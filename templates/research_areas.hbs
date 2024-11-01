@@ -1,0 +1,22 @@
+{{#each this}}
+<div href="" class="tw-flex tw-h-[400px] tw-w-[350px] max-xl:tw-w-[300px] tw-flex-col tw-gap-2 tw-overflow-clip tw-rounded-lg tw-bg-[#edecec79] tw-p-4 tw-flex-col hover:tw-shadow-lg tw-transition-shadow tw-duration-300">
+    <div class="tw-h-[200px] tw-w-full tw-overflow-hidden tw-rounded-md">
+        <img
+            src={{image}}
+            alt="article image"
+            class="tw-h-full tw-w-full tw-object-cover tw-transform hover:tw-scale-150 tw-transition-transform tw-duration-300"
+            srcset=""
+        />
+    </div>
+    <h3 class="tw-text-2xl tw-font-semibold max-md:tw-text-xl">
+        {{{title}}}
+    </h3>
+    <p class="tw-mt-2 tw-text-gray-600">
+        {{{description}}}
+    </p>
+    <!-- <span>
+        <span>Learn more</span>
+        <i class="bi bi-arrow-right"></i>
+    </span> -->
+</div>
+{{/each}}

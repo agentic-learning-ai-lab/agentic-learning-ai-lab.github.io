@@ -1,0 +1,38 @@
+{
+  "name": "agentic_learning_ai_lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "agentic_learning_ai_lab webpage",
+  "main": "index.js",
+  "scripts": {
+    "start:tailwind": "cross-env NODE_ENV=development tailwindcss --postcss -i ./css/tailwind.css -o ./css/tailwind-runtime.css -w",
+    "build:tailwind": "cross-env NODE_ENV=production tailwindcss --postcss -i ./css/tailwind.css -o ./css/tailwind-build.css --minify",
+    "build-in-place": "npm run template; npm run template_people",
+    "template": "node ./build/templater.js index.hbs index.html",
+    "template_people": "node ./build/templater.js people.hbs people.html"
+  },
+  "keywords": [],
+  "author": "Paul, Mengye",
+  "license": "MIT",
+  "devDependencies": {
+    "@iconify/tailwind": "^1.1.3",
+    "chart.js": "^4.4.2",
+    "gsap": "^3.12.5",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.5",
+    "swiper": "^11.1.1",
+    "tailwindcss": "^3.4.1",
+    "glob": "^7.1.2",
+    "handlebars": "^4.7.7",
+    "js-yaml": "^3.14.1",
+    "moment": "^2.9.0",
+    "slugg": "^1.0.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^7.1.3"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "postcss": "^8.4.33",
+    "postcss-simple-vars": "^7.0.1"
+  }
+}

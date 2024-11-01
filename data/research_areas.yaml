@@ -1,0 +1,14 @@
+-
+  title: learning from visual experience
+  image: ./assets/images/home/visual_experience.webp
+  description: Embodied AI; Self-supervised learning; Continual learning; Representation learning; Multimodal learning.
+
+-
+  title: adaptive foundation models
+  image: ./assets/images/home/adaptive_foundation_models.webp
+  description: Personalized AI; Few-shot, continual, meta learning; Memorization and forgetting; Future news forecasting.
+
+-
+  title: concept learning and abstraction
+  image: ./assets/images/home/concept_abstraction.webp
+  description: Few-shot concept learning; Visual reasoning; Relational abstraction; Hierarchical abstraction and planning.
