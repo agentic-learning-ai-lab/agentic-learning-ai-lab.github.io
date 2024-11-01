@@ -1,0 +1,19 @@
+{{#each this}}
+<div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-p-4 tw-w-[200px]">
+    <div class="tw-flex tw-place-items-center tw-gap-3">
+        <div class="tw-h-[100px] tw-w-[100px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
+            <img src={{{image}}}
+                class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                alt="design"/>
+        </div>
+    </div>
+    <a href={{{url}}}>
+    <div class="tw-flex tw-flex-col tw-gap-2">
+        <h3 class="tw-text-lg tw-font-medium tw-text-center max-md:tw-text-base">{{{name}}}</h3>
+        <p class="tw-text-gray-600 tw-text-center max-md:tw-text-sm">
+            {{{position}}}
+        </p>
+    </div>
+    </a>
+</div>
+{{/each}}
