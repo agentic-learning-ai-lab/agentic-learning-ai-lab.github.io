@@ -28,6 +28,9 @@ module.exports = {
 	        scale: {
 	            '120': '1.2', // 120% scaling (doubles the size)
 	        },
+	        scale: {
+	            '110': '1.1', // 110% scaling (doubles the size)
+	        },
 	    },
 	},
 }
