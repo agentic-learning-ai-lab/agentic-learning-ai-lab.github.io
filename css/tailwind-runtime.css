@@ -743,6 +743,10 @@ video {
   min-width: 450px;
 }
 
+.tw-min-w-\[350px\] {
+  min-width: 350px;
+}
+
 .tw-max-w-\[100vw\] {
   max-width: 100vw;
 }
