@@ -241,3 +241,25 @@ flex-direction: column;
 align-items: left;
 /*margin-top: 20px; /* Space between header and section */*/
 }
+.padding-fix {
+    -webkit-padding-start: 0px; /* Adjust as needed */
+}
+
+/*@media not all and (min-resolution: 0.001dpcm) and (min--moz-device-pixel-ratio: 0) {
+    .safari-padding-fix {
+        padding-bottom: 0 !important;
+    }
+}
+*/
+.safari-padding-fix {
+    padding-bottom: 8px; /* or any other padding value */
+}
+
+@supports (-webkit-touch-callout: none) {
+    .safari-padding-fix {
+        padding-bottom: 0 !important;
+    }
+}
+.safari-box-sizing {
+    box-sizing: border-box;
+}

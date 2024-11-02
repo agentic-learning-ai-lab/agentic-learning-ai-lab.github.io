@@ -44,22 +44,17 @@
                 id="collapsed-header-items">
                 <div class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-black max-lg:tw-mt-[30px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-5 lg:tw-mx-auto lg:tw-place-items-center">
                     <a class="header-links" href="#"> home </a>
+                    <a class="header-links" href="./research.html"> research </a>
                     <a class="header-links" href="./people.html"> people </a>
-                    <a class="header-links" href=""> projects </a>
                     <!-- <a class="header-links" href=""> faq </a> -->
                     <a class="header-links" href=""> contact </a>
                 </div>
-                <div class="tw-mx-4 tw-flex tw-place-items-center tw-gap-[20px] tw-text-base max-md:tw-w-full max-md:tw-flex-col max-md:tw-place-content-center">
-<!--                     <a href="https://tally.so/r/woO0Kx"
-                        aria-label="signup"
-                        class="tw-flex tw-h-[40px] tw-place-items-center tw-gap-2 tw-rounded-full tw-bg-black tw-p-1 tw-pl-4 tw-text-white">
-                        <span>search</span> -->
-                        <div class="tw-flex tw-h-[30px] tw-w-[30px] tw-place-content-center tw-place-items-center tw-rounded-full tw-bg-white tw-font-semibold tw-text-black">
+                <div class="tw-mx-4 tw-flex tw-place-items-center tw-justify-end tw-gap-[20px] tw-text-base">
+                        <div class="tw-flex tw-h-[30px] tw-w-[30px] tw-rounded-full tw-bg-white tw-font-semibold tw-text-black tw-place-items-center ">
                             <a href="">
                             <i class="bi bi-search"></i>
                             </a>
                         </div>
-                    <!-- </a> -->
                 </div>
             </div>
             <button
@@ -99,7 +94,7 @@
             <div class="reveal-up tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
             </div>
 
-            <div class="reveal-up tw-mt-10 tw-space-y-8 tw-gap-10  sm:tw-columns-1 md:tw-columns-3 lg:tw-columns-3 xl:tw-columns-3">
+            <div class="reveal-up tw-mt-10 tw-space-y-8 tw-gap-10 sm:tw-columns-1 md:tw-columns-3 lg:tw-columns-3 xl:tw-columns-3">
             <!-- tw-place-content-center tw-justify-around -->
             {{> research_areas research_areas }}
             </div>
@@ -112,13 +107,17 @@
             <div class="reveal-up tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
             </div>
             <!-- tw-shadow-lg  -->
-            <div class="tw-mt-8 tw-gap-10 tw-space-y-8 tw-space-y-reverse sm:tw-columns-1 md:tw-columns-2 lg:tw-columns-3 xl:tw-columns-4">
+            <div class="tw-mt-8 tw-gap-10 tw-space-y-reverse sm:tw-columns-1 md:tw-columns-2 lg:tw-columns-3 xl:tw-columns-4 tw-items-start">
                 {{> recent_works recent_papers }}
             </div>
         </section>
         <hr class="tw-mt-4" />
 
-        <footer class="tw-mt-auto tw-flex tw-min-h-[100px] tw-w-full tw-place-content-around tw-place-items-center tw-gap-3 tw-p-[2%] tw-px-[10%] tw-text-black max-md:tw-flex-col">
+ <!-- max-lg:tw-flex-col -->
+ <!-- max-md:tw-place-content-around  -->
+ <!-- tw-p-[2%] tw-px-[10%]  -->
+        <footer class="tw-mt-auto tw-flex tw-p-[5%] tw-min-h-[100px] tw-w-full tw-place-items-center tw-gap-3 tw-text-black
+        ">
 
             <div class="tw-flex tw-gap-6 tw-text-sm">
                 60 Fifth Ave
@@ -127,28 +126,15 @@
                 <br />
                 
             </div>
-            <div class="tw-flex tw-gap-6 tw-text-2xl">
+            <div class="tw-flex tw-gap-6 tw-text-2xl tw-justify-end tw-ml-auto tw-px-2">
                 <a href="https://github.com/agentic-learning-ai-lab" aria-label="Github">
                     <i class="bi bi-github"></i>
                 </a>
                 
-                <a
-                    href="https://x.com/@mengyer"
-                    aria-label="X"
-                >
+                <a href="https://x.com/@mengyer" aria-label="X">
                     <i class="bi bi-twitter-x"></i>
                 </a>
-                <!-- <a
-                    href="https://stackoverflow.com/"
-                    class="tw-h-[40px] tw-w-[40px]"
-                    aria-label="stackoverflow"
-                >
-                    <i class="bi bi-stack-overflow"></i>
-                </a> -->
             </div>
-            <!-- <div class="tw-flex tw-gap-6 tw-text-sm">
-                &copy; 2022-2024
-            </div> -->
         </footer>
     </body>
 

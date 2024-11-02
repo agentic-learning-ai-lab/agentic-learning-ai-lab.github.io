@@ -96,7 +96,10 @@ function registerHelpers(handlebars) {
     // Use UI.registerHelper..
     
     handlebars.registerHelper('formatDate', function (date, format) {
-      return moment.utc(date).format(format); // For example, "MMMM Do YYYY, h:mm:ss a"
+      return moment.utc(date).format(format);
+    });
+    handlebars.registerHelper('formatAuthors', function (authors) {
+      return authors.slice(0, -1).join(', ') + (', and ') + authors[authors.length - 1];
     });
 }
 
