@@ -1,1 +1,456 @@
-Hello World
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>agentic learning ai lab</title>
+        <meta name="description" content="" />
+        <!-- <link
+            rel="shortcut icon"
+            href="./assets/logo.png"
+            type="image/x-icon"
+        /> -->
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:title" content="Title of the project" />
+        <meta property="og:description" content="" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://github.com/PaulleDemon" />
+        <!--Replace with the current website url-->
+        <meta property="og:image" content="" />
+
+        <link rel="stylesheet" href="./css/tailwind-runtime.css" />
+        <!-- <link rel="stylesheet" href="./css/tailwind-build.css" /> -->
+        <link rel="stylesheet" href="css/index.css" />
+
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+            integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+    </head>
+    <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
+        <header class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-around">
+            <a class="tw-h-[120px] tw-p-[4px] tw-w-[100px] tw-text-2xl tw-font-medium" href="">
+            agentic learning <br/> ai lab
+            </a>
+            <div class="collapsible-header animated-collapse max-lg:tw-shadow-md"
+                id="collapsed-header-items">
+                <div class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-black max-lg:tw-mt-[30px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-5 lg:tw-mx-auto lg:tw-place-items-center">
+                    <a class="header-links" href="#"> home </a>
+                    <a class="header-links" href="./research.html"> research </a>
+                    <a class="header-links" href="./people.html"> people </a>
+                    <!-- <a class="header-links" href=""> faq </a> -->
+                    <a class="header-links" href=""> contact </a>
+                </div>
+                <div class="tw-mx-4 tw-flex tw-place-items-center tw-justify-end tw-gap-[20px] tw-text-base">
+                        <div class="tw-flex tw-h-[30px] tw-w-[30px] tw-rounded-full tw-bg-white tw-font-semibold tw-text-black tw-place-items-center ">
+                            <a href="">
+                            <i class="bi bi-search"></i>
+                            </a>
+                        </div>
+                </div>
+            </div>
+            <button
+                class="bi bi-list tw-absolute tw-right-3 tw-top-3 tw-z-50 tw-text-3xl tw-text-black lg:tw-hidden"
+                onclick="toggleHeader()"
+                aria-label="menu"
+                id="collapse-btn"
+            ></button>
+        </header>
+
+        <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[450px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
+            <div class="tw-flex tw-w-full tw-place-content-center tw-gap-6 max-xl:tw-place-items-center max-lg:tw-flex-col">
+            <div class="image-container">
+                <img src="./assets/images/background/bg1.jpg" alt="app" class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain"/>
+
+                <div class="text-overlay">
+                <div class="tw-flex tw-flex-wrap tw-text-7xl tw-font-semibold tw-leading-[85px] max-lg:tw-text-4xl max-md:tw-leading-snug" style={position: relative}>
+                        <span class="reveal-hero-text">
+                            agentic learning <br/> ai lab
+                        </span>
+                </div>
+                <div class="reveal-hero-text tw-mt-2 tw-max-w-[600px] tw-p-2 tw-text-justify max-lg:min(tw-max-w-full,tw-max-w-[600px])">
+                        Agentic Learning AI Lab is a research lab in New York
+                        University founded in 2022. We innovate learning algorithms that enable future agentic AI to learn and adapt flexibly in the real world.
+                </div>
+                </div>
+            </div>
+            <!-- <div class="tw-flex tw-flex-col tw-place-content-center"> -->
+            <!-- </div> -->
+            </div>
+        </section>
+
+        <section class="tw-mt-5 tw-flex tw-w-full tw-flex-col tw-p-[5%] max-lg:tw-p-4">
+            <h3 class="reveal-up text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
+                research areas
+            </h3>
+            <div class="reveal-up tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
+            </div>
+
+            <div class="reveal-up tw-mt-10 tw-space-y-8 tw-gap-10 sm:tw-columns-1 md:tw-columns-3 lg:tw-columns-3 xl:tw-columns-3">
+            <!-- tw-place-content-center tw-justify-around -->
+            <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300">
+                <div class="tw-h-[200px] tw-w-full tw-overflow-hidden tw-rounded-md">
+                    <img
+                        src=./assets/images/home/visual_experience.webp
+                        alt="article image"
+                        class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                        srcset=""
+                    />
+                </div>
+                <h3 class="tw-text-2xl tw-font-semibold max-md:tw-text-xl">
+                    learning from visual experience
+                </h3>
+                <p class="tw-mt-2 tw-text-gray-600">
+                    Embodied AI; Self-supervised learning; Continual learning; Representation learning; Multimodal learning.
+                </p>
+                <!-- <span>
+                    <span>Learn more</span>
+                    <i class="bi bi-arrow-right"></i>
+                </span> -->
+            </div>
+            <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300">
+                <div class="tw-h-[200px] tw-w-full tw-overflow-hidden tw-rounded-md">
+                    <img
+                        src=./assets/images/home/adaptive_foundation_models.webp
+                        alt="article image"
+                        class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                        srcset=""
+                    />
+                </div>
+                <h3 class="tw-text-2xl tw-font-semibold max-md:tw-text-xl">
+                    adaptive foundation models
+                </h3>
+                <p class="tw-mt-2 tw-text-gray-600">
+                    Personalized AI; Few-shot, continual, meta learning; Memorization and forgetting; Future news forecasting.
+                </p>
+                <!-- <span>
+                    <span>Learn more</span>
+                    <i class="bi bi-arrow-right"></i>
+                </span> -->
+            </div>
+            <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300">
+                <div class="tw-h-[200px] tw-w-full tw-overflow-hidden tw-rounded-md">
+                    <img
+                        src=./assets/images/home/concept_abstraction.webp
+                        alt="article image"
+                        class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                        srcset=""
+                    />
+                </div>
+                <h3 class="tw-text-2xl tw-font-semibold max-md:tw-text-xl">
+                    concept learning and abstraction
+                </h3>
+                <p class="tw-mt-2 tw-text-gray-600">
+                    Few-shot concept learning; Visual reasoning; Relational abstraction; Hierarchical abstraction and planning.
+                </p>
+                <!-- <span>
+                    <span>Learn more</span>
+                    <i class="bi bi-arrow-right"></i>
+                </span> -->
+            </div>
+            </div>
+        </section>
+
+        <section class="tw-mt-5 tw-flex tw-w-full tw-flex-col tw-p-[5%] max-lg:tw-p-4 tw-overflow-hidden">
+            <h3 class="reveal-up text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
+                recent works
+            </h3>
+            <div class="reveal-up tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
+            </div>
+            <!-- tw-shadow-lg  -->
+            <div class="tw-mt-8 tw-gap-10 tw-space-y-reverse sm:tw-columns-1 md:tw-columns-2 lg:tw-columns-3 xl:tw-columns-4 tw-items-start">
+                <a href="#">
+                <div class="safari-padding-fix">
+                <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
+                    <div class="tw-flex tw-place-items-center tw-gap-3">
+                        <div class="tw-h-[300px] tw-w-full tw-overflow-hidden tw-rounded-lg">
+                            <img src=./assets/images/papers/are_llms_prescient.png
+                                class="tw-h-full tw-w-full tw-object-cover"
+                                alt="design"/>
+                        </div>
+                        <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                    </div>
+                    <div class="tw-flex tw-flex-col tw-gap-2">
+                        <h3 class="tw-text-xl tw-font-medium tw-mt-4">Are LLMs Prescient? A Continuous Evaluation using Daily News as Oracle</h3>
+                        <p class="tw-text-gray-600 tw-mt-4">
+                            Our new benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict “future” events based on pre-training data.
+                        </p>
+                        <p class="tw-mt-4">
+                        Publish Date: 2024-11-01
+                        </p>
+                        <a href=# class="tw-mt-4">
+                            <span>Learn more</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                </a>
+                <a href="https://arxiv.org/abs/2408.11208">
+                <div class="safari-padding-fix">
+                <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
+                    <div class="tw-flex tw-place-items-center tw-gap-3">
+                        <div class="tw-h-[300px] tw-w-full tw-overflow-hidden tw-rounded-lg">
+                            <img src=./assets/images/papers/poodle.webp
+                                class="tw-h-full tw-w-full tw-object-cover"
+                                alt="design"/>
+                        </div>
+                        <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                    </div>
+                    <div class="tw-flex tw-flex-col tw-gap-2">
+                        <h3 class="tw-text-xl tw-font-medium tw-mt-4">PooDLe: Pooled and Dense Self-Supervised Learning from Naturalistic Videos</h3>
+                        <p class="tw-text-gray-600 tw-mt-4">
+                            We propose PooDLe, a self-supervised learning method that combines an invariance-based objective on pooled representations with a dense SSL objective that enforces equivariance to optical flow warping.
+                        </p>
+                        <p class="tw-mt-4">
+                        Publish Date: 2024-08-20
+                        </p>
+                        <a href=https://arxiv.org/abs/2408.11208 class="tw-mt-4">
+                            <span>Learn more</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                </a>
+                <a href="https://arxiv.org/abs/2408.02226">
+                <div class="safari-padding-fix">
+                <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
+                    <div class="tw-flex tw-place-items-center tw-gap-3">
+                        <div class="tw-h-[300px] tw-w-full tw-overflow-hidden tw-rounded-lg">
+                            <img src=./assets/images/papers/procreate.png
+                                class="tw-h-full tw-w-full tw-object-cover"
+                                alt="design"/>
+                        </div>
+                        <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                    </div>
+                    <div class="tw-flex tw-flex-col tw-gap-2">
+                        <h3 class="tw-text-xl tw-font-medium tw-mt-4">ProCreate, Don't Reproduce! Propulsive Energy Diffusion for Creative Generation</h3>
+                        <p class="tw-text-gray-600 tw-mt-4">
+                            ProCreate is a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction.
+                        </p>
+                        <p class="tw-mt-4">
+                        Publish Date: 2024-08-05
+                        </p>
+                        <a href=https://arxiv.org/abs/2408.02226 class="tw-mt-4">
+                            <span>Learn more</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                </a>
+                <a href="https://arxiv.org/abs/2404.19132">
+                <div class="safari-padding-fix">
+                <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
+                    <div class="tw-flex tw-place-items-center tw-gap-3">
+                        <div class="tw-h-[300px] tw-w-full tw-overflow-hidden tw-rounded-lg">
+                            <img src=./assets/images/papers/osiris.webp
+                                class="tw-h-full tw-w-full tw-object-cover"
+                                alt="design"/>
+                        </div>
+                        <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                    </div>
+                    <div class="tw-flex tw-flex-col tw-gap-2">
+                        <h3 class="tw-text-xl tw-font-medium tw-mt-4">Integrating Present and Past in Unsupervised Continual Learning</h3>
+                        <p class="tw-text-gray-600 tw-mt-4">
+                            We formulate Osiris, a unifying framework for unsupervised continual learning (UCL), which disentangles learning objectives that encompass stability, plasticity, and cross-task consolidation.
+                        </p>
+                        <p class="tw-mt-4">
+                        Publish Date: 2024-04-29
+                        </p>
+                        <a href=https://arxiv.org/abs/2404.19132 class="tw-mt-4">
+                            <span>Learn more</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                </a>
+                <a href="https://arxiv.org/abs/2403.15362">
+                <div class="safari-padding-fix">
+                <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
+                    <div class="tw-flex tw-place-items-center tw-gap-3">
+                        <div class="tw-h-[300px] tw-w-full tw-overflow-hidden tw-rounded-lg">
+                            <img src=./assets/images/papers/college.png
+                                class="tw-h-full tw-w-full tw-object-cover"
+                                alt="design"/>
+                        </div>
+                        <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                    </div>
+                    <div class="tw-flex tw-flex-col tw-gap-2">
+                        <h3 class="tw-text-xl tw-font-medium tw-mt-4">CoLLEGe: Concept Embedding Generation for Large Language Models</h3>
+                        <p class="tw-text-gray-600 tw-mt-4">
+                            CoLLEGe is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions.
+                        </p>
+                        <p class="tw-mt-4">
+                        Publish Date: 2024-03-22
+                        </p>
+                        <a href=https://arxiv.org/abs/2403.15362 class="tw-mt-4">
+                            <span>Learn more</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                </a>
+                <a href="https://arxiv.org/abs/2403.09613">
+                <div class="safari-padding-fix">
+                <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
+                    <div class="tw-flex tw-place-items-center tw-gap-3">
+                        <div class="tw-h-[300px] tw-w-full tw-overflow-hidden tw-rounded-lg">
+                            <img src=./assets/images/papers/reawakening.png
+                                class="tw-h-full tw-w-full tw-object-cover"
+                                alt="design"/>
+                        </div>
+                        <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                    </div>
+                    <div class="tw-flex tw-flex-col tw-gap-2">
+                        <h3 class="tw-text-xl tw-font-medium tw-mt-4">Reawakening Knowledge: Anticipatory Recovery from Catastrophic Interference via Structured Training</h3>
+                        <p class="tw-text-gray-600 tw-mt-4">
+                            We discover a curious and remarkable property of LLMs fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again.
+                        </p>
+                        <p class="tw-mt-4">
+                        Publish Date: 2024-03-14
+                        </p>
+                        <a href=https://arxiv.org/abs/2403.09613 class="tw-mt-4">
+                            <span>Learn more</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                </a>
+                <a href="https://arxiv.org/abs/2402.00300">
+                <div class="safari-padding-fix">
+                <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
+                    <div class="tw-flex tw-place-items-center tw-gap-3">
+                        <div class="tw-h-[300px] tw-w-full tw-overflow-hidden tw-rounded-lg">
+                            <img src=./assets/images/papers/ssl_childs_perspective.webp
+                                class="tw-h-full tw-w-full tw-object-cover"
+                                alt="design"/>
+                        </div>
+                        <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                    </div>
+                    <div class="tw-flex tw-flex-col tw-gap-2">
+                        <h3 class="tw-text-xl tw-font-medium tw-mt-4">Self-Supervised Learning of Video Representations from a Child's Perspective</h3>
+                        <p class="tw-text-gray-600 tw-mt-4">
+                            We train self-supervised video models on longitudinal, egocentric headcam recordings collected from a child over a two year period in their early development.
+                        </p>
+                        <p class="tw-mt-4">
+                        Publish Date: 2024-02-01
+                        </p>
+                        <a href=https://arxiv.org/abs/2402.00300 class="tw-mt-4">
+                            <span>Learn more</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                </a>
+                <a href="https://arxiv.org/abs/2312.12736">
+                <div class="safari-padding-fix">
+                <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
+                    <div class="tw-flex tw-place-items-center tw-gap-3">
+                        <div class="tw-h-[300px] tw-w-full tw-overflow-hidden tw-rounded-lg">
+                            <img src=./assets/images/papers/learning_and_forgetting_llm.png
+                                class="tw-h-full tw-w-full tw-object-cover"
+                                alt="design"/>
+                        </div>
+                        <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                    </div>
+                    <div class="tw-flex tw-flex-col tw-gap-2">
+                        <h3 class="tw-text-xl tw-font-medium tw-mt-4">Learning and Forgetting Unsafe Examples in Large Language Models</h3>
+                        <p class="tw-text-gray-600 tw-mt-4">
+                            We explore the behavior of LLMs finetuned on noisy custom data containing unsafe content and propose a simple filtering algorithm for detecting harmful content based on the phenomenon of selective forgetting.
+                        </p>
+                        <p class="tw-mt-4">
+                        Publish Date: 2023-12-20
+                        </p>
+                        <a href=https://arxiv.org/abs/2312.12736 class="tw-mt-4">
+                            <span>Learn more</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                </a>
+                <a href="https://arxiv.org/abs/2312.12736">
+                <div class="safari-padding-fix">
+                <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
+                    <div class="tw-flex tw-place-items-center tw-gap-3">
+                        <div class="tw-h-[300px] tw-w-full tw-overflow-hidden tw-rounded-lg">
+                            <img src=./assets/images/papers/lifelong_memory.png
+                                class="tw-h-full tw-w-full tw-object-cover"
+                                alt="design"/>
+                        </div>
+                        <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                    </div>
+                    <div class="tw-flex tw-flex-col tw-gap-2">
+                        <h3 class="tw-text-xl tw-font-medium tw-mt-4">LifelongMemory: Leveraging LLMs for Answering Queries in Long-form Egocentric Videos</h3>
+                        <p class="tw-text-gray-600 tw-mt-4">
+                            LifelongMemory is a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval.
+                        </p>
+                        <p class="tw-mt-4">
+                        Publish Date: 2023-12-07
+                        </p>
+                        <a href=https://arxiv.org/abs/2312.12736 class="tw-mt-4">
+                            <span>Learn more</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                </a>
+            </div>
+        </section>
+        <hr class="tw-mt-4" />
+
+ <!-- max-lg:tw-flex-col -->
+ <!-- max-md:tw-place-content-around  -->
+ <!-- tw-p-[2%] tw-px-[10%]  -->
+        <footer class="tw-mt-auto tw-flex tw-p-[5%] tw-min-h-[100px] tw-w-full tw-place-items-center tw-gap-3 tw-text-black
+        ">
+
+            <div class="tw-flex tw-gap-6 tw-text-sm">
+                60 Fifth Ave
+                <br />
+                New York, NY
+                <br />
+                
+            </div>
+            <div class="tw-flex tw-gap-6 tw-text-2xl tw-justify-end tw-ml-auto tw-px-2">
+                <a href="https://github.com/agentic-learning-ai-lab" aria-label="Github">
+                    <i class="bi bi-github"></i>
+                </a>
+                
+                <a href="https://x.com/@mengyer" aria-label="X">
+                    <i class="bi bi-twitter-x"></i>
+                </a>
+            </div>
+        </footer>
+    </body>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"
+        integrity="sha512-B1lby8cGcAUU3GR+Fd809/ZxgHbfwJMp0jLTVfHiArTuUt++VqSlJpaJvhNtRf3NERaxDNmmxkdx2o+aHd4bvw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/ScrollTrigger.min.js"
+        integrity="sha512-AY2+JxnBETJ0wcXnLPCcZJIJx0eimyhz3OJ55k2Jx4RtYC+XdIi2VtJQ+tP3BaTst4otlGG1TtPJ9fKrAUnRdQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+
+    <script src="./index.js"></script>
+</html>
