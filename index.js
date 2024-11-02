@@ -98,9 +98,7 @@ window.addEventListener("load", () => {
 // ------------- reveal section animations ---------------
 
 const sections = gsap.utils.toArray("section")
-
 sections.forEach((sec) => {
-
     const revealUptimeline = gsap.timeline({paused: true, 
                                             scrollTrigger: {
                                                             trigger: sec,
@@ -116,8 +114,6 @@ sections.forEach((sec) => {
         y: "0%",
         stagger: 0.2,
     })
-
-
 })
 
 
