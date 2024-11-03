@@ -739,12 +739,12 @@ video {
   width: max-content;
 }
 
-.tw-min-w-\[450px\] {
-  min-width: 450px;
-}
-
 .tw-min-w-\[350px\] {
   min-width: 350px;
+}
+
+.tw-min-w-\[450px\] {
+  min-width: 450px;
 }
 
 .tw-max-w-\[100vw\] {
