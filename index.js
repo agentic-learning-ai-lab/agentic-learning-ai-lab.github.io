@@ -56,18 +56,17 @@ window.addEventListener("resize", responsive)
  * Animations
  */
 
-gsap.registerPlugin(ScrollTrigger)
+// gsap.registerPlugin(ScrollTrigger)
 
-gsap.to(".reveal-hero-text", {
-    opacity: 0,
-    y: "100%",
-})
+// gsap.to(".reveal-hero-text", {
+//     opacity: 0,
+//     y: "100%",
+// })
 
-gsap.to(".reveal-hero-img", {
-    opacity: 0,
-    y: "100%",
-})
-
+// gsap.to(".reveal-hero-img", {
+//     opacity: 0,
+//     y: "100%",
+// })
 
 gsap.to(".reveal-up", {
     opacity: 0,
@@ -76,27 +75,25 @@ gsap.to(".reveal-up", {
 
 
 window.addEventListener("load", () => {
-    // animate from initial position
-    gsap.to(".reveal-hero-text", {
-        opacity: 1,
-        y: "0%",
-        duration: 0.8,
-        // ease: "power3.out",
-        stagger: 0.5, // Delay between each word's reveal,
-        // delay: 3
-    })
+    // // animate from initial position
+    // gsap.to(".reveal-hero-text", {
+    //     opacity: 1,
+    //     y: "0%",
+    //     duration: 0.8,
+    //     // ease: "power3.out",
+    //     stagger: 0.5, // Delay between each word's reveal,
+    //     // delay: 3
+    // })
 
-    gsap.to(".reveal-hero-img", {
-        opacity: 1,
-        y: "0%",
-    })
+    // gsap.to(".reveal-hero-img", {
+    //     opacity: 1,
+    //     y: "0%",
+    // })
 
     
 })
 
-
 // ------------- reveal section animations ---------------
-
 const sections = gsap.utils.toArray("section")
 sections.forEach((sec) => {
     const revealUptimeline = gsap.timeline({paused: true, 
@@ -115,6 +112,3 @@ sections.forEach((sec) => {
         stagger: 0.2,
     })
 })
-
-
-
