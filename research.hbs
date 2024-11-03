@@ -36,34 +36,7 @@
         />
     </head>
     <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
-        <header class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-around">
-            <a class="tw-h-[120px] tw-p-[4px] tw-w-[100px] tw-text-2xl tw-font-medium" href="">
-            agentic learning <br/> ai lab
-            </a>
-            <div class="collapsible-header animated-collapse max-lg:tw-shadow-md"
-                id="collapsed-header-items">
-                <div class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-black max-lg:tw-mt-[30px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-5 lg:tw-mx-auto lg:tw-place-items-center">
-                    <a class="header-links" href="./index.html"> home </a>
-                    <a class="header-links" href="#"> research </a>
-                    <a class="header-links" href="./people.html"> people </a>
-                    <!-- <a class="header-links" href=""> faq </a> -->
-                    <a class="header-links" href=""> contact </a>
-                </div>
-                <div class="tw-mx-4 tw-flex tw-place-items-center tw-justify-end tw-gap-[20px] tw-text-base">
-                        <div class="tw-flex tw-h-[30px] tw-w-[30px] tw-rounded-full tw-bg-white tw-font-semibold tw-text-black tw-place-items-center ">
-                            <a href="">
-                            <i class="bi bi-search"></i>
-                            </a>
-                        </div>
-                </div>
-            </div>
-            <button
-                class="bi bi-list tw-absolute tw-right-3 tw-top-3 tw-z-50 tw-text-3xl tw-text-black lg:tw-hidden"
-                onclick="toggleHeader()"
-                aria-label="menu"
-                id="collapse-btn"
-            ></button>
-        </header>
+        {{> header}}
 
         <section class="tw-flex tw-w-full tw-flex-col tw-p-[5%] tw-mt-[150px] max-lg:tw-p-4">
             <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
@@ -75,37 +48,16 @@
             <div id="flexContainer" class="tw-mt-10 tw-flex tw-flex-wrap tw-place-content-center tw-gap-y-4 tw-gap-x-4 tw-justify-around">
             {{> research_tab papers }}
             </div>
-<div class="pagination-controls tw-mt-12 tw-flex tw-justify-center tw-items-center tw-gap-2">
-    <!-- <button id="prevButton" class="tw-px-6 tw-py-1 tw-bg-black tw-text-white disabled:tw-bg-gray-300" onclick="prevPage()">Prev</button> -->
-    <button id="prevButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300" onclick="prevPage()">Prev</button>
-    <span id="pageNumbers" class="tw-flex tw-gap-2"></span>
-    <!-- <button id="lastPageButton" class="px-4 py-2 bg-blue-500 text-white disabled:bg-gray-300" onclick="goToLastPage()"></button> -->
-    <!-- <button id="nextButton" class="tw-px-6 tw-py-1 tw-bg-black tw-text-white disabled:tw-bg-gray-300" onclick="nextPage()">Next</button> -->
-    <button id="nextButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300" onclick="nextPage()">Next</button>
-</div>
+
+            <div class="pagination-controls tw-mt-12 tw-flex tw-justify-center tw-items-center tw-gap-2">
+                <button id="prevButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300" onclick="prevPage()">Prev</button>
+                <span id="pageNumbers" class="tw-flex tw-gap-2"></span>
+                <button id="nextButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300" onclick="nextPage()">Next</button>
+            </div>
 
         </section>
-
-        <hr class="tw-mt-4" />
-        <footer class="tw-mt-auto tw-flex tw-p-[5%] tw-min-h-[100px] tw-w-full tw-place-items-center tw-gap-3 tw-text-black">
-
-            <div class="tw-flex tw-gap-6 tw-text-sm tw-px-2">
-                60 Fifth Ave
-                <br />
-                New York, NY
-                <br />
-                
-            </div>
-            <div class="tw-flex tw-gap-6 tw-text-2xl tw-justify-end tw-ml-auto tw-px-2">
-                <a href="https://github.com/agentic-learning-ai-lab" aria-label="Github">
-                    <i class="bi bi-github"></i>
-                </a>
-                
-                <a href="https://x.com/@mengyer" aria-label="X">
-                    <i class="bi bi-twitter-x"></i>
-                </a>
-            </div>
-        </footer>
+        
+        {{> footer}}
     </body>
 
     <script
