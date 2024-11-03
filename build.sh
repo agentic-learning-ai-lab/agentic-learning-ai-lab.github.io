@@ -4,7 +4,7 @@ set -e # exit with nonzero exit code if anything fails
 npm run build-in-place
 
 find . -name ".DS_Store" -depth -exec rm {} \;
-rm -rf out
+# rm -rf out
 mkdir -p out
 cp index.html index.js out/
 cp people.html out/
