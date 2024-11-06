@@ -1,6 +1,6 @@
 -
   name: Mengye Ren
-  image: "./assets/images/home/forest.jpg"
+  image: "./assets/images/people/mengye_ren.jpg"
   position: Assistant Professor
   url: https://mengyeren.com/
 
@@ -36,12 +36,12 @@
 
 -
   name: Yanlai Yang
-  image: "./assets/images/home/forest.jpg"
+  image: "./assets/images/people/yanlai_yang.jpg"
   position: PhD Student
   url: https://yanlai00.github.io/
 
 -
   name: Amelia (Hui) Dai
-  image: "./assets/images/home/forest.jpg"
+  image: "./assets/images/people/amelia_dai.jpg"
   position: Master Student
   url: https://www.linkedin.com/in/hui-dai/
