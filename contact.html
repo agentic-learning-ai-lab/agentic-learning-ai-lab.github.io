@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+    
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>agentic learning ai lab</title>
+        <meta name="description" content="" />
+        <!-- <link
+            rel="shortcut icon"
+            href="./assets/logo.png"
+            type="image/x-icon"
+        /> -->
+    
+        <!-- Open Graph / Facebook -->
+        <meta property="og:title" content="agentic learning ai lab" />
+        <meta property="og:description" content="agentic learning ai lab" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://agenticlearning.ai/" />
+        <!--Replace with the current website url-->
+        <meta property="og:image" content="" />
+    
+        <link rel="stylesheet" href="./css/tailwind-runtime.css" />
+        <!-- <link rel="stylesheet" href="./css/tailwind-build.css" /> -->
+        <link rel="stylesheet" href="css/index.css" />
+    
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+            integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-44MVTGBV0D"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+    
+          gtag('config', 'G-44MVTGBV0D');
+        </script>
+    </head>    <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
+        <header class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-around">
+            <a class="tw-h-[120px] tw-p-[4px] tw-w-[100px] tw-text-2xl tw-font-medium" href="">
+            agentic learning <br/> ai lab
+            </a>
+            <div class="collapsible-header animated-collapse max-lg:tw-shadow-md"
+                id="collapsed-header-items">
+                <div class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-black max-lg:tw-mt-[30px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-5 lg:tw-mx-auto lg:tw-place-items-center">
+                    <a class="header-links" href="./index.html"> home </a>
+                    <a class="header-links" href="./research.html"> research </a>
+                    <a class="header-links" href="./people.html"> people </a>
+                    <a class="header-links" href="./contact.html"> contact </a>
+                </div>
+                <div class="tw-mx-4 tw-flex tw-place-items-center tw-justify-end tw-gap-[20px] tw-text-base">
+                        <div class="tw-flex tw-h-[30px] tw-w-[30px] tw-rounded-full tw-bg-white tw-font-semibold tw-text-black tw-place-items-center ">
+                            <a href="">
+                            <i class="bi bi-search"></i>
+                            </a>
+                        </div>
+                </div>
+            </div>
+            <button
+                class="bi bi-list tw-absolute tw-right-3 tw-top-3 tw-z-50 tw-text-3xl tw-text-black lg:tw-hidden"
+                onclick="toggleHeader()"
+                aria-label="menu"
+                id="collapse-btn"
+            ></button>
+        </header>
+        <section class="tw-flex tw-w-full tw-flex-col tw-p-[5%] tw-mt-[150px] max-lg:tw-p-4">
+            <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
+                contact
+            </h3>
+            <form id="contact-form" class="tw-space-y-4 tw-mt-[30px]">
+        <div>
+            <label for="name" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">name</label>
+            <input type="text" id="name" name="name" required
+                   class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
+        </div>
+        <div>
+            <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">email</label>
+            <input type="email" id="email" name="email" required
+                   class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
+        </div>
+        <div>
+            <label for="message" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">message</label>
+            <textarea id="message" name="message" rows="5" required
+                      class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"></textarea>
+        </div>
+        
+        <!-- reCAPTCHA widget -->
+        <div class="g-recaptcha" data-sitekey="6LeLXHcqAAAAAKjLueRN9QL5eTcF7hC6kLFcDZjC"></div>
+        
+        <button type="submit"
+                class="tw-w-full tw-bg-blue-500 tw-text-white tw-font-semibold tw-py-2 tw-px-4 tw-rounded-md hover:tw-bg-blue-600 tw-transition tw-duration-200">
+            Send Message
+        </button>
+        <p class="tw-text-green-600 tw-text-center tw-mt-4" id="success-message" style="display: none;">Your message has been sent!</p>
+        <p class="tw-text-red-600 tw-text-center tw-mt-4" id="error-message" style="display: none;">There was an error sending your message. Please try again.</p>
+    </form>
+        </section>
+
+        <hr class="tw-mt-4" />
+        <footer class="tw-mt-auto tw-flex tw-p-[5%] tw-min-h-[100px] tw-w-full tw-place-items-center tw-gap-3 tw-text-black
+        ">
+        
+            <div class="tw-flex tw-gap-6 tw-text-sm">
+                60 Fifth Ave
+                <br />
+                New York, NY
+                <br />
+                
+            </div>
+            <div class="tw-flex tw-gap-6 tw-text-2xl tw-justify-end tw-ml-auto tw-px-2">
+                <a href="https://github.com/agentic-learning-ai-lab" aria-label="Github">
+                    <i class="bi bi-github"></i>
+                </a>
+                
+                <a href="https://x.com/agentic_ai_lab" aria-label="X">
+                    <i class="bi bi-twitter-x"></i>
+                </a>
+            </div>
+        </footer>    </body>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"
+        integrity="sha512-B1lby8cGcAUU3GR+Fd809/ZxgHbfwJMp0jLTVfHiArTuUt++VqSlJpaJvhNtRf3NERaxDNmmxkdx2o+aHd4bvw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/ScrollTrigger.min.js"
+        integrity="sha512-AY2+JxnBETJ0wcXnLPCcZJIJx0eimyhz3OJ55k2Jx4RtYC+XdIi2VtJQ+tP3BaTst4otlGG1TtPJ9fKrAUnRdQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+    <script>
+    (function(){
+        emailjs.init({publicKey: "y6ebNBhEpEzmyqS8F",}); // Replace with your EmailJS user ID
+    })();
+
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Hide previous messages
+        document.getElementById('success-message').style.display = 'none';
+        document.getElementById('error-message').style.display = 'none';
+
+        // Check if reCAPTCHA is completed
+        if (grecaptcha.getResponse() === "") {
+            document.getElementById('error-message').innerText = "Please complete the reCAPTCHA.";
+            document.getElementById('error-message').style.display = 'block';
+            return;
+        }
+
+        templateParams = {
+            from_name: this.name,
+            reply_to: this.email,
+            message: this.message
+        };
+
+        // Send the email
+        emailjs.sendForm('service_nyu', 'template_w5u7hym', templateParams)
+            .then(function() {
+                document.getElementById('success-message').style.display = 'block';
+                document.getElementById('contact-form').reset();
+                grecaptcha.reset(); // Reset reCAPTCHA after successful submission
+            }, function(error) {
+                document.getElementById('error-message').style.display = 'block';
+                console.error('Failed to send the message:', error);
+            });
+    });
+    </script>
+
+    <script src="./index.js"></script>
+</html>
