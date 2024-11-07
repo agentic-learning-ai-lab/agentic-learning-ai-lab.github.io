@@ -7,14 +7,11 @@
   "scripts": {
     "start:tailwind": "cross-env NODE_ENV=development tailwindcss --postcss -i ./css/tailwind.css -o ./css/tailwind-runtime.css -w",
     "build:tailwind": "cross-env NODE_ENV=production tailwindcss --postcss -i ./css/tailwind.css -o ./css/tailwind-build.css --minify",
-    "build-in-place": "npm run template; npm run template_people; npm run template_research; npm run template_contact",
-    "template": "node ./build/templater.js index.hbs index.html",
-    "template_people": "node ./build/templater.js people.hbs people.html",
-    "template_research": "node ./build/templater.js research.hbs research.html",
-    "template_contact": "node ./build/templater.js contact.hbs contact.html"
+    "build-in-place": "npm run build",
+    "build": "node ./build/build_pages.js"
   },
   "keywords": [],
-  "author": "Paul, Mengye",
+  "author": "Paul, Mengye Ren",
   "license": "MIT",
   "devDependencies": {
     "@iconify/tailwind": "^1.1.3",
