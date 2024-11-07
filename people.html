@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+    
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,7 +11,7 @@
             href="./assets/logo.png"
             type="image/x-icon"
         /> -->
-
+    
         <!-- Open Graph / Facebook -->
         <meta property="og:title" content="agentic learning ai lab" />
         <meta property="og:description" content="agentic learning ai lab" />
@@ -18,11 +19,11 @@
         <meta property="og:url" content="https://agenticlearning.ai/" />
         <!--Replace with the current website url-->
         <meta property="og:image" content="" />
-
+    
         <link rel="stylesheet" href="./css/tailwind-runtime.css" />
         <!-- <link rel="stylesheet" href="./css/tailwind-build.css" /> -->
         <link rel="stylesheet" href="css/index.css" />
-
+    
         <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -34,8 +35,18 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
         />
-    </head>
-    <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-44MVTGBV0D"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+    
+          gtag('config', 'G-44MVTGBV0D');
+        </script>
+    </head>    <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
         <header class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-around">
             <a class="tw-h-[120px] tw-p-[4px] tw-w-[100px] tw-text-2xl tw-font-medium" href="">
             agentic learning <br/> ai lab
@@ -46,8 +57,7 @@
                     <a class="header-links" href="./index.html"> home </a>
                     <a class="header-links" href="./research.html"> research </a>
                     <a class="header-links" href="./people.html"> people </a>
-                    <!-- <a class="header-links" href=""> faq </a> -->
-                    <a class="header-links" href=""> contact </a>
+                    <a class="header-links" href="./contact.html"> contact </a>
                 </div>
                 <div class="tw-mx-4 tw-flex tw-place-items-center tw-justify-end tw-gap-[20px] tw-text-base">
                         <div class="tw-flex tw-h-[30px] tw-w-[30px] tw-rounded-full tw-bg-white tw-font-semibold tw-text-black tw-place-items-center ">
@@ -74,9 +84,9 @@
             <div class="tw-mt-10 tw-flex tw-flex-wrap tw-place-content-center tw-gap-y-8 tw-gap-x-4 tw-justify-around">
             <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-p-4 tw-w-[200px]">
                 <div class="tw-flex tw-place-items-center tw-gap-3">
-                    <div class="tw-h-[100px] tw-w-[100px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
-                        <img src=./assets/images/home/forest.jpg
-                            class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                    <div class="tw-h-[120px] tw-w-[120px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
+                        <img src=./assets/images/people/mengye_ren.jpg
+                            class="tw-h-full tw-w-full tw-object-cover"
                             alt="design"/>
                     </div>
                 </div>
@@ -91,9 +101,9 @@
             </div>
             <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-p-4 tw-w-[200px]">
                 <div class="tw-flex tw-place-items-center tw-gap-3">
-                    <div class="tw-h-[100px] tw-w-[100px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
-                        <img src=./assets/images/home/forest.jpg
-                            class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                    <div class="tw-h-[120px] tw-w-[120px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
+                        <img src=./assets/images/people/chris_hoang.jpg
+                            class="tw-h-full tw-w-full tw-object-cover"
                             alt="design"/>
                     </div>
                 </div>
@@ -108,9 +118,9 @@
             </div>
             <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-p-4 tw-w-[200px]">
                 <div class="tw-flex tw-place-items-center tw-gap-3">
-                    <div class="tw-h-[100px] tw-w-[100px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
-                        <img src=./assets/images/home/forest.jpg
-                            class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                    <div class="tw-h-[120px] tw-w-[120px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
+                        <img src=./assets/images/people/jack_lu.jpg
+                            class="tw-h-full tw-w-full tw-object-cover"
                             alt="design"/>
                     </div>
                 </div>
@@ -125,9 +135,9 @@
             </div>
             <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-p-4 tw-w-[200px]">
                 <div class="tw-flex tw-place-items-center tw-gap-3">
-                    <div class="tw-h-[100px] tw-w-[100px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
+                    <div class="tw-h-[120px] tw-w-[120px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
                         <img src=./assets/images/home/forest.jpg
-                            class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                            class="tw-h-full tw-w-full tw-object-cover"
                             alt="design"/>
                     </div>
                 </div>
@@ -142,9 +152,9 @@
             </div>
             <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-p-4 tw-w-[200px]">
                 <div class="tw-flex tw-place-items-center tw-gap-3">
-                    <div class="tw-h-[100px] tw-w-[100px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
-                        <img src=./assets/images/home/forest.jpg
-                            class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                    <div class="tw-h-[120px] tw-w-[120px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
+                        <img src=./assets/images/people/alex_wang.jpg
+                            class="tw-h-full tw-w-full tw-object-cover"
                             alt="design"/>
                     </div>
                 </div>
@@ -159,9 +169,9 @@
             </div>
             <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-p-4 tw-w-[200px]">
                 <div class="tw-flex tw-place-items-center tw-gap-3">
-                    <div class="tw-h-[100px] tw-w-[100px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
-                        <img src=./assets/images/home/forest.jpg
-                            class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                    <div class="tw-h-[120px] tw-w-[120px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
+                        <img src=./assets/images/people/ying_wang.jpg
+                            class="tw-h-full tw-w-full tw-object-cover"
                             alt="design"/>
                     </div>
                 </div>
@@ -176,9 +186,9 @@
             </div>
             <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-p-4 tw-w-[200px]">
                 <div class="tw-flex tw-place-items-center tw-gap-3">
-                    <div class="tw-h-[100px] tw-w-[100px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
-                        <img src=./assets/images/home/forest.jpg
-                            class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                    <div class="tw-h-[120px] tw-w-[120px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
+                        <img src=./assets/images/people/yanlai_yang.jpg
+                            class="tw-h-full tw-w-full tw-object-cover"
                             alt="design"/>
                     </div>
                 </div>
@@ -193,9 +203,9 @@
             </div>
             <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-p-4 tw-w-[200px]">
                 <div class="tw-flex tw-place-items-center tw-gap-3">
-                    <div class="tw-h-[100px] tw-w-[100px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
-                        <img src=./assets/images/home/forest.jpg
-                            class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+                    <div class="tw-h-[120px] tw-w-[120px] tw-overflow-hidden tw-rounded-full tw-mx-auto">
+                        <img src=./assets/images/people/amelia_dai.jpg
+                            class="tw-h-full tw-w-full tw-object-cover"
                             alt="design"/>
                     </div>
                 </div>
