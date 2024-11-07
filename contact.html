@@ -155,7 +155,6 @@
         .loading {
             background-color: #718096; /* Gray out color */
             cursor: not-allowed;
-/*            opacity: 0.7;*/
         }
         .loading:hover{
             background-color: #718096; /* Gray out color */
@@ -179,9 +178,9 @@
         if (!recaptchaResponse) {
             document.getElementById('error-message').innerText = "Please complete the reCAPTCHA.";
             document.getElementById('error-message').style.display = 'block';
-            // submitButton.disabled = false;
-            // submitButton.classList.remove('loading');
-            // submitButton.textContent = "send";
+            submitButton.disabled = false;
+            submitButton.classList.remove('loading');
+            submitButton.textContent = "send";
             return;
         }
 
@@ -190,10 +189,6 @@
             .then(function() {
                 document.getElementById('success-message').style.display = 'block';
                 document.getElementById('contact-form').reset();
-
-                // Send a confirmation email to the user
-                // emailjs.sendForm("service_nyu", "template_p0kvosr", form);
-
                 grecaptcha.reset(); // Reset reCAPTCHA after successful submission
                 submitButton.disabled = false;
                 submitButton.classList.remove('loading');
