@@ -46,6 +46,29 @@
     
           gtag('config', 'G-44MVTGBV0D');
         </script>
+    
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+        <script type="text/javascript">
+            (function() {
+                // https://dashboard.emailjs.com/admin/account
+                emailjs.init({
+                  publicKey: "y6ebNBhEpEzmyqS8F",
+                });
+            })();
+        </script>
+        
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"
+            integrity="sha512-B1lby8cGcAUU3GR+Fd809/ZxgHbfwJMp0jLTVfHiArTuUt++VqSlJpaJvhNtRf3NERaxDNmmxkdx2o+aHd4bvw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/ScrollTrigger.min.js"
+            integrity="sha512-AY2+JxnBETJ0wcXnLPCcZJIJx0eimyhz3OJ55k2Jx4RtYC+XdIi2VtJQ+tP3BaTst4otlGG1TtPJ9fKrAUnRdQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
     </head>    <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
         <header class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-around">
             <a class="tw-h-[120px] tw-p-[4px] tw-w-[100px] tw-text-2xl tw-font-medium" href="">
@@ -79,32 +102,32 @@
                 contact
             </h3>
             <form id="contact-form" class="tw-space-y-4 tw-mt-[30px]">
-        <div>
-            <label for="name" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">name</label>
-            <input type="text" id="name" name="name" required
-                   class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
-        </div>
-        <div>
-            <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">email</label>
-            <input type="email" id="email" name="email" required
-                   class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
-        </div>
-        <div>
-            <label for="message" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">message</label>
-            <textarea id="message" name="message" rows="5" required
-                      class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"></textarea>
-        </div>
-        
-        <!-- reCAPTCHA widget -->
-        <div class="g-recaptcha" data-sitekey="6LeLXHcqAAAAAKjLueRN9QL5eTcF7hC6kLFcDZjC"></div>
-        
-        <button type="submit"
-                class="tw-w-full tw-bg-blue-500 tw-text-white tw-font-semibold tw-py-2 tw-px-4 tw-rounded-md hover:tw-bg-blue-600 tw-transition tw-duration-200">
-            Send Message
-        </button>
-        <p class="tw-text-green-600 tw-text-center tw-mt-4" id="success-message" style="display: none;">Your message has been sent!</p>
-        <p class="tw-text-red-600 tw-text-center tw-mt-4" id="error-message" style="display: none;">There was an error sending your message. Please try again.</p>
-    </form>
+                <div>
+                    <label for="name" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">name</label>
+                    <input type="text" id="name" name="name" required
+                           class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
+                </div>
+                <div>
+                    <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">email</label>
+                    <input type="email" id="email" name="email" required
+                           class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
+                </div>
+                <div>
+                    <label for="message" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">message</label>
+                    <textarea id="message" name="message" rows="5" required
+                              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"></textarea>
+                </div>
+            
+                <!-- reCAPTCHA widget -->
+                <div class="g-recaptcha" data-sitekey="6LeLXHcqAAAAAKjLueRN9QL5eTcF7hC6kLFcDZjC"></div>
+                
+                <button type="submit"
+                        class="tw-w-full tw-bg-blue-500 tw-text-white tw-font-semibold tw-py-2 tw-px-4 tw-rounded-md hover:tw-bg-blue-600 tw-transition tw-duration-200">
+                    Send Message
+                </button>
+                <p class="tw-text-green-600 tw-text-center tw-mt-4" id="success-message" style="display: none;">Your message has been sent!</p>
+                <p class="tw-text-red-600 tw-text-center tw-mt-4" id="error-message" style="display: none;">There was an error sending your message. Please try again.</p>
+            </form>
         </section>
 
         <hr class="tw-mt-4" />
@@ -129,47 +152,24 @@
             </div>
         </footer>    </body>
 
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"
-        integrity="sha512-B1lby8cGcAUU3GR+Fd809/ZxgHbfwJMp0jLTVfHiArTuUt++VqSlJpaJvhNtRf3NERaxDNmmxkdx2o+aHd4bvw=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-    ></script>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/ScrollTrigger.min.js"
-        integrity="sha512-AY2+JxnBETJ0wcXnLPCcZJIJx0eimyhz3OJ55k2Jx4RtYC+XdIi2VtJQ+tP3BaTst4otlGG1TtPJ9fKrAUnRdQ=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-    ></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
     <script>
-    (function(){
-        emailjs.init({publicKey: "y6ebNBhEpEzmyqS8F",}); // Replace with your EmailJS user ID
-    })();
-
     document.getElementById('contact-form').addEventListener('submit', function(event) {
         event.preventDefault();
 
         // Hide previous messages
         document.getElementById('success-message').style.display = 'none';
         document.getElementById('error-message').style.display = 'none';
-
+        
+        const recaptchaResponse = grecaptcha.getResponse();
         // Check if reCAPTCHA is completed
-        if (grecaptcha.getResponse() === "") {
+        if (!recaptchaResponse) {
             document.getElementById('error-message').innerText = "Please complete the reCAPTCHA.";
             document.getElementById('error-message').style.display = 'block';
             return;
         }
 
-        templateParams = {
-            from_name: this.name,
-            reply_to: this.email,
-            message: this.message
-        };
-
         // Send the email
-        emailjs.sendForm('service_nyu', 'template_w5u7hym', templateParams)
+        emailjs.sendForm('service_nyu', 'template_w5u7hym', this, {'g-recaptcha-response': recaptchaResponse})
             .then(function() {
                 document.getElementById('success-message').style.display = 'block';
                 document.getElementById('contact-form').reset();
