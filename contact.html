@@ -173,6 +173,10 @@
             .then(function() {
                 document.getElementById('success-message').style.display = 'block';
                 document.getElementById('contact-form').reset();
+
+                // Send a confirmation email to the user
+                emailjs.send("service_nyu", "template_p0kvosr", this);
+
                 grecaptcha.reset(); // Reset reCAPTCHA after successful submission
             }, function(error) {
                 document.getElementById('error-message').style.display = 'block';
