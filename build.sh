@@ -9,6 +9,7 @@ mkdir -p out
 cp index.html index.js out/
 cp people.html out/
 cp research.html research.js out/
+cp contact.html out/
 cp -R assets css out/
 
 echo ""
