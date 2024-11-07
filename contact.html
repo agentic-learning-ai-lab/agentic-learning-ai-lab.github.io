@@ -167,16 +167,16 @@
             document.getElementById('error-message').style.display = 'block';
             return;
         }
-        const form = this;
+        // const form = this;
 
         // Send the email
-        emailjs.sendForm('service_nyu', 'template_w5u7hym', form, {'g-recaptcha-response': recaptchaResponse})
+        emailjs.sendForm('service_nyu', 'template_w5u7hym', this, {'g-recaptcha-response': recaptchaResponse})
             .then(function() {
                 document.getElementById('success-message').style.display = 'block';
                 document.getElementById('contact-form').reset();
 
                 // Send a confirmation email to the user
-                emailjs.sendForm("service_nyu", "template_p0kvosr", form);
+                // emailjs.sendForm("service_nyu", "template_p0kvosr", form);
 
                 grecaptcha.reset(); // Reset reCAPTCHA after successful submission
             }, function(error) {
