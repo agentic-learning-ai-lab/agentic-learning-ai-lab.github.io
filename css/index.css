@@ -263,3 +263,15 @@ align-items: left;
 .safari-box-sizing {
     box-sizing: border-box;
 }
+
+.bi-bluesky::before {
+    content: "";
+/*    background-image: url("../assets/images/icons/bluesky.svg") no-repeat*/
+    background-color: currentColor;
+    -webkit-mask: url("../assets/images/icons/bluesky.svg") no-repeat 50% 50%;
+    mask: url("../assets/images/icons/bluesky.svg") no-repeat 50% 50%;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    height: 32px;
+    width: 24px;
+}
