@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e # exit with nonzero exit code if anything fails
 
-npm run build-in-place
+# npm run build-in-place
+npm run build
 
 find . -name ".DS_Store" -depth -exec rm {} \;
 # rm -rf out
