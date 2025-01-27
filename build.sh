@@ -8,9 +8,9 @@ find . -name ".DS_Store" -depth -exec rm {} \;
 # rm -rf out
 mkdir -p out
 cp index.html index.js out/
-cp people.html out/
-cp research.html research.js out/
-cp contact.html out/
+cp -R people out/
+cp -R research research.js out/
+cp -R contact out/
 cp -R assets css out/
 
 echo ""
