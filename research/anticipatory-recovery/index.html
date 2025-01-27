@@ -20,9 +20,9 @@
         <!--Replace with the current website url-->
         <meta property="og:image" content="" />
     
-        <link rel="stylesheet" href="./css/tailwind-runtime.css" />
-        <!-- <link rel="stylesheet" href="./css/tailwind-build.css" /> -->
-        <link rel="stylesheet" href="css/index.css" />
+        <link rel="stylesheet" href="/css/tailwind-runtime.css" />
+        <!-- <link rel="stylesheet" href="/css/tailwind-build.css" /> -->
+        <link rel="stylesheet" href="/css/index.css" />
     
         <link
             rel="stylesheet"
@@ -71,16 +71,16 @@
         ></script>
     </head>    <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
         <header class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-around">
-            <a class="tw-h-[120px] tw-p-[4px] tw-w-[100px] tw-text-2xl tw-font-medium" href="./index.html">
+            <a class="tw-h-[120px] tw-p-[4px] tw-w-[100px] tw-text-2xl tw-font-medium" href="/">
             agentic learning <br/> ai lab
             </a>
             <div class="collapsible-header animated-collapse max-lg:tw-shadow-md"
                 id="collapsed-header-items">
                 <div class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-black max-lg:tw-mt-[30px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-5 lg:tw-mx-auto lg:tw-place-items-center">
-                    <a class="header-links" href="./index.html"> home </a>
-                    <a class="header-links" href="./research.html"> research </a>
-                    <a class="header-links" href="./people.html"> people </a>
-                    <a class="header-links" href="./contact.html"> contact </a>
+                    <a class="header-links" href="/"> home </a>
+                    <a class="header-links" href="/research/"> research </a>
+                    <a class="header-links" href="/people/"> people </a>
+                    <a class="header-links" href="/contact/"> contact </a>
                 </div>
                 <div class="tw-mx-4 tw-flex tw-place-items-center tw-justify-end tw-gap-[20px] tw-text-base">
                         <div class="tw-flex tw-h-[30px] tw-w-[30px] tw-rounded-full tw-bg-white tw-font-semibold tw-text-black tw-place-items-center ">
@@ -97,39 +97,51 @@
                 id="collapse-btn"
             ></button>
         </header>
-        <section class="tw-flex tw-w-full tw-flex-col tw-p-[5%] tw-mt-[150px] max-lg:tw-p-4">
-            <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
-                contact
-            </h3>
-            <form id="contact-form" class="tw-space-y-4 tw-mt-[30px]">
-                <div>
-                    <label for="name" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">name</label>
-                    <input type="text" id="name" name="name" required
-                           class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
-                </div>
-                <div>
-                    <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">email</label>
-                    <input type="email" id="email" name="email" required
-                           class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
-                </div>
-                <div>
-                    <label for="message" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">message</label>
-                    <textarea id="message" name="message" rows="5" required
-                              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-shadow-sm focus:tw-ring-blue-500 focus:tw-border-blue-500"></textarea>
-                </div>
-            
-                <!-- reCAPTCHA widget -->
-                <div class="g-recaptcha" data-sitekey="6LeLXHcqAAAAAKjLueRN9QL5eTcF7hC6kLFcDZjC"></div>
-                
-                <button type="submit"
-                        class="tw-w-full tw-bg-black tw-text-white tw-font-semibold tw-py-2 tw-px-4 tw-rounded-md hover:tw-bg-gray-600 tw-transition tw-duration-200">
-                    send
-                </button>
-                <p class="tw-text-green-600 tw-text-center tw-mt-4" id="success-message" style="display: none;">Your message has been sent!</p>
-                <p class="tw-text-red-600 tw-text-center tw-mt-4" id="error-message" style="display: none;">There was an error sending your message. Please try again.</p>
-            </form>
+        <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
+            <div class="tw-flex tw-w-full tw-place-content-center tw-gap-6 max-xl:tw-place-items-center max-lg:tw-flex-col">
+            <div class="image-container">
+                <img src=/assets/images/papers/reawakening.png alt="app" class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain"/>
+            </div>
+            </div>
         </section>
 
+        <section class="tw-w-full tw-flex-col tw-p-[5%] tw-mt-[10px] max-lg:tw-p-4">
+            <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
+                Reawakening Knowledge: Anticipatory Recovery from Catastrophic Interference via Structured Training
+            </h3>
+
+            <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
+            </div>
+
+            <!-- <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden"> -->
+            <div class="tw-gap-2 tw-max-w-100">
+                <p class="tw-mt-4">
+                Authors: Yanlai Yang, Matt Jones, Michael C. Mozer, and Mengye Ren
+                </p>
+                <p class="tw-text-gray-600 tw-mt-4">
+                Abstract: We explore the training dynamics of neural networks in a structured non-IID setting where documents are presented cyclically in a fixed, repeated sequence. Typically, networks suffer from catastrophic interference when training on a sequence of documents; however, we discover a curious and remarkable property of LLMs fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again. The behavior emerges and becomes more robust as the architecture scales up its number of parameters. Through comprehensive experiments and visualizations, we uncover new insights into training over-parameterized networks in structured environments.
+                </p>
+                <p class="tw-mt-4">
+                Publish Date: 2024-03-14
+                </p>
+                <p class="tw-mt-8">
+                <a href=https://arxiv.org/pdf/2403.09613 class="tw-mt-4">
+                    <span>Read Paper (PDF)</span>
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+                &nbsp;
+                &nbsp;
+                <a href=https://agenticlearning.ai/anticipatory-recovery/ class="tw-mt-4">
+                    <span>Visit Project Website</span>
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+                </p>
+            </div>
+            <!-- </div> -->
+
+
+        </section>
+        
         <hr class="tw-mt-4" />
         <footer class="tw-mt-auto tw-flex tw-p-[5%] tw-min-h-[100px] tw-w-full tw-place-items-center tw-gap-3 tw-text-black
         ">
@@ -155,57 +167,5 @@
                 </a>
             </div>
         </footer>    </body>
-    <style>
-        .loading {
-            background-color: #718096; /* Gray out color */
-            cursor: not-allowed;
-        }
-        .loading:hover{
-            background-color: #718096; /* Gray out color */
-        }
-    </style>
-    <script>
-    document.getElementById('contact-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        // Hide previous messages
-        document.getElementById('success-message').style.display = 'none';
-        document.getElementById('error-message').style.display = 'none';
-        
-        const submitButton = event.target.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        submitButton.classList.add('loading');
-        submitButton.textContent = "sending...";
-        
-        const recaptchaResponse = grecaptcha.getResponse();
-        // Check if reCAPTCHA is completed
-        if (!recaptchaResponse) {
-            document.getElementById('error-message').innerText = "Please complete the reCAPTCHA.";
-            document.getElementById('error-message').style.display = 'block';
-            submitButton.disabled = false;
-            submitButton.classList.remove('loading');
-            submitButton.textContent = "send";
-            return;
-        }
-
-        // Send the email
-        emailjs.sendForm('service_nyu', 'template_w5u7hym', this, {'g-recaptcha-response': recaptchaResponse})
-            .then(function() {
-                document.getElementById('success-message').style.display = 'block';
-                document.getElementById('contact-form').reset();
-                grecaptcha.reset(); // Reset reCAPTCHA after successful submission
-                submitButton.disabled = false;
-                submitButton.classList.remove('loading');
-                submitButton.textContent = "send";
-            }, function(error) {
-                document.getElementById('error-message').style.display = 'block';
-                console.error('Failed to send the message:', error);
-                submitButton.disabled = false;
-                submitButton.classList.remove('loading');
-                submitButton.textContent = "send";
-            });
-    });
-    </script>
-
-    <script src="./index.js"></script>
+    <script src="/index.js"></script>
 </html>

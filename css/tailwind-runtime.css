@@ -649,6 +649,10 @@ video {
   margin-top: 2rem;
 }
 
+.tw-mt-\[10px\] {
+  margin-top: 10px;
+}
+
 .tw-mt-\[150px\] {
   margin-top: 150px;
 }
@@ -737,6 +741,10 @@ video {
 
 .tw-min-w-\[350px\] {
   min-width: 350px;
+}
+
+.tw-max-w-\[1000px\] {
+  max-width: 1000px;
 }
 
 .tw-max-w-\[100vw\] {

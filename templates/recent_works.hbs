@@ -1,5 +1,5 @@
 {{#each this}}
-<a href="{{{arxiv}}}">
+<a href="/research/{{{permalink}}}">
 <div class="safari-padding-fix">
 <div class="reveal-up tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
     <div class="tw-flex tw-place-items-center tw-gap-3">
@@ -18,7 +18,7 @@
         <p class="tw-mt-4">
         Publish Date: {{formatDate date "YYYY-MM-DD"}}
         </p>
-        <a href={{{arxiv}}} class="tw-mt-4">
+        <a href=/research/{{{permalink}}} class="tw-mt-4">
             <span>Learn more</span>
             <i class="bi bi-arrow-right"></i>
         </a>

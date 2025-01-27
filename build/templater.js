@@ -26,10 +26,27 @@ function doTemplating(input, output) {
     // Uncomment to see documents; useful while tweaking the templates
     // console.log(require("util").inspect(documents, { depth: Infinity }));
 
-    fs.writeFileSync(output, template(documents));
+    if (input === "paper.hbs") {
+        // Generate individual papers
+        for (const p of documents.papers) {
+            const output_new = output.replace("{{permalink}}", p.permalink);
+            if (!fs.existsSync(path.dirname(output_new))){
+                fs.mkdirSync(path.dirname(output_new));
+            }
+            fs.writeFileSync(output_new, template(p));
+        }
+    }
+    else if (input == "person.hbs") {
+        // Generate individual person
+
+    } else {
+        fs.writeFileSync(output, template(documents));
+    }
+
 }
 
 function compileTemplate(handlebars, input) {
+    console.log("Input: " + input);
     return handlebars.compile(fs.readFileSync(input, { encoding: 'utf-8' }));
 }
 
@@ -99,7 +116,17 @@ function registerHelpers(handlebars) {
       return moment.utc(date).format(format);
     });
     handlebars.registerHelper('formatAuthors', function (authors) {
-      return authors.slice(0, -1).join(', ') + (', and ') + authors[authors.length - 1];
+        console.log(authors);
+        if (authors.length == 0) {
+          return "";
+        }
+        else if (authors.length == 1) {
+          return authors[0];
+        } else if (authors.length == 2) {
+          return authors[0] + ' and ' + authors[1];
+        } else {
+          return authors.slice(0, -1).join(', ') + (', and ') + authors[authors.length - 1];
+        }
     });
 }
 
