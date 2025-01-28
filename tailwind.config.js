@@ -8,6 +8,8 @@ module.exports = {
 		"**/*.{html, jsx, js}",
 		"**/*.js",
 		"**/*.html",
+		"*.html",
+		"**/**/*.html",
 	],
 	theme: {
 		extend: {
