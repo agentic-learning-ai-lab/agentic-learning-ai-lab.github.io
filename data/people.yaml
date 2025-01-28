@@ -1,47 +1,59 @@
 -
-  name: Mengye Ren
+  name: "Mengye Ren"
   image: "/assets/images/people/mengye_ren.jpg"
-  position: Assistant Professor
-  url: https://mengyeren.com/
-
+  position: "Assistant Professor"
+  webpage: "https://mengyeren.com/"
+  permalink: "mengye-ren"
+  description: "Mengye Ren is an assistant professor of computer science and data science at New York University (NYU). He runs the Agentic Learning AI Lab. Before joining NYU, he was a visiting faculty researcher at Google Brain Toronto working with Prof. Geoffrey Hinton. From 2017 to 2021, he was a senior research scientist at Uber Advanced Technologies Group (ATG) and Waabi, working on self-driving vehicles. He received PhD in Computer Science from the University of Toronto, advised by Prof. Richard Zemel and Prof. Raquel Urtasun. His research focuses on making machine learning more natural and human-like, in order for AIs to continually learn, adapt, and reason in naturalistic environments."
 -
-  name: Chris Hoang
+  name: "Chris Hoang"
   image: "/assets/images/people/chris_hoang.jpg"
-  position: PhD Student
-  url: https://www.chrishoang.com/
-
+  position: "PhD Student"
+  webpage: "https://www.chrishoang.com/"
+  permalink: "chris-hoang"
+  description: "Chris Hoang is a PhD student in the CILVR lab at NYU Courant advised by Mengye Ren and supported by the NDSEG fellowship. His areas of interest are machine learning and computer vision. His research goal is to advance the visual perception and reasoning capabilities of AI agents to enable them to robustly operate in the complex real world."
 - 
-  name: Jack (Yi Ao) Lu
+  name: "Jack (Yi Ao) Lu"
   image: "/assets/images/people/jack_lu.jpg"
-  position: PhD Student
-  url: https://jacklu-me.com/
-
+  position: "PhD Student"
+  webpage: "https://jacklu-me.com/"
+  permalink: "jack-lu"
+  description: "Jack Lu is a PhD student in Computer Science at NYU Courant, advised by Prof. Mengye Ren in the CILVR lab. His research is supported by the NSERC PGS-D Scholarship. Prior to joining NYU, he got his Bachelor’s degree in Computer Science and Mathematics at the University of Waterloo. Recently, his work focused on generative modeling, few-shot learning, and AI-assisted design."
 - 
-  name: Ryan Teehan
+  name: "Ryan Teehan"
   image: "/assets/images/people/ryan_teehan.jpg"
-  position: PhD Student
-  url: https://rteehas.github.io/
+  position: "PhD Student"
+  webpage: "https://rteehas.github.io/"
+  permalink: "ryan-teehan"
+  description: ""
 
 -
-  name: Alex N. Wang
+  name: "Alex N. Wang"
   image: "/assets/images/people/alex_wang.jpg"
-  position: PhD Student
-  url: https://www.alexn.wang/
-
+  position: "PhD Student"
+  webpage: "https://www.alexn.wang/"
+  permalink: "alex-wang"
+  description: "Alex Wang is a PhD student in CILVR advised by Mengye Ren at New York University. He did his MSc with Rich Zemel and BASc in Engineering Science at University of Toronto. He is supported by the NSERC PGS-D scholarship. He is interested in intelligent, large-scale generative vision models. Through generative modeling, he aims to define, build, and evaluate a notion of visual intelligence."
 -
-  name: Ying Wang
+  name: "Ying Wang"
   image: "/assets/images/people/ying_wang.jpg"
-  position: PhD Student
-  url: https://yingwangg.github.io/
+  position: "PhD Student"
+  webpage: "https://yingwangg.github.io/"
+  permalink: "ying-wang"
+  description: "Ying Wang is a PhD student at NYU Center for Data Science, advised by Prof. Andrew Wilson and Prof. Mengye Ren in the CILVR Lab. Her research focuses on multimodal learning, aiming to build adaptive and trustworthy machine learning systems that integrate diverse modalities such as text, images, and videos. Prior to starting her PhD, she earned an MS in Data Science at NYU, where she was featured in the alumni spotlight. She completed her undergraduate degree in Computer Science, Statistics, and Finance at McGill University in Montreal, Canada."
 
 -
-  name: Yanlai Yang
+  name: "Yanlai Yang"
   image: "/assets/images/people/yanlai_yang.jpg"
-  position: PhD Student
-  url: https://yanlai00.github.io/
+  position: "PhD Student"
+  webpage: "https://yanlai00.github.io/"
+  permalink: "yanlai-yang"
+  description: "Yanlai Yang is a third-year Ph.D student in Computer Science at NYU Courant, advised by Prof. Mengye Ren in the CILVR Lab. Starting Fall 2024, he also works as a Visiting Researcher at Meta. Prior to joining NYU, he got his Bachelor's degree in Computer Science and Applied Math at UC Berkeley. He was a recipient of the Mark D. Weiser Excellence in Computing Scholarship and the Outstanding Student Instructor Award at UC Berkeley."
 
 -
-  name: Amelia (Hui) Dai
+  name: "Amelia (Hui) Dai"
   image: "/assets/images/people/amelia_dai.jpg"
-  position: Master Student
-  url: https://www.linkedin.com/in/hui-dai/
+  position: "Master Student"
+  webpage: "https://ameliadai.github.io/"
+  permalink: "amelia-dai"
+  description: "Amelia Dai is a second-year Master in Data Science at NYU Center for Data Science, working with Prof. Mengye Ren in the Agentic Learning AI Lab and Prof. Krzysztof J. Geras. Her research interests include understanding LLMs (capabilities and limitations) and AI in healthcare. Recently, her work includes evaluating the generalization ability of LLMs and multi-modal learning for breast cancer detection. Previously, she completed her BS in Statistics at The Chinese University of Hong Kong, Shenzhen. Outside of school, she also does hiphop dancing!"

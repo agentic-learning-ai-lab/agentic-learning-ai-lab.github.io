@@ -38,6 +38,13 @@ function doTemplating(input, output) {
     }
     else if (input == "person.hbs") {
         // Generate individual person
+        for (const p of documents.people) {
+            const output_new = output.replace("{{permalink}}", p.permalink);
+            if (!fs.existsSync(path.dirname(output_new))){
+                fs.mkdirSync(path.dirname(output_new));
+            }
+            fs.writeFileSync(output_new, template(p));
+        }
 
     } else {
         fs.writeFileSync(output, template(documents));

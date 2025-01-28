@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta property="og:title" content="{{{name}}} | Agentic Learning AI Lab" />
+<meta property="og:description" content="{{{description}}}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://agenticlearning.ai/research/{{{permalink}}}" />
+<!--Replace with the current website url-->
+<meta property="og:image" content="https://agenticlearning.ai/{{{image}}}" />
+{{> head}}
+</head>
+<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
+    {{> header}}
+
+    <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
+            <div class="tw-h-[200px] tw-w-[200px] tw-overflow-hidden">
+                <img src={{{image}}}
+                    class="tw-h-full tw-w-full tw-object-cover"
+                    alt="design"/>
+            </div>
+    </section>
+
+    <section class="tw-w-full tw-flex-col tw-p-[5%] tw-mt-[10px] max-lg:tw-p-4">
+            <div class="tw-flex-col tw-w-[50%]">
+            <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
+                {{name}}
+            </h3>
+
+            <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
+            </div>
+            <div class="tw-gap-2 tw-max-w-100">
+                <p class="tw-mt-4 tw-italic">
+                {{{position}}}
+                </p>
+                <p class="tw-text-gray-600 tw-mt-4">
+                {{{description}}}
+                </p>
+                <div class="tw-flex tw-mt-8 tw-gap-x-4 tw-min-w-[100px]">
+                <div class="tw-flex-col">
+                <a href={{{webpage}}}>
+                    <span>Visit Personal Website</span>
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    {{> footer}}
+</body>
+<script src="/index.js"></script>
+</html>
