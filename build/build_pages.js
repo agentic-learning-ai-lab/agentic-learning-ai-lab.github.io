@@ -12,6 +12,7 @@ const pages = [
     { template: 'people.hbs', output: 'people/index.html', context: { pageTitle: 'People' } },
     { template: 'research.hbs', output: 'research/index.html', context: { pageTitle: 'Research' } },
     { template: 'paper.hbs', output: 'research/{{permalink}}/index.html', context: { pageTitle: 'Research' } },
+    { template: 'person.hbs', output: 'people/{{permalink}}/index.html', context: { pageTitle: 'People' } },
 ];
 
 // Compile and write each page
