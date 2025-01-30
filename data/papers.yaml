@@ -11,7 +11,7 @@
   webpage: "#"
   permalink: "memory-storyboard"
   research_areas:
-    - "continual-visual-learning"
+    - "learning-from-visual-experience"
   date: 2025-01-21
   journal: "CoRR"
   is_recent: true
@@ -51,7 +51,7 @@
   webpage: "https://agenticlearning.ai/poodle/"
   permalink: "poodle"
   research_areas:
-    - "continual-visual-learning"
+    - "learning-from-visual-experience"
   date: 2024-08-20
   journal: "CoRR"
   is_recent: true
@@ -70,7 +70,7 @@
   webpage: "https://agenticlearning.ai/procreate-diffusion/"
   permalink: "procreate"
   research_areas:
-    - "concept-learning"
+    - "concept-learning-abstraction"
   date: 2024-08-05
   journal: "ECCV 2024"
   is_recent: true
@@ -90,7 +90,7 @@
   webpage: "#"
   permalink: "osiris"
   research_areas:
-    - "continual-visual-learning"
+    - "learning-from-visual-experience"
   date: 2024-04-29
   journal: "CoLLAs 2024"
   is_recent: true
@@ -110,7 +110,7 @@
   permalink: "college"
   research_areas:
     - "adaptive-foundation-models"
-    - "concept-learning"
+    - "concept-learning-abstraction"
   date: 2024-03-22
   journal: "COLM 2024"
   is_recent: true
@@ -151,7 +151,7 @@
   webpage: "#"
   permalink: "video-ssl-from-child"
   research_areas:
-    - "continual-visual-learning"
+    - "learning-from-visual-experience"
   date: 2024-02-01
   journal: "CogSci 2024"
   is_recent: true
@@ -191,7 +191,7 @@
   webpage: "https://agenticlearning.ai/lifelong-memory/"
   permalink: "lifelong-memory"
   research_areas:
-    - "continual-visual-learning"
+    - "learning-from-visual-experience"
     - "adaptive-foundation-models"
   date: 2023-12-07
   journal: "CoRR"

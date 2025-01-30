@@ -46,6 +46,31 @@ function doTemplating(input, output) {
             fs.writeFileSync(output_new, template(p));
         }
 
+    }
+    else if (input == "research_area.hbs") {
+        // Generate individual research area
+        for (const ra of documents.research_areas) {
+            const output_new = output.replace("{{permalink}}", ra.permalink);
+            console.log(output_new);
+            if (!fs.existsSync(path.dirname(output_new))){
+                console.log(path.dirname(output_new));
+                fs.mkdirSync(path.dirname(output_new));
+            }
+            const papers = [];
+            for (const p of documents.papers){
+                for (const ra2 of p.research_areas){
+                    console.log(ra2, ra.permalink);
+                    if (ra2 === ra.permalink){
+                        papers.push(p);
+                    }
+                }
+            }
+            ra.papers = papers;
+            console.log("papers");
+            console.log(papers);
+            fs.writeFileSync(output_new, template(ra));
+        }
+
     } else {
         fs.writeFileSync(output, template(documents));
     }

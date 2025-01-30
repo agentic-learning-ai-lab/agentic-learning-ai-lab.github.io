@@ -224,11 +224,19 @@ header > .collapsible-header{
 }
 
 .text-overlay {
-    position: absolute;
+  position: absolute;
+  top: 50%;
+  left: 40px;
+  transform: translate(0%, -50%);
+/*    display: flex;
+    align-items: center;
+    height: 100vh;
+    */
+/*    position: absolute;*/
     color: white; /* Text color */
-    top: 100px;
-    left: 40px;
-    width: 80%; /* Ensures the image fits the container */
+/*    top: 100px;*/
+/*    left: 40px;*/
+    width: 60%; /* Ensures the image fits the container */
 /*    font-size: 24px; /* Adjust font size */
 /*    font-weight: bold;*/
 /*    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Optional text shadow for readability */*/
