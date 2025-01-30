@@ -13,7 +13,7 @@ const pages = [
     { template: 'research.hbs', output: 'research/index.html', context: { pageTitle: 'Research' } },
     { template: 'paper.hbs', output: 'research/{{permalink}}/index.html', context: { pageTitle: 'Research' } },
     { template: 'person.hbs', output: 'people/{{permalink}}/index.html', context: { pageTitle: 'People' } },
-    { template: 'research_area.hbs', output: './{{permalink}}/index.html', context: { pageTitle: 'Research Areas' } },
+    { template: 'research_area.hbs', output: 'areas/{{permalink}}/index.html', context: { pageTitle: 'Research Areas' } },
 ];
 
 // Compile and write each page
