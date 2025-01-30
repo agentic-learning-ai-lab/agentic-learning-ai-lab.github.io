@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta property="og:title" content=" | Agentic Learning AI Lab" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://agenticlearning.ai/research/concept-learning-abstraction" />
+<!--Replace with the current website url-->
+<meta property="og:image" content="https://agenticlearning.ai//assets/images/home/concept_abstraction.webp" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>agentic learning ai lab</title>
+<meta name="description" content="" />
+<!-- <link
+    rel="shortcut icon"
+    href="./assets/logo.png"
+    type="image/x-icon"
+/> -->
+
+<link rel="stylesheet" href="/css/tailwind-runtime.css" />
+<link rel="stylesheet" href="/css/tailwind-build.css" />
+<link rel="stylesheet" href="/css/index.css" />
+
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+/>
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+    integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+/>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-44MVTGBV0D"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-44MVTGBV0D');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+    (function() {
+        // https://dashboard.emailjs.com/admin/account
+        emailjs.init({
+          publicKey: "y6ebNBhEpEzmyqS8F",
+        });
+    })();
+</script>
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"
+    integrity="sha512-B1lby8cGcAUU3GR+Fd809/ZxgHbfwJMp0jLTVfHiArTuUt++VqSlJpaJvhNtRf3NERaxDNmmxkdx2o+aHd4bvw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/ScrollTrigger.min.js"
+    integrity="sha512-AY2+JxnBETJ0wcXnLPCcZJIJx0eimyhz3OJ55k2Jx4RtYC+XdIi2VtJQ+tP3BaTst4otlGG1TtPJ9fKrAUnRdQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+></script></head>
+<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
+    <header class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-around">
+        <a class="tw-h-[120px] tw-p-[4px] tw-w-[100px] tw-text-2xl tw-font-medium" href="/">
+        agentic learning <br/> ai lab
+        </a>
+        <div class="collapsible-header animated-collapse max-lg:tw-shadow-md"
+            id="collapsed-header-items">
+            <div class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-black max-lg:tw-mt-[30px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-5 lg:tw-mx-auto lg:tw-place-items-center">
+                <a class="header-links" href="/"> home </a>
+                <a class="header-links" href="/research/"> research </a>
+                <a class="header-links" href="/people/"> people </a>
+                <a class="header-links" href="/contact/"> contact </a>
+            </div>
+            <div class="tw-mx-4 tw-flex tw-place-items-center tw-justify-end tw-gap-[20px] tw-text-base">
+                    <div class="tw-flex tw-h-[30px] tw-w-[30px] tw-rounded-full tw-bg-white tw-font-semibold tw-text-black tw-place-items-center ">
+                        <a href="">
+                        <i class="bi bi-search"></i>
+                        </a>
+                    </div>
+            </div>
+        </div>
+        <button
+            class="bi bi-list tw-absolute tw-right-3 tw-top-3 tw-z-50 tw-text-3xl tw-text-black lg:tw-hidden"
+            onclick="toggleHeader()"
+            aria-label="menu"
+            id="collapse-btn"
+        ></button>
+    </header>
+    <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
+        <div class="tw-flex tw-w-full tw-place-content-center tw-gap-6 max-xl:tw-place-items-center max-lg:tw-flex-col">
+        <div class="image-container">
+            <img src="/assets/images/home/concept_abstraction.webp" alt="app" class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain"/>
+            <div class="text-overlay">
+            <div class="tw-flex tw-flex-wrap tw-text-7xl tw-font-semibold tw-leading-[85px] max-md:tw-text-4xl max-md:tw-leading-snug" style={position: relative}>
+                <span class="reveal-hero-text">
+                    Concept Learning and Abstraction
+                </span>
+            </div>
+        </div>
+        </div>
+    </section>
+
+<!-- 
+    <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
+            <div class="tw-h-[200px] tw-w-[200px] tw-overflow-hidden">
+                <img src=/assets/images/home/concept_abstraction.webp
+                    class="tw-h-full tw-w-full tw-object-cover"
+                    alt="design"/>
+            </div>
+    </section> -->
+
+    <section class="tw-w-full tw-flex-col tw-p-[5%] tw-mt-[10px] max-lg:tw-p-4">
+        <!-- sm:tw-w-[100%] md:tw-w-[80%] lg:tw-w-[60%] xl:tw-w-[50%] -->
+            <div class="tw-flex-col tw-w-full">
+            <!-- <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
+                
+            </h3>
+
+            <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
+            </div> -->
+            <div class="tw-gap-2 tw-max-w-100">
+                <p class="tw-text-gray-600 tw-mt-4">
+                
+                </p>
+            </div>
+
+            <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
+                Research Works
+            </h3>
+            <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
+            </div>
+
+            <div class="tw-mt-8 tw-gap-10 tw-space-y-reverse sm:tw-columns-1 md:tw-columns-2 lg:tw-columns-3 xl:tw-columns-4 tw-items-start">
+                <a href="/research/procreate">
+                <div class="safari-padding-fix">
+                <!-- reveal-up  -->
+                <!-- tw-rounded-lg  -->
+                <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
+                    <div class="tw-flex tw-place-items-center tw-gap-3">
+                        <!-- tw-rounded-lg -->
+                        <div class="tw-h-[300px] tw-w-full tw-overflow-hidden ">
+                            <img src=/assets/images/papers/procreate.png
+                                class="tw-h-full tw-w-full tw-object-cover"
+                                alt="design"/>
+                        </div>
+                        <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                    </div>
+                    <div class="tw-flex tw-flex-col tw-gap-2">
+                        <h3 class="tw-text-xl tw-font-medium tw-mt-4">ProCreate, Don't Reproduce! Propulsive Energy Diffusion for Creative Generation</h3>
+                        <p class="tw-text-gray-600 tw-mt-4">
+                            ProCreate is a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction.
+                        </p>
+                        <p class="tw-mt-4">
+                        Publish Date: 2024-08-05
+                        </p>
+                        <a href=/research/procreate class="tw-mt-4">
+                            <span>Learn more</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                </a>
+                <a href="/research/college">
+                <div class="safari-padding-fix">
+                <!-- reveal-up  -->
+                <!-- tw-rounded-lg  -->
+                <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden">
+                    <div class="tw-flex tw-place-items-center tw-gap-3">
+                        <!-- tw-rounded-lg -->
+                        <div class="tw-h-[300px] tw-w-full tw-overflow-hidden ">
+                            <img src=/assets/images/papers/college.png
+                                class="tw-h-full tw-w-full tw-object-cover"
+                                alt="design"/>
+                        </div>
+                        <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                    </div>
+                    <div class="tw-flex tw-flex-col tw-gap-2">
+                        <h3 class="tw-text-xl tw-font-medium tw-mt-4">CoLLEGe: Concept Embedding Generation for Large Language Models</h3>
+                        <p class="tw-text-gray-600 tw-mt-4">
+                            CoLLEGe is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions.
+                        </p>
+                        <p class="tw-mt-4">
+                        Publish Date: 2024-03-22
+                        </p>
+                        <a href=/research/college class="tw-mt-4">
+                            <span>Learn more</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                </div>
+                </a>
+            </div>
+
+        </div>
+    </section>
+    
+    <hr class="tw-mt-4" />
+    <footer class="tw-mt-auto tw-flex tw-p-[5%] tw-min-h-[100px] tw-w-full tw-place-items-center tw-gap-3 tw-text-black
+    ">
+    
+        <div class="tw-flex tw-gap-6 tw-text-sm">
+            60 Fifth Ave
+            <br />
+            New York, NY
+            <br />
+            
+        </div>
+        <div class="tw-flex tw-gap-6 tw-text-2xl tw-justify-end tw-ml-auto tw-px-2">
+            <a href="https://github.com/agentic-learning-ai-lab" aria-label="Github">
+                <i class="bi bi-github"></i>
+            </a>
+            
+            <a href="https://x.com/agentic_ai_lab" aria-label="X">
+                <i class="bi bi-twitter-x"></i>
+            </a>
+    
+            <a href="https://bsky.app/profile/agentic-ai-lab.bsky.social" aria-label="Bluesky">
+                <i class="bi bi-bluesky"></i>
+            </a>
+        </div>
+    </footer></body>
+<script src="/index.js"></script>
+</html>
