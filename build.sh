@@ -11,7 +11,9 @@ cp index.html index.js out/
 cp -R people out/
 cp -R research research.js out/
 cp -R contact out/
-cp -R assets css out/
+cp -R assets out/
+cp -R css out/
+cp -R areas out/
 
 echo ""
 find out/ -print
