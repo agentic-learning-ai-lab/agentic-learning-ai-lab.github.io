@@ -53,7 +53,7 @@
   research_areas:
     - "learning-from-visual-experience"
   date: 2024-08-20
-  journal: "CoRR"
+  journal: "The Thirteenth International Conference on Learning Representations (ICLR 2025)"
   is_recent: true
 
 -
@@ -72,7 +72,7 @@
   research_areas:
     - "concept-learning-abstraction"
   date: 2024-08-05
-  journal: "ECCV 2024"
+  journal: "The 18th European Conference on Computer Vision (ECCV 2024)"
   is_recent: true
 
 - 
@@ -92,7 +92,7 @@
   research_areas:
     - "learning-from-visual-experience"
   date: 2024-04-29
-  journal: "CoLLAs 2024"
+  journal: "The Third Conference on Lifelong Learning Agents (CoLLAs 2024)"
   is_recent: true
 
 - 
@@ -112,7 +112,7 @@
     - "adaptive-foundation-models"
     - "concept-learning-abstraction"
   date: 2024-03-22
-  journal: "COLM 2024"
+  journal: "The First Conference on Language Modeling (COLM 2024)"
   is_recent: true
 
 -
@@ -132,7 +132,7 @@
   research_areas:
     - "adaptive-foundation-models"
   date: 2024-03-14
-  journal: "NeurIPS 2024"
+  journal: "Advances in Neural Information Processing Systems 37 (NeurIPS 2024)"
   is_recent: true
 
 - 
@@ -153,7 +153,7 @@
   research_areas:
     - "learning-from-visual-experience"
   date: 2024-02-01
-  journal: "CogSci 2024"
+  journal: "The 46th Annual Meeting of the Cognitive Science Society (CogSci 2024)"
   is_recent: true
 
 -
@@ -174,7 +174,7 @@
   research_areas:
     - "adaptive-foundation-models"
   date: 2023-12-20
-  journal: "ICML 2024"
+  journal: "The Forty-First International Conference on Machine Learning (ICML 2024)"
   is_recent: true
 
 -
@@ -186,8 +186,8 @@
     - "Mengye Ren"
   short_abstract: 'LifelongMemory is a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval.'
   abstract: "In this paper we introduce LifelongMemory, a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval. LifelongMemory generates concise video activity descriptions of the camera wearer and leverages the zero-shot capabilities of pretrained large language models to perform reasoning over long-form video context. Furthermore, Lifelong Memory uses a confidence and explanation module to produce confident, high-quality, and interpretable answers. Our approach achieves state-of-the-art performance on the EgoSchema benchmark for question answering and is highly competitive on the natural language query (NLQ) challenge of Ego4D."
-  arxiv: "https://arxiv.org/abs/2312.12736"
-  pdf: "https://arxiv.org/pdf/2312.12736"
+  arxiv: "https://arxiv.org/abs/2312.05269"
+  pdf: "https://arxiv.org/pdf/2312.05269"
   webpage: "https://agenticlearning.ai/lifelong-memory/"
   permalink: "lifelong-memory"
   research_areas:
