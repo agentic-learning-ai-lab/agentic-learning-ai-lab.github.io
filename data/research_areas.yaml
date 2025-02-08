@@ -1,20 +1,20 @@
 -
   title: "Learning from Visual Experience"
-  image: "/assets/images/home/visual_experience.webp"
+  image: "/assets/images/home/visual_experience.png"
   keywords: "Embodied AI; Self-supervised learning; Continual learning; Representation learning; Multimodal learning."
   description: "Visual learning has made significant progress with single-subject, iconic images, but learning useful representations from long-form egocentric videos remains challenging. These videos provide a naturalistic, embodied sensory experience, offering spatiotemporal grounding in the real world. Leveraging multimodality, object motion, temporal structure and consistency can improve performance and data efficiency, yet learning is also hindered by constant and continual distribution shifts. To address these challenges, we have developed methods for incremental recognition in open-world environments, unsupervised continual representation learning, and video representation learning. Our vision is to build efficient and adaptable learning algorithms for on-device visual learning from streaming embodied experiences, with applications in downstream tasks such as planning and visual assistance, where the learned representations are broadly useful."
   permalink: "learning-from-visual-experience"
 
 -
   title: "Adaptive Foundation Models"
-  image: "/assets/images/home/adaptive_foundation_models.webp"
+  image: "/assets/images/home/adaptive_foundation_models.png"
   keywords: "Personalized AI; Few-shot, continual, meta learning; Memorization and forgetting; Future news forecasting."
   description: "The development of adaptive foundation models marks a significant shift toward AI systems that can continually learn, adapt, and evolve in response to new information, changing environments, and user preferences. Current foundation models are typically trained on static data, with limited ability to adapt through context post-deployment. Our goal is to enable foundation models to continuously absorb new knowledge and compress it into reusable representations for more up-to-date responses. This capability is also valuable for third-party customization, personalization, and safety alignment. We are interested in both the foundational study of sequential learning dynamics in large language models and practical applications that demand adaptive foundation models, such as personalized assistance and news forecasting."
   permalink: "adaptive-foundation-models"
 
 -
   title: "Concept Learning and Abstraction"
-  image: "/assets/images/home/concept_abstraction.webp"
+  image: "/assets/images/home/concept_abstraction.png"
   keywords: "Few-shot concept learning; Visual reasoning; Relational abstraction; Hierarchical abstraction and planning."
   description: "Scaling AI for lifelong learning and reasoning requires the ability to transform raw inputs into abstract concepts that can be efficiently composed to form more complex ones. Our lab has a strong focus on few-shot learning for concept acquisition. In recent research, we have enabled large-scale foundation models to incrementally learn new language and visual concepts. Our current efforts extend to recognizing functional and relational concepts, as well as exploring how learned concepts can be composed hierarchically for high-level reasoning. These advancements are key to building AI systems that generalize efficiently and adapt continuously to new tasks."
   permalink: "concept-learning-abstraction"

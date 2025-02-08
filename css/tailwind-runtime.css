@@ -759,12 +759,6 @@ video {
   max-width: 600px;
 }
 
-.tw-scale-150 {
-  --tw-scale-x: 1.5;
-  --tw-scale-y: 1.5;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
 .tw-transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
@@ -895,9 +889,17 @@ video {
   border-width: 1px;
 }
 
+.tw-border-2 {
+  border-width: 2px;
+}
+
 .tw-border-gray-300 {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}
+
+.tw-border-transparent {
+  border-color: transparent;
 }
 
 .tw-bg-\[\#f3f3f3b4\] {
@@ -1167,6 +1169,15 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.hover\:tw-border-solid:hover {
+  border-style: solid;
+}
+
+.hover\:tw-border-gray-600:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(75 85 99 / var(--tw-border-opacity));
+}
+
 .hover\:tw-bg-gray-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(75 85 99 / var(--tw-bg-opacity));
@@ -1305,11 +1316,6 @@ video {
     -moz-columns: 1;
          columns: 1;
   }
-
-  .sm\:tw-text-4xl {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
-  }
 }
 
 @media (min-width: 768px) {
@@ -1325,11 +1331,6 @@ video {
   .md\:tw-columns-3 {
     -moz-columns: 3;
          columns: 3;
-  }
-
-  .md\:tw-text-4xl {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
   }
 }
 
@@ -1359,11 +1360,6 @@ video {
   .lg\:tw-justify-around {
     justify-content: space-around;
   }
-
-  .lg\:tw-text-6xl {
-    font-size: 3.75rem;
-    line-height: 1;
-  }
 }
 
 @media (min-width: 1280px) {
@@ -1383,11 +1379,6 @@ video {
 
   .xl\:tw-justify-around {
     justify-content: space-around;
-  }
-
-  .xl\:tw-text-7xl {
-    font-size: 4.5rem;
-    line-height: 1;
   }
 }
 

@@ -1,18 +1,22 @@
 {{#each this}}
 <!-- reveal-up  -->
 <!-- tw-rounded-lg  -->
-<div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] hover:tw-shadow-lg tw-transition-shadow tw-duration-300">
+<!-- hover:tw-shadow-lg tw-transition-shadow tw-duration-300--> 
+<div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full max-lg:tw-max-w-[400px] 
+tw-border-transparent tw-border-2
+hover:tw-border-solid hover:tw-border-gray-600">
     <a href="/areas/{{{permalink}}}">
-        <!--  tw-rounded-md -->
+        <!--  tw-rounded-md  tw-scale-150-->
     <div class="tw-h-[200px] tw-w-full tw-overflow-hidden">
         <img
             src={{image}}
             alt="article image"
-            class="tw-h-full tw-w-full tw-object-cover tw-scale-150"
+            class="tw-h-full tw-w-full tw-object-cover"
             srcset=""
         />
     </div>
-    <h3 class="tw-text-2xl tw-mt-4 tw-font-semibold max-md:tw-text-xl">
+    <!--tw-font-semibold  tw-text-2xl -->
+    <h3 class="tw-text-xl tw-font-medium tw-mt-4 max-md:tw-text-xl">
         {{{title}}}
     </h3>
     <p class="tw-mt-2 tw-text-gray-600">
