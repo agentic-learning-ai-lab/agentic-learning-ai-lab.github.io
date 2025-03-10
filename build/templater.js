@@ -28,22 +28,38 @@ function doTemplating(input, output) {
 
     if (input === "paper.hbs") {
         // Generate individual papers
-        for (const p of documents.papers) {
-            const output_new = output.replace("{{permalink}}", p.permalink);
+        for (const paper of documents.papers) {
+            const output_new = output.replace("{{permalink}}", paper.permalink);
             if (!fs.existsSync(path.dirname(output_new))){
                 fs.mkdirSync(path.dirname(output_new));
             }
-            fs.writeFileSync(output_new, template(p));
+            fs.writeFileSync(output_new, template(paper));
         }
     }
     else if (input == "person.hbs") {
         // Generate individual person
-        for (const p of documents.people) {
-            const output_new = output.replace("{{permalink}}", p.permalink);
+        for (const person of documents.people) {
+            console.log(person.name)
+            const output_new = output.replace("{{permalink}}", person.permalink);
             if (!fs.existsSync(path.dirname(output_new))){
                 fs.mkdirSync(path.dirname(output_new));
             }
-            fs.writeFileSync(output_new, template(p));
+            var papers_ = [];
+            for (const paper of documents.papers) {
+                // console.log(paper.title);
+                for (const author of paper.authors) {
+                    // console.log(author);
+                    if (person.name === author) {
+                        papers_.push(paper);
+                        // console.log("Match!");
+                        // console.log(person.name + " " + paper.title);
+                        break;
+                    }
+                }
+            }
+            person.papers = papers_;
+            console.log(person.papers);
+            fs.writeFileSync(output_new, template(person));
         }
 
     }
@@ -78,7 +94,7 @@ function doTemplating(input, output) {
 }
 
 function compileTemplate(handlebars, input) {
-    console.log("Input: " + input);
+    // console.log("Input: " + input);
     return handlebars.compile(fs.readFileSync(input, { encoding: 'utf-8' }));
 }
 
@@ -89,19 +105,19 @@ function parseDocuments() {
 
     // Normalize the data
     for (const ra of research_areas) {
-        console.log(ra)
+        // console.log(ra);
         ensureArrayExists(ra, 'title');
         ensureArrayExists(ra, 'image');
         ensureArrayExists(ra, 'Description');
     }
     for (const p of papers) {
-        console.log(p)
+        // console.log(p);
         ensureArrayExists(p, 'title');
         ensureArrayExists(p, 'image');
         ensureArrayExists(p, 'short_abstract');
     }
     for (const p of people) {
-        console.log(p)
+        // console.log(p);
         ensureArrayExists(p, 'name');
         ensureArrayExists(p, 'position');
         ensureArrayExists(p, 'image');

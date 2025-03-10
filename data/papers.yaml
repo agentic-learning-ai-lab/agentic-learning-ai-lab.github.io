@@ -20,7 +20,7 @@
   title: "Are LLMs Prescient? A Continuous Evaluation using Daily News as Oracle"
   image: "/assets/images/papers/are_llms_prescient.png"
   authors:
-    - "Hui Dai"
+    - "Amelia Dai"
     - "Ryan Teehan"
     - "Mengye Ren"
   short_abstract: "Our new benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict \"future\" events based on pre-training data."
@@ -40,7 +40,7 @@
   image: "/assets/images/papers/poodle.webp"
   authors: 
     - "Alex N. Wang"
-    - "Christopher Hoang"
+    - "Chris Hoang"
     - "Yuwen Xiong"
     - "Yann LeCun"
     - "Mengye Ren"
