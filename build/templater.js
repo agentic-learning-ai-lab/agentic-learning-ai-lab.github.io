@@ -102,6 +102,9 @@ function parseDocuments() {
     const research_areas = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, '../data/research_areas.yaml')));
     const papers = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, '../data/papers.yaml')));
     const people = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, '../data/people.yaml')));
+    const people_current = people.filter(x => x.current);
+    const people_alumni = people.filter(x => !x.current);
+    console.log(people_alumni);
 
     // Normalize the data
     for (const ra of research_areas) {
@@ -126,7 +129,7 @@ function parseDocuments() {
     const recent_papers = papers.filter((p) => p['is_recent']);
 
 
-    return { research_areas, papers, recent_papers, people };
+    return { research_areas, papers, recent_papers, people, people_current, people_alumni };
 }
 
 function registerPartials(handlebars) {

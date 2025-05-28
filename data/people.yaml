@@ -6,6 +6,7 @@
   permalink: "mengye-ren"
   description: "Mengye Ren is an assistant professor of computer science and data science at New York University (NYU). He runs the Agentic Learning AI Lab. Before joining NYU, he was a visiting faculty researcher at Google Brain Toronto working with Prof. Geoffrey Hinton. From 2017 to 2021, he was a senior research scientist at Uber Advanced Technologies Group (ATG) and Waabi, working on self-driving vehicles. He received PhD in Computer Science from the University of Toronto, advised by Prof. Richard Zemel and Prof. Raquel Urtasun. His research focuses on making machine learning more natural and human-like, in order for AIs to continually learn, adapt, and reason in naturalistic environments."
   google_scholar: "XcQ9WqMAAAAJ"
+  current: true
 -
   name: "Chris Hoang"
   image: "/assets/images/people/chris_hoang.jpg"
@@ -14,6 +15,7 @@
   permalink: "chris-hoang"
   description: "Chris Hoang is a PhD student in the CILVR lab at NYU Courant advised by Mengye Ren and supported by the NDSEG fellowship. His areas of interest are machine learning and computer vision. His research goal is to advance the visual perception and reasoning capabilities of AI agents to enable them to robustly operate in the complex real world."
   google_scholar: "5vKuUwsAAAAJ"
+  current: true
 - 
   name: "Jack Lu"
   image: "/assets/images/people/jack_lu.jpg"
@@ -22,6 +24,7 @@
   permalink: "jack-lu"
   description: "Jack Lu is a PhD student in Computer Science at NYU Courant, advised by Prof. Mengye Ren in the CILVR lab. His research is supported by the NSERC PGS-D Scholarship. Prior to joining NYU, he got his Bachelor’s degree in Computer Science and Mathematics at the University of Waterloo. Recently, his work focused on generative modeling, few-shot learning, and AI-assisted design."
   google_scholar: "iN5SFdsAAAAJ"
+  current: true
 - 
   name: "Ryan Teehan"
   image: "/assets/images/people/ryan_teehan.jpg"
@@ -30,6 +33,16 @@
   permalink: "ryan-teehan"
   description: "Ryan Teehan is a PhD student in the CILVR lab at the NYU Center for Data Science, where he is advised by Professor Mengye Ren. His research focuses on abstraction and reasoning, particularly in language, with a long-term goal of understanding and replicating the complexities of general intelligence. Prior to starting his PhD, he earned a joint BA/MS in Mathematics and Computer Science at the University of Chicago."
   google_scholar: "mXo4IYQAAAAJ"
+  current: true
+-
+  name: "Alex N. Wang"
+  image: "/assets/images/people/alex_wang.jpg"
+  position: "PhD Student"
+  webpage: "https://www.alexn.wang/"
+  permalink: "alex-wang"
+  description: "Alex Wang is a PhD student in CILVR advised by Mengye Ren at New York University. He did his MSc with Rich Zemel and BASc in Engineering Science at University of Toronto. He is supported by the NSERC PGS-D scholarship. He is interested in intelligent, large-scale generative vision models. Through generative modeling, he aims to define, build, and evaluate a notion of visual intelligence."
+  google_scholar: "X0n8TX0AAAAJ"
+  current: false
 -
   name: "Ying Wang"
   image: "/assets/images/people/ying_wang.jpg"
@@ -38,6 +51,7 @@
   permalink: "ying-wang"
   description: "Ying Wang is a PhD student at NYU Center for Data Science, advised by Prof. Andrew Wilson and Prof. Mengye Ren in the CILVR Lab. Her research focuses on multimodal learning, aiming to build adaptive and trustworthy machine learning systems that integrate diverse modalities such as text, images, and videos. Prior to starting her PhD, she earned an MS in Data Science at NYU, where she was featured in the alumni spotlight. She completed her undergraduate degree in Computer Science, Statistics, and Finance at McGill University in Montreal, Canada."
   google_scholar: "5BN__1MAAAAJ"
+  current: true
 -
   name: "Yanlai Yang"
   image: "/assets/images/people/yanlai_yang.jpg"
@@ -46,6 +60,7 @@
   permalink: "yanlai-yang"
   description: "Yanlai Yang is a PhD student in Computer Science at NYU Courant, advised by Prof. Mengye Ren in the CILVR Lab. Starting Fall 2024, he also works as a Visiting Researcher at Meta. Prior to joining NYU, he got his Bachelor's degree in Computer Science and Applied Math at UC Berkeley. He was a recipient of the Mark D. Weiser Excellence in Computing Scholarship and the Outstanding Student Instructor Award at UC Berkeley."
   google_scholar: "QWd5d1oAAAAJ"
+  current: true
 -
   name: "Amelia Dai"
   image: "/assets/images/people/amelia_dai.jpg"
@@ -54,3 +69,13 @@
   permalink: "amelia-dai"
   description: "Amelia Dai is a Master student at NYU Center for Data Science, working with Prof. Mengye Ren in the Agentic Learning AI Lab and Prof. Krzysztof J. Geras. Her research interests include understanding LLMs (capabilities and limitations) and AI in healthcare. Recently, her work includes evaluating the generalization ability of LLMs and multi-modal learning for breast cancer detection. Previously, she completed her BS in Statistics at The Chinese University of Hong Kong, Shenzhen. Outside of school, she also does hiphop dancing!"
   google_scholar: "HmKPa2AAAAAJ"
+  current: true
+-
+  name: "Frank (Zequan) Wu"
+  image: "/assets/images/people/frank_wu.jpg"
+  position: "Visiting Researcher"
+  webpage: "https://www.linkedin.com/in/frank-wu-1636911ba/"
+  permalink: "frank-wu"
+  description: "Frank (Zequan) Wu is a visiting researcher and an Algorithm Engineer. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning."
+  google_scholar: ""
+  current: true
