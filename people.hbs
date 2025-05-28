@@ -18,10 +18,21 @@
             </h3>
             <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
             </div>
+            <h4 class="text-left tw-text-2xl tw-font-medium max-md:tw-text-xl">
+                Current Members
+            </h4>
 
             <div class="tw-mt-10 tw-flex tw-flex-wrap tw-place-content-center tw-gap-y-8 tw-gap-x-4 tw-justify-around">
-            {{> people_tab people }}
+            {{> people_tab people_current }}
             </div>
+            
+            <h4 class="text-left tw-text-2xl tw-font-medium max-md:tw-text-xl">
+                Alumni
+            </h4>
+            <div class="tw-mt-10 tw-flex tw-flex-wrap tw-place-content-center tw-gap-y-8 tw-gap-x-4 tw-justify-around">
+            {{> people_tab people_alumni }}
+            </div>
+
         </section>
 
 
