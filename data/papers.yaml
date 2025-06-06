@@ -1,3 +1,23 @@
+- title: "Replay Can Provably Increase Forgetting"
+  image: "/assets/images/papers/replay_can_provably_increase_forgetting.png"
+  authors: 
+    - "Yasaman Mahdaviyeh"
+    - "James Lucas"
+    - "Mengye Ren"
+    - "Andreas S. Tolias"
+    - "Richard Zemel"
+    - "Toniann Pitassi"
+  short_abstract: "We provide a theoretical analysis of sample replay in over-parameterized continual linear regression, and we show that replay can provably increase forgetting in the worst case even though the network has the capacity to memorize all tasks."
+  abstract: "Continual learning seeks to enable machine learning systems to solve an increasing corpus of tasks sequentially. A critical challenge for continual learning is forgetting, where the performance on previously learned tasks decreases as new tasks are introduced. One of the commonly used techniques to mitigate forgetting, sample replay, has been shown empirically to reduce forgetting by retaining some examples from old tasks and including them in new training episodes. In this work, we provide a theoretical analysis of sample replay in an over-parameterized continual linear regression setting, where each task is given by a linear subspace and with enough replay samples, one would be able to eliminate forgetting. Our analysis focuses on sample replay and highlights the role of the replayed samples and the relationship between task subspaces. Surprisingly, we find that, even in a noiseless setting, forgetting can be non-monotonic with respect to the number of replay samples. We present tasks where replay can be harmful with respect to worst-case settings, and also in distributional settings where replay of randomly selected samples increases forgetting in expectation. We also give empirical evidence that harmful replay is not limited to training with linear models by showing similar behavior for a neural networks equipped with SGD. Through experiments on a commonly used benchmark, we provide additional evidence that, even in seemingly benign scenarios, performance of the replay heavily depends on the choice of replay samples and the relationship between tasks."
+  arxiv: "https://arxiv.org/abs/2506.04377"
+  pdf: "https://arxiv.org/pdf/2506.04377"
+  webpage: "#"
+  permalink: "replay-can-provably-increase-forgetting"
+  research_areas:
+    - "learning-from-visual-experience"
+  date: 2025-06-04
+  journal: "The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)"
+  is_recent: true
 -
   title: "Memory Storyboard: Leveraging Temporal Segmentation for Streaming Self-Supervised Learning from Egocentric Videos"
   image: "/assets/images/papers/memory_storyboard.png"
@@ -13,7 +33,7 @@
   research_areas:
     - "learning-from-visual-experience"
   date: 2025-01-21
-  journal: "CoRR"
+  journal: "The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)"
   is_recent: true
 
 -
@@ -32,7 +52,7 @@
   research_areas:
     - "adaptive-foundation-models"
   date: 2024-11-13
-  journal: "CoRR"
+  journal: "The 42nd International Conference on Machine Learning (ICML 2025)"
   is_recent: true
 
 -
@@ -53,7 +73,7 @@
   research_areas:
     - "learning-from-visual-experience"
   date: 2024-08-20
-  journal: "The Thirteenth International Conference on Learning Representations (ICLR 2025)"
+  journal: "The 13th International Conference on Learning Representations (ICLR 2025)"
   is_recent: true
 
 -
@@ -154,7 +174,7 @@
     - "learning-from-visual-experience"
   date: 2024-02-01
   journal: "The 46th Annual Meeting of the Cognitive Science Society (CogSci 2024)"
-  is_recent: true
+  is_recent: false
 
 -
   title: "Learning and Forgetting Unsafe Examples in Large Language Models"
@@ -174,8 +194,8 @@
   research_areas:
     - "adaptive-foundation-models"
   date: 2023-12-20
-  journal: "The Forty-First International Conference on Machine Learning (ICML 2024)"
-  is_recent: true
+  journal: "The 41st International Conference on Machine Learning (ICML 2024)"
+  is_recent: false
 
 -
   title: "LifelongMemory: Leveraging LLMs for Answering Queries in Long-form Egocentric Videos"
@@ -195,4 +215,4 @@
     - "adaptive-foundation-models"
   date: 2023-12-07
   journal: "CoRR"
-  is_recent: true
+  is_recent: false

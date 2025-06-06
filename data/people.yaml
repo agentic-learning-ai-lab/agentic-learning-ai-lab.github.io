@@ -35,15 +35,6 @@
   google_scholar: "mXo4IYQAAAAJ"
   current: true
 -
-  name: "Alex N. Wang"
-  image: "/assets/images/people/alex_wang.jpg"
-  position: "PhD Student"
-  webpage: "https://www.alexn.wang/"
-  permalink: "alex-wang"
-  description: "Alex Wang is a PhD student in CILVR advised by Mengye Ren at New York University. He did his MSc with Rich Zemel and BASc in Engineering Science at University of Toronto. He is supported by the NSERC PGS-D scholarship. He is interested in intelligent, large-scale generative vision models. Through generative modeling, he aims to define, build, and evaluate a notion of visual intelligence."
-  google_scholar: "X0n8TX0AAAAJ"
-  current: false
--
   name: "Ying Wang"
   image: "/assets/images/people/ying_wang.jpg"
   position: "PhD Student"
@@ -79,3 +70,12 @@
   description: "Frank (Zequan) Wu is a visiting researcher and an Algorithm Engineer. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning."
   google_scholar: ""
   current: true
+-
+  name: "Alex N. Wang"
+  image: "/assets/images/people/alex_wang.jpg"
+  position: "PhD Student"
+  webpage: "https://www.alexn.wang/"
+  permalink: "alex-wang"
+  description: "Alex Wang is a PhD student in CILVR at New York University. He did his MSc with Rich Zemel and BASc in Engineering Science at University of Toronto. He is supported by the NSERC PGS-D scholarship. He is interested in intelligent, large-scale generative vision models. Through generative modeling, he aims to define, build, and evaluate a notion of visual intelligence."
+  google_scholar: "X0n8TX0AAAAJ"
+  current: false
