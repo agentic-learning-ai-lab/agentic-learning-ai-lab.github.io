@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta property="og:title" content="PooDLe: Pooled and Dense Self-Supervised Learning from Naturalistic Videos | Agentic Learning AI Lab" />
-<meta property="og:description" content="We propose PooDLe, a self-supervised learning method that combines an invariance-based objective on pooled representations with a dense SSL objective that enforces equivariance to optical flow warping." />
+<meta property="og:title" content="Replay Can Provably Increase Forgetting | Agentic Learning AI Lab" />
+<meta property="og:description" content="We provide a theoretical analysis of sample replay in over-parameterized continual linear regression, and we show that replay can provably increase forgetting in the worst case even though the network has the capacity to memorize all tasks." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://agenticlearning.ai/research/poodle" />
+<meta property="og:url" content="https://agenticlearning.ai/research/replay-can-provably-increase-forgetting" />
 <!--Replace with the current website url-->
-<meta property="og:image" content="https://agenticlearning.ai//assets/images/papers/poodle.webp" />
+<meta property="og:image" content="https://agenticlearning.ai//assets/images/papers/replay_can_provably_increase_forgetting.png" />
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>agentic learning ai lab</title>
@@ -95,7 +95,7 @@
         ></button>
     </header>
    <!--      <div class="tw-h-[330px] tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-overflow-hidden tw-mt-[150px] tw-px-[5%] ">
-            <img src=/assets/images/papers/poodle.webp
+            <img src=/assets/images/papers/replay_can_provably_increase_forgetting.png
                 class="tw-h-full tw-w-full tw-object-cover"
                 alt="design"/>
         </div>
@@ -103,14 +103,14 @@
     <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
         <div class="tw-flex tw-w-full tw-place-content-center tw-gap-6 max-xl:tw-place-items-center max-lg:tw-flex-col">
         <div class="image-container">
-            <img src="/assets/images/papers/poodle.webp" alt="app" class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain"/>
+            <img src="/assets/images/papers/replay_can_provably_increase_forgetting.png" alt="app" class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain"/>
         </div>
         </div>
     </section>
 
     <section class="tw-w-full tw-flex-col tw-p-[5%] tw-mt-[10px] max-lg:tw-p-4">
         <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
-            PooDLe: Pooled and Dense Self-Supervised Learning from Naturalistic Videos
+            Replay Can Provably Increase Forgetting
         </h3>
 
         <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
@@ -119,20 +119,20 @@
         <!-- <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden"> -->
         <div class="tw-gap-2 tw-max-w-100">
             <p class="tw-mt-4">
-            Authors: Alex N. Wang, Chris Hoang, Yuwen Xiong, Yann LeCun, and Mengye Ren
+            Authors: Yasaman Mahdaviyeh, James Lucas, Mengye Ren, Andreas S. Tolias, Richard Zemel, and Toniann Pitassi
             </p>
             <p class="tw-text-gray-600 tw-mt-4">
-            Abstract: Self-supervised learning has driven significant progress in learning from single-subject, iconic images. However, there are still unanswered questions about the use of minimally-curated, naturalistic video data, which contain dense scenes with many independent objects, imbalanced class distributions, and varying object sizes. In this paper, we propose PooDLe, a self-supervised learning method that combines an invariance-based objective on pooled representations with a dense SSL objective that enforces equivariance to optical flow warping. Our results show that a unified objective applied at multiple feature scales is essential for learning effective image representations from naturalistic videos. We validate our method with experiments on the BDD100K driving video dataset and the Walking Tours first-person video dataset, demonstrating its ability to capture spatial understanding from a dense objective and semantic understanding via a pooled representation objective.
+            Abstract: Continual learning seeks to enable machine learning systems to solve an increasing corpus of tasks sequentially. A critical challenge for continual learning is forgetting, where the performance on previously learned tasks decreases as new tasks are introduced. One of the commonly used techniques to mitigate forgetting, sample replay, has been shown empirically to reduce forgetting by retaining some examples from old tasks and including them in new training episodes. In this work, we provide a theoretical analysis of sample replay in an over-parameterized continual linear regression setting, where each task is given by a linear subspace and with enough replay samples, one would be able to eliminate forgetting. Our analysis focuses on sample replay and highlights the role of the replayed samples and the relationship between task subspaces. Surprisingly, we find that, even in a noiseless setting, forgetting can be non-monotonic with respect to the number of replay samples. We present tasks where replay can be harmful with respect to worst-case settings, and also in distributional settings where replay of randomly selected samples increases forgetting in expectation. We also give empirical evidence that harmful replay is not limited to training with linear models by showing similar behavior for a neural networks equipped with SGD. Through experiments on a commonly used benchmark, we provide additional evidence that, even in seemingly benign scenarios, performance of the replay heavily depends on the choice of replay samples and the relationship between tasks.
             </p>
             <p class="tw-mt-4">
-            Published: 2024-08-20
+            Published: 2025-06-04
             </p>
             <p class="tw-mt-4">
-            Venue: The 13th International Conference on Learning Representations (ICLR 2025)
+            Venue: The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)
             </p>
             <div class="tw-flex tw-mt-8 tw-gap-x-4 tw-min-w-[100px]">
             <div class="tw-flex-col person-page-links">
-            <a href=https://arxiv.org/pdf/2408.11208>
+            <a href=https://arxiv.org/pdf/2506.04377>
                 <span>Full Paper (PDF)</span>
                 <i class="bi bi-arrow-right"></i>
             </a>
@@ -140,7 +140,7 @@
             &nbsp;
             &nbsp;
             <div class="tw-flex-col person-page-links">
-            <a href=https://agenticlearning.ai/poodle/>
+            <a href=#>
                 <span>Project Website</span>
                 <i class="bi bi-arrow-right"></i>
             </a>
