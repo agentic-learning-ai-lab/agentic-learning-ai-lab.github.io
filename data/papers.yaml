@@ -18,6 +18,7 @@
   date: 2025-06-04
   journal: "The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)"
   is_recent: true
+
 -
   title: "Memory Storyboard: Leveraging Temporal Segmentation for Streaming Self-Supervised Learning from Egocentric Videos"
   image: "/assets/images/papers/memory_storyboard.png"
@@ -28,7 +29,7 @@
   abstract: "Self-supervised learning holds the promise to learn good representations from real-world continuous uncurated data streams. However, most existing works in visual self-supervised learning focus on static images or artificial data streams. Towards exploring a more realistic learning substrate, we investigate streaming self-supervised learning from long-form real-world egocentric video streams. Inspired by the event segmentation mechanism in human perception and memory, we propose \"Memory Storyboard\" that groups recent past frames into temporal segments for more effective summarization of the past visual streams for memory replay. To accommodate efficient temporal segmentation, we propose a two-tier memory hierarchy: the recent past is stored in a short-term memory, and the storyboard temporal segments are then transferred to a long-term memory. Experiments on real-world egocentric video datasets including SAYCam and KrishnaCam show that contrastive learning objectives on top of storyboard frames result in semantically meaningful representations which outperform those produced by state-of-the-art unsupervised continual learning methods."
   arxiv: "https://arxiv.org/abs/2501.12254"
   pdf: "https://arxiv.org/pdf/2501.12254"
-  webpage: "#"
+  webpage: "https://agenticlearning.ai/memory-storyboard/"
   permalink: "memory-storyboard"
   research_areas:
     - "learning-from-visual-experience"
