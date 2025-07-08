@@ -1,3 +1,23 @@
+- title: "Context Tuning for In-Context Optimization"
+  image: "/assets/images/papers/context_tuning.png"
+  authors: 
+    - "Jack Lu"
+    - "Ryan Teehan"
+    - "Zhenbang Yang"
+    - "Mengye Ren"
+  short_abstract: "We introduce Context Tuning, a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters."
+  abstract: "We introduce Context Tuning, a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters. While prompt-based adaptation techniques have demonstrated the effectiveness of lightweight adaptation methods for LLMs, they typically initialize a trainable prompt or prefix with irrelevant tokens for the task at hand. In contrast, Context Tuning initializes the trainable prompt or prefix with task-specific demonstration examples, leveraging the model's inherent In-Context Learning (ICL) ability to extract relevant information for improved few-shot learning performance. Extensive evaluations on benchmarks such as CrossFit, UnifiedQA, MMLU, BIG-Bench Hard, and ARC demonstrate that Context Tuning outperforms traditional prompt-based adaptation methods and achieves competitive accuracy to Test-Time Training with significantly higher training efficiency."
+  arxiv: "https://arxiv.org/abs/2507.04221"
+  pdf: "https://arxiv.org/pdf/2507.04221"
+  webpage: "https://agenticlearning.ai/context-tuning/"
+  permalink: "context-tuning"
+  research_areas:
+    - "adaptive-foundation-models"
+    - "concept-learning-abstraction"
+  date: 2025-07-06
+  journal: "CoRR"
+  is_recent: true
+
 - title: "Replay Can Provably Increase Forgetting"
   image: "/assets/images/papers/replay_can_provably_increase_forgetting.png"
   authors: 
