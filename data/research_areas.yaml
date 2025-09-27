@@ -6,10 +6,10 @@
   permalink: "learning-from-visual-experience"
 
 -
-  title: "Adaptive Foundation Models"
+  title: "Adaptive Agents and Foundation Models"
   image: "/assets/images/home/adaptive_foundation_models.png"
-  keywords: "Personalized AI; Few-shot, continual, meta learning; Memorization and forgetting; Future news forecasting."
-  description: "The development of adaptive foundation models marks a significant shift toward AI systems that can continually learn, adapt, and evolve in response to new information, changing environments, and user preferences. Current foundation models are typically trained on static data, with limited ability to adapt through context post-deployment. Our goal is to enable foundation models to continuously absorb new knowledge and compress it into reusable representations for more up-to-date responses. This capability is also valuable for third-party customization, personalization, and safety alignment. We are interested in both the foundational study of sequential learning dynamics in large language models and practical applications that demand adaptive foundation models, such as personalized assistance and news forecasting."
+  keywords: "Personalized AI; Agents; Few-shot, continual, meta learning; Memorization and forgetting; News forecasting."
+  description: "The development of adaptive agents and foundation models marks a significant shift toward AI systems that can continually learn, adapt, and evolve in response to new information, changing environments, and user preferences. Current AI models are typically trained on static data, with limited ability to adapt through context post-deployment. Our goal is to enable agents to continuously absorb new knowledge and compress it into reusable representations for more up-to-date responses. This capability is also valuable for third-party customization, personalization, and safety alignment. We are interested in both the foundational study of sequential learning dynamics in large language models and practical applications that demand adaptive agents, such as personalized assistance, multimodal learning, and news forecasting."
   permalink: "adaptive-foundation-models"
 
 -
