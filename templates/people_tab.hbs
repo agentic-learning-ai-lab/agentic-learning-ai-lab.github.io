@@ -11,9 +11,11 @@
     <a href="/people/{{{permalink}}}">
     <div class="tw-flex tw-flex-col tw-gap-2">
         <h3 class="tw-text-lg tw-font-medium tw-text-center max-md:tw-text-base">{{{name}}}</h3>
+        {{#if current}}
         <p class="tw-text-gray-600 tw-text-center max-md:tw-text-sm">
             {{{position}}}
         </p>
+        {{/if}}
     </div>
     </a>
 </div>

@@ -31,7 +31,7 @@
   abstract: "Continual learning seeks to enable machine learning systems to solve an increasing corpus of tasks sequentially. A critical challenge for continual learning is forgetting, where the performance on previously learned tasks decreases as new tasks are introduced. One of the commonly used techniques to mitigate forgetting, sample replay, has been shown empirically to reduce forgetting by retaining some examples from old tasks and including them in new training episodes. In this work, we provide a theoretical analysis of sample replay in an over-parameterized continual linear regression setting, where each task is given by a linear subspace and with enough replay samples, one would be able to eliminate forgetting. Our analysis focuses on sample replay and highlights the role of the replayed samples and the relationship between task subspaces. Surprisingly, we find that, even in a noiseless setting, forgetting can be non-monotonic with respect to the number of replay samples. We present tasks where replay can be harmful with respect to worst-case settings, and also in distributional settings where replay of randomly selected samples increases forgetting in expectation. We also give empirical evidence that harmful replay is not limited to training with linear models by showing similar behavior for a neural networks equipped with SGD. Through experiments on a commonly used benchmark, we provide additional evidence that, even in seemingly benign scenarios, performance of the replay heavily depends on the choice of replay samples and the relationship between tasks."
   arxiv: "https://arxiv.org/abs/2506.04377"
   pdf: "https://arxiv.org/pdf/2506.04377"
-  webpage: "#"
+  webpage: ""
   permalink: "replay-can-provably-increase-forgetting"
   research_areas:
     - "learning-from-visual-experience"
@@ -128,7 +128,7 @@
   abstract: "We formulate a unifying framework for unsupervised continual learning (UCL), which disentangles learning objectives that are specific to the present and the past data, encompassing stability, plasticity, and cross-task consolidation. The framework reveals that many existing UCL approaches overlook cross-task consolidation and try to balance plasticity and stability in a shared embedding space. This results in worse performance due to a lack of within-task data diversity and reduced effectiveness in learning the current task. Our method, Osiris, which explicitly optimizes all three objectives on separate embedding spaces, achieves state-of-the-art performance on all benchmarks, including two novel benchmarks proposed in this paper featuring semantically structured task sequences. Compared to standard benchmarks, these two structured benchmarks more closely resemble visual signals received by humans and animals when navigating real-world environments. Finally, we show some preliminary evidence that continual models can benefit from such realistic learning scenarios."
   arxiv: "https://arxiv.org/abs/2404.19132"
   pdf: "https://arxiv.org/pdf/2404.19132"
-  webpage: "#"
+  webpage: ""
   permalink: "osiris"
   research_areas:
     - "learning-from-visual-experience"
@@ -189,7 +189,7 @@
   abstract: "Children learn powerful internal models of the world around them from a few years of egocentric visual experience. Can such internal models be learned from a child's visual experience with highly generic learning algorithms or do they require strong inductive biases? Recent advances in collecting large-scale, longitudinal, developmentally realistic video datasets and generic self-supervised learning (SSL) algorithms are allowing us to begin to tackle this nature vs. nurture question. However, existing work typically focuses on image-based SSL algorithms and visual capabilities that can be learned from static images (e.g. object recognition), thus ignoring temporal aspects of the world. To close this gap, here we train self-supervised video models on longitudinal, egocentric headcam recordings collected from a child over a two year period in their early development (6-31 months). The resulting models are highly effective at facilitating the learning of action concepts from a small number of labeled examples; they have favorable data size scaling properties; and they display emergent video interpolation capabilities. Video models also learn more accurate and more robust object representations than image-based models trained with the exact same data. These results suggest that important temporal aspects of a child's internal model of the world may be learnable from their visual experience using highly generic learning algorithms and without strong inductive biases."
   arxiv: "https://arxiv.org/abs/2402.00300"
   pdf: "https://arxiv.org/pdf/2402.00300"
-  webpage: "#"
+  webpage: ""
   permalink: "video-ssl-from-child"
   research_areas:
     - "learning-from-visual-experience"
@@ -210,7 +210,7 @@
   abstract: "As the number of large language models (LLMs) released to the public grows, there is a pressing need to understand the safety implications associated with these models learning from third-party custom finetuning data. We explore the behavior of LLMs finetuned on noisy custom data containing unsafe content, represented by datasets that contain biases, toxicity, and harmfulness, finding that while aligned LLMs can readily learn this unsafe content, they also tend to forget it more significantly than other examples when subsequently finetuned on safer content. Drawing inspiration from the discrepancies in forgetting, we introduce the \"ForgetFilter\" algorithm, which filters unsafe data based on how strong the model's forgetting signal is for that data. We demonstrate that the ForgetFilter algorithm ensures safety in customized finetuning without compromising downstream task performance, unlike sequential safety finetuning. ForgetFilter outperforms alternative strategies like replay and moral self-correction in curbing LLMs' ability to assimilate unsafe content during custom finetuning, e.g. 75% lower than not applying any safety measures and 62% lower than using self-correction in toxicity score."
   arxiv: "https://arxiv.org/abs/2312.12736"
   pdf: "https://arxiv.org/pdf/2312.12736"
-  webpage: "#"
+  webpage: ""
   permalink: "learning-forgetting-llms"
   research_areas:
     - "adaptive-foundation-models"

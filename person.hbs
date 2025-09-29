@@ -36,12 +36,16 @@
                 {{{description}}}
                 </p>
                 <div class="tw-flex tw-mt-8 tw-gap-x-4 tw-min-w-[100px]">
+
+                {{#if webpage}}
                 <div class="tw-flex-col person-page-links">
                 <a href={{{webpage}}}>
                     <span>Personal Website</span>
                     <i class="bi bi-arrow-right"></i>
                 </a>
                 </div>
+                {{/if}}
+                {{#if google_scholar}}
                 &nbsp;
                 &nbsp;
                 <div class="tw-flex-col person-page-links">
@@ -50,15 +54,19 @@
                     <i class="bi bi-arrow-right"></i>
                 </a>
                 </div>
+                {{/if}}
+
                 </div>
             </div>
         </div>
+        {{#if papers}}
         <h3 class="tw-mt-10 text-left tw-text-xl tw-font-medium max-md:tw-text-2xl">
             {{name}}'s Papers
         </h3>
         <div id="flexContainer" class="tw-mt-4 tw-columns-1 tw-flex tw-flex-wrap tw-gap-y-4 tw-gap-x-4">
             {{> person_paper papers }}
         </div>
+        {{/if}}
     </section>
     {{> footer}}
 </body>
