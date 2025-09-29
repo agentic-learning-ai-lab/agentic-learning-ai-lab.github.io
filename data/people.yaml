@@ -53,13 +53,85 @@
   google_scholar: "QWd5d1oAAAAJ"
   current: true
 -
-  name: "Amelia Dai"
+  name: "Amelia (Hui) Dai"
   image: "/assets/images/people/amelia_dai.jpg"
   position: "Master Student"
   webpage: "https://ameliadai.github.io/"
   permalink: "amelia-dai"
-  description: "Amelia Dai is a Master student at NYU Center for Data Science, working with Prof. Mengye Ren in the Agentic Learning AI Lab and Prof. Krzysztof J. Geras. Her research interests include understanding LLMs (capabilities and limitations) and AI in healthcare. Recently, her work includes evaluating the generalization ability of LLMs and multi-modal learning for breast cancer detection. Previously, she completed her BS in Statistics at The Chinese University of Hong Kong, Shenzhen. Outside of school, she also does hiphop dancing!"
+  description: "Amelia (Hui) Dai is a PhD student at University of Chicago. She obtained her Master's degree at NYU Center for Data Science, working with Prof. Mengye Ren in the Agentic Learning AI Lab and Prof. Krzysztof J. Geras. Her research interests include understanding LLMs (capabilities and limitations) and AI in healthcare. Recently, her work includes evaluating the generalization ability of LLMs and multi-modal learning for breast cancer detection. Previously, she completed her BS in Statistics at The Chinese University of Hong Kong, Shenzhen. Outside of school, she also does hiphop dancing!"
   google_scholar: "HmKPa2AAAAAJ"
+  current: true
+-
+  name: "Xavier (Xiaoyang) Jiang"
+  image: "/assets/images/people/xavier_jiang.jpg"
+  position: "Master Student"
+  webpage: "https://www.linkedin.com/in/xiaoyang-jiang-1979aa28a/"
+  permalink: "xavier-jiang"
+  description: ""
+  google_scholar: ""
+  current: true
+-
+  name: "Jinran Jin"
+  image: "/assets/images/people/jinran_jin.jpg"
+  position: "Master Student"
+  webpage: "https://www.linkedin.com/in/jinran-jin-093252319/"
+  permalink: "jinran-jin"
+  description: "Jinran is a second-year Master's student in Data Science at the Courant Institute of Mathematical Sciences at NYU. He received his BS in Statistics and Data Science from the University of California, Santa Barbara. His research focuses on machine reasoning, particularly self-correction in language models."
+  google_scholar: ""
+  current: true
+-
+  name: "Arjun Prasad"
+  image: "/assets/images/people/arjun_prasad.jpg"
+  position: "Master Student"
+  webpage: "https://prasadboi.github.io/"
+  permalink: "arjun-prasad"
+  description: "Arjun Parasuram Prasad is a Master’s student in Computer Science at NYU’s Courant Institute, working with Prof. Mengye Ren in the Agentic AI Learning Lab. His research interests include search and ranking, NLP, and developing ML systems. His prior research includes applying ML to problems in software testing and IoT systems. He holds a B.E. in Computer Science from BITS Pilani – Hyderabad Campus."
+  google_scholar: ""
+  current: true
+-
+  name: "Zhenbang Yang"
+  image: "/assets/images/home/forest.jpg"
+  position: "Master Student"
+  webpage: ""
+  permalink: "zhenbang-yang"
+  description: ""
+  google_scholar: ""
+  current: true
+-
+  name: "Yuen-Hei Yeung"
+  image: "/assets/images/people/yh_yeung.jpg"
+  position: "Master Student"
+  webpage: "https://xavhl.github.io"
+  permalink: "yh-yeung"
+  description: "Yuen-Hei is a Master's student in Computer Science at NYU Courant, currently working with Prof. Mengye Ren and Chris Hoang. His research interests include more efficient visual representation learning for visuomotor policy learning through self-supervision and test-time tuning for robust out-of-domain generalization. Prior to NYU, he completed his Bachelor’s in Computer Science at the City University of Hong Kong, supported by the Innovation and Technology Scholarship from the Government of Hong Kong and HSBC."
+  google_scholar: "L8ypl78AAAAJ"
+  current: true
+-
+  name: "Weizhen Zhou"
+  image: "/assets/images/home/forest.jpg"
+  position: "Master Student"
+  webpage: ""
+  permalink: "weizhen-zhou"
+  description: ""
+  google_scholar: ""
+  current: true
+-
+  name: "Azwar Abdulsalam"
+  image: "/assets/images/people/azwar_abdulsalam.jpg"
+  position: "Visiting Researcher"
+  webpage: "https://www.linkedin.com/in/azwar-abdulsalam-379740173/"
+  permalink: "azwar-abdulsalam"
+  description: "Azwar Abdulsalam is a visiting researcher and an eFX Quant Trader at Morgan Stanley. He completed his MS in Electrical and Computer Engineering at Purdue University, where he worked on localized learning and energy-based models. He previously earned his B.Tech in Computer Science from IIT Kharagpur, where he conducted research in semiconductor physics. His primary research interests include learning meaningful representations of natural data, generative modeling, and biologically inspired paradigms for training neural networks."
+  google_scholar: "dnrJtSUAAAAJ"
+  current: true
+-
+  name: "Steven Luo"
+  image: "/assets/images/people/steven_luo.jpg"
+  position: "Visiting Researcher"
+  webpage: "https://stevolopolis.github.io/"
+  permalink: "steven-luo"
+  description: "Steven is a visiting researcher and a 4th Year CS Undergraduate from University of Toronto. His current research focuses on pushing the frontiers of in-context learning to enable language models to learn at test-time, touching upon ideas like infinite-context learning and concept learning. Previously, Steven worked on efficient algorithms for neural fields at DGP, UofT and NGai Lab, HKU."
+  google_scholar: "2ASNx9AAAAAJ"
   current: true
 -
   name: "Frank (Zequan) Wu"
@@ -68,6 +140,15 @@
   webpage: "https://www.linkedin.com/in/frank-wu-1636911ba/"
   permalink: "frank-wu"
   description: "Frank (Zequan) Wu is a visiting researcher and an Algorithm Engineer. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning."
+  google_scholar: ""
+  current: true
+-
+  name: "Will Wu"
+  image: "/assets/images/people/will_wu.jpg"
+  position: "Undergraduate Student"
+  webpage: "https://www.linkedin.com/in/will-wu-57a080245/"
+  permalink: "will-wu"
+  description: "Will Wu is a second-year undergraduate at NYU's Stern School of Business. He is conducting research under Professor Mengye Ren through the Data Science Research Program for Undergraduates, focusing on agent research for real-time forecasting markets with guidance from Professor Ren and Amelia Dai. Beyond his research, Will is passionate about robotics, swimming, and board games."
   google_scholar: ""
   current: true
 -
