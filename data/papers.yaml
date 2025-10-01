@@ -1,3 +1,26 @@
+- title: "StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding"
+  image: "/assets/images/papers/stream_mem.png"
+  authors: 
+    - "Yanlai Yang" 
+    - "Zhuokai Zhao"
+    - "Satya Narayan Shukla"
+    - "Aashu Singh"
+    - "Shlok Kumar Mishra"
+    - "Lizhu Zhang"
+    - "Mengye Ren"
+  short_abstract: "StreamMem is a query-agnostic KV cache memory mechanism for streaming video understanding."
+  abstract: "Multimodal large language models (MLLMs) have made significant progress in visual-language reasoning, but their ability to efficiently handle long videos remains limited. Despite recent advances in long-context MLLMs, storing and attending to the key-value (KV) cache for long visual contexts incurs substantial memory and computational overhead. Existing visual compression methods require either encoding the entire visual context before compression or having access to the questions in advance, which is impractical for long video understanding and multi-turn conversational settings. In this work, we propose StreamMem, a query-agnostic KV cache memory mechanism for streaming video understanding. Specifically, StreamMem encodes new video frames in a streaming manner, compressing the KV cache using attention scores between visual tokens and generic query tokens, while maintaining a fixed-size KV memory to enable efficient question answering (QA) in memory-constrained, long-video scenarios. Evaluation on three long video understanding and two streaming video question answering benchmarks shows that StreamMem achieves state-of-the-art performance in query-agnostic KV cache compression and is competitive with query-aware compression approaches."
+  arxiv: "https://arxiv.org/abs/2508.15717"
+  pdf: "https://arxiv.org/pdf/2508.15717"
+  webpage: "https://yangyanl.ai/streammem/"
+  permalink: "stream-mem"
+  research_areas:
+    - "learning-from-visual-experience"
+    - "adaptive-foundation-models"
+  date: 2025-08-21
+  journal: "CoRR"
+  is_recent: true
+
 - title: "Context Tuning for In-Context Optimization"
   image: "/assets/images/papers/context_tuning.png"
   authors: 
@@ -5,7 +28,7 @@
     - "Ryan Teehan"
     - "Zhenbang Yang"
     - "Mengye Ren"
-  short_abstract: "We introduce Context Tuning, a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters."
+  short_abstract: "Context Tuning is a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters."
   abstract: "We introduce Context Tuning, a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters. While prompt-based adaptation techniques have demonstrated the effectiveness of lightweight adaptation methods for LLMs, they typically initialize a trainable prompt or prefix with irrelevant tokens for the task at hand. In contrast, Context Tuning initializes the trainable prompt or prefix with task-specific demonstration examples, leveraging the model's inherent In-Context Learning (ICL) ability to extract relevant information for improved few-shot learning performance. Extensive evaluations on benchmarks such as CrossFit, UnifiedQA, MMLU, BIG-Bench Hard, and ARC demonstrate that Context Tuning outperforms traditional prompt-based adaptation methods and achieves competitive accuracy to Test-Time Training with significantly higher training efficiency."
   arxiv: "https://arxiv.org/abs/2507.04221"
   pdf: "https://arxiv.org/pdf/2507.04221"
@@ -13,6 +36,26 @@
   permalink: "context-tuning"
   research_areas:
     - "adaptive-foundation-models"
+    - "concept-learning-abstraction"
+  date: 2025-07-06
+  journal: "CoRR"
+  is_recent: true
+
+- title: "Discrete JEPA: Learning Discrete Token Representations without Reconstruction"
+  image: "/assets/images/papers/discrete_jepa.png"
+  authors: 
+    - "Junyeob Baek"
+    - "Hosung Lee"
+    - "Christopher Hoang"
+    - "Mengye Ren"
+    - "Sungjin Ahn"
+  short_abstract: "Discrete-JEPA extends the latent predictive coding JEPA framework with semantic tokenization and complementary objectives for symbolic reasoning tasks."
+  abstract: "The cornerstone of cognitive intelligence lies in extracting hidden patterns from observations and leveraging these principles to systematically predict future outcomes. However, current image tokenization methods demonstrate significant limitations in tasks requiring symbolic abstraction and logical reasoning capabilities essential for systematic inference. To address this challenge, we propose Discrete-JEPA, extending the latent predictive coding framework with semantic tokenization and novel complementary objectives to create robust tokenization for symbolic reasoning tasks. Discrete-JEPA dramatically outperforms baselines on visual symbolic prediction tasks, while striking visual evidence reveals the spontaneous emergence of deliberate systematic patterns within the learned semantic token space. Though an initial model, our approach promises a significant impact for advancing Symbolic world modeling and planning capabilities in artificial intelligence systems."
+  arxiv: "https://arxiv.org/abs/2506.14373"
+  pdf: "https://arxiv.org/pdf/2506.14373"
+  webpage: ""
+  permalink: "discrete-jepa"
+  research_areas:
     - "concept-learning-abstraction"
   date: 2025-07-06
   journal: "CoRR"
