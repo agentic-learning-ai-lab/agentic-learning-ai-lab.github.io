@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta property="og:title" content="Context Tuning for In-Context Optimization | Agentic Learning AI Lab" />
-<meta property="og:description" content="Context Tuning is a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters." />
+<meta property="og:title" content="StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding | Agentic Learning AI Lab" />
+<meta property="og:description" content="StreamMem is a query-agnostic KV cache memory mechanism for streaming video understanding." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://agenticlearning.ai/research/context-tuning" />
+<meta property="og:url" content="https://agenticlearning.ai/research/stream-mem" />
 <!--Replace with the current website url-->
-<meta property="og:image" content="https://agenticlearning.ai//assets/images/papers/context_tuning.png" />
+<meta property="og:image" content="https://agenticlearning.ai//assets/images/papers/stream_mem.png" />
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>agentic learning ai lab</title>
@@ -96,7 +96,7 @@
         ></button>
     </header>
    <!--      <div class="tw-h-[330px] tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-overflow-hidden tw-mt-[150px] tw-px-[5%] ">
-            <img src=/assets/images/papers/context_tuning.png
+            <img src=/assets/images/papers/stream_mem.png
                 class="tw-h-full tw-w-full tw-object-cover"
                 alt="design"/>
         </div>
@@ -104,14 +104,14 @@
     <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
         <div class="tw-flex tw-w-full tw-place-content-center tw-gap-6 max-xl:tw-place-items-center max-lg:tw-flex-col">
         <div class="image-container">
-            <img src="/assets/images/papers/context_tuning.png" alt="app" class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain"/>
+            <img src="/assets/images/papers/stream_mem.png" alt="app" class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain"/>
         </div>
         </div>
     </section>
 
     <section class="tw-w-full tw-flex-col tw-p-[5%] tw-mt-[10px] max-lg:tw-p-4">
         <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
-            Context Tuning for In-Context Optimization
+            StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding
         </h3>
 
         <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
@@ -120,20 +120,20 @@
         <!-- <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden"> -->
         <div class="tw-gap-2 tw-max-w-100">
             <p class="tw-mt-4">
-            Authors: Jack Lu, Ryan Teehan, Zhenbang Yang, and Mengye Ren
+            Authors: Yanlai Yang, Zhuokai Zhao, Satya Narayan Shukla, Aashu Singh, Shlok Kumar Mishra, Lizhu Zhang, and Mengye Ren
             </p>
             <p class="tw-text-gray-600 tw-mt-4">
-            Abstract: We introduce Context Tuning, a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters. While prompt-based adaptation techniques have demonstrated the effectiveness of lightweight adaptation methods for LLMs, they typically initialize a trainable prompt or prefix with irrelevant tokens for the task at hand. In contrast, Context Tuning initializes the trainable prompt or prefix with task-specific demonstration examples, leveraging the model's inherent In-Context Learning (ICL) ability to extract relevant information for improved few-shot learning performance. Extensive evaluations on benchmarks such as CrossFit, UnifiedQA, MMLU, BIG-Bench Hard, and ARC demonstrate that Context Tuning outperforms traditional prompt-based adaptation methods and achieves competitive accuracy to Test-Time Training with significantly higher training efficiency.
+            Abstract: Multimodal large language models (MLLMs) have made significant progress in visual-language reasoning, but their ability to efficiently handle long videos remains limited. Despite recent advances in long-context MLLMs, storing and attending to the key-value (KV) cache for long visual contexts incurs substantial memory and computational overhead. Existing visual compression methods require either encoding the entire visual context before compression or having access to the questions in advance, which is impractical for long video understanding and multi-turn conversational settings. In this work, we propose StreamMem, a query-agnostic KV cache memory mechanism for streaming video understanding. Specifically, StreamMem encodes new video frames in a streaming manner, compressing the KV cache using attention scores between visual tokens and generic query tokens, while maintaining a fixed-size KV memory to enable efficient question answering (QA) in memory-constrained, long-video scenarios. Evaluation on three long video understanding and two streaming video question answering benchmarks shows that StreamMem achieves state-of-the-art performance in query-agnostic KV cache compression and is competitive with query-aware compression approaches.
             </p>
             <p class="tw-mt-4">
-            Published: 2025-07-06
+            Published: 2025-08-21
             </p>
             <p class="tw-mt-4">
             Venue: CoRR
             </p>
             <div class="tw-flex tw-mt-8 tw-gap-x-4 tw-min-w-[100px]">
             <div class="tw-flex-col person-page-links">
-            <a href=https://arxiv.org/pdf/2507.04221>
+            <a href=https://arxiv.org/pdf/2508.15717>
                 <span>Full Paper (PDF)</span>
                 <i class="bi bi-arrow-right"></i>
             </a>
@@ -141,7 +141,7 @@
             &nbsp;
             &nbsp;
             <div class="tw-flex-col person-page-links">
-            <a href=https://agenticlearning.ai/context-tuning/>
+            <a href=https://yangyanl.ai/streammem/>
                 <span>Project Website</span>
                 <i class="bi bi-arrow-right"></i>
             </a>
