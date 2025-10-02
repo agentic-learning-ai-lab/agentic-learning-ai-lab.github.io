@@ -49,7 +49,7 @@
     - "Christopher Hoang"
     - "Mengye Ren"
     - "Sungjin Ahn"
-  short_abstract: "Discrete JEPA extends the latent predictive coding JEPA framework with semantic tokenization and complementary objectives for symbolic reasoning tasks."
+  short_abstract: "Discrete-JEPA extends the latent predictive coding JEPA framework with semantic tokenization and complementary objectives for symbolic reasoning tasks."
   abstract: "The cornerstone of cognitive intelligence lies in extracting hidden patterns from observations and leveraging these principles to systematically predict future outcomes. However, current image tokenization methods demonstrate significant limitations in tasks requiring symbolic abstraction and logical reasoning capabilities essential for systematic inference. To address this challenge, we propose Discrete-JEPA, extending the latent predictive coding framework with semantic tokenization and novel complementary objectives to create robust tokenization for symbolic reasoning tasks. Discrete-JEPA dramatically outperforms baselines on visual symbolic prediction tasks, while striking visual evidence reveals the spontaneous emergence of deliberate systematic patterns within the learned semantic token space. Though an initial model, our approach promises a significant impact for advancing Symbolic world modeling and planning capabilities in artificial intelligence systems."
   arxiv: "https://arxiv.org/abs/2506.14373"
   pdf: "https://arxiv.org/pdf/2506.14373"
@@ -57,7 +57,7 @@
   permalink: "discrete-jepa"
   research_areas:
     - "concept-learning-abstraction"
-  date: 2025-07-06
+  date: 2025-06-22
   journal: "CoRR"
   is_recent: true
 
