@@ -60,11 +60,13 @@
             </div>
         </div>
         {{#if papers}}
-        <h3 class="tw-mt-10 text-left tw-text-xl tw-font-medium max-md:tw-text-2xl">
-            {{name}}'s Papers
-        </h3>
-        <div id="flexContainer" class="tw-mt-4 tw-columns-1 tw-flex tw-flex-wrap tw-gap-y-4 tw-gap-x-4">
-            {{> person_paper papers }}
+        <div class="tw-flex-col sm:tw-w-[100%] md:tw-w-[80%] lg:tw-w-[60%] xl:tw-w-[50%]">
+            <h3 class="tw-mt-10 text-left tw-text-xl tw-font-medium max-md:tw-text-2xl">
+                {{name}}'s Papers
+            </h3>
+            <div id="flexContainer" class="tw-mt-4 tw-flex tw-flex-col tw-gap-y-4">
+                {{> person_paper papers }}
+            </div>
         </div>
         {{/if}}
     </section>
