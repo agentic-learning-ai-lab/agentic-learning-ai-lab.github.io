@@ -67,10 +67,19 @@
             <div id="flexContainer" class="tw-mt-4 tw-flex tw-flex-col tw-gap-y-4">
                 {{> person_paper papers }}
             </div>
+
+            <div class="pagination-controls tw-mt-12 tw-flex tw-justify-center tw-items-center tw-gap-2">
+                <button id="prevButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300"
+                    onclick="prevPage()">Prev</button>
+                <span id="pageNumbers" class="tw-flex tw-gap-2"></span>
+                <button id="nextButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300"
+                    onclick="nextPage()">Next</button>
+            </div>
         </div>
         {{/if}}
     </section>
     {{> footer}}
 </body>
 <script src="/index.js"></script>
+<script src="/person.js"></script>
 </html>
