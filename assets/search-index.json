@@ -2,7 +2,7 @@
   {
     "type": "paper",
     "title": "StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding",
-    "authors": "Yanlai Yang, Zhuokai Zhao, Satya Narayan Shukla, Aashu Singh, Shlok Kumar Mishra, Lizhu Zhang, Mengye Ren",
+    "authors": "Yanlai Yang, Zhuokai Zhao, Satya Narayan Shukla, Aashu Singh, Shlok Kumar Mishra, Lizhu Zhang, and Mengye Ren",
     "abstract": "StreamMem is a query-agnostic KV cache memory mechanism for streaming video understanding.",
     "image": "/assets/images/papers/stream_mem.png",
     "thumbnail": "/assets/images/thumbnails/stream_mem.png",
@@ -12,7 +12,7 @@
   {
     "type": "paper",
     "title": "Context Tuning for In-Context Optimization",
-    "authors": "Jack Lu, Ryan Teehan, Zhenbang Yang, Mengye Ren",
+    "authors": "Jack Lu, Ryan Teehan, Zhenbang Yang, and Mengye Ren",
     "abstract": "Context Tuning is a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters.",
     "image": "/assets/images/papers/context_tuning.png",
     "thumbnail": "/assets/images/thumbnails/context_tuning.png",
@@ -22,7 +22,7 @@
   {
     "type": "paper",
     "title": "Discrete JEPA: Learning Discrete Token Representations without Reconstruction",
-    "authors": "Junyeob Baek, Hosung Lee, Christopher Hoang, Mengye Ren, Sungjin Ahn",
+    "authors": "Junyeob Baek, Hosung Lee, Christopher Hoang, Mengye Ren, and Sungjin Ahn",
     "abstract": "Discrete-JEPA extends the latent predictive coding JEPA framework with semantic tokenization and complementary objectives for symbolic reasoning tasks.",
     "image": "/assets/images/papers/discrete_jepa.png",
     "thumbnail": "/assets/images/thumbnails/discrete_jepa.png",
@@ -32,7 +32,7 @@
   {
     "type": "paper",
     "title": "Replay Can Provably Increase Forgetting",
-    "authors": "Yasaman Mahdaviyeh, James Lucas, Mengye Ren, Andreas S. Tolias, Richard Zemel, Toniann Pitassi",
+    "authors": "Yasaman Mahdaviyeh, James Lucas, Mengye Ren, Andreas S. Tolias, Richard Zemel, and Toniann Pitassi",
     "abstract": "We provide a theoretical analysis of sample replay in over-parameterized continual linear regression, and we show that replay can provably increase forgetting in the worst case even though the network has the capacity to memorize all tasks.",
     "image": "/assets/images/papers/replay_can_provably_increase_forgetting.png",
     "thumbnail": "/assets/images/thumbnails/replay_can_provably_increase_forgetting.png",
@@ -42,7 +42,7 @@
   {
     "type": "paper",
     "title": "Memory Storyboard: Leveraging Temporal Segmentation for Streaming Self-Supervised Learning from Egocentric Videos",
-    "authors": "Yanlai Yang, Mengye Ren",
+    "authors": "Yanlai Yang and Mengye Ren",
     "abstract": "Memory Storyboard groups recent past frames into temporal segments and provides effective summarization of the past visual streams for memory replay.",
     "image": "/assets/images/papers/memory_storyboard.png",
     "thumbnail": "/assets/images/thumbnails/memory_storyboard.png",
@@ -52,7 +52,7 @@
   {
     "type": "paper",
     "title": "Are LLMs Prescient? A Continuous Evaluation using Daily News as Oracle",
-    "authors": "Amelia Dai, Ryan Teehan, Mengye Ren",
+    "authors": "Amelia Dai, Ryan Teehan, and Mengye Ren",
     "abstract": "Our new benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict \"future\" events based on pre-training data.",
     "image": "/assets/images/papers/are_llms_prescient.png",
     "thumbnail": "/assets/images/thumbnails/are_llms_prescient.png",
@@ -62,7 +62,7 @@
   {
     "type": "paper",
     "title": "PooDLe: Pooled and Dense Self-Supervised Learning from Naturalistic Videos",
-    "authors": "Alex N. Wang, Chris Hoang, Yuwen Xiong, Yann LeCun, Mengye Ren",
+    "authors": "Alex N. Wang, Chris Hoang, Yuwen Xiong, Yann LeCun, and Mengye Ren",
     "abstract": "We propose PooDLe, a self-supervised learning method that combines an invariance-based objective on pooled representations with a dense SSL objective that enforces equivariance to optical flow warping.",
     "image": "/assets/images/papers/poodle.webp",
     "thumbnail": "/assets/images/thumbnails/poodle.png",
@@ -72,7 +72,7 @@
   {
     "type": "paper",
     "title": "ProCreate, Don't Reproduce! Propulsive Energy Diffusion for Creative Generation",
-    "authors": "Jack Lu, Ryan Teehan, Mengye Ren",
+    "authors": "Jack Lu, Ryan Teehan, and Mengye Ren",
     "abstract": "ProCreate is a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction.",
     "image": "/assets/images/papers/procreate.png",
     "thumbnail": "/assets/images/thumbnails/procreate.png",
@@ -82,7 +82,7 @@
   {
     "type": "paper",
     "title": "Integrating Present and Past in Unsupervised Continual Learning",
-    "authors": "Yipeng Zhang, Laurent Charlin, Richard S. Zemel, Mengye Ren",
+    "authors": "Yipeng Zhang, Laurent Charlin, Richard S. Zemel, and Mengye Ren",
     "abstract": "We formulate Osiris, a unifying framework for unsupervised continual learning (UCL), which disentangles learning objectives that encompass stability, plasticity, and cross-task consolidation.",
     "image": "/assets/images/papers/osiris.webp",
     "thumbnail": "/assets/images/thumbnails/osiris.png",
@@ -92,7 +92,7 @@
   {
     "type": "paper",
     "title": "CoLLEGe: Concept Embedding Generation for Large Language Models",
-    "authors": "Ryan Teehan, Brenden M. Lake, Mengye Ren",
+    "authors": "Ryan Teehan, Brenden M. Lake, and Mengye Ren",
     "abstract": "CoLLEGe is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions.",
     "image": "/assets/images/papers/college.png",
     "thumbnail": "/assets/images/thumbnails/college.png",
@@ -102,7 +102,7 @@
   {
     "type": "paper",
     "title": "Reawakening Knowledge: Anticipatory Recovery from Catastrophic Interference via Structured Training",
-    "authors": "Yanlai Yang, Matt Jones, Michael C. Mozer, Mengye Ren",
+    "authors": "Yanlai Yang, Matt Jones, Michael C. Mozer, and Mengye Ren",
     "abstract": "We discover a curious and remarkable property of LLMs fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again.",
     "image": "/assets/images/papers/reawakening.png",
     "thumbnail": "/assets/images/thumbnails/reawakening.png",
@@ -112,7 +112,7 @@
   {
     "type": "paper",
     "title": "Self-Supervised Learning of Video Representations from a Child's Perspective",
-    "authors": "A. Emin Orhan, Wentao Wang, Alex N. Wang, Mengye Ren, Brenden M. Lake",
+    "authors": "A. Emin Orhan, Wentao Wang, Alex N. Wang, Mengye Ren, and Brenden M. Lake",
     "abstract": "We train self-supervised video models on longitudinal, egocentric headcam recordings collected from a child over a two year period in their early development.",
     "image": "/assets/images/papers/ssl_childs_perspective.webp",
     "thumbnail": "/assets/images/thumbnails/ssl_childs_perspective.png",
@@ -122,7 +122,7 @@
   {
     "type": "paper",
     "title": "Learning and Forgetting Unsafe Examples in Large Language Models",
-    "authors": "Jiachen Zhao, Zhun Deng, David Madras, James Zou, Mengye Ren",
+    "authors": "Jiachen Zhao, Zhun Deng, David Madras, James Zou, and Mengye Ren",
     "abstract": "We explore the behavior of LLMs finetuned on noisy custom data containing unsafe content and propose a simple filtering algorithm for detecting harmful content based on the phenomenon of selective forgetting.",
     "image": "/assets/images/papers/learning_and_forgetting_llm.png",
     "thumbnail": "/assets/images/thumbnails/learning_and_forgetting_llm.png",
@@ -132,7 +132,7 @@
   {
     "type": "paper",
     "title": "LifelongMemory: Leveraging LLMs for Answering Queries in Long-form Egocentric Videos",
-    "authors": "Ying Wang, Yanlai Yang, Mengye Ren",
+    "authors": "Ying Wang, Yanlai Yang, and Mengye Ren",
     "abstract": "LifelongMemory is a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval.",
     "image": "/assets/images/papers/lifelong_memory.png",
     "thumbnail": "/assets/images/thumbnails/lifelong_memory.png",
