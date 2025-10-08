@@ -48,13 +48,14 @@ This website now includes a client-side search feature that allows users to sear
 
 When you run `npm run build` or `./build.sh`, the following happens:
 
-1. `node ./build/generate_thumbnails.js` creates center-cropped 120x120px thumbnails
+1. `npm run build:tailwind` compiles and minifies Tailwind CSS for production
+2. `node ./build/generate_thumbnails.js` creates center-cropped 256x256px thumbnails
    - Converts WebP images to PNG thumbnails (sips limitation)
    - Skips thumbnails that are already up-to-date
    - Uses macOS `sips` command for image processing
-2. `node ./build/generate_search_index.js` creates `assets/search-index.json` with thumbnail paths
-3. `node ./build/build_pages.js` generates HTML pages
-4. `build.sh` copies all files including `search.js` and thumbnails to the `out/` directory
+3. `node ./build/generate_search_index.js` creates `assets/search-index.json` with thumbnail paths
+4. `node ./build/build_pages.js` generates HTML pages
+5. `build.sh` copies all files including `search.js` and thumbnails to the `out/` directory
 
 ## Design Choices
 

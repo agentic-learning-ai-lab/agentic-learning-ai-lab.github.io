@@ -65,27 +65,29 @@
     integrity="sha512-AY2+JxnBETJ0wcXnLPCcZJIJx0eimyhz3OJ55k2Jx4RtYC+XdIi2VtJQ+tP3BaTst4otlGG1TtPJ9fKrAUnRdQ=="
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
-></script></head>
+></script>
+
+<script src="/search.js"></script></head>
 <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
-    <header class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-around">
+    <header class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-between">
         <a class="tw-h-[120px] tw-p-[4px] tw-w-[100px] tw-text-2xl tw-font-medium" href="/">
         agentic learning <br/> ai lab
         </a>
         <div class="collapsible-header animated-collapse max-lg:tw-shadow-md"
             id="collapsed-header-items">
-            <div class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-black max-lg:tw-mt-[30px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-5 lg:tw-mx-auto lg:tw-place-items-center">
+            <div class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-black max-lg:tw-mt-[10px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-2 lg:tw-place-items-center">
+                <button
+                    onclick="openSearch()"
+                    class="header-links tw-cursor-pointer tw-bg-transparent tw-border-none tw-flex tw-items-center tw-gap-2 max-lg:tw-w-full max-lg:tw-justify-end lg:tw-hidden"
+                    aria-label="Search">
+                    <span>search</span>
+                    <i class="bi bi-search"></i>
+                </button>
                 <a class="header-links" href="/"> home </a>
                 <a class="header-links" href="/research/"> research </a>
                 <a class="header-links" href="/people/"> people </a>
                 <a class="header-links" href="/contact/"> contact </a>
                 <a class="header-links" href="https://www.givecampus.com/campaigns/25654/donations/new?designation=supportofprofmengyerensagenticlearningailabresearch&"> donate </a>
-            </div>
-            <div class="tw-mx-4 tw-flex tw-place-items-center tw-justify-end tw-gap-[20px] tw-text-base">
-                    <div class="tw-flex tw-h-[30px] tw-w-[30px] tw-rounded-full tw-bg-white tw-font-semibold tw-text-black tw-place-items-center ">
-                        <a href="">
-                        <i class="bi bi-search"></i>
-                        </a>
-                    </div>
             </div>
         </div>
         <button
