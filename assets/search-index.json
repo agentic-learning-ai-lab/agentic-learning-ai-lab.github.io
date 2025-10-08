@@ -332,18 +332,18 @@
     "type": "research-area",
     "title": "Adaptive Agents and Foundation Models",
     "description": "The development of adaptive agents and foundation models marks a significant shift toward AI systems that can continually learn, adapt, and evolve in response to new information, changing environments, and user preferences. Current AI models are typically trained on static data, with limited ability to adapt through context post-deployment. Our goal is to enable agents to continuously absorb new knowledge and compress it into reusable representations for more up-to-date responses. This capability is also valuable for third-party customization, personalization, and safety alignment. We are interested in both the foundational study of sequential learning dynamics in large language models and practical applications that demand adaptive agents, such as personalized assistance, multimodal learning, and news forecasting.",
-    "image": "/assets/images/home/adaptive_foundation_models.png",
-    "thumbnail": "/assets/images/thumbnails/adaptive_foundation_models.png",
-    "url": "/areas/adaptive-foundation-models/",
+    "image": "/assets/images/home/adaptive_agents_foundation_models.png",
+    "thumbnail": "/assets/images/thumbnails/adaptive_agents_foundation_models.png",
+    "url": "/areas/adaptive-agents-and-foundation-models/",
     "keywords": "adaptive agents and foundation models the development of adaptive agents and foundation models marks a significant shift toward ai systems that can continually learn, adapt, and evolve in response to new information, changing environments, and user preferences. current ai models are typically trained on static data, with limited ability to adapt through context post-deployment. our goal is to enable agents to continuously absorb new knowledge and compress it into reusable representations for more up-to-date responses. this capability is also valuable for third-party customization, personalization, and safety alignment. we are interested in both the foundational study of sequential learning dynamics in large language models and practical applications that demand adaptive agents, such as personalized assistance, multimodal learning, and news forecasting."
   },
   {
     "type": "research-area",
     "title": "Concept Learning and Abstraction",
     "description": "Scaling AI for lifelong learning and reasoning requires the ability to transform raw inputs into abstract concepts that can be efficiently composed to form more complex ones. Our lab has a strong focus on few-shot learning for concept acquisition. In recent research, we have enabled large-scale foundation models to incrementally learn new language and visual concepts. Our current efforts extend to recognizing functional and relational concepts, as well as exploring how learned concepts can be composed hierarchically for high-level reasoning. These advancements are key to building AI systems that generalize efficiently and adapt continuously to new tasks.",
-    "image": "/assets/images/home/concept_abstraction.png",
-    "thumbnail": "/assets/images/thumbnails/concept_abstraction.png",
-    "url": "/areas/concept-learning-abstraction/",
+    "image": "/assets/images/home/concept_learning_and_abstraction.png",
+    "thumbnail": "/assets/images/thumbnails/concept_learning_and_abstraction.png",
+    "url": "/areas/concept-learning-and-abstraction/",
     "keywords": "concept learning and abstraction scaling ai for lifelong learning and reasoning requires the ability to transform raw inputs into abstract concepts that can be efficiently composed to form more complex ones. our lab has a strong focus on few-shot learning for concept acquisition. in recent research, we have enabled large-scale foundation models to incrementally learn new language and visual concepts. our current efforts extend to recognizing functional and relational concepts, as well as exploring how learned concepts can be composed hierarchically for high-level reasoning. these advancements are key to building ai systems that generalize efficiently and adapt continuously to new tasks."
   }
 ]
