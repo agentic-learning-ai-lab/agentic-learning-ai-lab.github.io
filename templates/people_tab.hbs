@@ -1,5 +1,5 @@
 {{#each this}}
-<div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-p-4 tw-w-[200px]">
+<a href="/people/{{{permalink}}}" class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-p-4 tw-w-[200px] tw-border-transparent tw-border-2 hover:tw-border-solid hover:tw-border-gray-600 hover:tw-bg-[#f3f3f3b4] tw-transition-all tw-duration-200">
     <div class="tw-flex tw-place-items-center tw-gap-3">
     <!--tw-rounded-full -->
         <div class="tw-h-[120px] tw-w-[120px] tw-overflow-hidden tw-mx-auto">
@@ -8,7 +8,6 @@
                 alt="design"/>
         </div>
     </div>
-    <a href="/people/{{{permalink}}}">
     <div class="tw-flex tw-flex-col tw-gap-2">
         <h3 class="tw-text-lg tw-font-medium tw-text-center max-md:tw-text-base">{{{name}}}</h3>
         {{#if current}}
@@ -17,6 +16,5 @@
         </p>
         {{/if}}
     </div>
-    </a>
-</div>
+</a>
 {{/each}}
