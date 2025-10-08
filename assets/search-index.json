@@ -1,0 +1,349 @@
+[
+  {
+    "type": "paper",
+    "title": "StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding",
+    "authors": "Yanlai Yang, Zhuokai Zhao, Satya Narayan Shukla, Aashu Singh, Shlok Kumar Mishra, Lizhu Zhang, Mengye Ren",
+    "abstract": "StreamMem is a query-agnostic KV cache memory mechanism for streaming video understanding.",
+    "image": "/assets/images/papers/stream_mem.png",
+    "thumbnail": "/assets/images/thumbnails/stream_mem.png",
+    "url": "/research/stream-mem/",
+    "keywords": "streammem: query-agnostic kv cache memory for streaming video understanding yanlai yang zhuokai zhao satya narayan shukla aashu singh shlok kumar mishra lizhu zhang mengye ren streammem is a query-agnostic kv cache memory mechanism for streaming video understanding. learning-from-visual-experience adaptive-foundation-models"
+  },
+  {
+    "type": "paper",
+    "title": "Context Tuning for In-Context Optimization",
+    "authors": "Jack Lu, Ryan Teehan, Zhenbang Yang, Mengye Ren",
+    "abstract": "Context Tuning is a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters.",
+    "image": "/assets/images/papers/context_tuning.png",
+    "thumbnail": "/assets/images/thumbnails/context_tuning.png",
+    "url": "/research/context-tuning/",
+    "keywords": "context tuning for in-context optimization jack lu ryan teehan zhenbang yang mengye ren context tuning is a simple and effective method to significantly enhance few-shot adaptation of llms without fine-tuning model parameters. adaptive-foundation-models concept-learning-abstraction"
+  },
+  {
+    "type": "paper",
+    "title": "Discrete JEPA: Learning Discrete Token Representations without Reconstruction",
+    "authors": "Junyeob Baek, Hosung Lee, Christopher Hoang, Mengye Ren, Sungjin Ahn",
+    "abstract": "Discrete-JEPA extends the latent predictive coding JEPA framework with semantic tokenization and complementary objectives for symbolic reasoning tasks.",
+    "image": "/assets/images/papers/discrete_jepa.png",
+    "thumbnail": "/assets/images/thumbnails/discrete_jepa.png",
+    "url": "/research/discrete-jepa/",
+    "keywords": "discrete jepa: learning discrete token representations without reconstruction junyeob baek hosung lee christopher hoang mengye ren sungjin ahn discrete-jepa extends the latent predictive coding jepa framework with semantic tokenization and complementary objectives for symbolic reasoning tasks. concept-learning-abstraction"
+  },
+  {
+    "type": "paper",
+    "title": "Replay Can Provably Increase Forgetting",
+    "authors": "Yasaman Mahdaviyeh, James Lucas, Mengye Ren, Andreas S. Tolias, Richard Zemel, Toniann Pitassi",
+    "abstract": "We provide a theoretical analysis of sample replay in over-parameterized continual linear regression, and we show that replay can provably increase forgetting in the worst case even though the network has the capacity to memorize all tasks.",
+    "image": "/assets/images/papers/replay_can_provably_increase_forgetting.png",
+    "thumbnail": "/assets/images/thumbnails/replay_can_provably_increase_forgetting.png",
+    "url": "/research/replay-can-provably-increase-forgetting/",
+    "keywords": "replay can provably increase forgetting yasaman mahdaviyeh james lucas mengye ren andreas s. tolias richard zemel toniann pitassi we provide a theoretical analysis of sample replay in over-parameterized continual linear regression, and we show that replay can provably increase forgetting in the worst case even though the network has the capacity to memorize all tasks. learning-from-visual-experience"
+  },
+  {
+    "type": "paper",
+    "title": "Memory Storyboard: Leveraging Temporal Segmentation for Streaming Self-Supervised Learning from Egocentric Videos",
+    "authors": "Yanlai Yang, Mengye Ren",
+    "abstract": "Memory Storyboard groups recent past frames into temporal segments and provides effective summarization of the past visual streams for memory replay.",
+    "image": "/assets/images/papers/memory_storyboard.png",
+    "thumbnail": "/assets/images/thumbnails/memory_storyboard.png",
+    "url": "/research/memory-storyboard/",
+    "keywords": "memory storyboard: leveraging temporal segmentation for streaming self-supervised learning from egocentric videos yanlai yang mengye ren memory storyboard groups recent past frames into temporal segments and provides effective summarization of the past visual streams for memory replay. learning-from-visual-experience"
+  },
+  {
+    "type": "paper",
+    "title": "Are LLMs Prescient? A Continuous Evaluation using Daily News as Oracle",
+    "authors": "Amelia Dai, Ryan Teehan, Mengye Ren",
+    "abstract": "Our new benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict \"future\" events based on pre-training data.",
+    "image": "/assets/images/papers/are_llms_prescient.png",
+    "thumbnail": "/assets/images/thumbnails/are_llms_prescient.png",
+    "url": "/research/are-llms-prescient/",
+    "keywords": "are llms prescient? a continuous evaluation using daily news as oracle amelia dai ryan teehan mengye ren our new benchmark, daily oracle, automatically generates question-answer (qa) pairs from daily news, challenging llms to predict \"future\" events based on pre-training data. adaptive-foundation-models"
+  },
+  {
+    "type": "paper",
+    "title": "PooDLe: Pooled and Dense Self-Supervised Learning from Naturalistic Videos",
+    "authors": "Alex N. Wang, Chris Hoang, Yuwen Xiong, Yann LeCun, Mengye Ren",
+    "abstract": "We propose PooDLe, a self-supervised learning method that combines an invariance-based objective on pooled representations with a dense SSL objective that enforces equivariance to optical flow warping.",
+    "image": "/assets/images/papers/poodle.webp",
+    "thumbnail": "/assets/images/thumbnails/poodle.png",
+    "url": "/research/poodle/",
+    "keywords": "poodle: pooled and dense self-supervised learning from naturalistic videos alex n. wang chris hoang yuwen xiong yann lecun mengye ren we propose poodle, a self-supervised learning method that combines an invariance-based objective on pooled representations with a dense ssl objective that enforces equivariance to optical flow warping. learning-from-visual-experience"
+  },
+  {
+    "type": "paper",
+    "title": "ProCreate, Don't Reproduce! Propulsive Energy Diffusion for Creative Generation",
+    "authors": "Jack Lu, Ryan Teehan, Mengye Ren",
+    "abstract": "ProCreate is a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction.",
+    "image": "/assets/images/papers/procreate.png",
+    "thumbnail": "/assets/images/thumbnails/procreate.png",
+    "url": "/research/procreate/",
+    "keywords": "procreate, don't reproduce! propulsive energy diffusion for creative generation jack lu ryan teehan mengye ren procreate is a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction. concept-learning-abstraction"
+  },
+  {
+    "type": "paper",
+    "title": "Integrating Present and Past in Unsupervised Continual Learning",
+    "authors": "Yipeng Zhang, Laurent Charlin, Richard S. Zemel, Mengye Ren",
+    "abstract": "We formulate Osiris, a unifying framework for unsupervised continual learning (UCL), which disentangles learning objectives that encompass stability, plasticity, and cross-task consolidation.",
+    "image": "/assets/images/papers/osiris.webp",
+    "thumbnail": "/assets/images/thumbnails/osiris.png",
+    "url": "/research/osiris/",
+    "keywords": "integrating present and past in unsupervised continual learning yipeng zhang laurent charlin richard s. zemel mengye ren we formulate osiris, a unifying framework for unsupervised continual learning (ucl), which disentangles learning objectives that encompass stability, plasticity, and cross-task consolidation. learning-from-visual-experience"
+  },
+  {
+    "type": "paper",
+    "title": "CoLLEGe: Concept Embedding Generation for Large Language Models",
+    "authors": "Ryan Teehan, Brenden M. Lake, Mengye Ren",
+    "abstract": "CoLLEGe is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions.",
+    "image": "/assets/images/papers/college.png",
+    "thumbnail": "/assets/images/thumbnails/college.png",
+    "url": "/research/college/",
+    "keywords": "college: concept embedding generation for large language models ryan teehan brenden m. lake mengye ren college is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions. adaptive-foundation-models concept-learning-abstraction"
+  },
+  {
+    "type": "paper",
+    "title": "Reawakening Knowledge: Anticipatory Recovery from Catastrophic Interference via Structured Training",
+    "authors": "Yanlai Yang, Matt Jones, Michael C. Mozer, Mengye Ren",
+    "abstract": "We discover a curious and remarkable property of LLMs fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again.",
+    "image": "/assets/images/papers/reawakening.png",
+    "thumbnail": "/assets/images/thumbnails/reawakening.png",
+    "url": "/research/anticipatory-recovery/",
+    "keywords": "reawakening knowledge: anticipatory recovery from catastrophic interference via structured training yanlai yang matt jones michael c. mozer mengye ren we discover a curious and remarkable property of llms fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again. adaptive-foundation-models"
+  },
+  {
+    "type": "paper",
+    "title": "Self-Supervised Learning of Video Representations from a Child's Perspective",
+    "authors": "A. Emin Orhan, Wentao Wang, Alex N. Wang, Mengye Ren, Brenden M. Lake",
+    "abstract": "We train self-supervised video models on longitudinal, egocentric headcam recordings collected from a child over a two year period in their early development.",
+    "image": "/assets/images/papers/ssl_childs_perspective.webp",
+    "thumbnail": "/assets/images/thumbnails/ssl_childs_perspective.png",
+    "url": "/research/video-ssl-from-child/",
+    "keywords": "self-supervised learning of video representations from a child's perspective a. emin orhan wentao wang alex n. wang mengye ren brenden m. lake we train self-supervised video models on longitudinal, egocentric headcam recordings collected from a child over a two year period in their early development. learning-from-visual-experience"
+  },
+  {
+    "type": "paper",
+    "title": "Learning and Forgetting Unsafe Examples in Large Language Models",
+    "authors": "Jiachen Zhao, Zhun Deng, David Madras, James Zou, Mengye Ren",
+    "abstract": "We explore the behavior of LLMs finetuned on noisy custom data containing unsafe content and propose a simple filtering algorithm for detecting harmful content based on the phenomenon of selective forgetting.",
+    "image": "/assets/images/papers/learning_and_forgetting_llm.png",
+    "thumbnail": "/assets/images/thumbnails/learning_and_forgetting_llm.png",
+    "url": "/research/learning-forgetting-llms/",
+    "keywords": "learning and forgetting unsafe examples in large language models jiachen zhao zhun deng david madras james zou mengye ren we explore the behavior of llms finetuned on noisy custom data containing unsafe content and propose a simple filtering algorithm for detecting harmful content based on the phenomenon of selective forgetting. adaptive-foundation-models"
+  },
+  {
+    "type": "paper",
+    "title": "LifelongMemory: Leveraging LLMs for Answering Queries in Long-form Egocentric Videos",
+    "authors": "Ying Wang, Yanlai Yang, Mengye Ren",
+    "abstract": "LifelongMemory is a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval.",
+    "image": "/assets/images/papers/lifelong_memory.png",
+    "thumbnail": "/assets/images/thumbnails/lifelong_memory.png",
+    "url": "/research/lifelong-memory/",
+    "keywords": "lifelongmemory: leveraging llms for answering queries in long-form egocentric videos ying wang yanlai yang mengye ren lifelongmemory is a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval. learning-from-visual-experience adaptive-foundation-models"
+  },
+  {
+    "type": "person",
+    "title": "Mengye Ren",
+    "position": "Assistant Professor",
+    "description": "Mengye Ren is an assistant professor of computer science and data science at New York University (NYU). He runs the Agentic Learning AI Lab. Before joining NYU, he was a visiting faculty researcher at Google Brain Toronto working with Prof. Geoffrey Hinton. From 2017 to 2021, he was a senior research scientist at Uber Advanced Technologies Group (ATG) and Waabi, working on self-driving vehicles. He received PhD in Computer Science from the University of Toronto, advised by Prof. Richard Zemel and Prof. Raquel Urtasun. His research focuses on making machine learning more natural and human-like, in order for AIs to continually learn, adapt, and reason in naturalistic environments.",
+    "image": "/assets/images/people/mengye_ren.jpg",
+    "thumbnail": "/assets/images/thumbnails/mengye_ren.jpg",
+    "url": "/people/mengye-ren/",
+    "keywords": "mengye ren assistant professor mengye ren is an assistant professor of computer science and data science at new york university (nyu). he runs the agentic learning ai lab. before joining nyu, he was a visiting faculty researcher at google brain toronto working with prof. geoffrey hinton. from 2017 to 2021, he was a senior research scientist at uber advanced technologies group (atg) and waabi, working on self-driving vehicles. he received phd in computer science from the university of toronto, advised by prof. richard zemel and prof. raquel urtasun. his research focuses on making machine learning more natural and human-like, in order for ais to continually learn, adapt, and reason in naturalistic environments."
+  },
+  {
+    "type": "person",
+    "title": "Chris Hoang",
+    "position": "PhD Student",
+    "description": "Chris Hoang is a PhD student in the CILVR lab at NYU Courant advised by Mengye Ren and supported by the NDSEG fellowship. His areas of interest are machine learning and computer vision. His research goal is to advance the visual perception and reasoning capabilities of AI agents to enable them to robustly operate in the complex real world.",
+    "image": "/assets/images/people/chris_hoang.jpg",
+    "thumbnail": "/assets/images/thumbnails/chris_hoang.jpg",
+    "url": "/people/chris-hoang/",
+    "keywords": "chris hoang phd student chris hoang is a phd student in the cilvr lab at nyu courant advised by mengye ren and supported by the ndseg fellowship. his areas of interest are machine learning and computer vision. his research goal is to advance the visual perception and reasoning capabilities of ai agents to enable them to robustly operate in the complex real world."
+  },
+  {
+    "type": "person",
+    "title": "Jack Lu",
+    "position": "PhD Student",
+    "description": "Jack Lu is a PhD student in Computer Science at NYU Courant, advised by Prof. Mengye Ren in the CILVR lab. His research is supported by the NSERC PGS-D Scholarship. Prior to joining NYU, he got his Bachelor’s degree in Computer Science and Mathematics at the University of Waterloo. Recently, his work focused on generative modeling, few-shot learning, and AI-assisted design.",
+    "image": "/assets/images/people/jack_lu.jpg",
+    "thumbnail": "/assets/images/thumbnails/jack_lu.jpg",
+    "url": "/people/jack-lu/",
+    "keywords": "jack lu phd student jack lu is a phd student in computer science at nyu courant, advised by prof. mengye ren in the cilvr lab. his research is supported by the nserc pgs-d scholarship. prior to joining nyu, he got his bachelor’s degree in computer science and mathematics at the university of waterloo. recently, his work focused on generative modeling, few-shot learning, and ai-assisted design."
+  },
+  {
+    "type": "person",
+    "title": "Ryan Teehan",
+    "position": "PhD Student",
+    "description": "Ryan Teehan is a PhD student in the CILVR lab at the NYU Center for Data Science, where he is advised by Professor Mengye Ren. His research focuses on abstraction and reasoning, particularly in language, with a long-term goal of understanding and replicating the complexities of general intelligence. Prior to starting his PhD, he earned a joint BA/MS in Mathematics and Computer Science at the University of Chicago.",
+    "image": "/assets/images/people/ryan_teehan.jpg",
+    "thumbnail": "/assets/images/thumbnails/ryan_teehan.jpg",
+    "url": "/people/ryan-teehan/",
+    "keywords": "ryan teehan phd student ryan teehan is a phd student in the cilvr lab at the nyu center for data science, where he is advised by professor mengye ren. his research focuses on abstraction and reasoning, particularly in language, with a long-term goal of understanding and replicating the complexities of general intelligence. prior to starting his phd, he earned a joint ba/ms in mathematics and computer science at the university of chicago."
+  },
+  {
+    "type": "person",
+    "title": "Ying Wang",
+    "position": "PhD Student",
+    "description": "Ying Wang is a PhD student at NYU Center for Data Science, advised by Prof. Mengye Ren and  Prof. Yann LeCun in the CILVR Lab. Her research focuses on multimodal learning, aiming to build adaptive and trustworthy machine learning systems that integrate diverse modalities such as text, images, and videos. Prior to starting her PhD, she earned an MS in Data Science at NYU, where she was featured in the alumni spotlight. She completed her undergraduate degree in Computer Science, Statistics, and Finance at McGill University in Montreal, Canada.",
+    "image": "/assets/images/people/ying_wang.jpg",
+    "thumbnail": "/assets/images/thumbnails/ying_wang.jpg",
+    "url": "/people/ying-wang/",
+    "keywords": "ying wang phd student ying wang is a phd student at nyu center for data science, advised by prof. mengye ren and  prof. yann lecun in the cilvr lab. her research focuses on multimodal learning, aiming to build adaptive and trustworthy machine learning systems that integrate diverse modalities such as text, images, and videos. prior to starting her phd, she earned an ms in data science at nyu, where she was featured in the alumni spotlight. she completed her undergraduate degree in computer science, statistics, and finance at mcgill university in montreal, canada."
+  },
+  {
+    "type": "person",
+    "title": "Yanlai Yang",
+    "position": "PhD Student",
+    "description": "Yanlai Yang is a PhD student in Computer Science at NYU Courant, advised by Prof. Mengye Ren in the CILVR Lab. Starting Fall 2024, he also works as a Visiting Researcher at Meta. Prior to joining NYU, he got his Bachelor's degree in Computer Science and Applied Math at UC Berkeley. He was a recipient of the Mark D. Weiser Excellence in Computing Scholarship and the Outstanding Student Instructor Award at UC Berkeley.",
+    "image": "/assets/images/people/yanlai_yang.jpg",
+    "thumbnail": "/assets/images/thumbnails/yanlai_yang.jpg",
+    "url": "/people/yanlai-yang/",
+    "keywords": "yanlai yang phd student yanlai yang is a phd student in computer science at nyu courant, advised by prof. mengye ren in the cilvr lab. starting fall 2024, he also works as a visiting researcher at meta. prior to joining nyu, he got his bachelor's degree in computer science and applied math at uc berkeley. he was a recipient of the mark d. weiser excellence in computing scholarship and the outstanding student instructor award at uc berkeley."
+  },
+  {
+    "type": "person",
+    "title": "Amelia (Hui) Dai",
+    "position": "Master Student",
+    "description": "Amelia (Hui) Dai is a PhD student at University of Chicago. She obtained her Master's degree at NYU Center for Data Science, working with Prof. Mengye Ren in the Agentic Learning AI Lab and Prof. Krzysztof J. Geras. Her research interests include understanding LLMs (capabilities and limitations) and AI in healthcare. Recently, her work includes evaluating the generalization ability of LLMs and multi-modal learning for breast cancer detection. Previously, she completed her BS in Statistics at The Chinese University of Hong Kong, Shenzhen. Outside of school, she also does hiphop dancing!",
+    "image": "/assets/images/people/amelia_dai.jpg",
+    "thumbnail": "/assets/images/thumbnails/amelia_dai.jpg",
+    "url": "/people/amelia-dai/",
+    "keywords": "amelia (hui) dai master student amelia (hui) dai is a phd student at university of chicago. she obtained her master's degree at nyu center for data science, working with prof. mengye ren in the agentic learning ai lab and prof. krzysztof j. geras. her research interests include understanding llms (capabilities and limitations) and ai in healthcare. recently, her work includes evaluating the generalization ability of llms and multi-modal learning for breast cancer detection. previously, she completed her bs in statistics at the chinese university of hong kong, shenzhen. outside of school, she also does hiphop dancing!"
+  },
+  {
+    "type": "person",
+    "title": "Xavier (Xiaoyang) Jiang",
+    "position": "Master Student",
+    "description": "",
+    "image": "/assets/images/people/xavier_jiang.jpg",
+    "thumbnail": "/assets/images/thumbnails/xavier_jiang.jpg",
+    "url": "/people/xavier-jiang/",
+    "keywords": "xavier (xiaoyang) jiang master student "
+  },
+  {
+    "type": "person",
+    "title": "Jinran Jin",
+    "position": "Master Student",
+    "description": "Jinran is a second-year Master's student in Data Science at the Courant Institute of Mathematical Sciences at NYU. He received his BS in Statistics and Data Science from the University of California, Santa Barbara. His research focuses on machine reasoning, particularly self-correction in language models.",
+    "image": "/assets/images/people/jinran_jin.jpg",
+    "thumbnail": "/assets/images/thumbnails/jinran_jin.jpg",
+    "url": "/people/jinran-jin/",
+    "keywords": "jinran jin master student jinran is a second-year master's student in data science at the courant institute of mathematical sciences at nyu. he received his bs in statistics and data science from the university of california, santa barbara. his research focuses on machine reasoning, particularly self-correction in language models."
+  },
+  {
+    "type": "person",
+    "title": "Arjun Prasad",
+    "position": "Master Student",
+    "description": "Arjun Parasuram Prasad is a Master’s student in Computer Science at NYU’s Courant Institute, working with Prof. Mengye Ren in the Agentic AI Learning Lab. His research interests include search and ranking, NLP, and developing ML systems. His prior research includes applying ML to problems in software testing and IoT systems. He holds a B.E. in Computer Science from BITS Pilani – Hyderabad Campus.",
+    "image": "/assets/images/people/arjun_prasad.jpg",
+    "thumbnail": "/assets/images/thumbnails/arjun_prasad.jpg",
+    "url": "/people/arjun-prasad/",
+    "keywords": "arjun prasad master student arjun parasuram prasad is a master’s student in computer science at nyu’s courant institute, working with prof. mengye ren in the agentic ai learning lab. his research interests include search and ranking, nlp, and developing ml systems. his prior research includes applying ml to problems in software testing and iot systems. he holds a b.e. in computer science from bits pilani – hyderabad campus."
+  },
+  {
+    "type": "person",
+    "title": "Zhenbang Yang",
+    "position": "Master Student",
+    "description": "",
+    "image": "/assets/images/home/forest.jpg",
+    "thumbnail": "/assets/images/thumbnails/forest.jpg",
+    "url": "/people/zhenbang-yang/",
+    "keywords": "zhenbang yang master student "
+  },
+  {
+    "type": "person",
+    "title": "Yuen-Hei Yeung",
+    "position": "Master Student",
+    "description": "Yuen-Hei is a Master's student in Computer Science at NYU Courant, currently working with Prof. Mengye Ren and Chris Hoang. His research interests include more efficient visual representation learning for visuomotor policy learning through self-supervision and test-time tuning for robust out-of-domain generalization. Prior to NYU, he completed his Bachelor’s in Computer Science at the City University of Hong Kong, supported by the Innovation and Technology Scholarship from the Government of Hong Kong and HSBC.",
+    "image": "/assets/images/people/yh_yeung.jpg",
+    "thumbnail": "/assets/images/thumbnails/yh_yeung.jpg",
+    "url": "/people/yh-yeung/",
+    "keywords": "yuen-hei yeung master student yuen-hei is a master's student in computer science at nyu courant, currently working with prof. mengye ren and chris hoang. his research interests include more efficient visual representation learning for visuomotor policy learning through self-supervision and test-time tuning for robust out-of-domain generalization. prior to nyu, he completed his bachelor’s in computer science at the city university of hong kong, supported by the innovation and technology scholarship from the government of hong kong and hsbc."
+  },
+  {
+    "type": "person",
+    "title": "Weizhen Zhou",
+    "position": "Master Student",
+    "description": "",
+    "image": "/assets/images/home/forest.jpg",
+    "thumbnail": "/assets/images/thumbnails/forest.jpg",
+    "url": "/people/weizhen-zhou/",
+    "keywords": "weizhen zhou master student "
+  },
+  {
+    "type": "person",
+    "title": "Azwar Abdulsalam",
+    "position": "Visiting Researcher",
+    "description": "Azwar Abdulsalam is a visiting researcher and an eFX Quant Trader at Morgan Stanley. He completed his MS in Electrical and Computer Engineering at Purdue University, where he worked on localized learning and energy-based models. He previously earned his B.Tech in Computer Science from IIT Kharagpur, where he conducted research in semiconductor physics. His primary research interests include learning meaningful representations of natural data, generative modeling, and biologically inspired paradigms for training neural networks.",
+    "image": "/assets/images/people/azwar_abdulsalam.jpg",
+    "thumbnail": "/assets/images/thumbnails/azwar_abdulsalam.jpg",
+    "url": "/people/azwar-abdulsalam/",
+    "keywords": "azwar abdulsalam visiting researcher azwar abdulsalam is a visiting researcher and an efx quant trader at morgan stanley. he completed his ms in electrical and computer engineering at purdue university, where he worked on localized learning and energy-based models. he previously earned his b.tech in computer science from iit kharagpur, where he conducted research in semiconductor physics. his primary research interests include learning meaningful representations of natural data, generative modeling, and biologically inspired paradigms for training neural networks."
+  },
+  {
+    "type": "person",
+    "title": "Steven Luo",
+    "position": "Visiting Researcher",
+    "description": "Steven is a visiting researcher and a 4th Year CS Undergraduate from University of Toronto. His current research focuses on pushing the frontiers of in-context learning to enable language models to learn at test-time, touching upon ideas like infinite-context learning and concept learning. Previously, Steven worked on efficient algorithms for neural fields at DGP, UofT and NGai Lab, HKU.",
+    "image": "/assets/images/people/steven_luo.jpg",
+    "thumbnail": "/assets/images/thumbnails/steven_luo.jpg",
+    "url": "/people/steven-luo/",
+    "keywords": "steven luo visiting researcher steven is a visiting researcher and a 4th year cs undergraduate from university of toronto. his current research focuses on pushing the frontiers of in-context learning to enable language models to learn at test-time, touching upon ideas like infinite-context learning and concept learning. previously, steven worked on efficient algorithms for neural fields at dgp, uoft and ngai lab, hku."
+  },
+  {
+    "type": "person",
+    "title": "Frank (Zequan) Wu",
+    "position": "Visiting Researcher",
+    "description": "Frank (Zequan) Wu is a visiting researcher and an Algorithm Engineer. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning.",
+    "image": "/assets/images/people/frank_wu.jpg",
+    "thumbnail": "/assets/images/thumbnails/frank_wu.jpg",
+    "url": "/people/frank-wu/",
+    "keywords": "frank (zequan) wu visiting researcher frank (zequan) wu is a visiting researcher and an algorithm engineer. he previously graduated with a joint bachelor degree in computer science and mathematics from nyu, where he worked with prof. mengye ren on the forward-forward algorithm. his primary interests lie in exploring new, emerging paradigms to train deep neural networks. recently, his work has focused on localized learning and reinforcement learning."
+  },
+  {
+    "type": "person",
+    "title": "Will Wu",
+    "position": "Undergraduate Student",
+    "description": "Will Wu is a second-year undergraduate at NYU's Stern School of Business. He is conducting research under Professor Mengye Ren through the Data Science Research Program for Undergraduates, focusing on agent research for real-time forecasting markets with guidance from Professor Ren and Amelia Dai. Beyond his research, Will is passionate about robotics, swimming, and board games.",
+    "image": "/assets/images/people/will_wu.jpg",
+    "thumbnail": "/assets/images/thumbnails/will_wu.jpg",
+    "url": "/people/will-wu/",
+    "keywords": "will wu undergraduate student will wu is a second-year undergraduate at nyu's stern school of business. he is conducting research under professor mengye ren through the data science research program for undergraduates, focusing on agent research for real-time forecasting markets with guidance from professor ren and amelia dai. beyond his research, will is passionate about robotics, swimming, and board games."
+  },
+  {
+    "type": "person",
+    "title": "Alex N. Wang",
+    "position": "PhD Student",
+    "description": "Alex Wang is a PhD student in CILVR at New York University. He did his MSc with Rich Zemel and BASc in Engineering Science at University of Toronto. He is supported by the NSERC PGS-D scholarship. He is interested in intelligent, large-scale generative vision models. Through generative modeling, he aims to define, build, and evaluate a notion of visual intelligence.",
+    "image": "/assets/images/people/alex_wang.jpg",
+    "thumbnail": "/assets/images/thumbnails/alex_wang.jpg",
+    "url": "/people/alex-wang/",
+    "keywords": "alex n. wang phd student alex wang is a phd student in cilvr at new york university. he did his msc with rich zemel and basc in engineering science at university of toronto. he is supported by the nserc pgs-d scholarship. he is interested in intelligent, large-scale generative vision models. through generative modeling, he aims to define, build, and evaluate a notion of visual intelligence."
+  },
+  {
+    "type": "research-area",
+    "title": "Learning from Visual Experience",
+    "description": "Visual learning has made significant progress with single-subject, iconic images, but learning useful representations from long-form egocentric videos remains challenging. These videos provide a naturalistic, embodied sensory experience, offering spatiotemporal grounding in the real world. Leveraging multimodality, object motion, temporal structure and consistency can improve performance and data efficiency, yet learning is also hindered by constant and continual distribution shifts. To address these challenges, we have developed methods for incremental recognition in open-world environments, unsupervised continual representation learning, and video representation learning. Our vision is to build efficient and adaptable learning algorithms for on-device visual learning from streaming embodied experiences, with applications in downstream tasks such as planning and visual assistance, where the learned representations are broadly useful.",
+    "image": "/assets/images/home/visual_experience.png",
+    "thumbnail": "/assets/images/thumbnails/visual_experience.png",
+    "url": "/areas/learning-from-visual-experience/",
+    "keywords": "learning from visual experience visual learning has made significant progress with single-subject, iconic images, but learning useful representations from long-form egocentric videos remains challenging. these videos provide a naturalistic, embodied sensory experience, offering spatiotemporal grounding in the real world. leveraging multimodality, object motion, temporal structure and consistency can improve performance and data efficiency, yet learning is also hindered by constant and continual distribution shifts. to address these challenges, we have developed methods for incremental recognition in open-world environments, unsupervised continual representation learning, and video representation learning. our vision is to build efficient and adaptable learning algorithms for on-device visual learning from streaming embodied experiences, with applications in downstream tasks such as planning and visual assistance, where the learned representations are broadly useful."
+  },
+  {
+    "type": "research-area",
+    "title": "Adaptive Agents and Foundation Models",
+    "description": "The development of adaptive agents and foundation models marks a significant shift toward AI systems that can continually learn, adapt, and evolve in response to new information, changing environments, and user preferences. Current AI models are typically trained on static data, with limited ability to adapt through context post-deployment. Our goal is to enable agents to continuously absorb new knowledge and compress it into reusable representations for more up-to-date responses. This capability is also valuable for third-party customization, personalization, and safety alignment. We are interested in both the foundational study of sequential learning dynamics in large language models and practical applications that demand adaptive agents, such as personalized assistance, multimodal learning, and news forecasting.",
+    "image": "/assets/images/home/adaptive_foundation_models.png",
+    "thumbnail": "/assets/images/thumbnails/adaptive_foundation_models.png",
+    "url": "/areas/adaptive-foundation-models/",
+    "keywords": "adaptive agents and foundation models the development of adaptive agents and foundation models marks a significant shift toward ai systems that can continually learn, adapt, and evolve in response to new information, changing environments, and user preferences. current ai models are typically trained on static data, with limited ability to adapt through context post-deployment. our goal is to enable agents to continuously absorb new knowledge and compress it into reusable representations for more up-to-date responses. this capability is also valuable for third-party customization, personalization, and safety alignment. we are interested in both the foundational study of sequential learning dynamics in large language models and practical applications that demand adaptive agents, such as personalized assistance, multimodal learning, and news forecasting."
+  },
+  {
+    "type": "research-area",
+    "title": "Concept Learning and Abstraction",
+    "description": "Scaling AI for lifelong learning and reasoning requires the ability to transform raw inputs into abstract concepts that can be efficiently composed to form more complex ones. Our lab has a strong focus on few-shot learning for concept acquisition. In recent research, we have enabled large-scale foundation models to incrementally learn new language and visual concepts. Our current efforts extend to recognizing functional and relational concepts, as well as exploring how learned concepts can be composed hierarchically for high-level reasoning. These advancements are key to building AI systems that generalize efficiently and adapt continuously to new tasks.",
+    "image": "/assets/images/home/concept_abstraction.png",
+    "thumbnail": "/assets/images/thumbnails/concept_abstraction.png",
+    "url": "/areas/concept-learning-abstraction/",
+    "keywords": "concept learning and abstraction scaling ai for lifelong learning and reasoning requires the ability to transform raw inputs into abstract concepts that can be efficiently composed to form more complex ones. our lab has a strong focus on few-shot learning for concept acquisition. in recent research, we have enabled large-scale foundation models to incrementally learn new language and visual concepts. our current efforts extend to recognizing functional and relational concepts, as well as exploring how learned concepts can be composed hierarchically for high-level reasoning. these advancements are key to building ai systems that generalize efficiently and adapt continuously to new tasks."
+  }
+]
