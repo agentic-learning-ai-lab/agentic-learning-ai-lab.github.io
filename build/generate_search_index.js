@@ -10,6 +10,19 @@ const researchAreas = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data
 // Build search index
 const searchIndex = [];
 
+// Helper function to format authors with "and"
+function formatAuthors(authors) {
+    if (!authors || authors.length === 0) {
+        return '';
+    } else if (authors.length === 1) {
+        return authors[0];
+    } else if (authors.length === 2) {
+        return authors[0] + ' and ' + authors[1];
+    } else {
+        return authors.slice(0, -1).join(', ') + ', and ' + authors[authors.length - 1];
+    }
+}
+
 // Add papers to search index
 papers.forEach(paper => {
     // Generate thumbnail path from image path
@@ -26,7 +39,7 @@ papers.forEach(paper => {
     searchIndex.push({
         type: 'paper',
         title: paper.title,
-        authors: paper.authors ? paper.authors.join(', ') : '',
+        authors: formatAuthors(paper.authors),
         abstract: paper.short_abstract || paper.abstract || '',
         image: paper.image || '',
         thumbnail: thumbnail,

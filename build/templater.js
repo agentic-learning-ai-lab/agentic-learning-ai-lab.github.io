@@ -162,7 +162,7 @@ function registerHelpers(handlebars) {
     // handlebars.registerHelper('assignmentSlug', l => 'assignment-' + toSlug(l.Label));
 
     // Use UI.registerHelper..
-    
+
     handlebars.registerHelper('formatDate', function (date, format) {
       return moment.utc(date).format(format);
     });
@@ -178,6 +178,38 @@ function registerHelpers(handlebars) {
         } else {
           return authors.slice(0, -1).join(', ') + (', and ') + authors[authors.length - 1];
         }
+    });
+
+    handlebars.registerHelper('formatAuthorsWithLinks', function (authors) {
+        console.log('formatAuthorsWithLinks', authors);
+
+        // Load people data to check for existing pages
+        const peopleData = parseDocuments().people;
+        const peopleMap = new Map(peopleData.map(p => [p.name, p.permalink]));
+
+        if (!authors || authors.length == 0) {
+          return "";
+        }
+
+        // Format each author with link if they have a page
+        const formattedAuthors = authors.map(author => {
+            if (peopleMap.has(author)) {
+                return `<a href="/people/${peopleMap.get(author)}/">${author}</a>`;
+            }
+            return author;
+        });
+
+        // Join with proper formatting
+        let result;
+        if (formattedAuthors.length == 1) {
+          result = formattedAuthors[0];
+        } else if (formattedAuthors.length == 2) {
+          result = formattedAuthors[0] + ' and ' + formattedAuthors[1];
+        } else {
+          result = formattedAuthors.slice(0, -1).join(', ') + ', and ' + formattedAuthors[formattedAuthors.length - 1];
+        }
+
+        return new handlebars.SafeString(result);
     });
 }
 
