@@ -8,7 +8,7 @@
     "start:tailwind": "cross-env NODE_ENV=development tailwindcss --postcss -i ./css/tailwind.css -o ./css/tailwind-runtime.css -w",
     "build:tailwind": "cross-env NODE_ENV=production tailwindcss --postcss -i ./css/tailwind.css -o ./css/tailwind-build.css --minify",
     "build-in-place": "npm run build",
-    "build": "node ./build/build_pages.js"
+    "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && node ./build/generate_search_index.js && node ./build/build_pages.js"
   },
   "keywords": [],
   "author": "Paul, Mengye Ren",
