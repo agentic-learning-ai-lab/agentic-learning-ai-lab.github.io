@@ -1,40 +1,46 @@
 <!doctype html>
 
 <html lang="en">
+
 <head>
-<!-- Open Graph / Facebook -->
-<meta property="og:title" content="Research | Agentic Learning AI Lab" />
-<meta property="og:description" content="Read our rcent research articles" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://agenticlearning.ai/research" />
-<!--Replace with the current website url-->
-<meta property="og:image" content="https://agenticlearning.ai/assets/images/background/bg1.jpg" />
-{{> head}}
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Research | Agentic Learning AI Lab" />
+    <meta property="og:description" content="Read our rcent research articles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://agenticlearning.ai/research" />
+    <!--Replace with the current website url-->
+    <meta property="og:image" content="https://agenticlearning.ai/assets/images/background/bg1.jpg" />
+    {{> head}}
 </head>
-    <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
-        {{> header}}
 
-        <section class="tw-flex tw-w-full tw-flex-col tw-p-[5%] tw-mt-[150px] max-lg:tw-p-4">
-            <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
-                Research
-            </h3>
-            <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
-            </div>
+<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
+    {{> header}}
 
-            <div id="flexContainer" class="tw-mt-10 tw-flex tw-flex-wrap tw-place-content-center tw-gap-y-4 tw-gap-x-4 tw-justify-around">
+    <section class="tw-flex tw-w-full tw-flex-col tw-p-[5%] tw-mt-[150px] max-lg:tw-p-4">
+        <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
+            Research
+        </h3>
+        <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
+        </div>
+
+        <div id="flexContainer"
+            class="tw-mt-4 tw-flex tw-flex-wrap tw-place-content-center tw-gap-y-4 tw-gap-x-4 tw-justify-around">
             {{> research_tab papers }}
-            </div>
+        </div>
 
-            <div class="pagination-controls tw-mt-12 tw-flex tw-justify-center tw-items-center tw-gap-2">
-                <button id="prevButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300" onclick="prevPage()">Prev</button>
-                <span id="pageNumbers" class="tw-flex tw-gap-2"></span>
-                <button id="nextButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300" onclick="nextPage()">Next</button>
-            </div>
+        <div class="pagination-controls tw-mt-12 tw-flex tw-justify-center tw-items-center tw-gap-2">
+            <button id="prevButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300"
+                onclick="prevPage()">Prev</button>
+            <span id="pageNumbers" class="tw-flex tw-gap-2"></span>
+            <button id="nextButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300"
+                onclick="nextPage()">Next</button>
+        </div>
 
-        </section>
-        
-        {{> footer}}
-    </body>
-    <script src="/index.js"></script>
-    <script src="/research.js"></script>
+    </section>
+
+    {{> footer}}
+</body>
+<script src="/index.js"></script>
+<script src="/research.js"></script>
+
 </html>
