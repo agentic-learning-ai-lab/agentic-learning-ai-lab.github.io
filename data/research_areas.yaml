@@ -1,6 +1,6 @@
 -
   title: "Learning from Visual Experience"
-  image: "/assets/images/home/visual_experience.png"
+  image: "/assets/images/home/learning_from_visual_experience.png"
   keywords: "Embodied AI; Self-supervised learning; Continual learning; Representation learning; Multimodal learning."
   description: "Visual learning has made significant progress with single-subject, iconic images, but learning useful representations from long-form egocentric videos remains challenging. These videos provide a naturalistic, embodied sensory experience, offering spatiotemporal grounding in the real world. Leveraging multimodality, object motion, temporal structure and consistency can improve performance and data efficiency, yet learning is also hindered by constant and continual distribution shifts. To address these challenges, we have developed methods for incremental recognition in open-world environments, unsupervised continual representation learning, and video representation learning. Our vision is to build efficient and adaptable learning algorithms for on-device visual learning from streaming embodied experiences, with applications in downstream tasks such as planning and visual assistance, where the learned representations are broadly useful."
   permalink: "learning-from-visual-experience"
