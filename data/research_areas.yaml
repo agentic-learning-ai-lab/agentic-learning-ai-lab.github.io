@@ -10,11 +10,11 @@
   image: "/assets/images/home/adaptive_agents_foundation_models.png"
   keywords: "Personalized AI; Agents; Few-shot, continual, meta learning; Memorization and forgetting; News forecasting."
   description: "The development of adaptive agents and foundation models marks a significant shift toward AI systems that can continually learn, adapt, and evolve in response to new information, changing environments, and user preferences. Current AI models are typically trained on static data, with limited ability to adapt through context post-deployment. Our goal is to enable agents to continuously absorb new knowledge and compress it into reusable representations for more up-to-date responses. This capability is also valuable for third-party customization, personalization, and safety alignment. We are interested in both the foundational study of sequential learning dynamics in large language models and practical applications that demand adaptive agents, such as personalized assistance, multimodal learning, and news forecasting."
-  permalink: "adaptive-agents-foundation-models"
+  permalink: "adaptive-agents-and-foundation-models"
 
 -
   title: "Concept Learning and Abstraction"
-  image: "/assets/images/home/concept_abstraction.png"
+  image: "/assets/images/home/concept_learning_and_abstraction.png"
   keywords: "Few-shot concept learning; Visual reasoning; Relational abstraction; Hierarchical abstraction and planning."
   description: "Scaling AI for lifelong learning and reasoning requires the ability to transform raw inputs into abstract concepts that can be efficiently composed to form more complex ones. Our lab has a strong focus on few-shot learning for concept acquisition. In recent research, we have enabled large-scale foundation models to incrementally learn new language and visual concepts. Our current efforts extend to recognizing functional and relational concepts, as well as exploring how learned concepts can be composed hierarchically for high-level reasoning. These advancements are key to building AI systems that generalize efficiently and adapt continuously to new tasks."
-  permalink: "concept-learning-abstraction"
+  permalink: "concept-learning-and-abstraction"
