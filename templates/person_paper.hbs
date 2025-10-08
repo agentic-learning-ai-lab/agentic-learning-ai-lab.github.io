@@ -1,14 +1,15 @@
 {{#each this}}
-<div class="page-item tw-w-full">
-<div class="safari-padding-fix">
-<!-- <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full  tw-border-transparent tw-overflow-hidden"> -->
-    <div class="tw-flex tw-flex-col">
-        {{formatDate date "YYYY-MM-DD"}}<br/>
-        <a href="/research/{{{permalink}}}"><span class="tw-italic person-page-links">{{{title}}}.</span></a>
-        <!-- <br/> -->
-        <span class="tw-text-gray-600 tw-text-sm">{{{formatAuthors authors}}}.</span>
+<a href="/research/{{{permalink}}}" class="search-result-item">
+    <div class="search-result-content">
+        <div class="search-result-thumbnail">
+            <img src="{{{image}}}" alt="{{{title}}}" />
+        </div>
+        <div class="search-result-text">
+            <div class="search-result-title">{{{title}}}</div>
+            <div class="search-result-subtitle">{{formatDate date "YYYY-MM-DD"}}</div>
+            <div class="search-result-subtitle">{{{formatAuthors authors}}}</div>
+        </div>
+        <i class="bi bi-arrow-right search-result-arrow"></i>
     </div>
-<!-- </div> -->
-</div>
-</div>
+</a>
 {{/each}}
