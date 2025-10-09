@@ -1,6 +1,16 @@
 [
   {
     "type": "paper",
+    "title": "Midway Network: Learning Representations for Recognition and Motion from Latent Dynamics",
+    "authors": "Chris Hoang and Mengye Ren",
+    "abstract": "Midway Network is a new self-supervised learning architecture that learns strong visual representations for both object recognition and motion understanding solely from natural videos, by extending latent dynamics modeling to this domain.",
+    "image": "/assets/images/papers/midway_network.png",
+    "thumbnail": "/assets/images/thumbnails/midway_network.png",
+    "url": "/research/midway-network/",
+    "keywords": "midway network: learning representations for recognition and motion from latent dynamics chris hoang mengye ren midway network is a new self-supervised learning architecture that learns strong visual representations for both object recognition and motion understanding solely from natural videos, by extending latent dynamics modeling to this domain. learning-from-visual-experience"
+  },
+  {
+    "type": "paper",
     "title": "StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding",
     "authors": "Yanlai Yang, Zhuokai Zhao, Satya Narayan Shukla, Aashu Singh, Shlok Kumar Mishra, Lizhu Zhang, and Mengye Ren",
     "abstract": "StreamMem is a query-agnostic KV cache memory mechanism for streaming video understanding.",
@@ -22,12 +32,12 @@
   {
     "type": "paper",
     "title": "Discrete JEPA: Learning Discrete Token Representations without Reconstruction",
-    "authors": "Junyeob Baek, Hosung Lee, Christopher Hoang, Mengye Ren, and Sungjin Ahn",
+    "authors": "Junyeob Baek, Hosung Lee, Chris Hoang, Mengye Ren, and Sungjin Ahn",
     "abstract": "Discrete-JEPA extends the latent predictive coding JEPA framework with semantic tokenization and complementary objectives for symbolic reasoning tasks.",
     "image": "/assets/images/papers/discrete_jepa.png",
     "thumbnail": "/assets/images/thumbnails/discrete_jepa.png",
     "url": "/research/discrete-jepa/",
-    "keywords": "discrete jepa: learning discrete token representations without reconstruction junyeob baek hosung lee christopher hoang mengye ren sungjin ahn discrete-jepa extends the latent predictive coding jepa framework with semantic tokenization and complementary objectives for symbolic reasoning tasks. concept-learning-abstraction"
+    "keywords": "discrete jepa: learning discrete token representations without reconstruction junyeob baek hosung lee chris hoang mengye ren sungjin ahn discrete-jepa extends the latent predictive coding jepa framework with semantic tokenization and complementary objectives for symbolic reasoning tasks. concept-learning-abstraction"
   },
   {
     "type": "paper",
@@ -52,12 +62,12 @@
   {
     "type": "paper",
     "title": "Are LLMs Prescient? A Continuous Evaluation using Daily News as Oracle",
-    "authors": "Amelia Dai, Ryan Teehan, and Mengye Ren",
+    "authors": "Amelia (Hui) Dai, Ryan Teehan, and Mengye Ren",
     "abstract": "Our new benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict \"future\" events based on pre-training data.",
     "image": "/assets/images/papers/are_llms_prescient.png",
     "thumbnail": "/assets/images/thumbnails/are_llms_prescient.png",
     "url": "/research/are-llms-prescient/",
-    "keywords": "are llms prescient? a continuous evaluation using daily news as oracle amelia dai ryan teehan mengye ren our new benchmark, daily oracle, automatically generates question-answer (qa) pairs from daily news, challenging llms to predict \"future\" events based on pre-training data. adaptive-foundation-models"
+    "keywords": "are llms prescient? a continuous evaluation using daily news as oracle amelia (hui) dai ryan teehan mengye ren our new benchmark, daily oracle, automatically generates question-answer (qa) pairs from daily news, challenging llms to predict \"future\" events based on pre-training data. adaptive-foundation-models"
   },
   {
     "type": "paper",

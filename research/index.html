@@ -111,6 +111,45 @@
         <div id="flexContainer"
             class="tw-mt-4 tw-flex tw-flex-wrap tw-place-content-center tw-gap-y-4 tw-gap-x-4 tw-justify-around">
             <div class="page-item">
+            <a href="/research/midway-network">
+            <div class="safari-padding-fix">
+                <!-- tw-rounded-lg  -->
+                <!-- hover:tw-shadow-lg tw-transition-shadow tw-duration-300 -->
+            <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full
+            tw-border-transparent tw-border-2 hover:tw-border-solid  hover:tw-border-gray-600
+            tw-overflow-hidden tw-transition-all tw-duration-200">
+                <div class="tw-flex tw-place-items-center tw-gap-3">
+                    <!-- tw-rounded-lg -->
+                    <div class="tw-h-[300px] tw-w-full tw-overflow-hidden ">
+                        <img src=/assets/images/papers/midway_network.png
+                            class="tw-h-full tw-w-full tw-object-cover"
+                            alt="design"/>
+                    </div>
+                    <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
+                </div>
+                <div class="tw-flex tw-flex-col tw-gap-2">
+                    <h3 class="tw-text-xl tw-font-medium tw-mt-4">Midway Network: Learning Representations for Recognition and Motion from Latent Dynamics</h3>
+                    <p class="tw-mt-4">
+                        Authors: <a href="/people/chris-hoang/">Chris Hoang</a> and <a href="/people/mengye-ren/">Mengye Ren</a>
+                    </p>
+                    <p class="tw-text-gray-600 tw-mt-4">
+                        Object recognition and motion understanding are key components of perception that complement each other. While self-supervised learning methods have shown promise in their ability to learn from unlabeled data, they have primarily focused on obtaining rich representations for either recognition or motion rather than both in tandem. On the other hand, latent dynamics modeling has been used in decision making to learn latent representations of observations and their transformations over time for control and planning tasks. In this work, we present Midway Network, a new self-supervised learning architecture that is the first to learn strong visual representations for both object recognition and motion understanding solely from natural videos, by extending latent dynamics modeling to this domain. Midway Network leverages a midway top-down path to infer motion latents between video frames, as well as a dense forward prediction objective and hierarchical structure to tackle the complex, multi-object scenes of natural videos. We demonstrate that after pretraining on two large-scale natural video datasets, Midway Network achieves strong performance on both semantic segmentation and optical flow tasks relative to prior self-supervised learning methods. We also show that Midway Network's learned dynamics can capture high-level correspondence via a novel analysis method based on forward feature perturbation.
+                    </p>
+                    <p class="tw-mt-4">
+                    Published: 2025-10-07
+                    </p>
+                    <div  class="tw-mt-4">
+                    <!-- <a href=https://arxiv.org/abs/2510.05558 class="tw-mt-4"> -->
+                        <span>Learn more</span>
+                        <i class="bi bi-arrow-right"></i>
+                    <!-- </a> -->
+                    </div>
+                </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="page-item">
             <a href="/research/stream-mem">
             <div class="safari-padding-fix">
                 <!-- tw-rounded-lg  -->
@@ -208,7 +247,7 @@
                 <div class="tw-flex tw-flex-col tw-gap-2">
                     <h3 class="tw-text-xl tw-font-medium tw-mt-4">Discrete JEPA: Learning Discrete Token Representations without Reconstruction</h3>
                     <p class="tw-mt-4">
-                        Authors: Junyeob Baek, Hosung Lee, Christopher Hoang, <a href="/people/mengye-ren/">Mengye Ren</a>, and Sungjin Ahn
+                        Authors: Junyeob Baek, Hosung Lee, <a href="/people/chris-hoang/">Chris Hoang</a>, <a href="/people/mengye-ren/">Mengye Ren</a>, and Sungjin Ahn
                     </p>
                     <p class="tw-text-gray-600 tw-mt-4">
                         The cornerstone of cognitive intelligence lies in extracting hidden patterns from observations and leveraging these principles to systematically predict future outcomes. However, current image tokenization methods demonstrate significant limitations in tasks requiring symbolic abstraction and logical reasoning capabilities essential for systematic inference. To address this challenge, we propose Discrete-JEPA, extending the latent predictive coding framework with semantic tokenization and novel complementary objectives to create robust tokenization for symbolic reasoning tasks. Discrete-JEPA dramatically outperforms baselines on visual symbolic prediction tasks, while striking visual evidence reveals the spontaneous emergence of deliberate systematic patterns within the learned semantic token space. Though an initial model, our approach promises a significant impact for advancing Symbolic world modeling and planning capabilities in artificial intelligence systems.
@@ -325,7 +364,7 @@
                 <div class="tw-flex tw-flex-col tw-gap-2">
                     <h3 class="tw-text-xl tw-font-medium tw-mt-4">Are LLMs Prescient? A Continuous Evaluation using Daily News as Oracle</h3>
                     <p class="tw-mt-4">
-                        Authors: Amelia Dai, <a href="/people/ryan-teehan/">Ryan Teehan</a>, and <a href="/people/mengye-ren/">Mengye Ren</a>
+                        Authors: <a href="/people/amelia-dai/">Amelia (Hui) Dai</a>, <a href="/people/ryan-teehan/">Ryan Teehan</a>, and <a href="/people/mengye-ren/">Mengye Ren</a>
                     </p>
                     <p class="tw-text-gray-600 tw-mt-4">
                         Existing evaluation benchmarks for Large Language Models (LLMs) quickly become outdated due to model updates and an evolving information landscape. Moreover, they often lack the ability to assess how model performance evolves over time, as they consist of static questions without a temporal dimension. To address these, we propose using future event prediction as a continuous evaluation method to assess LLMs' temporal generalization and forecasting abilities. Our benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict "future" events based on pre-training data. Our findings reveal that as pre-training data becomes outdated, LLM performance degrades over time. While Retrieval Augmented Generation (RAG) can enhance prediction accuracy, the degradation persists, highlighting the need for ongoing model updates.
