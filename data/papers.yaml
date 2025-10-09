@@ -1,3 +1,20 @@
+- title: "Midway Network: Learning Representations for Recognition and Motion from Latent Dynamics"
+  image: "/assets/images/papers/midway_network.png"
+  authors: 
+    - "Chris Hoang"
+    - "Mengye Ren"
+  short_abstract: "Midway Network is a new self-supervised learning architecture that learns strong visual representations for both object recognition and motion understanding solely from natural videos, by extending latent dynamics modeling to this domain."
+  abstract: "Object recognition and motion understanding are key components of perception that complement each other. While self-supervised learning methods have shown promise in their ability to learn from unlabeled data, they have primarily focused on obtaining rich representations for either recognition or motion rather than both in tandem. On the other hand, latent dynamics modeling has been used in decision making to learn latent representations of observations and their transformations over time for control and planning tasks. In this work, we present Midway Network, a new self-supervised learning architecture that is the first to learn strong visual representations for both object recognition and motion understanding solely from natural videos, by extending latent dynamics modeling to this domain. Midway Network leverages a midway top-down path to infer motion latents between video frames, as well as a dense forward prediction objective and hierarchical structure to tackle the complex, multi-object scenes of natural videos. We demonstrate that after pretraining on two large-scale natural video datasets, Midway Network achieves strong performance on both semantic segmentation and optical flow tasks relative to prior self-supervised learning methods. We also show that Midway Network's learned dynamics can capture high-level correspondence via a novel analysis method based on forward feature perturbation."
+  arxiv: "https://arxiv.org/abs/2510.05558"
+  pdf: "https://arxiv.org/pdf/2510.05558"
+  webpage: "https://agenticlearning.ai/midway-network/"
+  permalink: "midway-network"
+  research_areas:
+    - "learning-from-visual-experience"
+  date: 2025-10-07
+  journal: "CoRR"
+  is_recent: true
+
 - title: "StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding"
   image: "/assets/images/papers/stream_mem.png"
   authors: 
@@ -46,7 +63,7 @@
   authors: 
     - "Junyeob Baek"
     - "Hosung Lee"
-    - "Christopher Hoang"
+    - "Chris Hoang"
     - "Mengye Ren"
     - "Sungjin Ahn"
   short_abstract: "Discrete-JEPA extends the latent predictive coding JEPA framework with semantic tokenization and complementary objectives for symbolic reasoning tasks."
@@ -104,7 +121,7 @@
   title: "Are LLMs Prescient? A Continuous Evaluation using Daily News as Oracle"
   image: "/assets/images/papers/are_llms_prescient.png"
   authors:
-    - "Amelia Dai"
+    - "Amelia (Hui) Dai"
     - "Ryan Teehan"
     - "Mengye Ren"
   short_abstract: "Our new benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict \"future\" events based on pre-training data."
@@ -157,7 +174,7 @@
     - "concept-learning-abstraction"
   date: 2024-08-05
   journal: "The 18th European Conference on Computer Vision (ECCV 2024)"
-  is_recent: true
+  is_recent: false
 
 - 
   title: "Integrating Present and Past in Unsupervised Continual Learning"
@@ -177,7 +194,7 @@
     - "learning-from-visual-experience"
   date: 2024-04-29
   journal: "The Third Conference on Lifelong Learning Agents (CoLLAs 2024)"
-  is_recent: true
+  is_recent: false
 
 - 
   title: "CoLLEGe: Concept Embedding Generation for Large Language Models"
@@ -197,7 +214,7 @@
     - "concept-learning-abstraction"
   date: 2024-03-22
   journal: "The First Conference on Language Modeling (COLM 2024)"
-  is_recent: true
+  is_recent: false
 
 -
   title: "Reawakening Knowledge: Anticipatory Recovery from Catastrophic Interference via Structured Training"
@@ -217,7 +234,7 @@
     - "adaptive-foundation-models"
   date: 2024-03-14
   journal: "Advances in Neural Information Processing Systems 37 (NeurIPS 2024)"
-  is_recent: true
+  is_recent: false
 
 - 
   title: "Self-Supervised Learning of Video Representations from a Child's Perspective"
