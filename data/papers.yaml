@@ -1,3 +1,20 @@
+- title: "Local Reinforcement Learning with Action-Conditioned Root Mean Squared Q-Functions"
+  image: "/assets/images/papers/arq.png"
+  authors: 
+    - "Frank (Zequan) Wu"
+    - "Mengye Ren"
+  short_abstract: "Action-conditioned Root mean squared Q-Functions (ARQ) is a novel backprop-free value estimation method that applies a goodness function and action conditioning for local reinforcement learning."
+  abstract: "The Forward-Forward (FF) Algorithm is a recently proposed learning procedure for neural networks that employs two forward passes instead of the traditional forward and backward passes used in backpropagation. However, FF remains largely confined to supervised settings, leaving a gap at domains where learning signals can be yielded more naturally such as RL. In this work, inspired by FF's goodness function using layer activity statistics, we introduce Action-conditioned Root mean squared Q-Functions (ARQ), a novel value estimation method that applies a goodness function and action conditioning for local RL using temporal difference learning. Despite its simplicity and biological grounding, our approach achieves superior performance compared to state-of-the-art local backprop-free RL methods in the MinAtar and the DeepMind Control Suite benchmarks, while also outperforming algorithms trained with backpropagation on most tasks."
+  arxiv: "https://arxiv.org/abs/2510.06649"
+  pdf: "https://arxiv.org/pdf/2510.06649"
+  webpage: "https://agenticlearning.ai/arq/"
+  permalink: "arq"
+  research_areas:
+    - "adaptive-agents-and-foundation-models"
+  date: 2025-10-08
+  journal: "CoRR"
+  is_recent: true
+
 - title: "Midway Network: Learning Representations for Recognition and Motion from Latent Dynamics"
   image: "/assets/images/papers/midway_network.png"
   authors: 
@@ -33,7 +50,7 @@
   permalink: "stream-mem"
   research_areas:
     - "learning-from-visual-experience"
-    - "adaptive-foundation-models"
+    - "adaptive-agents-and-foundation-models"
   date: 2025-08-21
   journal: "CoRR"
   is_recent: true
@@ -52,8 +69,8 @@
   webpage: "https://agenticlearning.ai/context-tuning/"
   permalink: "context-tuning"
   research_areas:
-    - "adaptive-foundation-models"
-    - "concept-learning-abstraction"
+    - "adaptive-agents-and-foundation-models"
+    - "concept-learning-and-abstraction"
   date: 2025-07-06
   journal: "CoRR"
   is_recent: true
@@ -73,7 +90,7 @@
   webpage: ""
   permalink: "discrete-jepa"
   research_areas:
-    - "concept-learning-abstraction"
+    - "concept-learning-and-abstraction"
   date: 2025-06-22
   journal: "CoRR"
   is_recent: true
@@ -131,7 +148,7 @@
   webpage: "https://agenticlearning.ai/daily-oracle/"
   permalink: "are-llms-prescient"
   research_areas:
-    - "adaptive-foundation-models"
+    - "adaptive-agents-and-foundation-models"
   date: 2024-11-13
   journal: "The 42nd International Conference on Machine Learning (ICML 2025)"
   is_recent: true
@@ -171,7 +188,7 @@
   webpage: "https://agenticlearning.ai/procreate-diffusion/"
   permalink: "procreate"
   research_areas:
-    - "concept-learning-abstraction"
+    - "concept-learning-and-abstraction"
   date: 2024-08-05
   journal: "The 18th European Conference on Computer Vision (ECCV 2024)"
   is_recent: false
@@ -210,8 +227,8 @@
   webpage: "https://agenticlearning.ai/college/"
   permalink: "college"
   research_areas:
-    - "adaptive-foundation-models"
-    - "concept-learning-abstraction"
+    - "adaptive-agents-and-foundation-models"
+    - "concept-learning-and-abstraction"
   date: 2024-03-22
   journal: "The First Conference on Language Modeling (COLM 2024)"
   is_recent: false
@@ -231,7 +248,7 @@
   webpage: "https://agenticlearning.ai/anticipatory-recovery/"
   permalink: "anticipatory-recovery"
   research_areas:
-    - "adaptive-foundation-models"
+    - "adaptive-agents-and-foundation-models"
   date: 2024-03-14
   journal: "Advances in Neural Information Processing Systems 37 (NeurIPS 2024)"
   is_recent: false
@@ -273,7 +290,7 @@
   webpage: ""
   permalink: "learning-forgetting-llms"
   research_areas:
-    - "adaptive-foundation-models"
+    - "adaptive-agents-and-foundation-models"
   date: 2023-12-20
   journal: "The 41st International Conference on Machine Learning (ICML 2024)"
   is_recent: false
@@ -293,7 +310,7 @@
   permalink: "lifelong-memory"
   research_areas:
     - "learning-from-visual-experience"
-    - "adaptive-foundation-models"
+    - "adaptive-agents-and-foundation-models"
   date: 2023-12-07
   journal: "CoRR"
   is_recent: false

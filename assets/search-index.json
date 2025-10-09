@@ -1,6 +1,16 @@
 [
   {
     "type": "paper",
+    "title": "Local Reinforcement Learning with Action-Conditioned Root Mean Squared Q-Functions",
+    "authors": "Frank (Zequan) Wu and Mengye Ren",
+    "abstract": "Action-conditioned Root mean squared Q-Functions (ARQ) is a novel backprop-free value estimation method that applies a goodness function and action conditioning for local reinforcement learning.",
+    "image": "/assets/images/papers/arq.png",
+    "thumbnail": "/assets/images/thumbnails/arq.png",
+    "url": "/research/arq/",
+    "keywords": "local reinforcement learning with action-conditioned root mean squared q-functions frank (zequan) wu mengye ren action-conditioned root mean squared q-functions (arq) is a novel backprop-free value estimation method that applies a goodness function and action conditioning for local reinforcement learning. adaptive-agents-and-foundation-models"
+  },
+  {
+    "type": "paper",
     "title": "Midway Network: Learning Representations for Recognition and Motion from Latent Dynamics",
     "authors": "Chris Hoang and Mengye Ren",
     "abstract": "Midway Network is a new self-supervised learning architecture that learns strong visual representations for both object recognition and motion understanding solely from natural videos by modeling latent dynamics.",
@@ -17,7 +27,7 @@
     "image": "/assets/images/papers/stream_mem.png",
     "thumbnail": "/assets/images/thumbnails/stream_mem.png",
     "url": "/research/stream-mem/",
-    "keywords": "streammem: query-agnostic kv cache memory for streaming video understanding yanlai yang zhuokai zhao satya narayan shukla aashu singh shlok kumar mishra lizhu zhang mengye ren streammem is a query-agnostic kv cache memory mechanism for streaming video understanding. learning-from-visual-experience adaptive-foundation-models"
+    "keywords": "streammem: query-agnostic kv cache memory for streaming video understanding yanlai yang zhuokai zhao satya narayan shukla aashu singh shlok kumar mishra lizhu zhang mengye ren streammem is a query-agnostic kv cache memory mechanism for streaming video understanding. learning-from-visual-experience adaptive-agents-and-foundation-models"
   },
   {
     "type": "paper",
@@ -27,7 +37,7 @@
     "image": "/assets/images/papers/context_tuning.png",
     "thumbnail": "/assets/images/thumbnails/context_tuning.png",
     "url": "/research/context-tuning/",
-    "keywords": "context tuning for in-context optimization jack lu ryan teehan zhenbang yang mengye ren context tuning is a simple and effective method to significantly enhance few-shot adaptation of llms without fine-tuning model parameters. adaptive-foundation-models concept-learning-abstraction"
+    "keywords": "context tuning for in-context optimization jack lu ryan teehan zhenbang yang mengye ren context tuning is a simple and effective method to significantly enhance few-shot adaptation of llms without fine-tuning model parameters. adaptive-agents-and-foundation-models concept-learning-and-abstraction"
   },
   {
     "type": "paper",
@@ -37,7 +47,7 @@
     "image": "/assets/images/papers/discrete_jepa.png",
     "thumbnail": "/assets/images/thumbnails/discrete_jepa.png",
     "url": "/research/discrete-jepa/",
-    "keywords": "discrete jepa: learning discrete token representations without reconstruction junyeob baek hosung lee chris hoang mengye ren sungjin ahn discrete-jepa extends the latent predictive coding jepa framework with semantic tokenization and complementary objectives for symbolic reasoning tasks. concept-learning-abstraction"
+    "keywords": "discrete jepa: learning discrete token representations without reconstruction junyeob baek hosung lee chris hoang mengye ren sungjin ahn discrete-jepa extends the latent predictive coding jepa framework with semantic tokenization and complementary objectives for symbolic reasoning tasks. concept-learning-and-abstraction"
   },
   {
     "type": "paper",
@@ -67,7 +77,7 @@
     "image": "/assets/images/papers/are_llms_prescient.png",
     "thumbnail": "/assets/images/thumbnails/are_llms_prescient.png",
     "url": "/research/are-llms-prescient/",
-    "keywords": "are llms prescient? a continuous evaluation using daily news as oracle amelia (hui) dai ryan teehan mengye ren our new benchmark, daily oracle, automatically generates question-answer (qa) pairs from daily news, challenging llms to predict \"future\" events based on pre-training data. adaptive-foundation-models"
+    "keywords": "are llms prescient? a continuous evaluation using daily news as oracle amelia (hui) dai ryan teehan mengye ren our new benchmark, daily oracle, automatically generates question-answer (qa) pairs from daily news, challenging llms to predict \"future\" events based on pre-training data. adaptive-agents-and-foundation-models"
   },
   {
     "type": "paper",
@@ -87,7 +97,7 @@
     "image": "/assets/images/papers/procreate.png",
     "thumbnail": "/assets/images/thumbnails/procreate.png",
     "url": "/research/procreate/",
-    "keywords": "procreate, don't reproduce! propulsive energy diffusion for creative generation jack lu ryan teehan mengye ren procreate is a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction. concept-learning-abstraction"
+    "keywords": "procreate, don't reproduce! propulsive energy diffusion for creative generation jack lu ryan teehan mengye ren procreate is a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction. concept-learning-and-abstraction"
   },
   {
     "type": "paper",
@@ -107,7 +117,7 @@
     "image": "/assets/images/papers/college.png",
     "thumbnail": "/assets/images/thumbnails/college.png",
     "url": "/research/college/",
-    "keywords": "college: concept embedding generation for large language models ryan teehan brenden m. lake mengye ren college is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions. adaptive-foundation-models concept-learning-abstraction"
+    "keywords": "college: concept embedding generation for large language models ryan teehan brenden m. lake mengye ren college is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions. adaptive-agents-and-foundation-models concept-learning-and-abstraction"
   },
   {
     "type": "paper",
@@ -117,7 +127,7 @@
     "image": "/assets/images/papers/reawakening.png",
     "thumbnail": "/assets/images/thumbnails/reawakening.png",
     "url": "/research/anticipatory-recovery/",
-    "keywords": "reawakening knowledge: anticipatory recovery from catastrophic interference via structured training yanlai yang matt jones michael c. mozer mengye ren we discover a curious and remarkable property of llms fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again. adaptive-foundation-models"
+    "keywords": "reawakening knowledge: anticipatory recovery from catastrophic interference via structured training yanlai yang matt jones michael c. mozer mengye ren we discover a curious and remarkable property of llms fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again. adaptive-agents-and-foundation-models"
   },
   {
     "type": "paper",
@@ -137,7 +147,7 @@
     "image": "/assets/images/papers/learning_and_forgetting_llm.png",
     "thumbnail": "/assets/images/thumbnails/learning_and_forgetting_llm.png",
     "url": "/research/learning-forgetting-llms/",
-    "keywords": "learning and forgetting unsafe examples in large language models jiachen zhao zhun deng david madras james zou mengye ren we explore the behavior of llms finetuned on noisy custom data containing unsafe content and propose a simple filtering algorithm for detecting harmful content based on the phenomenon of selective forgetting. adaptive-foundation-models"
+    "keywords": "learning and forgetting unsafe examples in large language models jiachen zhao zhun deng david madras james zou mengye ren we explore the behavior of llms finetuned on noisy custom data containing unsafe content and propose a simple filtering algorithm for detecting harmful content based on the phenomenon of selective forgetting. adaptive-agents-and-foundation-models"
   },
   {
     "type": "paper",
@@ -147,7 +157,7 @@
     "image": "/assets/images/papers/lifelong_memory.png",
     "thumbnail": "/assets/images/thumbnails/lifelong_memory.png",
     "url": "/research/lifelong-memory/",
-    "keywords": "lifelongmemory: leveraging llms for answering queries in long-form egocentric videos ying wang yanlai yang mengye ren lifelongmemory is a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval. learning-from-visual-experience adaptive-foundation-models"
+    "keywords": "lifelongmemory: leveraging llms for answering queries in long-form egocentric videos ying wang yanlai yang mengye ren lifelongmemory is a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval. learning-from-visual-experience adaptive-agents-and-foundation-models"
   },
   {
     "type": "person",
