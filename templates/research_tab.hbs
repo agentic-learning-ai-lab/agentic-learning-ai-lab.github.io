@@ -1,6 +1,6 @@
 {{#each this}}
-<div class="page-item">
 <a href="/research/{{{permalink}}}">
+<div class="page-item">
 <div class="safari-padding-fix">
     <!-- tw-rounded-lg  -->
     <!-- hover:tw-shadow-lg tw-transition-shadow tw-duration-300 -->
@@ -19,7 +19,7 @@ tw-overflow-hidden tw-transition-all tw-duration-200">
     <div class="tw-flex tw-flex-col tw-gap-2">
         <h3 class="tw-text-xl tw-font-medium tw-mt-4">{{{title}}}</h3>
         <p class="tw-mt-4">
-            Authors: {{{formatAuthorsWithLinks authors}}}
+            Authors: {{{formatAuthors authors}}}
         </p>
         <p class="tw-text-gray-600 tw-mt-4">
             {{{abstract}}}
@@ -36,6 +36,6 @@ tw-overflow-hidden tw-transition-all tw-duration-200">
     </div>
 </div>
 </div>
-</a>
 </div>
+</a>
 {{/each}}
