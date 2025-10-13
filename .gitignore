@@ -1,6 +1,7 @@
 node_modules/
 *.DS_Store
 out/
+staging/
 other_assets/
 
 # LaTeX build artifacts (keep source .tex and images, ignore build files)
