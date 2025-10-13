@@ -80,6 +80,9 @@ async function loadPaperContent() {
         // Generate table of contents
         generateTableOfContents();
 
+        // Enhance citations with reference information
+        enhanceCitations();
+
         // If MathJax is available, typeset the new content
         if (window.MathJax && window.MathJax.typesetPromise) {
             window.MathJax.typesetPromise([contentEl]).catch(err => {
@@ -91,6 +94,270 @@ async function loadPaperContent() {
         console.error('Failed to load paper content:', error);
         loadingEl.innerHTML = '<p class="tw-text-red-600">Failed to load paper content. Please try the PDF link above.</p>';
     }
+}
+
+function enhanceCitations() {
+    const contentEl = document.getElementById('paper-content');
+    if (!contentEl) return;
+
+    // Find all bibliography items and create a map of ID -> reference info
+    const bibMap = new Map();
+    const bibItems = contentEl.querySelectorAll('li.ltx_bibitem[id^="bib."]');
+
+    console.log('Found', bibItems.length, 'bibliography items');
+
+    bibItems.forEach(bibItem => {
+        const id = bibItem.id;
+        // Get the reference label (e.g., "Agrawal et al. [2015]")
+        const refNum = bibItem.querySelector('.ltx_tag_bibitem');
+        if (!refNum) return;
+
+        const refText = refNum.textContent.trim();
+
+        // Extract author and year
+        let authors = '';
+        let year = '';
+
+        // Check if this is a numeric reference (e.g., "(5)" or "[5]")
+        const isNumeric = /^\(?\d+\)?$/.test(refText);
+
+        if (isNumeric) {
+            // Extract from bibblock content instead
+            const bibblocks = bibItem.querySelectorAll('.ltx_bibblock');
+            if (bibblocks.length > 0) {
+                const firstBlock = bibblocks[0].textContent.trim();
+                // Pattern: "Author, A. (2019a)." or "Author et al. (2019)."
+                let match = firstBlock.match(/^([^(]+?)\s*\((\d{4}[a-z]?)\)/);
+                if (match) {
+                    let authorText = match[1].trim();
+                    year = match[2];
+
+                    // Remove initials (e.g., "Chollet, F." -> "Chollet")
+                    // Match last names before comma or "et al."
+                    const authorMatch = authorText.match(/^([^,]+?)(?:,|\s+et al\.)/);
+                    if (authorMatch) {
+                        authors = authorMatch[1].trim();
+                        // Add "et al." if present
+                        if (/et al\./.test(authorText)) {
+                            authors += ' et al.';
+                        }
+                    } else {
+                        // Simple case: just use first part
+                        authors = authorText.split(',')[0].trim();
+                    }
+
+                    // Update the refnum display to show author-year
+                    refNum.textContent = `${authors}, (${year})`;
+                }
+            }
+        } else {
+            // Pattern 1: "Author et al. [2015]" or "Author [2015]"
+            // Pattern 2: "Author et al., (2015)" or "Author, (2015)"
+            // Pattern 3: "Author et al. (2015)" or "Author (2015)" - no comma
+            let match = refText.match(/^(.+?)\s*\[(\d{4}[a-z]?)\]$/);
+            if (!match) {
+                match = refText.match(/^(.+?),\s*\((\d{4}[a-z]?)\)$/);
+            }
+            if (!match) {
+                match = refText.match(/^(.+?)\s+\((\d{4}[a-z]?)\)$/);
+            }
+
+            if (match) {
+                authors = match[1].trim();
+                year = match[2];
+
+                // Reformat from [year] to (year) if needed
+                if (refText.includes('[')) {
+                    refNum.textContent = refText.replace(/\[(\d{4}[a-z]?)\]/, '($1)');
+                }
+            }
+        }
+
+        // Get the paper title (usually in the second ltx_bibblock)
+        const bibblocks = bibItem.querySelectorAll('.ltx_bibblock');
+        let title = '';
+        if (bibblocks.length >= 2) {
+            title = bibblocks[1].textContent.trim();
+        }
+
+        // Store the formatted reference
+        const formattedRef = authors && year ? `${authors}, (${year})` : refText;
+
+        bibMap.set(id, {
+            original: formattedRef,
+            authors: authors,
+            year: year,
+            title: title
+        });
+    });
+
+    // Find all citation elements and replace numeric citations with author-year format
+    const citations = contentEl.querySelectorAll('cite.ltx_cite');
+
+    citations.forEach(cite => {
+        const links = cite.querySelectorAll('a.ltx_ref[href^="#bib."]');
+
+        if (links.length === 0) return;
+
+        // Check if this citation is already in author-year format BEFORE any modifications
+        // (e.g., contains text like "Brown et al.," before the link)
+        const citeText = cite.textContent;
+        // Note: textContent converts &amp; to & automatically, so we can match & directly
+        const hasAuthors = /[A-Z][a-z]+\s+et al\.|[A-Z][a-z]+\s+(and|&|&amp;)\s+[A-Z][a-z]+/.test(citeText);
+
+        // Debug: log citations that don't match
+        if (!hasAuthors && links.length > 1) {
+            console.log('Multi-citation without authors detected:', citeText);
+        }
+
+        // If already in author-year format, just enhance tooltips and skip restructuring
+        if (hasAuthors) {
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                const bibId = href.substring(1);
+                const data = bibMap.get(bibId);
+
+                if (data && data.authors && data.year) {
+                    // Add enhanced tooltip with title
+                    link.setAttribute('data-ref-authors', data.authors);
+                    link.setAttribute('data-ref-year', data.year);
+                    link.setAttribute('data-ref-title', data.title || '');
+
+                    // Add positioning on hover
+                    setupTooltipPositioning(link);
+                } else {
+                    console.warn('Missing bibMap data for', bibId, 'in author-year citation');
+                }
+            });
+            return; // Important: skip the rest of the processing
+        }
+
+        // Only process numeric citations (like [45]) from here on
+        // Build the new citation text with author-year format
+        const refData = [];
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            const bibId = href.substring(1); // Remove the '#'
+            const data = bibMap.get(bibId);
+
+            if (data) {
+                refData.push({ link, data });
+            } else {
+                console.warn('No bibMap entry found for:', bibId, 'in citation:', citeText);
+            }
+        });
+
+        // Replace the citation content with author-year format (only for numeric citations)
+        // Only proceed if we have data for ALL links (to avoid breaking partially)
+        if (refData.length > 0 && refData.length === links.length) {
+            // Clear the cite element and rebuild it
+            cite.textContent = '';
+            cite.appendChild(document.createTextNode('('));
+
+            refData.forEach((item, index) => {
+                // Add author text (not clickable)
+                if (item.data.authors) {
+                    cite.appendChild(document.createTextNode(item.data.authors));
+                    if (item.data.year) {
+                        cite.appendChild(document.createTextNode(', '));
+                    }
+                }
+
+                // Add year as clickable link
+                if (item.data.year) {
+                    item.link.textContent = item.data.year;
+
+                    // Build tooltip with structured data
+                    item.link.setAttribute('data-ref-authors', item.data.authors || '');
+                    item.link.setAttribute('data-ref-year', item.data.year || '');
+                    item.link.setAttribute('data-ref-title', item.data.title || '');
+
+                    // Add positioning on hover
+                    setupTooltipPositioning(item.link);
+
+                    cite.appendChild(item.link);
+                }
+
+                // Add separator between citations
+                if (index < refData.length - 1) {
+                    cite.appendChild(document.createTextNode('; '));
+                }
+            });
+
+            cite.appendChild(document.createTextNode(')'));
+        } else if (refData.length !== links.length) {
+            console.warn('Skipping citation conversion - incomplete bibMap data. Expected', links.length, 'got', refData.length);
+        }
+    });
+}
+
+function setupTooltipPositioning(link) {
+    let tooltipEl = null;
+
+    link.addEventListener('mouseenter', function () {
+        const authors = link.getAttribute('data-ref-authors');
+        const year = link.getAttribute('data-ref-year');
+        const title = link.getAttribute('data-ref-title');
+
+        if (!authors && !year) return;
+
+        // Create tooltip element
+        tooltipEl = document.createElement('div');
+        tooltipEl.className = 'citation-tooltip';
+
+        // Create italic author/year line
+        const refLine = document.createElement('div');
+        refLine.style.fontStyle = 'italic';
+        refLine.style.marginBottom = title ? '0.5rem' : '0';
+        refLine.textContent = `${authors}, ${year}`;
+        tooltipEl.appendChild(refLine);
+
+        // Add title if present
+        if (title) {
+            const titleLine = document.createElement('div');
+            titleLine.textContent = title;
+            tooltipEl.appendChild(titleLine);
+        }
+
+        document.body.appendChild(tooltipEl);
+
+        // Position the tooltip
+        setTimeout(() => {
+            const rect = link.getBoundingClientRect();
+            const tooltipRect = tooltipEl.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const margin = 10;
+
+            // Calculate tooltip position
+            let left = rect.left + rect.width / 2;
+            let top = rect.top - margin - tooltipRect.height;
+
+            // Adjust horizontal position to stay within viewport
+            if (left + tooltipRect.width / 2 > viewportWidth - margin) {
+                left = viewportWidth - tooltipRect.width / 2 - margin;
+            }
+            if (left - tooltipRect.width / 2 < margin) {
+                left = tooltipRect.width / 2 + margin;
+            }
+
+            // Check if too close to top - show below instead
+            if (rect.top < tooltipRect.height + margin + 10) {
+                top = rect.bottom + 10;
+            }
+
+            tooltipEl.style.left = `${left}px`;
+            tooltipEl.style.top = `${top}px`;
+            tooltipEl.style.transform = 'translateX(-50%)';
+            tooltipEl.style.opacity = '1';
+        }, 10);
+    });
+
+    link.addEventListener('mouseleave', function () {
+        if (tooltipEl && tooltipEl.parentNode) {
+            tooltipEl.remove();
+            tooltipEl = null;
+        }
+    });
 }
 
 function generateTableOfContents() {
@@ -291,17 +558,14 @@ function setupScrollSpy(sections) {
 
     // Detect when scrolling has stopped
     let scrollTimeout;
-    let isScrolling = false;
 
     window.addEventListener('scroll', () => {
         if (manualScrollInProgress) return; // Skip scroll events during manual navigation
 
-        isScrolling = true;
         clearTimeout(scrollTimeout);
 
         // Wait until scrolling has stopped for 150ms before updating highlight
         scrollTimeout = setTimeout(() => {
-            isScrolling = false;
             handleScroll();
         }, 150);
     });
@@ -346,7 +610,7 @@ function constrainSidebarPosition() {
 
     const handleScroll = () => {
         const sectionTop = paperSection.getBoundingClientRect().top;
-        const headerHeight = 140; // Height of the header
+        const headerHeight = 50; // Height of the header
 
         // If the section top is below the desired sidebar position, clamp it
         if (sectionTop > headerHeight) {

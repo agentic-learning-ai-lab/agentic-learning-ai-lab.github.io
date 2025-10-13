@@ -338,7 +338,6 @@
   cursor: pointer;
   pointer-events: auto;
   position: relative;
-  z-index: 1;
   font-weight: 500;
   transition: color 0.15s ease;
 }
@@ -348,6 +347,25 @@
   color: #2563eb;
   text-decoration: underline;
   cursor: pointer;
+}
+
+/* Enhanced citation tooltips - created dynamically with JavaScript */
+.citation-tooltip {
+  position: fixed;
+  background-color: #2c2c2c;
+  color: #ffffff;
+  border: 1px solid #404040;
+  padding: 0.5rem 0.75rem;
+  border-radius: 2px;
+  font-size: 0.875rem;
+  max-width: 320px;
+  width: max-content;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10000;
+  line-height: 1.5;
+  font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif;
 }
 
 /* Bibliography */
@@ -573,8 +591,10 @@ section p.tw-text-gray-600 {
   max-width: 1024px;
   margin: 0;
   position: relative;
-  width: 100%; /* Ensure it respects viewport width on mobile */
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  width: 100%;
+  /* Ensure it respects viewport width on mobile */
+  overflow-x: hidden;
+  /* Prevent horizontal scroll */
 }
 
 /* Floating sidebar on desktop */
@@ -585,10 +605,10 @@ section p.tw-text-gray-600 {
      This ensures sidebar stays visible even on smaller screens
   */
   left: min(calc(5vw + 1024px + 40px), calc(100vw - 240px - 20px));
-  top: 140px;
+  top: 50px;
   width: 240px;
   z-index: 10;
-  height: calc(100vh - 160px);
+  height: calc(100vh - 50px - 20px);
   opacity: 0;
   transition: opacity 0.3s ease-in;
 }
@@ -688,11 +708,12 @@ section p.tw-text-gray-600 {
 /* Mobile navigation toggle button - floating icon */
 .paper-mobile-nav-toggle {
   position: fixed;
-  top: 160px;
+  top: 50px;
   right: 20px;
   width: 48px;
   height: 48px;
-  display: flex !important; /* Force display, will be hidden by media query on desktop */
+  display: flex !important;
+  /* Force display, will be hidden by media query on desktop */
   align-items: center;
   justify-content: center;
   background-color: white;
@@ -840,7 +861,8 @@ section p.tw-text-gray-600 {
 /* On screens between 901px and 1350px, shrink main content to avoid overlap with sidebar */
 @media (min-width: 901px) and (max-width: 1350px) {
   .paper-layout {
-    max-width: calc(100vw - 10vw - 240px - 60px); /* viewport - padding - sidebar - gaps */
+    max-width: calc(100vw - 10vw - 240px - 60px);
+    /* viewport - padding - sidebar - gaps */
   }
 
   .paper-main-content {
@@ -853,9 +875,16 @@ section p.tw-text-gray-600 {
   }
 }
 
+/* Override Tailwind's max-lg:tw-hidden to show sidebar between 900px and 1024px */
+@media (min-width: 901px) {
+  .paper-sidebar {
+    display: block !important;
+  }
+}
+
 @media (max-width: 900px) {
   .paper-sidebar {
-    display: none;
+    display: none !important;
   }
 
   .paper-main-content {
