@@ -1,316 +1,307 @@
-- title: "Local Reinforcement Learning with Action-Conditioned Root Mean Squared Q-Functions"
-  image: "/assets/images/papers/arq.png"
-  authors: 
-    - "Frank (Zequan) Wu"
-    - "Mengye Ren"
-  short_abstract: "Action-conditioned Root mean squared Q-Functions (ARQ) is a novel backprop-free value estimation method that applies a goodness function and action conditioning for local reinforcement learning."
-  abstract: "The Forward-Forward (FF) Algorithm is a recently proposed learning procedure for neural networks that employs two forward passes instead of the traditional forward and backward passes used in backpropagation. However, FF remains largely confined to supervised settings, leaving a gap at domains where learning signals can be yielded more naturally such as RL. In this work, inspired by FF's goodness function using layer activity statistics, we introduce Action-conditioned Root mean squared Q-Functions (ARQ), a novel value estimation method that applies a goodness function and action conditioning for local RL using temporal difference learning. Despite its simplicity and biological grounding, our approach achieves superior performance compared to state-of-the-art local backprop-free RL methods in the MinAtar and the DeepMind Control Suite benchmarks, while also outperforming algorithms trained with backpropagation on most tasks."
-  arxiv: "https://arxiv.org/abs/2510.06649"
-  pdf: "https://arxiv.org/pdf/2510.06649"
-  webpage: "https://agenticlearning.ai/arq/"
-  permalink: "arq"
-  research_areas:
-    - "adaptive-agents-and-foundation-models"
-  date: 2025-10-08
-  journal: "CoRR"
-  is_recent: true
-
-- title: "Midway Network: Learning Representations for Recognition and Motion from Latent Dynamics"
-  image: "/assets/images/papers/midway_network.png"
-  authors: 
-    - "Chris Hoang"
-    - "Mengye Ren"
-  short_abstract: "Midway Network is a new self-supervised learning architecture that learns strong visual representations for both object recognition and motion understanding solely from natural videos by modeling latent dynamics."
-  abstract: "Object recognition and motion understanding are key components of perception that complement each other. While self-supervised learning methods have shown promise in their ability to learn from unlabeled data, they have primarily focused on obtaining rich representations for either recognition or motion rather than both in tandem. On the other hand, latent dynamics modeling has been used in decision making to learn latent representations of observations and their transformations over time for control and planning tasks. In this work, we present Midway Network, a new self-supervised learning architecture that is the first to learn strong visual representations for both object recognition and motion understanding solely from natural videos, by extending latent dynamics modeling to this domain. Midway Network leverages a midway top-down path to infer motion latents between video frames, as well as a dense forward prediction objective and hierarchical structure to tackle the complex, multi-object scenes of natural videos. We demonstrate that after pretraining on two large-scale natural video datasets, Midway Network achieves strong performance on both semantic segmentation and optical flow tasks relative to prior self-supervised learning methods. We also show that Midway Network's learned dynamics can capture high-level correspondence via a novel analysis method based on forward feature perturbation."
-  arxiv: "https://arxiv.org/abs/2510.05558"
-  pdf: "https://arxiv.org/pdf/2510.05558"
-  webpage: "https://agenticlearning.ai/midway-network/"
-  permalink: "midway-network"
-  research_areas:
-    - "learning-from-visual-experience"
-  date: 2025-10-07
-  journal: "CoRR"
-  is_recent: true
-
-- title: "StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding"
-  image: "/assets/images/papers/stream_mem.png"
-  authors: 
-    - "Yanlai Yang" 
-    - "Zhuokai Zhao"
-    - "Satya Narayan Shukla"
-    - "Aashu Singh"
-    - "Shlok Kumar Mishra"
-    - "Lizhu Zhang"
-    - "Mengye Ren"
-  short_abstract: "StreamMem is a query-agnostic KV cache memory mechanism for streaming video understanding."
-  abstract: "Multimodal large language models (MLLMs) have made significant progress in visual-language reasoning, but their ability to efficiently handle long videos remains limited. Despite recent advances in long-context MLLMs, storing and attending to the key-value (KV) cache for long visual contexts incurs substantial memory and computational overhead. Existing visual compression methods require either encoding the entire visual context before compression or having access to the questions in advance, which is impractical for long video understanding and multi-turn conversational settings. In this work, we propose StreamMem, a query-agnostic KV cache memory mechanism for streaming video understanding. Specifically, StreamMem encodes new video frames in a streaming manner, compressing the KV cache using attention scores between visual tokens and generic query tokens, while maintaining a fixed-size KV memory to enable efficient question answering (QA) in memory-constrained, long-video scenarios. Evaluation on three long video understanding and two streaming video question answering benchmarks shows that StreamMem achieves state-of-the-art performance in query-agnostic KV cache compression and is competitive with query-aware compression approaches."
-  arxiv: "https://arxiv.org/abs/2508.15717"
-  pdf: "https://arxiv.org/pdf/2508.15717"
-  webpage: "https://yangyanl.ai/streammem/"
-  permalink: "stream-mem"
-  research_areas:
-    - "learning-from-visual-experience"
-    - "adaptive-agents-and-foundation-models"
-  date: 2025-08-21
-  journal: "CoRR"
-  is_recent: true
-
-- title: "Context Tuning for In-Context Optimization"
-  image: "/assets/images/papers/context_tuning.png"
-  authors: 
-    - "Jack Lu"
-    - "Ryan Teehan"
-    - "Zhenbang Yang"
-    - "Mengye Ren"
-  short_abstract: "Context Tuning is a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters."
-  abstract: "We introduce Context Tuning, a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters. While prompt-based adaptation techniques have demonstrated the effectiveness of lightweight adaptation methods for LLMs, they typically initialize a trainable prompt or prefix with irrelevant tokens for the task at hand. In contrast, Context Tuning initializes the trainable prompt or prefix with task-specific demonstration examples, leveraging the model's inherent In-Context Learning (ICL) ability to extract relevant information for improved few-shot learning performance. Extensive evaluations on benchmarks such as CrossFit, UnifiedQA, MMLU, BIG-Bench Hard, and ARC demonstrate that Context Tuning outperforms traditional prompt-based adaptation methods and achieves competitive accuracy to Test-Time Training with significantly higher training efficiency."
-  arxiv: "https://arxiv.org/abs/2507.04221"
-  pdf: "https://arxiv.org/pdf/2507.04221"
-  webpage: "https://agenticlearning.ai/context-tuning/"
-  permalink: "context-tuning"
-  research_areas:
-    - "adaptive-agents-and-foundation-models"
-    - "concept-learning-and-abstraction"
-  date: 2025-07-06
-  journal: "CoRR"
-  is_recent: true
-
-- title: "Discrete JEPA: Learning Discrete Token Representations without Reconstruction"
-  image: "/assets/images/papers/discrete_jepa.png"
-  authors: 
-    - "Junyeob Baek"
-    - "Hosung Lee"
-    - "Chris Hoang"
-    - "Mengye Ren"
-    - "Sungjin Ahn"
-  short_abstract: "Discrete-JEPA extends the latent predictive coding JEPA framework with semantic tokenization and complementary objectives for symbolic reasoning tasks."
-  abstract: "The cornerstone of cognitive intelligence lies in extracting hidden patterns from observations and leveraging these principles to systematically predict future outcomes. However, current image tokenization methods demonstrate significant limitations in tasks requiring symbolic abstraction and logical reasoning capabilities essential for systematic inference. To address this challenge, we propose Discrete-JEPA, extending the latent predictive coding framework with semantic tokenization and novel complementary objectives to create robust tokenization for symbolic reasoning tasks. Discrete-JEPA dramatically outperforms baselines on visual symbolic prediction tasks, while striking visual evidence reveals the spontaneous emergence of deliberate systematic patterns within the learned semantic token space. Though an initial model, our approach promises a significant impact for advancing Symbolic world modeling and planning capabilities in artificial intelligence systems."
-  arxiv: "https://arxiv.org/abs/2506.14373"
-  pdf: "https://arxiv.org/pdf/2506.14373"
-  webpage: ""
-  permalink: "discrete-jepa"
-  research_areas:
-    - "concept-learning-and-abstraction"
-  date: 2025-06-22
-  journal: "CoRR"
-  is_recent: true
-
-- title: "Replay Can Provably Increase Forgetting"
-  image: "/assets/images/papers/replay_can_provably_increase_forgetting.png"
-  authors: 
-    - "Yasaman Mahdaviyeh"
-    - "James Lucas"
-    - "Mengye Ren"
-    - "Andreas S. Tolias"
-    - "Richard Zemel"
-    - "Toniann Pitassi"
-  short_abstract: "We provide a theoretical analysis of sample replay in over-parameterized continual linear regression, and we show that replay can provably increase forgetting in the worst case even though the network has the capacity to memorize all tasks."
-  abstract: "Continual learning seeks to enable machine learning systems to solve an increasing corpus of tasks sequentially. A critical challenge for continual learning is forgetting, where the performance on previously learned tasks decreases as new tasks are introduced. One of the commonly used techniques to mitigate forgetting, sample replay, has been shown empirically to reduce forgetting by retaining some examples from old tasks and including them in new training episodes. In this work, we provide a theoretical analysis of sample replay in an over-parameterized continual linear regression setting, where each task is given by a linear subspace and with enough replay samples, one would be able to eliminate forgetting. Our analysis focuses on sample replay and highlights the role of the replayed samples and the relationship between task subspaces. Surprisingly, we find that, even in a noiseless setting, forgetting can be non-monotonic with respect to the number of replay samples. We present tasks where replay can be harmful with respect to worst-case settings, and also in distributional settings where replay of randomly selected samples increases forgetting in expectation. We also give empirical evidence that harmful replay is not limited to training with linear models by showing similar behavior for a neural networks equipped with SGD. Through experiments on a commonly used benchmark, we provide additional evidence that, even in seemingly benign scenarios, performance of the replay heavily depends on the choice of replay samples and the relationship between tasks."
-  arxiv: "https://arxiv.org/abs/2506.04377"
-  pdf: "https://arxiv.org/pdf/2506.04377"
-  webpage: ""
-  permalink: "replay-can-provably-increase-forgetting"
-  research_areas:
-    - "learning-from-visual-experience"
-  date: 2025-06-04
-  journal: "The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)"
-  is_recent: true
-
--
-  title: "Memory Storyboard: Leveraging Temporal Segmentation for Streaming Self-Supervised Learning from Egocentric Videos"
-  image: "/assets/images/papers/memory_storyboard.png"
+- title: Local Reinforcement Learning with Action-Conditioned Root Mean Squared Q-Functions
+  image: /assets/images/papers/arq.png
   authors:
-    - "Yanlai Yang"
-    - "Mengye Ren"
-  short_abstract: "Memory Storyboard groups recent past frames into temporal segments and provides effective summarization of the past visual streams for memory replay."
-  abstract: "Self-supervised learning holds the promise to learn good representations from real-world continuous uncurated data streams. However, most existing works in visual self-supervised learning focus on static images or artificial data streams. Towards exploring a more realistic learning substrate, we investigate streaming self-supervised learning from long-form real-world egocentric video streams. Inspired by the event segmentation mechanism in human perception and memory, we propose \"Memory Storyboard\" that groups recent past frames into temporal segments for more effective summarization of the past visual streams for memory replay. To accommodate efficient temporal segmentation, we propose a two-tier memory hierarchy: the recent past is stored in a short-term memory, and the storyboard temporal segments are then transferred to a long-term memory. Experiments on real-world egocentric video datasets including SAYCam and KrishnaCam show that contrastive learning objectives on top of storyboard frames result in semantically meaningful representations which outperform those produced by state-of-the-art unsupervised continual learning methods."
-  arxiv: "https://arxiv.org/abs/2501.12254"
-  pdf: "https://arxiv.org/pdf/2501.12254"
-  webpage: "https://agenticlearning.ai/memory-storyboard/"
-  permalink: "memory-storyboard"
+    - Frank (Zequan) Wu
+    - Mengye Ren
+  short_abstract: Action-conditioned Root mean squared Q-Functions (ARQ) is a novel backprop-free value estimation method that applies a goodness function and action conditioning for local reinforcement learning.
+  abstract: 'The Forward-Forward (FF) Algorithm is a recently proposed learning procedure for neural networks that employs two forward passes instead of the traditional forward and backward passes used in backpropagation. However, FF remains largely confined to supervised settings, leaving a gap at domains where learning signals can be yielded more naturally such as RL. In this work, inspired by FF''s goodness function using layer activity statistics, we introduce Action-conditioned Root mean squared Q-Functions (ARQ), a novel value estimation method that applies a goodness function and action conditioning for local RL using temporal difference learning. Despite its simplicity and biological grounding, our approach achieves superior performance compared to state-of-the-art local backprop-free RL methods in the MinAtar and the DeepMind Control Suite benchmarks, while also outperforming algorithms trained with backpropagation on most tasks.'
+  arxiv: 'https://arxiv.org/abs/2510.06649'
+  pdf: 'https://arxiv.org/pdf/2510.06649'
+  webpage: 'https://agenticlearning.ai/arq/'
+  permalink: arq
+  enable_full_paper: false
   research_areas:
-    - "learning-from-visual-experience"
-  date: 2025-01-21
-  journal: "The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)"
+    - adaptive-agents-and-foundation-models
+  date: 2025-10-08T00:00:00.000Z
+  journal: CoRR
   is_recent: true
-
--
-  title: "Are LLMs Prescient? A Continuous Evaluation using Daily News as Oracle"
-  image: "/assets/images/papers/are_llms_prescient.png"
+- title: 'Midway Network: Learning Representations for Recognition and Motion from Latent Dynamics'
+  image: /assets/images/papers/midway_network.png
   authors:
-    - "Amelia (Hui) Dai"
-    - "Ryan Teehan"
-    - "Mengye Ren"
-  short_abstract: "Our new benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict \"future\" events based on pre-training data."
-  abstract: "Existing evaluation benchmarks for Large Language Models (LLMs) quickly become outdated due to model updates and an evolving information landscape. Moreover, they often lack the ability to assess how model performance evolves over time, as they consist of static questions without a temporal dimension. To address these, we propose using future event prediction as a continuous evaluation method to assess LLMs' temporal generalization and forecasting abilities. Our benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict \"future\" events based on pre-training data. Our findings reveal that as pre-training data becomes outdated, LLM performance degrades over time. While Retrieval Augmented Generation (RAG) can enhance prediction accuracy, the degradation persists, highlighting the need for ongoing model updates."
-  arxiv: "https://arxiv.org/abs/2411.08324"
-  pdf: "https://arxiv.org/pdf/2411.08324"
-  webpage: "https://agenticlearning.ai/daily-oracle/"
-  permalink: "are-llms-prescient"
+    - Chris Hoang
+    - Mengye Ren
+  short_abstract: Midway Network is a new self-supervised learning architecture that learns strong visual representations for both object recognition and motion understanding solely from natural videos by modeling latent dynamics.
+  abstract: 'Object recognition and motion understanding are key components of perception that complement each other. While self-supervised learning methods have shown promise in their ability to learn from unlabeled data, they have primarily focused on obtaining rich representations for either recognition or motion rather than both in tandem. On the other hand, latent dynamics modeling has been used in decision making to learn latent representations of observations and their transformations over time for control and planning tasks. In this work, we present Midway Network, a new self-supervised learning architecture that is the first to learn strong visual representations for both object recognition and motion understanding solely from natural videos, by extending latent dynamics modeling to this domain. Midway Network leverages a midway top-down path to infer motion latents between video frames, as well as a dense forward prediction objective and hierarchical structure to tackle the complex, multi-object scenes of natural videos. We demonstrate that after pretraining on two large-scale natural video datasets, Midway Network achieves strong performance on both semantic segmentation and optical flow tasks relative to prior self-supervised learning methods. We also show that Midway Network''s learned dynamics can capture high-level correspondence via a novel analysis method based on forward feature perturbation.'
+  arxiv: 'https://arxiv.org/abs/2510.05558'
+  pdf: 'https://arxiv.org/pdf/2510.05558'
+  webpage: 'https://agenticlearning.ai/midway-network/'
+  permalink: midway-network
   research_areas:
-    - "adaptive-agents-and-foundation-models"
-  date: 2024-11-13
-  journal: "The 42nd International Conference on Machine Learning (ICML 2025)"
+    - learning-from-visual-experience
+  date: 2025-10-07T00:00:00.000Z
+  journal: CoRR
   is_recent: true
-
--
-  title: "PooDLe: Pooled and Dense Self-Supervised Learning from Naturalistic Videos"
-  image: "/assets/images/papers/poodle.webp"
-  authors: 
-    - "Alex N. Wang"
-    - "Chris Hoang"
-    - "Yuwen Xiong"
-    - "Yann LeCun"
-    - "Mengye Ren"
-  short_abstract: "We propose PooDLe, a self-supervised learning method that combines an invariance-based objective on pooled representations with a dense SSL objective that enforces equivariance to optical flow warping."
-  abstract: "Self-supervised learning has driven significant progress in learning from single-subject, iconic images. However, there are still unanswered questions about the use of minimally-curated, naturalistic video data, which contain dense scenes with many independent objects, imbalanced class distributions, and varying object sizes. In this paper, we propose PooDLe, a self-supervised learning method that combines an invariance-based objective on pooled representations with a dense SSL objective that enforces equivariance to optical flow warping. Our results show that a unified objective applied at multiple feature scales is essential for learning effective image representations from naturalistic videos. We validate our method with experiments on the BDD100K driving video dataset and the Walking Tours first-person video dataset, demonstrating its ability to capture spatial understanding from a dense objective and semantic understanding via a pooled representation objective."
-  arxiv: "https://arxiv.org/abs/2408.11208"
-  pdf: "https://arxiv.org/pdf/2408.11208"
-  webpage: "https://agenticlearning.ai/poodle/"
-  permalink: "poodle"
+  enable_full_paper: false
+- title: 'StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding'
+  image: /assets/images/papers/stream_mem.png
+  authors:
+    - Yanlai Yang
+    - Zhuokai Zhao
+    - Satya Narayan Shukla
+    - Aashu Singh
+    - Shlok Kumar Mishra
+    - Lizhu Zhang
+    - Mengye Ren
+  short_abstract: StreamMem is a query-agnostic KV cache memory mechanism for streaming video understanding.
+  abstract: 'Multimodal large language models (MLLMs) have made significant progress in visual-language reasoning, but their ability to efficiently handle long videos remains limited. Despite recent advances in long-context MLLMs, storing and attending to the key-value (KV) cache for long visual contexts incurs substantial memory and computational overhead. Existing visual compression methods require either encoding the entire visual context before compression or having access to the questions in advance, which is impractical for long video understanding and multi-turn conversational settings. In this work, we propose StreamMem, a query-agnostic KV cache memory mechanism for streaming video understanding. Specifically, StreamMem encodes new video frames in a streaming manner, compressing the KV cache using attention scores between visual tokens and generic query tokens, while maintaining a fixed-size KV memory to enable efficient question answering (QA) in memory-constrained, long-video scenarios. Evaluation on three long video understanding and two streaming video question answering benchmarks shows that StreamMem achieves state-of-the-art performance in query-agnostic KV cache compression and is competitive with query-aware compression approaches.'
+  arxiv: 'https://arxiv.org/abs/2508.15717'
+  pdf: 'https://arxiv.org/pdf/2508.15717'
+  webpage: 'https://yangyanl.ai/streammem/'
+  permalink: stream-mem
+  enable_full_paper: true
   research_areas:
-    - "learning-from-visual-experience"
-  date: 2024-08-20
-  journal: "The 13th International Conference on Learning Representations (ICLR 2025)"
+    - learning-from-visual-experience
+    - adaptive-agents-and-foundation-models
+  date: 2025-08-21T00:00:00.000Z
+  journal: CoRR
   is_recent: true
-
--
-  title: "ProCreate, Don't Reproduce! Propulsive Energy Diffusion for Creative Generation"
-  image: "/assets/images/papers/procreate.png"
-  authors: 
-    - "Jack Lu"
-    - "Ryan Teehan"
-    - "Mengye Ren"
-  short_abstract: "ProCreate is a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction."
-  abstract: "In this paper, we propose ProCreate, a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction. ProCreate operates on a set of reference images and actively propels the generated image embedding away from the reference embeddings during the generation process. We propose FSCG-8 (Few-Shot Creative Generation 8), a few-shot creative generation dataset on eight different categories -- encompassing different concepts, styles, and settings -- in which ProCreate achieves the highest sample diversity and fidelity. Furthermore, we show that ProCreate is effective at preventing replicating training data in a large-scale evaluation using training text prompts."
-  arxiv: "https://arxiv.org/abs/2408.02226"
-  pdf: "https://arxiv.org/pdf/2408.02226"
-  webpage: "https://agenticlearning.ai/procreate-diffusion/"
-  permalink: "procreate"
-  research_areas:
-    - "concept-learning-and-abstraction"
-  date: 2024-08-05
-  journal: "The 18th European Conference on Computer Vision (ECCV 2024)"
-  is_recent: false
-
-- 
-  title: "Integrating Present and Past in Unsupervised Continual Learning"
-  image: "/assets/images/papers/osiris.webp"
-  authors: 
-    - "Yipeng Zhang"
-    - "Laurent Charlin"
-    - "Richard S. Zemel"
-    - "Mengye Ren"
-  short_abstract: "We formulate Osiris, a unifying framework for unsupervised continual learning (UCL), which disentangles learning objectives that encompass stability, plasticity, and cross-task consolidation."
-  abstract: "We formulate a unifying framework for unsupervised continual learning (UCL), which disentangles learning objectives that are specific to the present and the past data, encompassing stability, plasticity, and cross-task consolidation. The framework reveals that many existing UCL approaches overlook cross-task consolidation and try to balance plasticity and stability in a shared embedding space. This results in worse performance due to a lack of within-task data diversity and reduced effectiveness in learning the current task. Our method, Osiris, which explicitly optimizes all three objectives on separate embedding spaces, achieves state-of-the-art performance on all benchmarks, including two novel benchmarks proposed in this paper featuring semantically structured task sequences. Compared to standard benchmarks, these two structured benchmarks more closely resemble visual signals received by humans and animals when navigating real-world environments. Finally, we show some preliminary evidence that continual models can benefit from such realistic learning scenarios."
-  arxiv: "https://arxiv.org/abs/2404.19132"
-  pdf: "https://arxiv.org/pdf/2404.19132"
-  webpage: ""
-  permalink: "osiris"
-  research_areas:
-    - "learning-from-visual-experience"
-  date: 2024-04-29
-  journal: "The Third Conference on Lifelong Learning Agents (CoLLAs 2024)"
-  is_recent: false
-
-- 
-  title: "CoLLEGe: Concept Embedding Generation for Large Language Models"
-  image: "/assets/images/papers/college.png"
-  authors: 
-    - "Ryan Teehan"
-    - "Brenden M. Lake"
-    - "Mengye Ren"
-  short_abstract: "CoLLEGe is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions."
-  abstract: "Current language models are unable to quickly learn new concepts on the fly, often requiring a more involved finetuning process to learn robustly. Prompting in-context is not robust to context distractions, and often fails to confer much information about the new concepts. Classic methods for few-shot word learning in NLP, relying on global word vectors, are less applicable to large language models. In this paper, we introduce a novel approach named CoLLEGe (Concept Learning with Language Embedding Generation) to modernize few-shot concept learning. CoLLEGe is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions. Our primary meta-learning objective is simply to facilitate a language model to make next word predictions in forthcoming sentences, making it compatible with language model pretraining. We design a series of tasks to test new concept learning in challenging real-world scenarios, including new word acquisition, definition inference, and verbal reasoning, and demonstrate that our method succeeds in each setting without task-specific training."
-  arxiv: "https://arxiv.org/abs/2403.15362"
-  pdf: "https://arxiv.org/pdf/2403.15362"
-  webpage: "https://agenticlearning.ai/college/"
-  permalink: "college"
-  research_areas:
-    - "adaptive-agents-and-foundation-models"
-    - "concept-learning-and-abstraction"
-  date: 2024-03-22
-  journal: "The First Conference on Language Modeling (COLM 2024)"
-  is_recent: false
-
--
-  title: "Reawakening Knowledge: Anticipatory Recovery from Catastrophic Interference via Structured Training"
-  image: "/assets/images/papers/reawakening.png"
+- title: Context Tuning for In-Context Optimization
+  image: /assets/images/papers/context_tuning.png
   authors:
-    - "Yanlai Yang"
-    - "Matt Jones"
-    - "Michael C. Mozer"
-    - "Mengye Ren"
-  short_abstract: "We discover a curious and remarkable property of LLMs fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again."
-  abstract: "We explore the training dynamics of neural networks in a structured non-IID setting where documents are presented cyclically in a fixed, repeated sequence. Typically, networks suffer from catastrophic interference when training on a sequence of documents; however, we discover a curious and remarkable property of LLMs fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again. The behavior emerges and becomes more robust as the architecture scales up its number of parameters. Through comprehensive experiments and visualizations, we uncover new insights into training over-parameterized networks in structured environments."
-  arxiv: "https://arxiv.org/abs/2403.09613"
-  pdf: "https://arxiv.org/pdf/2403.09613"
-  webpage: "https://agenticlearning.ai/anticipatory-recovery/"
-  permalink: "anticipatory-recovery"
+    - Jack Lu
+    - Ryan Teehan
+    - Zhenbang Yang
+    - Mengye Ren
+  short_abstract: Context Tuning is a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters.
+  abstract: 'We introduce Context Tuning, a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters. While prompt-based adaptation techniques have demonstrated the effectiveness of lightweight adaptation methods for LLMs, they typically initialize a trainable prompt or prefix with irrelevant tokens for the task at hand. In contrast, Context Tuning initializes the trainable prompt or prefix with task-specific demonstration examples, leveraging the model''s inherent In-Context Learning (ICL) ability to extract relevant information for improved few-shot learning performance. Extensive evaluations on benchmarks such as CrossFit, UnifiedQA, MMLU, BIG-Bench Hard, and ARC demonstrate that Context Tuning outperforms traditional prompt-based adaptation methods and achieves competitive accuracy to Test-Time Training with significantly higher training efficiency.'
+  arxiv: 'https://arxiv.org/abs/2507.04221'
+  pdf: 'https://arxiv.org/pdf/2507.04221'
+  webpage: 'https://agenticlearning.ai/context-tuning/'
+  permalink: context-tuning
   research_areas:
-    - "adaptive-agents-and-foundation-models"
-  date: 2024-03-14
-  journal: "Advances in Neural Information Processing Systems 37 (NeurIPS 2024)"
-  is_recent: false
-
-- 
-  title: "Self-Supervised Learning of Video Representations from a Child's Perspective"
-  image: "/assets/images/papers/ssl_childs_perspective.webp"
+    - adaptive-agents-and-foundation-models
+    - concept-learning-and-abstraction
+  date: 2025-07-06T00:00:00.000Z
+  journal: CoRR
+  is_recent: true
+  enable_full_paper: true
+- title: 'Discrete JEPA: Learning Discrete Token Representations without Reconstruction'
+  image: /assets/images/papers/discrete_jepa.png
   authors:
-    - "A. Emin Orhan"
-    - "Wentao Wang"
-    - "Alex N. Wang"
-    - "Mengye Ren"
-    - "Brenden M. Lake"
-  short_abstract: "We train self-supervised video models on longitudinal, egocentric headcam recordings collected from a child over a two year period in their early development."
-  abstract: "Children learn powerful internal models of the world around them from a few years of egocentric visual experience. Can such internal models be learned from a child's visual experience with highly generic learning algorithms or do they require strong inductive biases? Recent advances in collecting large-scale, longitudinal, developmentally realistic video datasets and generic self-supervised learning (SSL) algorithms are allowing us to begin to tackle this nature vs. nurture question. However, existing work typically focuses on image-based SSL algorithms and visual capabilities that can be learned from static images (e.g. object recognition), thus ignoring temporal aspects of the world. To close this gap, here we train self-supervised video models on longitudinal, egocentric headcam recordings collected from a child over a two year period in their early development (6-31 months). The resulting models are highly effective at facilitating the learning of action concepts from a small number of labeled examples; they have favorable data size scaling properties; and they display emergent video interpolation capabilities. Video models also learn more accurate and more robust object representations than image-based models trained with the exact same data. These results suggest that important temporal aspects of a child's internal model of the world may be learnable from their visual experience using highly generic learning algorithms and without strong inductive biases."
-  arxiv: "https://arxiv.org/abs/2402.00300"
-  pdf: "https://arxiv.org/pdf/2402.00300"
-  webpage: ""
-  permalink: "video-ssl-from-child"
+    - Junyeob Baek
+    - Hosung Lee
+    - Chris Hoang
+    - Mengye Ren
+    - Sungjin Ahn
+  short_abstract: Discrete-JEPA extends the latent predictive coding JEPA framework with semantic tokenization and complementary objectives for symbolic reasoning tasks.
+  abstract: 'The cornerstone of cognitive intelligence lies in extracting hidden patterns from observations and leveraging these principles to systematically predict future outcomes. However, current image tokenization methods demonstrate significant limitations in tasks requiring symbolic abstraction and logical reasoning capabilities essential for systematic inference. To address this challenge, we propose Discrete-JEPA, extending the latent predictive coding framework with semantic tokenization and novel complementary objectives to create robust tokenization for symbolic reasoning tasks. Discrete-JEPA dramatically outperforms baselines on visual symbolic prediction tasks, while striking visual evidence reveals the spontaneous emergence of deliberate systematic patterns within the learned semantic token space. Though an initial model, our approach promises a significant impact for advancing Symbolic world modeling and planning capabilities in artificial intelligence systems.'
+  arxiv: 'https://arxiv.org/abs/2506.14373'
+  pdf: 'https://arxiv.org/pdf/2506.14373'
+  webpage: ''
+  permalink: discrete-jepa
   research_areas:
-    - "learning-from-visual-experience"
-  date: 2024-02-01
-  journal: "The 46th Annual Meeting of the Cognitive Science Society (CogSci 2024)"
-  is_recent: false
-
--
-  title: "Learning and Forgetting Unsafe Examples in Large Language Models"
-  image: "/assets/images/papers/learning_and_forgetting_llm.png"
+    - concept-learning-and-abstraction
+  date: 2025-06-22T00:00:00.000Z
+  journal: CoRR
+  is_recent: true
+  enable_full_paper: true
+- title: Replay Can Provably Increase Forgetting
+  image: /assets/images/papers/replay_can_provably_increase_forgetting.png
   authors:
-    - "Jiachen Zhao"
-    - "Zhun Deng"
-    - "David Madras"
-    - "James Zou"
-    - "Mengye Ren"
-  short_abstract: 'We explore the behavior of LLMs finetuned on noisy custom data containing unsafe content and propose a simple filtering algorithm for detecting harmful content based on the phenomenon of selective forgetting.'
-  abstract: "As the number of large language models (LLMs) released to the public grows, there is a pressing need to understand the safety implications associated with these models learning from third-party custom finetuning data. We explore the behavior of LLMs finetuned on noisy custom data containing unsafe content, represented by datasets that contain biases, toxicity, and harmfulness, finding that while aligned LLMs can readily learn this unsafe content, they also tend to forget it more significantly than other examples when subsequently finetuned on safer content. Drawing inspiration from the discrepancies in forgetting, we introduce the \"ForgetFilter\" algorithm, which filters unsafe data based on how strong the model's forgetting signal is for that data. We demonstrate that the ForgetFilter algorithm ensures safety in customized finetuning without compromising downstream task performance, unlike sequential safety finetuning. ForgetFilter outperforms alternative strategies like replay and moral self-correction in curbing LLMs' ability to assimilate unsafe content during custom finetuning, e.g. 75% lower than not applying any safety measures and 62% lower than using self-correction in toxicity score."
-  arxiv: "https://arxiv.org/abs/2312.12736"
-  pdf: "https://arxiv.org/pdf/2312.12736"
-  webpage: ""
-  permalink: "learning-forgetting-llms"
+    - Yasaman Mahdaviyeh
+    - James Lucas
+    - Mengye Ren
+    - Andreas S. Tolias
+    - Richard Zemel
+    - Toniann Pitassi
+  short_abstract: 'We provide a theoretical analysis of sample replay in over-parameterized continual linear regression, and we show that replay can provably increase forgetting in the worst case even though the network has the capacity to memorize all tasks.'
+  abstract: 'Continual learning seeks to enable machine learning systems to solve an increasing corpus of tasks sequentially. A critical challenge for continual learning is forgetting, where the performance on previously learned tasks decreases as new tasks are introduced. One of the commonly used techniques to mitigate forgetting, sample replay, has been shown empirically to reduce forgetting by retaining some examples from old tasks and including them in new training episodes. In this work, we provide a theoretical analysis of sample replay in an over-parameterized continual linear regression setting, where each task is given by a linear subspace and with enough replay samples, one would be able to eliminate forgetting. Our analysis focuses on sample replay and highlights the role of the replayed samples and the relationship between task subspaces. Surprisingly, we find that, even in a noiseless setting, forgetting can be non-monotonic with respect to the number of replay samples. We present tasks where replay can be harmful with respect to worst-case settings, and also in distributional settings where replay of randomly selected samples increases forgetting in expectation. We also give empirical evidence that harmful replay is not limited to training with linear models by showing similar behavior for a neural networks equipped with SGD. Through experiments on a commonly used benchmark, we provide additional evidence that, even in seemingly benign scenarios, performance of the replay heavily depends on the choice of replay samples and the relationship between tasks.'
+  arxiv: 'https://arxiv.org/abs/2506.04377'
+  pdf: 'https://arxiv.org/pdf/2506.04377'
+  webpage: ''
+  permalink: replay-can-provably-increase-forgetting
   research_areas:
-    - "adaptive-agents-and-foundation-models"
-  date: 2023-12-20
-  journal: "The 41st International Conference on Machine Learning (ICML 2024)"
-  is_recent: false
-
--
-  title: "LifelongMemory: Leveraging LLMs for Answering Queries in Long-form Egocentric Videos"
-  image: "/assets/images/papers/lifelong_memory.png"
+    - learning-from-visual-experience
+  date: 2025-06-04T00:00:00.000Z
+  journal: The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)
+  is_recent: true
+  enable_full_paper: true
+- title: 'Memory Storyboard: Leveraging Temporal Segmentation for Streaming Self-Supervised Learning from Egocentric Videos'
+  image: /assets/images/papers/memory_storyboard.png
   authors:
-    - "Ying Wang"
-    - "Yanlai Yang"
-    - "Mengye Ren"
-  short_abstract: 'LifelongMemory is a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval.'
-  abstract: "In this paper we introduce LifelongMemory, a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval. LifelongMemory generates concise video activity descriptions of the camera wearer and leverages the zero-shot capabilities of pretrained large language models to perform reasoning over long-form video context. Furthermore, Lifelong Memory uses a confidence and explanation module to produce confident, high-quality, and interpretable answers. Our approach achieves state-of-the-art performance on the EgoSchema benchmark for question answering and is highly competitive on the natural language query (NLQ) challenge of Ego4D."
-  arxiv: "https://arxiv.org/abs/2312.05269"
-  pdf: "https://arxiv.org/pdf/2312.05269"
-  webpage: "https://agenticlearning.ai/lifelong-memory/"
-  permalink: "lifelong-memory"
+    - Yanlai Yang
+    - Mengye Ren
+  short_abstract: Memory Storyboard groups recent past frames into temporal segments and provides effective summarization of the past visual streams for memory replay.
+  abstract: 'Self-supervised learning holds the promise to learn good representations from real-world continuous uncurated data streams. However, most existing works in visual self-supervised learning focus on static images or artificial data streams. Towards exploring a more realistic learning substrate, we investigate streaming self-supervised learning from long-form real-world egocentric video streams. Inspired by the event segmentation mechanism in human perception and memory, we propose "Memory Storyboard" that groups recent past frames into temporal segments for more effective summarization of the past visual streams for memory replay. To accommodate efficient temporal segmentation, we propose a two-tier memory hierarchy: the recent past is stored in a short-term memory, and the storyboard temporal segments are then transferred to a long-term memory. Experiments on real-world egocentric video datasets including SAYCam and KrishnaCam show that contrastive learning objectives on top of storyboard frames result in semantically meaningful representations which outperform those produced by state-of-the-art unsupervised continual learning methods.'
+  arxiv: 'https://arxiv.org/abs/2501.12254'
+  pdf: 'https://arxiv.org/pdf/2501.12254'
+  webpage: 'https://agenticlearning.ai/memory-storyboard/'
+  permalink: memory-storyboard
   research_areas:
-    - "learning-from-visual-experience"
-    - "adaptive-agents-and-foundation-models"
-  date: 2023-12-07
-  journal: "CoRR"
+    - learning-from-visual-experience
+  date: 2025-01-21T00:00:00.000Z
+  journal: The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)
+  is_recent: true
+  enable_full_paper: true
+- title: Are LLMs Prescient? A Continuous Evaluation using Daily News as Oracle
+  image: /assets/images/papers/are_llms_prescient.png
+  authors:
+    - Amelia (Hui) Dai
+    - Ryan Teehan
+    - Mengye Ren
+  short_abstract: 'Our new benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict "future" events based on pre-training data.'
+  abstract: 'Existing evaluation benchmarks for Large Language Models (LLMs) quickly become outdated due to model updates and an evolving information landscape. Moreover, they often lack the ability to assess how model performance evolves over time, as they consist of static questions without a temporal dimension. To address these, we propose using future event prediction as a continuous evaluation method to assess LLMs'' temporal generalization and forecasting abilities. Our benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict "future" events based on pre-training data. Our findings reveal that as pre-training data becomes outdated, LLM performance degrades over time. While Retrieval Augmented Generation (RAG) can enhance prediction accuracy, the degradation persists, highlighting the need for ongoing model updates.'
+  arxiv: 'https://arxiv.org/abs/2411.08324'
+  pdf: 'https://arxiv.org/pdf/2411.08324'
+  webpage: 'https://agenticlearning.ai/daily-oracle/'
+  permalink: are-llms-prescient
+  research_areas:
+    - adaptive-agents-and-foundation-models
+  date: 2024-11-13T00:00:00.000Z
+  journal: The 42nd International Conference on Machine Learning (ICML 2025)
+  is_recent: true
+  enable_full_paper: true
+- title: 'PooDLe: Pooled and Dense Self-Supervised Learning from Naturalistic Videos'
+  image: /assets/images/papers/poodle.webp
+  authors:
+    - Alex N. Wang
+    - Chris Hoang
+    - Yuwen Xiong
+    - Yann LeCun
+    - Mengye Ren
+  short_abstract: 'We propose PooDLe, a self-supervised learning method that combines an invariance-based objective on pooled representations with a dense SSL objective that enforces equivariance to optical flow warping.'
+  abstract: 'Self-supervised learning has driven significant progress in learning from single-subject, iconic images. However, there are still unanswered questions about the use of minimally-curated, naturalistic video data, which contain dense scenes with many independent objects, imbalanced class distributions, and varying object sizes. In this paper, we propose PooDLe, a self-supervised learning method that combines an invariance-based objective on pooled representations with a dense SSL objective that enforces equivariance to optical flow warping. Our results show that a unified objective applied at multiple feature scales is essential for learning effective image representations from naturalistic videos. We validate our method with experiments on the BDD100K driving video dataset and the Walking Tours first-person video dataset, demonstrating its ability to capture spatial understanding from a dense objective and semantic understanding via a pooled representation objective.'
+  arxiv: 'https://arxiv.org/abs/2408.11208'
+  pdf: 'https://arxiv.org/pdf/2408.11208'
+  webpage: 'https://agenticlearning.ai/poodle/'
+  permalink: poodle
+  research_areas:
+    - learning-from-visual-experience
+  date: 2024-08-20T00:00:00.000Z
+  journal: The 13th International Conference on Learning Representations (ICLR 2025)
+  is_recent: true
+  enable_full_paper: true
+- title: 'ProCreate, Don''t Reproduce! Propulsive Energy Diffusion for Creative Generation'
+  image: /assets/images/papers/procreate.png
+  authors:
+    - Jack Lu
+    - Ryan Teehan
+    - Mengye Ren
+  short_abstract: ProCreate is a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction.
+  abstract: 'In this paper, we propose ProCreate, a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction. ProCreate operates on a set of reference images and actively propels the generated image embedding away from the reference embeddings during the generation process. We propose FSCG-8 (Few-Shot Creative Generation 8), a few-shot creative generation dataset on eight different categories -- encompassing different concepts, styles, and settings -- in which ProCreate achieves the highest sample diversity and fidelity. Furthermore, we show that ProCreate is effective at preventing replicating training data in a large-scale evaluation using training text prompts.'
+  arxiv: 'https://arxiv.org/abs/2408.02226'
+  pdf: 'https://arxiv.org/pdf/2408.02226'
+  webpage: 'https://agenticlearning.ai/procreate-diffusion/'
+  permalink: procreate
+  research_areas:
+    - concept-learning-and-abstraction
+  date: 2024-08-05T00:00:00.000Z
+  journal: The 18th European Conference on Computer Vision (ECCV 2024)
   is_recent: false
+  enable_full_paper: true
+- title: Integrating Present and Past in Unsupervised Continual Learning
+  image: /assets/images/papers/osiris.webp
+  authors:
+    - Yipeng Zhang
+    - Laurent Charlin
+    - Richard S. Zemel
+    - Mengye Ren
+  short_abstract: 'We formulate Osiris, a unifying framework for unsupervised continual learning (UCL), which disentangles learning objectives that encompass stability, plasticity, and cross-task consolidation.'
+  abstract: 'We formulate a unifying framework for unsupervised continual learning (UCL), which disentangles learning objectives that are specific to the present and the past data, encompassing stability, plasticity, and cross-task consolidation. The framework reveals that many existing UCL approaches overlook cross-task consolidation and try to balance plasticity and stability in a shared embedding space. This results in worse performance due to a lack of within-task data diversity and reduced effectiveness in learning the current task. Our method, Osiris, which explicitly optimizes all three objectives on separate embedding spaces, achieves state-of-the-art performance on all benchmarks, including two novel benchmarks proposed in this paper featuring semantically structured task sequences. Compared to standard benchmarks, these two structured benchmarks more closely resemble visual signals received by humans and animals when navigating real-world environments. Finally, we show some preliminary evidence that continual models can benefit from such realistic learning scenarios.'
+  arxiv: 'https://arxiv.org/abs/2404.19132'
+  pdf: 'https://arxiv.org/pdf/2404.19132'
+  webpage: ''
+  permalink: osiris
+  research_areas:
+    - learning-from-visual-experience
+  date: 2024-04-29T00:00:00.000Z
+  journal: The Third Conference on Lifelong Learning Agents (CoLLAs 2024)
+  is_recent: false
+  enable_full_paper: true
+- title: 'CoLLEGe: Concept Embedding Generation for Large Language Models'
+  image: /assets/images/papers/college.png
+  authors:
+    - Ryan Teehan
+    - Brenden M. Lake
+    - Mengye Ren
+  short_abstract: CoLLEGe is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions.
+  abstract: 'Current language models are unable to quickly learn new concepts on the fly, often requiring a more involved finetuning process to learn robustly. Prompting in-context is not robust to context distractions, and often fails to confer much information about the new concepts. Classic methods for few-shot word learning in NLP, relying on global word vectors, are less applicable to large language models. In this paper, we introduce a novel approach named CoLLEGe (Concept Learning with Language Embedding Generation) to modernize few-shot concept learning. CoLLEGe is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions. Our primary meta-learning objective is simply to facilitate a language model to make next word predictions in forthcoming sentences, making it compatible with language model pretraining. We design a series of tasks to test new concept learning in challenging real-world scenarios, including new word acquisition, definition inference, and verbal reasoning, and demonstrate that our method succeeds in each setting without task-specific training.'
+  arxiv: 'https://arxiv.org/abs/2403.15362'
+  pdf: 'https://arxiv.org/pdf/2403.15362'
+  webpage: 'https://agenticlearning.ai/college/'
+  permalink: college
+  research_areas:
+    - adaptive-agents-and-foundation-models
+    - concept-learning-and-abstraction
+  date: 2024-03-22T00:00:00.000Z
+  journal: The First Conference on Language Modeling (COLM 2024)
+  is_recent: false
+  enable_full_paper: true
+- title: 'Reawakening Knowledge: Anticipatory Recovery from Catastrophic Interference via Structured Training'
+  image: /assets/images/papers/reawakening.png
+  authors:
+    - Yanlai Yang
+    - Matt Jones
+    - Michael C. Mozer
+    - Mengye Ren
+  short_abstract: 'We discover a curious and remarkable property of LLMs fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again.'
+  abstract: 'We explore the training dynamics of neural networks in a structured non-IID setting where documents are presented cyclically in a fixed, repeated sequence. Typically, networks suffer from catastrophic interference when training on a sequence of documents; however, we discover a curious and remarkable property of LLMs fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again. The behavior emerges and becomes more robust as the architecture scales up its number of parameters. Through comprehensive experiments and visualizations, we uncover new insights into training over-parameterized networks in structured environments.'
+  arxiv: 'https://arxiv.org/abs/2403.09613'
+  pdf: 'https://arxiv.org/pdf/2403.09613'
+  webpage: 'https://agenticlearning.ai/anticipatory-recovery/'
+  permalink: anticipatory-recovery
+  research_areas:
+    - adaptive-agents-and-foundation-models
+  date: 2024-03-14T00:00:00.000Z
+  journal: Advances in Neural Information Processing Systems 37 (NeurIPS 2024)
+  is_recent: false
+  enable_full_paper: true
+- title: Self-Supervised Learning of Video Representations from a Child's Perspective
+  image: /assets/images/papers/ssl_childs_perspective.webp
+  authors:
+    - A. Emin Orhan
+    - Wentao Wang
+    - Alex N. Wang
+    - Mengye Ren
+    - Brenden M. Lake
+  short_abstract: 'We train self-supervised video models on longitudinal, egocentric headcam recordings collected from a child over a two year period in their early development.'
+  abstract: 'Children learn powerful internal models of the world around them from a few years of egocentric visual experience. Can such internal models be learned from a child''s visual experience with highly generic learning algorithms or do they require strong inductive biases? Recent advances in collecting large-scale, longitudinal, developmentally realistic video datasets and generic self-supervised learning (SSL) algorithms are allowing us to begin to tackle this nature vs. nurture question. However, existing work typically focuses on image-based SSL algorithms and visual capabilities that can be learned from static images (e.g. object recognition), thus ignoring temporal aspects of the world. To close this gap, here we train self-supervised video models on longitudinal, egocentric headcam recordings collected from a child over a two year period in their early development (6-31 months). The resulting models are highly effective at facilitating the learning of action concepts from a small number of labeled examples; they have favorable data size scaling properties; and they display emergent video interpolation capabilities. Video models also learn more accurate and more robust object representations than image-based models trained with the exact same data. These results suggest that important temporal aspects of a child''s internal model of the world may be learnable from their visual experience using highly generic learning algorithms and without strong inductive biases.'
+  arxiv: 'https://arxiv.org/abs/2402.00300'
+  pdf: 'https://arxiv.org/pdf/2402.00300'
+  webpage: ''
+  permalink: video-ssl-from-child
+  research_areas:
+    - learning-from-visual-experience
+  date: 2024-02-01T00:00:00.000Z
+  journal: The 46th Annual Meeting of the Cognitive Science Society (CogSci 2024)
+  is_recent: false
+  enable_full_paper: true
+- title: Learning and Forgetting Unsafe Examples in Large Language Models
+  image: /assets/images/papers/learning_and_forgetting_llm.png
+  authors:
+    - Jiachen Zhao
+    - Zhun Deng
+    - David Madras
+    - James Zou
+    - Mengye Ren
+  short_abstract: We explore the behavior of LLMs finetuned on noisy custom data containing unsafe content and propose a simple filtering algorithm for detecting harmful content based on the phenomenon of selective forgetting.
+  abstract: 'As the number of large language models (LLMs) released to the public grows, there is a pressing need to understand the safety implications associated with these models learning from third-party custom finetuning data. We explore the behavior of LLMs finetuned on noisy custom data containing unsafe content, represented by datasets that contain biases, toxicity, and harmfulness, finding that while aligned LLMs can readily learn this unsafe content, they also tend to forget it more significantly than other examples when subsequently finetuned on safer content. Drawing inspiration from the discrepancies in forgetting, we introduce the "ForgetFilter" algorithm, which filters unsafe data based on how strong the model''s forgetting signal is for that data. We demonstrate that the ForgetFilter algorithm ensures safety in customized finetuning without compromising downstream task performance, unlike sequential safety finetuning. ForgetFilter outperforms alternative strategies like replay and moral self-correction in curbing LLMs'' ability to assimilate unsafe content during custom finetuning, e.g. 75% lower than not applying any safety measures and 62% lower than using self-correction in toxicity score.'
+  arxiv: 'https://arxiv.org/abs/2312.12736'
+  pdf: 'https://arxiv.org/pdf/2312.12736'
+  webpage: ''
+  permalink: learning-forgetting-llms
+  research_areas:
+    - adaptive-agents-and-foundation-models
+  date: 2023-12-20T00:00:00.000Z
+  journal: The 41st International Conference on Machine Learning (ICML 2024)
+  is_recent: false
+  enable_full_paper: true
+- title: 'LifelongMemory: Leveraging LLMs for Answering Queries in Long-form Egocentric Videos'
+  image: /assets/images/papers/lifelong_memory.png
+  authors:
+    - Ying Wang
+    - Yanlai Yang
+    - Mengye Ren
+  short_abstract: LifelongMemory is a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval.
+  abstract: 'In this paper we introduce LifelongMemory, a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval. LifelongMemory generates concise video activity descriptions of the camera wearer and leverages the zero-shot capabilities of pretrained large language models to perform reasoning over long-form video context. Furthermore, Lifelong Memory uses a confidence and explanation module to produce confident, high-quality, and interpretable answers. Our approach achieves state-of-the-art performance on the EgoSchema benchmark for question answering and is highly competitive on the natural language query (NLQ) challenge of Ego4D.'
+  arxiv: 'https://arxiv.org/abs/2312.05269'
+  pdf: 'https://arxiv.org/pdf/2312.05269'
+  webpage: 'https://agenticlearning.ai/lifelong-memory/'
+  permalink: lifelong-memory
+  research_areas:
+    - learning-from-visual-experience
+    - adaptive-agents-and-foundation-models
+  date: 2023-12-07T00:00:00.000Z
+  journal: CoRR
+  is_recent: false
+  enable_full_paper: true

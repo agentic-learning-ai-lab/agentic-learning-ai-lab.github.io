@@ -1,0 +1,461 @@
+/* Styling for LaTeX-generated paper content */
+
+.arxiv-paper-content {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;*/
+
+  line-height: 1.6;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Article structure */
+.arxiv-paper-content article {
+  max-width: 100%;
+}
+
+/* Typography */
+.arxiv-paper-content h1,
+.arxiv-paper-content h2,
+.arxiv-paper-content h3,
+.arxiv-paper-content h4,
+.arxiv-paper-content h5,
+.arxiv-paper-content h6 {
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.arxiv-paper-content h1 {
+  font-size: 2rem;
+  border-bottom: 2px solid #e5e5e5;
+  padding-bottom: 0.5rem;
+}
+
+.arxiv-paper-content h2 {
+  font-size: 1.5rem;
+  border-bottom: none;
+  padding-bottom: 0;
+  font-weight: 400;
+  margin-top: 2.5rem;
+}
+
+/* Section title underline - match paper title style with short underline */
+.arxiv-paper-content .ltx_title_section {
+  display: block;
+  font-weight: 400;
+}
+
+.arxiv-paper-content .ltx_title_section::after {
+  content: '';
+  display: block;
+  width: 30px;
+  height: 5px;
+  background-color: #d1d5db;
+  margin-top: 0.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.arxiv-paper-content h3 {
+  font-size: 1.25rem;
+}
+
+.arxiv-paper-content h4 {
+  font-size: 1.1rem;
+  display: inline;
+  font-weight: 600;
+  margin-right: 0.5em;
+}
+
+/* Paragraph headings - no new line */
+.arxiv-paper-content .ltx_title_paragraph {
+  display: inline;
+  font-weight: 600;
+  margin-right: 0.5em;
+}
+
+/* Paragraphs */
+.arxiv-paper-content p {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+/* Paragraph spacing - only add space between different paragraphs */
+.arxiv-paper-content .ltx_para+.ltx_para {
+  margin-top: 1rem;
+}
+
+/* Lists - default block display for proper bullet/numbered lists */
+.arxiv-paper-content ul,
+.arxiv-paper-content ol {
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  padding-left: 2rem;
+}
+
+.arxiv-paper-content li {
+  margin-bottom: 0.25rem;
+}
+
+.arxiv-paper-content .ltx_itemize,
+.arxiv-paper-content .ltx_enumerate {
+  list-style-position: outside;
+  margin-left: 0;
+  padding-left: 2rem;
+}
+
+/* Fix paragraph spacing inside list items */
+.arxiv-paper-content li p,
+.arxiv-paper-content li .ltx_para,
+.arxiv-paper-content li .ltx_p {
+  display: inline;
+  margin: 0;
+}
+
+/* Code blocks */
+.arxiv-paper-content pre,
+.arxiv-paper-content code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  background-color: #f5f5f5;
+}
+
+.arxiv-paper-content pre {
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border: 1px solid #e5e5e5;
+}
+
+.arxiv-paper-content code {
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.arxiv-paper-content pre code {
+  padding: 0;
+  background-color: transparent;
+}
+
+/* Figures and images */
+.arxiv-paper-content figure {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.arxiv-paper-content figure img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.arxiv-paper-content figcaption,
+.arxiv-paper-content .ltx_caption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: left;
+  font-style: italic;
+}
+
+/* Tables */
+.arxiv-paper-content table {
+  width: 100%;
+  margin: 0.0rem 0.2rem;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+/* Fix for transformed/scaled tables that can overlap */
+.arxiv-paper-content .ltx_transformed_outer {
+  display: block !important;
+  margin: 1.5rem 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  overflow: visible;
+}
+
+.arxiv-paper-content .ltx_transformed_inner {
+  transform: none !important;
+  display: block !important;
+  width: 100%;
+}
+
+.arxiv-paper-content .ltx_inline-block {
+  display: block !important;
+}
+
+.arxiv-paper-content table thead {
+  border-bottom: 2px solid #000;
+}
+
+.arxiv-paper-content table tbody tr {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.arxiv-paper-content table th,
+.arxiv-paper-content table td {
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.arxiv-paper-content table th {
+  font-weight: 600;
+}
+
+/* Math equations */
+.arxiv-paper-content .MathJax,
+.arxiv-paper-content .mjx-chtml {
+  font-size: 1.1em;
+}
+
+/* Display math (block equations) */
+.arxiv-paper-content .ltx_equation,
+.arxiv-paper-content .ltx_equationgroup {
+  margin: 1rem 0;
+  overflow-x: auto;
+  border: none;
+}
+
+/* Remove separators after equations */
+.arxiv-paper-content .ltx_equation hr,
+.arxiv-paper-content .ltx_equationgroup hr {
+  display: none;
+}
+
+.arxiv-paper-content .ltx_equation table,
+.arxiv-paper-content .ltx_equationgroup table {
+  border: none;
+  margin: 0;
+}
+
+/* Theorems, definitions, etc. */
+.arxiv-paper-content .ltx_theorem,
+.arxiv-paper-content .ltx_definition,
+.arxiv-paper-content .ltx_proof {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-left: 3px solid #666;
+}
+
+.arxiv-paper-content .ltx_theorem .ltx_title,
+.arxiv-paper-content .ltx_definition .ltx_title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Algorithm blocks */
+.arxiv-paper-content .ltx_float_algorithm {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.arxiv-paper-content .ltx_float_algorithm .ltx_caption {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  font-style: normal;
+  text-align: left;
+  font-size: 1em;
+}
+
+.arxiv-paper-content .ltx_float_algorithm .ltx_listingblock,
+.arxiv-paper-content .ltx_float_algorithm .ltx_listing {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 1em;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.arxiv-paper-content .ltx_float_algorithm .ltx_listing .ltx_tag {
+  display: inline-block;
+  min-width: 2em;
+  margin-right: 1em;
+  color: #666;
+  text-align: right;
+}
+
+/* Make math inside algorithm blocks same size as text */
+.arxiv-paper-content .ltx_float_algorithm .MathJax,
+.arxiv-paper-content .ltx_float_algorithm .mjx-chtml {
+  font-size: 1em !important;
+}
+
+/* Citations and references */
+.arxiv-paper-content .ltx_cite,
+.arxiv-paper-content .ltx_ref {
+  color: inherit;
+  text-decoration: none;
+  cursor: default;
+}
+
+.arxiv-paper-content .ltx_cite a,
+.arxiv-paper-content .ltx_ref a {
+  color: #0066cc;
+  text-decoration: none;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.arxiv-paper-content .ltx_cite a:hover,
+.arxiv-paper-content .ltx_ref a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Bibliography */
+.arxiv-paper-content .ltx_bibliography {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e5e5e5;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0 !important;
+  padding-right: 0;
+  list-style: none;
+}
+
+.arxiv-paper-content .ltx_bibliography.ltx_enumerate,
+.arxiv-paper-content .ltx_bibliography.ltx_itemize {
+  padding-left: 0 !important;
+}
+
+.arxiv-paper-content ul.ltx_biblist {
+  padding-left: 0 !important;
+  list-style: none;
+}
+
+.arxiv-paper-content .ltx_bibliography .ltx_bibitem {
+  margin-bottom: 1rem;
+  padding-left: 0 !important;
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+  text-indent: 0;
+  display: block;
+}
+
+/* Bibliography labels */
+.arxiv-paper-content .ltx_bibliography .ltx_tag {
+  float: none;
+  display: inline-block;
+  min-width: 4em;
+  margin-right: 0.5em;
+  text-align: left;
+  font-size: 1em;
+}
+
+/* Abstract */
+.arxiv-paper-content .ltx_abstract {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.arxiv-paper-content .ltx_abstract .ltx_title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Authors */
+.arxiv-paper-content .ltx_authors {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.arxiv-paper-content .ltx_author {
+  display: inline-block;
+  margin: 0 0.5rem;
+}
+
+/* Date */
+.arxiv-paper-content .ltx_dates {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* Footnotes */
+.arxiv-paper-content .ltx_note {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .arxiv-paper-content {
+    padding: 1rem 0;
+  }
+
+  .arxiv-paper-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .arxiv-paper-content h2 {
+    font-size: 1.25rem;
+  }
+
+  .arxiv-paper-content h3 {
+    font-size: 1.1rem;
+  }
+
+  .arxiv-paper-content table {
+    font-size: 0.8rem;
+  }
+
+  .arxiv-paper-content table th,
+  .arxiv-paper-content table td {
+    padding: 0.5rem;
+  }
+}
+
+/* LaTeXML specific classes */
+.arxiv-paper-content .ltx_page_main {
+  max-width: 100%;
+}
+
+.arxiv-paper-content .ltx_page_content {
+  padding: 0;
+}
+
+.arxiv-paper-content .ltx_title_document {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+/* Numbering - move to left side */
+.arxiv-paper-content .ltx_tag {
+  float: none;
+  display: inline;
+  color: #666;
+  font-size: 0.9em;
+  margin-right: 0.5em;
+}
+
+/* Verbatim/listings */
+.arxiv-paper-content .ltx_verbatim {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  white-space: pre;
+  border: 1px solid #e5e5e5;
+}

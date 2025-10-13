@@ -1,28 +1,50 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta property="og:title" content="{{{title}}} | Agentic Learning AI Lab" />
-<meta property="og:description" content="{{{short_abstract}}}" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://agenticlearning.ai/research/{{{permalink}}}" />
-<!--Replace with the current website url-->
-<meta property="og:image" content="https://agenticlearning.ai/{{{image}}}" />
-{{> head}}
+    <meta property="og:title" content="{{{title}}} | Agentic Learning AI Lab" />
+    <meta property="og:description" content="{{{short_abstract}}}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://agenticlearning.ai/research/{{{permalink}}}" />
+    <!--Replace with the current website url-->
+    <meta property="og:image" content="https://agenticlearning.ai/{{{image}}}" />
+    {{> head}}
+    {{#if has_full_paper}}
+    <!-- ArXiv paper styling -->
+    <link rel="stylesheet" href="/css/arxiv-paper.css" />
+    <!-- MathJax for rendering mathematical equations -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    {{/if}}
 </head>
+
 <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
     {{> header}}
 
-   <!--      <div class="tw-h-[330px] tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-overflow-hidden tw-mt-[150px] tw-px-[5%] ">
+    <!--      <div class="tw-h-[330px] tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-overflow-hidden tw-mt-[150px] tw-px-[5%] ">
             <img src={{{image}}}
                 class="tw-h-full tw-w-full tw-object-cover"
                 alt="design"/>
         </div>
  -->
-    <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
+    <section
+        class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
         <div class="tw-flex tw-w-full tw-place-content-center tw-gap-6 max-xl:tw-place-items-center max-lg:tw-flex-col">
-        <div class="image-container">
-            <img src="{{{image}}}" alt="app" class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain"/>
-        </div>
+            <div class="image-container">
+                <img src="{{{image}}}" alt="app"
+                    class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain" />
+            </div>
         </div>
     </section>
 
@@ -34,45 +56,137 @@
         <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
         </div>
 
-        <!-- <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden"> -->
         <div class="tw-gap-2 tw-max-w-100">
             <p class="tw-mt-4">
-            Authors: {{{formatAuthorsWithLinks authors}}}
+                Authors: {{{formatAuthorsWithLinks authors}}}
             </p>
             <p class="tw-text-gray-600 tw-mt-4">
-            Abstract: {{{abstract}}}
+                Abstract: {{{abstract}}}
             </p>
             <p class="tw-mt-4">
-            Published: {{formatDate date "YYYY-MM-DD"}}
+                Published: {{formatDate date "YYYY-MM-DD"}}
             </p>
             <p class="tw-mt-4">
-            Venue: {{journal}}
+                Venue: {{journal}}
             </p>
-            <div class="tw-flex tw-mt-8 tw-gap-x-4 tw-min-w-[100px]">
-            <div class="tw-flex-col person-page-links">
-            <a href={{{pdf}}}>
-                <span>Full Paper (PDF)</span>
-                <i class="bi bi-arrow-right"></i>
-            </a>
-            </div>
-            {{#if webpage}}
-            &nbsp;
-            &nbsp;
-            <div class="tw-flex-col person-page-links">
-            <a href={{{webpage}}}>
-                <span>Project Website</span>
-                <i class="bi bi-arrow-right"></i>
-            </a>
-            </div>
-            {{/if}}
+            <div class="tw-flex tw-mt-8 tw-gap-x-4 tw-gap-y-4 tw-min-w-[100px] tw-flex-wrap">
+                <div class="tw-flex-col person-page-links">
+                    <a href={{{pdf}}}>
+                        <span>Full Paper (PDF)</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                {{#if webpage}}
+                <div class="tw-flex-col person-page-links">
+                    <a href={{{webpage}}}>
+                        <span>Project Website</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                {{/if}}
+                {{#if has_full_paper}}
+                <div class="tw-flex-col person-page-links">
+                    <a href="#" onclick="toggleFullPaper(); return false;" id="toggle-full-paper-btn">
+                        <span id="toggle-full-paper-text">Full Paper (HTML) (Experimental)</span>
+                        <i class="bi bi-arrow-right" id="toggle-full-paper-icon"></i>
+                    </a>
+                </div>
+                {{/if}}
             </div>
         </div>
-        <!-- </div> -->
 
+        {{#if has_full_paper}}
+        <!-- Full paper view (hidden by default) -->
+        <div id="full-paper-view" class="tw-hidden tw-mt-8">
+            <hr class="tw-my-8" />
+            <div id="paper-loading" class="tw-text-center tw-py-8">
+                <p class="tw-text-gray-600">Loading paper...</p>
+            </div>
+            <div id="paper-content" class="arxiv-paper-content"></div>
+        </div>
+        {{/if}}
 
     </section>
-    
+
     {{> footer}}
 </body>
 <script src="/index.js"></script>
+{{#if has_full_paper}}
+<script>
+    // Paper view toggle functionality
+    let paperContentLoaded = false;
+    let paperVisible = false;
+
+    function toggleFullPaper() {
+        const fullPaperView = document.getElementById('full-paper-view');
+        const toggleText = document.getElementById('toggle-full-paper-text');
+        const toggleIcon = document.getElementById('toggle-full-paper-icon');
+
+        if (paperVisible) {
+            // Hide the full paper
+            fullPaperView.classList.add('tw-hidden');
+            toggleText.textContent = 'Full Paper (HTML) (Experimental)';
+            toggleIcon.className = 'bi bi-arrow-right';
+            paperVisible = false;
+        } else {
+            // Show the full paper
+            fullPaperView.classList.remove('tw-hidden');
+            toggleText.textContent = 'Hide Full Paper (HTML)';
+            toggleIcon.className = 'bi bi-arrow-up';
+            paperVisible = true;
+
+            // Load paper content if not already loaded
+            if (!paperContentLoaded) {
+                loadPaperContent();
+            }
+
+            // Scroll to the full paper section
+            fullPaperView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    async function loadPaperContent() {
+        const loadingEl = document.getElementById('paper-loading');
+        const contentEl = document.getElementById('paper-content');
+
+        try {
+            const response = await fetch('./paper-content.json');
+            if (!response.ok) {
+                throw new Error('Paper content not found');
+            }
+
+            const data = await response.json();
+
+            // Inject CSS if present
+            if (data.css) {
+                const styleEl = document.createElement('style');
+                styleEl.textContent = data.css;
+                document.head.appendChild(styleEl);
+            }
+
+            // Inject HTML content
+            contentEl.innerHTML = data.html;
+            loadingEl.style.display = 'none';
+            paperContentLoaded = true;
+
+            // If MathJax is available, typeset the new content
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([contentEl]).catch(err => {
+                    console.warn('MathJax typesetting failed:', err);
+                });
+            }
+
+        } catch (error) {
+            console.error('Failed to load paper content:', error);
+            loadingEl.innerHTML = '<p class="tw-text-red-600">Failed to load paper content. Please try the PDF link above.</p>';
+        }
+    }
+
+    // Support URL hash for direct linking
+    if (window.location.hash === '#full-paper') {
+        showFullPaper();
+    }
+</script>
+{{/if}}
+
 </html>

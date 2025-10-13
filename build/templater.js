@@ -33,6 +33,8 @@ function doTemplating(input, output) {
             if (!fs.existsSync(path.dirname(output_new))){
                 fs.mkdirSync(path.dirname(output_new));
             }
+            // Set has_full_paper flag if enable_full_paper is specified
+            paper.has_full_paper = !!paper.enable_full_paper;
             fs.writeFileSync(output_new, template(paper));
         }
     }

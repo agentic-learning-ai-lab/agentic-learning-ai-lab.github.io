@@ -2,3 +2,14 @@ node_modules/
 *.DS_Store
 out/
 other_assets/
+
+# LaTeX build artifacts (keep source .tex and images, ignore build files)
+papers-latex/**/paper.html
+papers-latex/**/*.aux
+papers-latex/**/*.log
+papers-latex/**/*.out
+papers-latex/**/*.toc
+papers-latex/**/*.bbl
+papers-latex/**/*.blg
+papers-latex/**/*.xml
+papers-latex/**/*.cache

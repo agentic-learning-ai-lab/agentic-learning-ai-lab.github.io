@@ -1,73 +1,91 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta property="og:title" content="ProCreate, Don't Reproduce! Propulsive Energy Diffusion for Creative Generation | Agentic Learning AI Lab" />
-<meta property="og:description" content="ProCreate is a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://agenticlearning.ai/research/procreate" />
-<!--Replace with the current website url-->
-<meta property="og:image" content="https://agenticlearning.ai//assets/images/papers/procreate.png" />
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>agentic learning ai lab</title>
-<meta name="description" content="" />
-<!-- <link
-    rel="shortcut icon"
-    href="./assets/logo.png"
-    type="image/x-icon"
-/> -->
+    <meta property="og:title" content="ProCreate, Don't Reproduce! Propulsive Energy Diffusion for Creative Generation | Agentic Learning AI Lab" />
+    <meta property="og:description" content="ProCreate is a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://agenticlearning.ai/research/procreate" />
+    <!--Replace with the current website url-->
+    <meta property="og:image" content="https://agenticlearning.ai//assets/images/papers/procreate.png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>agentic learning ai lab</title>
+    <meta name="description" content="" />
+    <!-- <link
+        rel="shortcut icon"
+        href="./assets/logo.png"
+        type="image/x-icon"
+    /> -->
+    
+    <link rel="stylesheet" href="/css/tailwind-runtime.css" />
+    <link rel="stylesheet" href="/css/tailwind-build.css" />
+    <link rel="stylesheet" href="/css/index.css" />
+    
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+        integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-44MVTGBV0D"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-44MVTGBV0D');
+    </script>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // https://dashboard.emailjs.com/admin/account
+            emailjs.init({
+              publicKey: "y6ebNBhEpEzmyqS8F",
+            });
+        })();
+    </script>
+    
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"
+        integrity="sha512-B1lby8cGcAUU3GR+Fd809/ZxgHbfwJMp0jLTVfHiArTuUt++VqSlJpaJvhNtRf3NERaxDNmmxkdx2o+aHd4bvw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/ScrollTrigger.min.js"
+        integrity="sha512-AY2+JxnBETJ0wcXnLPCcZJIJx0eimyhz3OJ55k2Jx4RtYC+XdIi2VtJQ+tP3BaTst4otlGG1TtPJ9fKrAUnRdQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+    
+    <script src="/search.js"></script>    <!-- ArXiv paper styling -->
+    <link rel="stylesheet" href="/css/arxiv-paper.css" />
+    <!-- MathJax for rendering mathematical equations -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
 
-<link rel="stylesheet" href="/css/tailwind-runtime.css" />
-<link rel="stylesheet" href="/css/tailwind-build.css" />
-<link rel="stylesheet" href="/css/index.css" />
-
-<link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-/>
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
-    integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-/>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-44MVTGBV0D"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-44MVTGBV0D');
-</script>
-
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script type="text/javascript">
-    (function() {
-        // https://dashboard.emailjs.com/admin/account
-        emailjs.init({
-          publicKey: "y6ebNBhEpEzmyqS8F",
-        });
-    })();
-</script>
-
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"
-    integrity="sha512-B1lby8cGcAUU3GR+Fd809/ZxgHbfwJMp0jLTVfHiArTuUt++VqSlJpaJvhNtRf3NERaxDNmmxkdx2o+aHd4bvw=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-></script>
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/ScrollTrigger.min.js"
-    integrity="sha512-AY2+JxnBETJ0wcXnLPCcZJIJx0eimyhz3OJ55k2Jx4RtYC+XdIi2VtJQ+tP3BaTst4otlGG1TtPJ9fKrAUnRdQ=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-></script>
-
-<script src="/search.js"></script></head>
 <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
     <header class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-between">
         <a class="tw-h-[120px] tw-p-[4px] tw-w-[100px] tw-text-2xl tw-font-medium" href="/">
@@ -97,17 +115,19 @@
             id="collapse-btn"
         ></button>
     </header>
-   <!--      <div class="tw-h-[330px] tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-overflow-hidden tw-mt-[150px] tw-px-[5%] ">
+    <!--      <div class="tw-h-[330px] tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-overflow-hidden tw-mt-[150px] tw-px-[5%] ">
             <img src=/assets/images/papers/procreate.png
                 class="tw-h-full tw-w-full tw-object-cover"
                 alt="design"/>
         </div>
  -->
-    <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
+    <section
+        class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
         <div class="tw-flex tw-w-full tw-place-content-center tw-gap-6 max-xl:tw-place-items-center max-lg:tw-flex-col">
-        <div class="image-container">
-            <img src="/assets/images/papers/procreate.png" alt="app" class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain"/>
-        </div>
+            <div class="image-container">
+                <img src="/assets/images/papers/procreate.png" alt="app"
+                    class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain" />
+            </div>
         </div>
     </section>
 
@@ -119,42 +139,52 @@
         <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
         </div>
 
-        <!-- <div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-rounded-lg tw-bg-[#f3f3f3b4] tw-p-4 max-lg:tw-w-full hover:tw-shadow-lg tw-transition-shadow tw-duration-300 tw-overflow-hidden"> -->
         <div class="tw-gap-2 tw-max-w-100">
             <p class="tw-mt-4">
-            Authors: <a href="/people/jack-lu/">Jack Lu</a>, <a href="/people/ryan-teehan/">Ryan Teehan</a>, and <a href="/people/mengye-ren/">Mengye Ren</a>
+                Authors: <a href="/people/jack-lu/">Jack Lu</a>, <a href="/people/ryan-teehan/">Ryan Teehan</a>, and <a href="/people/mengye-ren/">Mengye Ren</a>
             </p>
             <p class="tw-text-gray-600 tw-mt-4">
-            Abstract: In this paper, we propose ProCreate, a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction. ProCreate operates on a set of reference images and actively propels the generated image embedding away from the reference embeddings during the generation process. We propose FSCG-8 (Few-Shot Creative Generation 8), a few-shot creative generation dataset on eight different categories -- encompassing different concepts, styles, and settings -- in which ProCreate achieves the highest sample diversity and fidelity. Furthermore, we show that ProCreate is effective at preventing replicating training data in a large-scale evaluation using training text prompts.
+                Abstract: In this paper, we propose ProCreate, a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction. ProCreate operates on a set of reference images and actively propels the generated image embedding away from the reference embeddings during the generation process. We propose FSCG-8 (Few-Shot Creative Generation 8), a few-shot creative generation dataset on eight different categories -- encompassing different concepts, styles, and settings -- in which ProCreate achieves the highest sample diversity and fidelity. Furthermore, we show that ProCreate is effective at preventing replicating training data in a large-scale evaluation using training text prompts.
             </p>
             <p class="tw-mt-4">
-            Published: 2024-08-05
+                Published: 2024-08-05
             </p>
             <p class="tw-mt-4">
-            Venue: The 18th European Conference on Computer Vision (ECCV 2024)
+                Venue: The 18th European Conference on Computer Vision (ECCV 2024)
             </p>
-            <div class="tw-flex tw-mt-8 tw-gap-x-4 tw-min-w-[100px]">
-            <div class="tw-flex-col person-page-links">
-            <a href=https://arxiv.org/pdf/2408.02226>
-                <span>Full Paper (PDF)</span>
-                <i class="bi bi-arrow-right"></i>
-            </a>
-            </div>
-            &nbsp;
-            &nbsp;
-            <div class="tw-flex-col person-page-links">
-            <a href=https://agenticlearning.ai/procreate-diffusion/>
-                <span>Project Website</span>
-                <i class="bi bi-arrow-right"></i>
-            </a>
-            </div>
+            <div class="tw-flex tw-mt-8 tw-gap-x-4 tw-gap-y-4 tw-min-w-[100px] tw-flex-wrap">
+                <div class="tw-flex-col person-page-links">
+                    <a href=https://arxiv.org/pdf/2408.02226>
+                        <span>Full Paper (PDF)</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="tw-flex-col person-page-links">
+                    <a href=https://agenticlearning.ai/procreate-diffusion/>
+                        <span>Project Website</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="tw-flex-col person-page-links">
+                    <a href="#" onclick="toggleFullPaper(); return false;" id="toggle-full-paper-btn">
+                        <span id="toggle-full-paper-text">Full Paper (HTML) (Experimental)</span>
+                        <i class="bi bi-arrow-right" id="toggle-full-paper-icon"></i>
+                    </a>
+                </div>
             </div>
         </div>
-        <!-- </div> -->
 
+        <!-- Full paper view (hidden by default) -->
+        <div id="full-paper-view" class="tw-hidden tw-mt-8">
+            <hr class="tw-my-8" />
+            <div id="paper-loading" class="tw-text-center tw-py-8">
+                <p class="tw-text-gray-600">Loading paper...</p>
+            </div>
+            <div id="paper-content" class="arxiv-paper-content"></div>
+        </div>
 
     </section>
-    
+
     <hr class="tw-mt-4" />
     <footer class="tw-mt-auto tw-flex tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4  tw-min-h-[100px] tw-w-full tw-place-items-center tw-gap-3 tw-text-black
     ">
@@ -180,4 +210,80 @@
         </div>
     </footer></body>
 <script src="/index.js"></script>
+<script>
+    // Paper view toggle functionality
+    let paperContentLoaded = false;
+    let paperVisible = false;
+
+    function toggleFullPaper() {
+        const fullPaperView = document.getElementById('full-paper-view');
+        const toggleText = document.getElementById('toggle-full-paper-text');
+        const toggleIcon = document.getElementById('toggle-full-paper-icon');
+
+        if (paperVisible) {
+            // Hide the full paper
+            fullPaperView.classList.add('tw-hidden');
+            toggleText.textContent = 'Full Paper (HTML) (Experimental)';
+            toggleIcon.className = 'bi bi-arrow-right';
+            paperVisible = false;
+        } else {
+            // Show the full paper
+            fullPaperView.classList.remove('tw-hidden');
+            toggleText.textContent = 'Hide Full Paper (HTML)';
+            toggleIcon.className = 'bi bi-arrow-up';
+            paperVisible = true;
+
+            // Load paper content if not already loaded
+            if (!paperContentLoaded) {
+                loadPaperContent();
+            }
+
+            // Scroll to the full paper section
+            fullPaperView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    async function loadPaperContent() {
+        const loadingEl = document.getElementById('paper-loading');
+        const contentEl = document.getElementById('paper-content');
+
+        try {
+            const response = await fetch('./paper-content.json');
+            if (!response.ok) {
+                throw new Error('Paper content not found');
+            }
+
+            const data = await response.json();
+
+            // Inject CSS if present
+            if (data.css) {
+                const styleEl = document.createElement('style');
+                styleEl.textContent = data.css;
+                document.head.appendChild(styleEl);
+            }
+
+            // Inject HTML content
+            contentEl.innerHTML = data.html;
+            loadingEl.style.display = 'none';
+            paperContentLoaded = true;
+
+            // If MathJax is available, typeset the new content
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([contentEl]).catch(err => {
+                    console.warn('MathJax typesetting failed:', err);
+                });
+            }
+
+        } catch (error) {
+            console.error('Failed to load paper content:', error);
+            loadingEl.innerHTML = '<p class="tw-text-red-600">Failed to load paper content. Please try the PDF link above.</p>';
+        }
+    }
+
+    // Support URL hash for direct linking
+    if (window.location.hash === '#full-paper') {
+        showFullPaper();
+    }
+</script>
+
 </html>
