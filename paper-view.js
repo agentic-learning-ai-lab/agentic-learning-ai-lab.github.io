@@ -33,7 +33,7 @@ function toggleFullPaper() {
     if (paperVisible) {
         // Hide the full paper
         fullPaperView.classList.add('tw-hidden');
-        toggleText.textContent = 'Full Paper (HTML) (Experimental)';
+        toggleText.textContent = 'Full Paper (HTML)';
         toggleIcon.className = 'bi bi-arrow-right';
         paperVisible = false;
     } else {
@@ -375,10 +375,11 @@ function constrainMobileNavButton() {
         }
 
         const sectionRect = paperSection.getBoundingClientRect();
-        const sectionBottom = sectionRect.bottom;
 
-        // Show button only when paper section is visible
-        if (sectionRect.top < window.innerHeight && sectionBottom > 0) {
+        // Show button only when paper section is actually visible in viewport
+        // Section must have entered viewport (top < innerHeight) AND not scrolled past (bottom > 0)
+        // But also check that we've scrolled into the section (top <= 0 means section has reached top of viewport)
+        if (sectionRect.top <= 0 && sectionRect.bottom > 0) {
             mobileBtn.style.display = 'flex';
         } else {
             mobileBtn.style.display = 'none';
