@@ -1,12 +1,25 @@
 #!/usr/bin/env node
 
 /**
- * Build script to download arXiv HTML papers
+ * Build script to download arXiv HTML papers and compile PDFs from LaTeX source
+ *
  * This script:
- * 1. Reads papers.yaml to find papers with arxiv links
+ * 1. Reads papers.yaml to find papers with arxiv links and enable_full_paper: true
  * 2. Downloads HTML from ar5iv.labs.arxiv.org
  * 3. Extracts and cleans the main content
- * 4. Saves it for embedding in the paper template
+ * 4. Downloads images and updates paths
+ * 5. Saves it for embedding in the paper template
+ * 6. Optionally downloads LaTeX source and compiles PDFs
+ *
+ * Usage:
+ *   node build/build_arxiv_papers.js              # Build HTML only
+ *   node build/build_arxiv_papers.js --pdf        # Build HTML and PDFs
+ *   node build/build_arxiv_papers.js --force      # Force re-download existing papers
+ *   node build/build_arxiv_papers.js --pdf --force # Build everything, force re-download
+ *
+ * Requirements for PDF compilation:
+ *   - pdflatex or latexmk must be installed
+ *   - Full LaTeX distribution (texlive, mactex, etc.)
  */
 
 const fs = require('fs-extra');
@@ -146,9 +159,6 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
 
   const ar5ivUrl = `${ARXIV_HTML_BASE}${arxivId}`;
 
-  console.log(`Downloading arXiv HTML for ${arxivId}...`);
-  console.log(`URL: ${ar5ivUrl}`);
-
   try {
     // Download the HTML
     const html = await downloadHtml(ar5ivUrl);
@@ -202,10 +212,9 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
         // Ensure the subdirectory exists for nested paths (e.g., figs/image.png)
         await fs.ensureDir(path.dirname(localPath));
         await downloadFile(imageUrl, localPath);
-        console.log(`  Downloaded image: ${img.filename}`);
         downloadedImages.add(img.filename);
       } catch (err) {
-        console.warn(`  Warning: Failed to download ${img.filename}: ${err.message}`);
+        console.warn(`  Warning: Failed to download image ${img.filename}: ${err.message}`);
       }
     }
 
@@ -232,8 +241,6 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
     // Save the extracted content as JSON
     await fs.writeJson(outputPath, output, { spaces: 2 });
 
-    console.log(`✓ Downloaded and saved arXiv HTML to ${outputPath}`);
-
   } catch (error) {
     console.error(`Failed to download arXiv HTML: ${error.message}`);
     throw error;
@@ -241,14 +248,96 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
 }
 
 /**
+ * Download and compile LaTeX source from arXiv
+ * @param {string} arxivUrl - arXiv URL or ID
+ * @param {string} outputPath - Where to save the compiled PDF
+ */
+async function downloadAndCompileLatex(arxivUrl, outputPath) {
+  const arxivId = extractArxivId(arxivUrl);
+
+  if (!arxivId) {
+    throw new Error(`Could not extract arXiv ID from ${arxivUrl}`);
+  }
+
+  // arXiv source is available at https://arxiv.org/e-print/{arxiv_id}
+  const sourceUrl = `https://arxiv.org/e-print/${arxivId}`;
+  const tempDir = path.join(require('os').tmpdir(), `arxiv_${arxivId}_${Date.now()}`);
+  const tarPath = path.join(tempDir, 'source.tar.gz');
+
+  try {
+    await fs.ensureDir(tempDir);
+
+    // Download the source tarball
+    await downloadFile(sourceUrl, tarPath);
+
+    // Extract the tarball
+    await execAsync(`tar -xzf source.tar.gz`, { cwd: tempDir });
+
+    // Find the main .tex file
+    const files = await fs.readdir(tempDir);
+    let mainTexFile = files.find(f => f === 'main.tex' || f === 'ms.tex');
+
+    if (!mainTexFile) {
+      // Look for any .tex file that contains \documentclass
+      for (const file of files.filter(f => f.endsWith('.tex'))) {
+        const content = await fs.readFile(path.join(tempDir, file), 'utf8');
+        if (content.includes('\\documentclass')) {
+          mainTexFile = file;
+          break;
+        }
+      }
+    }
+
+    if (!mainTexFile) {
+      throw new Error('Could not find main .tex file');
+    }
+
+    // Compile the LaTeX using pdflatex
+    // Run twice to resolve references, suppress output
+    const latexCmd = `pdflatex -interaction=nonstopmode -halt-on-error "${mainTexFile}" > /dev/null 2>&1`;
+
+    try {
+      await execAsync(latexCmd, { cwd: tempDir });
+      await execAsync(latexCmd, { cwd: tempDir });
+    } catch (compileError) {
+      // Try with latexmk as fallback
+      await execAsync(`latexmk -pdf -interaction=nonstopmode "${mainTexFile}" > /dev/null 2>&1`, { cwd: tempDir });
+    }
+
+    // Copy the PDF to the output location
+    const pdfFile = mainTexFile.replace('.tex', '.pdf');
+    const pdfPath = path.join(tempDir, pdfFile);
+
+    if (await fs.pathExists(pdfPath)) {
+      await fs.ensureDir(path.dirname(outputPath));
+      await fs.copy(pdfPath, outputPath);
+    } else {
+      throw new Error('PDF file was not generated');
+    }
+
+  } catch (error) {
+    console.error(`Failed to compile LaTeX: ${error.message}`);
+    throw error;
+  } finally {
+    // Clean up temporary directory
+    try {
+      await fs.remove(tempDir);
+    } catch (cleanupError) {
+      console.warn(`Warning: Failed to clean up temp directory: ${cleanupError.message}`);
+    }
+  }
+}
+
+/**
  * Main build function
  * @param {Object} options - Build options
  * @param {boolean} options.force - Force re-download of existing papers
+ * @param {boolean} options.buildPdf - Build PDFs from LaTeX source
  */
 async function buildPapers(options = {}) {
-  const { force = false } = options;
+  const { force = false, buildPdf = false } = options;
 
-  console.log('Building papers from arXiv HTML...\n');
+  console.log('Building papers from arXiv...\n');
 
   if (force) {
     console.log('⚠️  Force mode: Re-downloading all papers\n');
@@ -257,47 +346,98 @@ async function buildPapers(options = {}) {
   // Load papers configuration
   const papersData = yaml.load(await fs.readFile(PAPERS_YAML, 'utf-8'));
 
-  // Filter papers that have arXiv links and enable_full_paper set
-  const arxivPapers = papersData.filter(paper => paper.arxiv && paper.enable_full_paper);
+  // For HTML: only papers with enable_full_paper
+  // For PDF: all papers with arXiv links
+  const htmlPapers = papersData.filter(paper => paper.arxiv && paper.enable_full_paper);
+  const pdfPapers = papersData.filter(paper => paper.arxiv);
 
-  if (arxivPapers.length === 0) {
+  if (htmlPapers.length === 0 && !buildPdf) {
     console.log('No papers with both arxiv and enable_full_paper found in papers.yaml');
     console.log('Add enable_full_paper: true to papers.yaml to enable full paper view');
     return;
   }
 
-  console.log(`Found ${arxivPapers.length} paper(s) to process\n`);
+  if (buildPdf) {
+    console.log(`Found ${htmlPapers.length} paper(s) for HTML`);
+    console.log(`Found ${pdfPapers.length} paper(s) for PDF\n`);
+  } else {
+    console.log(`Found ${htmlPapers.length} paper(s) for HTML\n`);
+  }
 
-  let downloaded = 0;
-  let skipped = 0;
+  let htmlDownloaded = 0;
+  let htmlSkipped = 0;
+  let pdfCompiled = 0;
+  let pdfSkipped = 0;
   let failed = 0;
 
-  // Process each paper
-  for (const paper of arxivPapers) {
-    try {
-      const outputPath = path.join(OUTPUT_DIR, paper.permalink, 'paper-content.json');
+  // Process HTML papers
+  if (htmlPapers.length > 0) {
+    console.log('📄 Processing HTML papers...\n');
+    for (const paper of htmlPapers) {
+      try {
+        const htmlOutputPath = path.join(OUTPUT_DIR, paper.permalink, 'paper-content.json');
 
-      // Skip if file exists and not in force mode
-      if (!force && await fs.pathExists(outputPath)) {
-        console.log(`⏭️  Skipping ${paper.permalink} (already exists)`);
-        skipped++;
-        continue;
+        if (!force && await fs.pathExists(htmlOutputPath)) {
+          console.log(`⏭️  [HTML] ${paper.permalink} - already exists`);
+          htmlSkipped++;
+        } else {
+          console.log(`⬇️  [HTML] ${paper.permalink} - downloading...`);
+          await downloadArxivHtml(paper.arxiv, htmlOutputPath);
+          console.log(`✅ [HTML] ${paper.permalink} - complete`);
+          htmlDownloaded++;
+        }
+      } catch (error) {
+        console.error(`❌ [HTML] ${paper.permalink} - failed: ${error.message}`);
+        failed++;
       }
-
-      await downloadArxivHtml(paper.arxiv, outputPath);
-      downloaded++;
-    } catch (error) {
-      console.error(`❌ Error processing ${paper.title}:`, error.message);
-      failed++;
     }
   }
 
-  console.log(`\n✓ Paper build complete!`);
-  console.log(`   ${downloaded} downloaded`);
-  console.log(`   ${skipped} skipped (already existed)`);
-  if (failed > 0) {
-    console.log(`   ${failed} failed`);
+  // Process PDF papers
+  if (buildPdf && pdfPapers.length > 0) {
+    console.log('\n📚 Compiling PDFs from LaTeX source...\n');
+    for (const paper of pdfPapers) {
+      try {
+        const pdfOutputPath = path.join(OUTPUT_DIR, paper.permalink, 'paper.pdf');
+
+        if (!force && await fs.pathExists(pdfOutputPath)) {
+          console.log(`⏭️  [PDF] ${paper.permalink} - already exists`);
+          pdfSkipped++;
+        } else {
+          console.log(`⬇️  [PDF] ${paper.permalink} - compiling...`);
+          await downloadAndCompileLatex(paper.arxiv, pdfOutputPath);
+          console.log(`✅ [PDF] ${paper.permalink} - complete`);
+          pdfCompiled++;
+        }
+      } catch (error) {
+        console.error(`❌ [PDF] ${paper.permalink} - failed: ${error.message}`);
+        failed++;
+      }
+    }
   }
+
+  // Print summary
+  console.log('\n' + '='.repeat(50));
+  console.log('📊 Build Summary');
+  console.log('='.repeat(50));
+
+  if (htmlPapers.length > 0) {
+    console.log(`\nHTML Papers:`);
+    console.log(`  ✅ Downloaded: ${htmlDownloaded}`);
+    console.log(`  ⏭️  Skipped: ${htmlSkipped}`);
+  }
+
+  if (buildPdf && pdfPapers.length > 0) {
+    console.log(`\nPDF Papers:`);
+    console.log(`  ✅ Compiled: ${pdfCompiled}`);
+    console.log(`  ⏭️  Skipped: ${pdfSkipped}`);
+  }
+
+  if (failed > 0) {
+    console.log(`\n❌ Failed: ${failed}`);
+  }
+
+  console.log('\n✓ Build complete!\n');
 }
 
 // Run if executed directly
@@ -305,11 +445,16 @@ if (require.main === module) {
   // Check for command line arguments
   const args = process.argv.slice(2);
   const force = args.includes('--force') || args.includes('-f');
+  const buildPdf = args.includes('--pdf') || args.includes('-p');
 
-  buildPapers({ force }).catch(error => {
+  if (buildPdf) {
+    console.log('📄 PDF compilation enabled\n');
+  }
+
+  buildPapers({ force, buildPdf }).catch(error => {
     console.error('Build failed:', error);
     process.exit(1);
   });
 }
 
-module.exports = { buildPapers, downloadArxivHtml };
+module.exports = { buildPapers, downloadArxivHtml, downloadAndCompileLatex };

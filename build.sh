@@ -7,7 +7,7 @@ npm run build
 find . -name ".DS_Store" -depth -exec rm {} \;
 # rm -rf out
 mkdir -p out
-cp index.html index.js search.js person.js out/
+cp index.html index.js search.js person.js paper-view.js out/
 cp -R people out/
 cp -R research research.js out/
 cp -R contact out/
