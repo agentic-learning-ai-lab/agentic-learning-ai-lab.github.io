@@ -35,27 +35,23 @@
                 <p class="tw-text-gray-600 tw-mt-4">
                 {{{description}}}
                 </p>
-                <div class="tw-flex tw-mt-8 tw-gap-x-4 tw-min-w-[100px]">
-
+                <div class="tw-flex tw-mt-8 tw-gap-x-2 tw-gap-y-4 tw-min-w-[100px] tw-flex-wrap">
                 {{#if webpage}}
                 <div class="tw-flex-col person-page-links">
-                <a href={{{webpage}}}>
-                    <span>Personal Website</span>
-                    <i class="bi bi-arrow-right"></i>
-                </a>
+                    <a href={{{webpage}}}>
+                        <span>Personal Website</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
                 </div>
                 {{/if}}
                 {{#if google_scholar}}
-                &nbsp;
-                &nbsp;
                 <div class="tw-flex-col person-page-links">
-                <a href=https://scholar.google.com/citations?user={{{google_scholar}}}>
-                    <span>GScholar Profile</span>
-                    <i class="bi bi-arrow-right"></i>
-                </a>
+                    <a href=https://scholar.google.com/citations?user={{{google_scholar}}}>
+                        <span>GScholar Profile</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
                 </div>
                 {{/if}}
-
                 </div>
             </div>
         </div>

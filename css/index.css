@@ -16,7 +16,40 @@
 
 html {
     scroll-behavior: smooth;
-    font-family: "Roboto", sans-serif;
+    font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    line-height: 1.75;
+    font-size: 1.0625rem;
+    color: #2c2c2c;
+    overflow-x: hidden;
+    max-width: 100vw;
+    scroll-padding-top: 150px;
+}
+
+body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+/* Apply serif fonts to common text elements */
+p, li, blockquote, dd, dt {
+    font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif;
+    line-height: 1.75;
+}
+
+/* Ensure descriptions and abstracts use serif */
+.tw-text-gray-600,
+.tw-text-gray-700 {
+    font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif;
+}
+
+/* Ensure italic text uses serif */
+.tw-italic {
+    font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif;
+}
+
+/* Ensure metadata text (dates, authors, venue) uses serif */
+p.tw-mt-4 {
+    font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif;
 }
 
 header {
@@ -66,6 +99,7 @@ header>.collapsible-header {
 }
 
 .person-page-links {
+    display: inline-block;
     color: black;
     padding: 6px 8px;
     border: 1px solid rgb(209 213 219);
@@ -539,6 +573,7 @@ section {
     color: #6b7280;
     line-height: 1.4;
     margin-top: 4px;
+    font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif;
 }
 
 /* Search Result Arrow */

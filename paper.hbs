@@ -70,6 +70,14 @@
                 Venue: {{journal}}
             </p>
             <div class="tw-flex tw-mt-8 tw-gap-x-2 tw-gap-y-4 tw-min-w-[100px] tw-flex-wrap">
+                {{#if has_full_paper}}
+                <div class="tw-flex-col person-page-links">
+                    <a href="#" onclick="toggleFullPaper(); return false;" id="toggle-full-paper-btn">
+                        <span id="toggle-full-paper-text">Full Paper (HTML)</span>
+                        <i class="bi bi-arrow-right" id="toggle-full-paper-icon"></i>
+                    </a>
+                </div>
+                {{/if}}
                 <div class="tw-flex-col person-page-links">
                     <a href="{{#if has_local_pdf}}{{{local_pdf}}}{{else}}{{{pdf}}}{{/if}}">
                         <span>Full Paper (PDF)</span>
@@ -84,29 +92,54 @@
                     </a>
                 </div>
                 {{/if}}
-                {{#if has_full_paper}}
-                <div class="tw-flex-col person-page-links">
-                    <a href="#" onclick="toggleFullPaper(); return false;" id="toggle-full-paper-btn">
-                        <span id="toggle-full-paper-text">Full Paper (HTML) (Experimental)</span>
-                        <i class="bi bi-arrow-right" id="toggle-full-paper-icon"></i>
-                    </a>
-                </div>
-                {{/if}}
             </div>
         </div>
-
-        {{#if has_full_paper}}
-        <!-- Full paper view (hidden by default) -->
-        <div id="full-paper-view" class="tw-hidden tw-mt-8">
-            <hr class="tw-my-8" />
-            <div id="paper-loading" class="tw-text-center tw-py-8">
-                <p class="tw-text-gray-600">Loading paper...</p>
-            </div>
-            <div id="paper-content" class="arxiv-paper-content"></div>
-        </div>
-        {{/if}}
 
     </section>
+
+    {{#if has_full_paper}}
+    <!-- Full paper view (hidden by default) -->
+    <section id="full-paper-view" class="tw-hidden tw-w-full tw-flex-col tw-px-[5%] max-lg:tw-px-4">
+        <hr class="tw-my-4" />
+        <div id="paper-loading" class="tw-text-center tw-py-8">
+            <p class="tw-text-gray-600">Loading paper...</p>
+        </div>
+
+        <!-- Mobile navigation toggle -->
+        <button id="mobile-nav-toggle" class="paper-mobile-nav-toggle lg:tw-hidden" onclick="toggleMobileNav()">
+            <i class="bi bi-list"></i>
+            <span>Table of Contents</span>
+        </button>
+
+        <!-- Mobile navigation drawer -->
+        <div id="paper-nav-mobile" class="paper-mobile-nav tw-hidden lg:tw-hidden"
+            onclick="if(event.target === this) toggleMobileNav()">
+            <div class="paper-mobile-nav-content">
+                <div class="paper-mobile-nav-header">
+                    <h3>Table of Contents</h3>
+                    <button onclick="event.stopPropagation(); toggleMobileNav()" class="paper-mobile-nav-close">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+                <nav id="paper-toc-mobile" class="paper-toc-mobile"></nav>
+            </div>
+        </div>
+
+        <!-- Desktop layout with sidebar -->
+        <div class="paper-layout">
+            <!-- Sticky sidebar navigation (desktop only) -->
+            <aside class="paper-sidebar max-lg:tw-hidden">
+                <div class="paper-sidebar-sticky">
+                    <h3 class="paper-sidebar-title">Table of Contents</h3>
+                    <nav id="paper-toc" class="paper-toc"></nav>
+                </div>
+            </aside>
+
+            <!-- Main paper content with max-width -->
+            <div id="paper-content" class="arxiv-paper-content paper-main-content"></div>
+        </div>
+    </section>
+    {{/if}}
 
     {{> footer}}
 </body>

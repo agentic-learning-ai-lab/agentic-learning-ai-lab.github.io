@@ -1,13 +1,14 @@
 /* Styling for LaTeX-generated paper content */
 
 .arxiv-paper-content {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  /* font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;*/
-
-  line-height: 1.6;
+  /* Use serif fonts for body text - elegant and readable for academic content */
+  font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.75;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
+  color: #2c2c2c;
+  font-size: 1.0625rem;
 }
 
 /* Article structure */
@@ -22,69 +23,84 @@
 .arxiv-paper-content h4,
 .arxiv-paper-content h5,
 .arxiv-paper-content h6 {
-  font-weight: 600;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  line-height: 1.3;
+  /* Space Mono - designed to pair with serif text */
+  font-family: "Space Mono", "SF Mono", "Monaco", Consolas, "Courier New", ui-monospace, monospace;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
 }
 
 .arxiv-paper-content h1 {
-  font-size: 2rem;
+  font-size: 2.25rem;
   border-bottom: 2px solid #e5e5e5;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
+  margin-top: 0;
+  font-weight: 700;
 }
 
 .arxiv-paper-content h2 {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   border-bottom: none;
   padding-bottom: 0;
-  font-weight: 400;
-  margin-top: 2.5rem;
+  font-weight: 600;
+  margin-top: 3rem;
 }
 
 /* Section title underline - match paper title style with short underline */
 .arxiv-paper-content .ltx_title_section {
   display: block;
-  font-weight: 400;
+  font-weight: 600;
+}
+
+/* Add scroll margin to sections for comfortable spacing when auto-scrolling */
+.ltx_section {
+  scroll-margin-top: 150px;
 }
 
 .arxiv-paper-content .ltx_title_section::after {
   content: '';
   display: block;
-  width: 30px;
+  width: 40px;
   height: 5px;
-  background-color: #d1d5db;
-  margin-top: 0.1rem;
-  margin-bottom: 0.5rem;
+  background-color: #3b82f6;
+  margin-top: 0.3rem;
+  margin-bottom: 0.75rem;
+  /* border-radius: 2px; */
 }
 
 .arxiv-paper-content h3 {
-  font-size: 1.25rem;
+  font-size: 1.375rem;
+  font-weight: 600;
 }
 
 .arxiv-paper-content h4 {
-  font-size: 1.1rem;
+  font-size: 1rem;
   display: inline;
   font-weight: 600;
   margin-right: 0.5em;
 }
 
-/* Paragraph headings - no new line */
+/* Paragraph headings - no new line, same size as body text */
 .arxiv-paper-content .ltx_title_paragraph {
   display: inline;
   font-weight: 600;
   margin-right: 0.5em;
+  font-size: 1rem;
 }
 
 /* Paragraphs */
 .arxiv-paper-content p {
   margin-bottom: 0;
   text-align: left;
+  font-weight: 400;
 }
 
 /* Paragraph spacing - only add space between different paragraphs */
 .arxiv-paper-content .ltx_para+.ltx_para {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
 }
 
 /* Lists - default block display for proper bullet/numbered lists */
@@ -118,31 +134,38 @@
 .arxiv-paper-content pre,
 .arxiv-paper-content code {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-  background-color: #f5f5f5;
+  background-color: #f8f9fa;
 }
 
 .arxiv-paper-content pre {
-  padding: 1rem;
+  padding: 1.25rem;
   overflow-x: auto;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e2e8f0;
+  line-height: 1.6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .arxiv-paper-content code {
-  padding: 0.2rem 0.4rem;
-  border-radius: 3px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
   font-size: 0.9em;
+  color: #e11d48;
+  background-color: #fef2f2;
+  border: 1px solid #fee2e2;
 }
 
 .arxiv-paper-content pre code {
   padding: 0;
   background-color: transparent;
+  color: inherit;
+  border: none;
 }
 
 /* Figures and images */
 .arxiv-paper-content figure {
-  margin: 2rem 0;
+  margin: 2.5rem 0;
   text-align: center;
 }
 
@@ -151,15 +174,18 @@
   height: auto;
   display: block;
   margin: 0 auto;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .arxiv-paper-content figcaption,
 .arxiv-paper-content .ltx_caption {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  font-size: 0.9375rem;
   color: #666;
   text-align: left;
   font-style: italic;
+  line-height: 1.6;
 }
 
 /* Tables */
@@ -237,34 +263,42 @@
 .arxiv-paper-content .ltx_theorem,
 .arxiv-paper-content .ltx_definition,
 .arxiv-paper-content .ltx_proof {
-  margin: 1.5rem 0;
-  padding: 1rem;
-  background-color: #f9f9f9;
-  border-left: 3px solid #666;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-left: 4px solid #6366f1;
+  border-radius: 4px;
 }
 
 .arxiv-paper-content .ltx_theorem .ltx_title,
 .arxiv-paper-content .ltx_definition .ltx_title {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-family: "Space Mono", "SF Mono", "Monaco", Consolas, "Courier New", ui-monospace, monospace;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
 }
 
 /* Algorithm blocks */
 .arxiv-paper-content .ltx_float_algorithm {
-  margin: 1.5rem 0;
-  padding: 1rem;
-  background-color: #f9f9f9;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   font-size: 0.9em;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .arxiv-paper-content .ltx_float_algorithm .ltx_caption {
-  font-weight: 600;
-  margin-bottom: 0.75rem;
+  font-family: "Space Mono", "SF Mono", "Monaco", Consolas, "Courier New", ui-monospace, monospace;
+  font-weight: 700;
+  margin-bottom: 1rem;
   font-style: normal;
   text-align: left;
   font-size: 1em;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
 }
 
 .arxiv-paper-content .ltx_float_algorithm .ltx_listingblock,
@@ -299,16 +333,19 @@
 
 .arxiv-paper-content .ltx_cite a,
 .arxiv-paper-content .ltx_ref a {
-  color: #0066cc;
+  color: #3b82f6;
   text-decoration: none;
   cursor: pointer;
   pointer-events: auto;
   position: relative;
   z-index: 1;
+  font-weight: 500;
+  transition: color 0.15s ease;
 }
 
 .arxiv-paper-content .ltx_cite a:hover,
 .arxiv-paper-content .ltx_ref a:hover {
+  color: #2563eb;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -357,15 +394,21 @@
 
 /* Abstract */
 .arxiv-paper-content .ltx_abstract {
-  margin: 2rem 0;
-  padding: 1.5rem;
-  background-color: #f9f9f9;
-  border-radius: 4px;
+  margin: 2.5rem 0;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #3b82f6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .arxiv-paper-content .ltx_abstract .ltx_title {
-  font-weight: 600;
+  font-family: "Space Mono", "SF Mono", "Monaco", Consolas, "Courier New", ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 1.125rem;
   margin-bottom: 1rem;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
 }
 
 /* Authors */
@@ -398,28 +441,39 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .arxiv-paper-content {
-    padding: 1rem 0;
+    padding: 0 0;
+    font-size: 1rem;
+    line-height: 1.7;
   }
 
   .arxiv-paper-content h1 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 
   .arxiv-paper-content h2 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
+    margin-top: 2rem;
   }
 
   .arxiv-paper-content h3 {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
   }
 
   .arxiv-paper-content table {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 
   .arxiv-paper-content table th,
   .arxiv-paper-content table td {
     padding: 0.5rem;
+  }
+
+  .arxiv-paper-content .ltx_abstract {
+    padding: 1.5rem;
+  }
+
+  .arxiv-paper-content .ltx_para+.ltx_para {
+    margin-top: 1rem;
   }
 }
 
@@ -433,10 +487,14 @@
 }
 
 .arxiv-paper-content .ltx_title_document {
+  font-family: "Space Mono", "SF Mono", "Monaco", Consolas, "Courier New", ui-monospace, monospace;
   text-align: center;
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  line-height: 1.3;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
 }
 
 /* Numbering - move to left side */
@@ -458,4 +516,356 @@
   margin-bottom: 1rem;
   white-space: pre;
   border: 1px solid #e5e5e5;
+}
+
+/* Paper page metadata styling (outside arxiv-paper-content) */
+/* Style the paper title, authors, and abstract on the main paper page */
+section .text-left.tw-text-4xl {
+  font-family: "Space Mono", "SF Mono", "Monaco", Consolas, "Courier New", ui-monospace, monospace;
+  letter-spacing: -0.02em;
+}
+
+/* Authors paragraph - make more readable */
+section p.tw-mt-4 {
+  font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif;
+  line-height: 1.75;
+  font-size: 1.0625rem;
+  color: #2c2c2c;
+}
+
+/* Abstract paragraph - make more readable with serif font */
+section p.tw-text-gray-600 {
+  font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif;
+  line-height: 1.75;
+  font-size: 1.0625rem;
+  color: #4b5563;
+}
+
+/* Full paper view section - prevent horizontal overflow */
+#full-paper-view {
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  scroll-padding-top: 150px;
+}
+
+/* Full paper view horizontal rule */
+#full-paper-view hr {
+  max-width: 1024px !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  border: none !important;
+  border-top: 1px solid #e5e7eb !important;
+  height: 1px !important;
+  background-color: transparent !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+@media (min-width: 1351px) {
+  #full-paper-view hr {
+    width: 1024px !important;
+  }
+}
+
+/* Paper navigation styles */
+.paper-layout {
+  max-width: 1024px;
+  margin: 0;
+  position: relative;
+  width: 100%; /* Ensure it respects viewport width on mobile */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Floating sidebar on desktop */
+.paper-sidebar {
+  position: fixed;
+  /* Position sidebar to the right of main content
+     Use the smaller of: calculated position OR right edge minus sidebar width
+     This ensures sidebar stays visible even on smaller screens
+  */
+  left: min(calc(5vw + 1024px + 40px), calc(100vw - 240px - 20px));
+  top: 140px;
+  width: 240px;
+  z-index: 10;
+  height: calc(100vh - 160px);
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+}
+
+.paper-sidebar.loaded {
+  opacity: 1;
+}
+
+.paper-sidebar-sticky {
+  background-color: white;
+  border-left: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  height: 100%;
+  overflow-y: scroll;
+  /* Always show scrollbar */
+  /* Show scrollbar - Firefox */
+  scrollbar-width: auto;
+  scrollbar-color: #9ca3af #f3f4f6;
+  /* Ensure this element captures scroll events */
+  pointer-events: auto;
+}
+
+/* Webkit browsers (Chrome, Safari) - always show scrollbar */
+.paper-sidebar-sticky::-webkit-scrollbar {
+  width: 10px;
+  -webkit-appearance: none;
+}
+
+.paper-sidebar-sticky::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 0;
+}
+
+.paper-sidebar-sticky::-webkit-scrollbar-thumb {
+  background-color: #9ca3af;
+  border-radius: 5px;
+  border: 2px solid #f3f4f6;
+}
+
+.paper-sidebar-sticky::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
+
+.paper-sidebar-title {
+  font-family: "Space Mono", "SF Mono", "Monaco", Consolas, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.paper-main-content {
+  max-width: 1024px;
+  min-width: 0;
+}
+
+/* Table of contents list */
+.paper-toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.paper-toc-item {
+  margin-bottom: 0.5rem;
+}
+
+.paper-toc-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #6b7280;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
+  font-family: "Iowan Old Style", "Apple Garamond", Baskerville, serif;
+}
+
+.paper-toc-link:hover {
+  color: #1a1a1a;
+  border-left-color: #d1d5db;
+  background-color: #f9fafb;
+}
+
+.paper-toc-link.active {
+  color: #2563eb;
+  border-left-color: #3b82f6;
+  border-left-width: 3px;
+  background-color: #eff6ff;
+  font-weight: 600;
+  padding-left: calc(0.75rem - 1px);
+}
+
+/* Mobile navigation toggle button - floating icon */
+.paper-mobile-nav-toggle {
+  position: fixed;
+  top: 160px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  display: flex !important; /* Force display, will be hidden by media query on desktop */
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+}
+
+.paper-mobile-nav-toggle:hover {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.paper-mobile-nav-toggle i {
+  font-size: 1.25rem;
+  color: #4b5563;
+  transition: color 0.2s ease;
+}
+
+.paper-mobile-nav-toggle:hover i {
+  color: white;
+}
+
+/* Hide text span on mobile button */
+.paper-mobile-nav-toggle span {
+  display: none;
+}
+
+/* Mobile navigation drawer - slides from right */
+.paper-mobile-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.paper-mobile-nav.tw-hidden {
+  display: none !important;
+}
+
+.paper-mobile-nav-content {
+  width: 85%;
+  max-width: 400px;
+  background-color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.paper-mobile-nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.paper-mobile-nav-header h3 {
+  font-family: "Space Mono", "SF Mono", Monaco, monospace;
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.paper-mobile-nav-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.paper-mobile-nav-close:hover {
+  color: #1a1a1a;
+}
+
+.paper-toc-mobile {
+  background-color: white;
+  padding: 1rem;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+.paper-toc-mobile::-webkit-scrollbar {
+  width: 4px;
+}
+
+.paper-toc-mobile::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.paper-toc-mobile::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 2px;
+}
+
+.paper-toc-mobile::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af;
+}
+
+/* Responsive adjustments for navigation */
+/* Breakpoint calculation:
+   - Sidebar position now uses min() to stay visible
+   - Switch to mobile at 900px for smaller desktop windows
+*/
+@media (min-width: 901px) {
+  .paper-mobile-nav-toggle {
+    display: none !important;
+  }
+
+  .paper-mobile-nav {
+    display: none !important;
+  }
+}
+
+/* On screens between 901px and 1350px, shrink main content to avoid overlap with sidebar */
+@media (min-width: 901px) and (max-width: 1350px) {
+  .paper-layout {
+    max-width: calc(100vw - 10vw - 240px - 60px); /* viewport - padding - sidebar - gaps */
+  }
+
+  .paper-main-content {
+    max-width: 100%;
+  }
+
+  #full-paper-view hr {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .paper-sidebar {
+    display: none;
+  }
+
+  .paper-main-content {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .paper-mobile-nav-toggle {
+    top: 140px;
+    right: 15px;
+  }
 }

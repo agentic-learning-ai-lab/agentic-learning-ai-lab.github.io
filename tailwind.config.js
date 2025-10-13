@@ -15,25 +15,41 @@ module.exports = {
 		extend: {
 			colors: {
 				primary: "#000",
-				secondary: "#fff", 
-			}
+				secondary: "#fff",
+			},
+			fontFamily: {
+				serif: [
+					'"Iowan Old Style"',
+					'"Apple Garamond"',
+					'Baskerville',
+					'"Times New Roman"',
+					'"Droid Serif"',
+					'Times',
+					'"Source Serif Pro"',
+					'serif',
+					'"Apple Color Emoji"',
+					'"Segoe UI Emoji"',
+					'"Segoe UI Symbol"',
+				],
+				mono: [
+					'"Space Mono"',
+					'"SF Mono"',
+					'"Monaco"',
+					'Consolas',
+					'"Courier New"',
+					'ui-monospace',
+					'monospace',
+				],
+			},
+			scale: {
+				'200': '2',
+				'120': '1.2',
+				'110': '1.1',
+			},
 		},
 	},
 	plugins: [
-       addDynamicIconSelectors(),
-    ],
-	theme: {
-	    extend: {
-	        scale: {
-	            '200': '2', // 200% scaling (doubles the size)
-	        },
-	        scale: {
-	            '120': '1.2', // 120% scaling (doubles the size)
-	        },
-	        scale: {
-	            '110': '1.1', // 110% scaling (doubles the size)
-	        },
-	    },
-	},
+		addDynamicIconSelectors(),
+	],
 }
 
