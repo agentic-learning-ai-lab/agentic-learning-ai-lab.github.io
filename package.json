@@ -9,8 +9,10 @@
     "build:tailwind": "cross-env NODE_ENV=production tailwindcss --postcss -i ./css/tailwind.css -o ./css/tailwind-build.css --minify",
     "build:arxiv": "node ./build/build_arxiv_papers.js",
     "build:arxiv:force": "node ./build/build_arxiv_papers.js --force",
+    "build:arxiv:pdf": "node ./build/build_arxiv_papers.js --pdf",
+    "build:pages": "node ./build/build_pages.js",
     "build-in-place": "npm run build",
-    "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && node ./build/generate_search_index.js && npm run build:arxiv && node ./build/build_pages.js"
+    "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && node ./build/generate_search_index.js && npm run build:arxiv && npm run build:pages"
   },
   "keywords": [],
   "author": "Paul, Mengye Ren",

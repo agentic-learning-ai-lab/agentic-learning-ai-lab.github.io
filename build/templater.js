@@ -35,6 +35,14 @@ function doTemplating(input, output) {
             }
             // Set has_full_paper flag if enable_full_paper is specified
             paper.has_full_paper = !!paper.enable_full_paper;
+
+            // Check if local PDF exists
+            const localPdfPath = path.join(__dirname, '..', 'research', paper.permalink, 'paper.pdf');
+            if (fs.existsSync(localPdfPath)) {
+                paper.has_local_pdf = true;
+                paper.local_pdf = `/research/${paper.permalink}/paper.pdf`;
+            }
+
             fs.writeFileSync(output_new, template(paper));
         }
     }
