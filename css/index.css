@@ -320,8 +320,9 @@ header>.collapsible-header {
         left: 5%;
         right: 5%;
         width: 90%;
-        top: 20px;
-        transform: translate(0%, 0%);
+        top: auto;
+        bottom: 20px;
+        transform: none;
     }
 
     /* Reduce line height for large heading on tablets */
@@ -339,8 +340,9 @@ header>.collapsible-header {
         left: 4%;
         right: 4%;
         width: 92%;
-        top: 15px;
-        transform: translate(0%, 0%);
+        top: auto;
+        bottom: 15px;
+        transform: none;
     }
 
     /* Reduce line height for large heading on small screens */
