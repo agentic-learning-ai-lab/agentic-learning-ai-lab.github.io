@@ -89,15 +89,22 @@ for slug in $project_slugs; do
 
                 # Check current status
                 has_theme=$(grep -q "lab-theme.css" index.html && echo "yes" || echo "no")
+                has_header=$(grep -q "agentic learning" index.html && echo "yes" || echo "no")
                 has_attr=$(grep -q "lab-attribution" index.html && echo "yes" || echo "no")
 
                 echo "  Current status:"
+                echo "    - Lab header: $has_header"
                 echo "    - Lab theme CSS: $has_theme"
                 echo "    - Lab attribution: $has_attr"
 
-                if [ "$has_theme" = "no" ]; then
+                needs_update=false
+                if [ "$has_header" = "no" ] || [ "$has_theme" = "no" ] || [ "$has_attr" = "no" ]; then
+                    needs_update=true
+                fi
+
+                if [ "$needs_update" = true ]; then
                     echo ""
-                    echo "  Would add lab theme CSS and attribution..."
+                    echo "  Would update with missing components..."
 
                     if [ "$DRY_RUN" = false ]; then
                         echo "  Applying changes..."
@@ -105,22 +112,43 @@ for slug in $project_slugs; do
                         # Backup
                         cp index.html index.html.backup
 
-                        # Add lab theme CSS
-                        # Find last CSS link and add before it
-                        last_css_line=$(grep -n 'rel="stylesheet"' index.html | grep -v 'lab-theme' | tail -1 | cut -d: -f1)
-                        if [ -n "$last_css_line" ]; then
-                            sed -i '' "${last_css_line}i\\
-  <link rel=\"stylesheet\" href=\"https://agenticlearning.ai/css/lab-theme.css\">
-" index.html
+                        # Add lab header after <body> tag (if not present)
+                        if [ "$has_header" = "no" ]; then
+                            echo "    Adding lab header..."
+                            sed -i '' '/<body>/a\
+\
+<!-- Lab Header -->\
+<div style="background-color: #fff; border-bottom: 1px solid #e5e7eb; padding: 0.5rem 2rem; font-family: '"'"'Space Mono'"'"', monospace;">\
+  <a href="https://agenticlearning.ai/" style="text-decoration: none; color: #000; font-size: 1.5rem; font-weight: 500; display: inline-block; max-width: 120px; line-height: 1.2;">\
+    agentic learning<br>ai lab\
+  </a>\
+</div>\
+
+' index.html
                         fi
 
-                        # Add lab attribution
-                        if grep -q "</footer>" index.html; then
-                            sed -i '' '/<\/footer>/i\
+                        # Add lab theme CSS (if not present)
+                        if [ "$has_theme" = "no" ]; then
+                            echo "    Adding lab theme CSS..."
+                            # Find last CSS link and add before it
+                            last_css_line=$(grep -n 'rel="stylesheet"' index.html | grep -v 'lab-theme' | tail -1 | cut -d: -f1)
+                            if [ -n "$last_css_line" ]; then
+                                sed -i '' "${last_css_line}i\\
+  <link rel=\"stylesheet\" href=\"https://agenticlearning.ai/css/lab-theme.css\">
+" index.html
+                            fi
+                        fi
+
+                        # Add lab attribution (if not present)
+                        if [ "$has_attr" = "no" ]; then
+                            echo "    Adding lab attribution..."
+                            if grep -q "</footer>" index.html; then
+                                sed -i '' '/<\/footer>/i\
           <div class="lab-attribution">\
             Part of the <a href="https://agenticlearning.ai/" target="_blank">Agentic Learning AI Lab</a> at New York University\
           </div>
 ' index.html
+                            fi
                         fi
 
                         # Fix BibTeX section structure to match other sections
@@ -186,6 +214,7 @@ PYTHON_SCRIPT
                             git add index.html
                             git commit -m "Add unified lab theme styling
 
+- Added lab header with logo linking to main site
 - Added lab-theme.css from main lab website
 - Added lab attribution in footer
 - Restructured BibTeX section to match other sections
@@ -201,16 +230,25 @@ PYTHON_SCRIPT
                         fi
                     else
                         # Show what would be added
-                        echo "  [DRY RUN] Would add before last CSS link:"
-                        echo '    <link rel="stylesheet" href="https://agenticlearning.ai/css/lab-theme.css">'
-                        echo ""
-                        echo "  [DRY RUN] Would add before </footer>:"
-                        echo '    <div class="lab-attribution">'
-                        echo '      Part of the <a href="https://agenticlearning.ai/">Agentic Learning AI Lab</a> at NYU'
-                        echo '    </div>'
+                        if [ "$has_header" = "no" ]; then
+                            echo "  [DRY RUN] Would add after <body>:"
+                            echo '    <!-- Lab Header with "agentic learning ai lab" logo -->'
+                            echo ""
+                        fi
+                        if [ "$has_theme" = "no" ]; then
+                            echo "  [DRY RUN] Would add before last CSS link:"
+                            echo '    <link rel="stylesheet" href="https://agenticlearning.ai/css/lab-theme.css">'
+                            echo ""
+                        fi
+                        if [ "$has_attr" = "no" ]; then
+                            echo "  [DRY RUN] Would add before </footer>:"
+                            echo '    <div class="lab-attribution">'
+                            echo '      Part of the <a href="https://agenticlearning.ai/">Agentic Learning AI Lab</a> at NYU'
+                            echo '    </div>'
+                        fi
                     fi
                 else
-                    echo -e "${YELLOW}  ⚠ Already has lab theme, skipping${NC}"
+                    echo -e "${YELLOW}  ⚠ Already has all components, skipping${NC}"
                 fi
             else
                 echo -e "${YELLOW}⚠ Repo exists but no index.html found in any branch${NC}"
