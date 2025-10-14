@@ -1,0 +1,367 @@
+/**
+ * Agentic Learning AI Lab - Unified Theme
+ *
+ * This stylesheet provides unified branding and styling across all lab websites,
+ * including both the main site and project-specific pages.
+ *
+ * Can be included in any project website via:
+ * <link rel="stylesheet" href="https://agenticlearning.ai/css/lab-theme.css">
+ */
+
+/* Import Space Mono font */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  /* Lab Color Palette */
+  --lab-primary-text: #2c2c2c;
+  --lab-secondary-text: #6b7280;
+  --lab-bg: #fff;
+  --lab-bg-subtle: #f3f3f3b4;
+  --lab-border-color: #e5e7eb;
+  --lab-border-hover: rgb(75 85 99);
+  --lab-link-color: #3b82f6;
+  --lab-link-hover: #2563eb;
+
+  /* Lab Typography */
+  --lab-font-mono: "Space Mono", monospace;
+  --lab-font-serif: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif;
+}
+
+/* Typography overrides */
+body {
+  font-family: var(--lab-font-serif) !important;
+  color: var(--lab-primary-text);
+  line-height: 1.75;
+  font-size: 1.0625rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.title {
+  font-family: var(--lab-font-mono) !important;
+  font-weight: 500 !important;
+  color: var(--lab-primary-text);
+}
+
+/* Heading sizes */
+.title.is-1,
+h1.title {
+  font-size: 2.25rem !important;
+  letter-spacing: -0.02em;
+}
+
+.title.is-2,
+h2.title {
+  font-size: 1.75rem !important;
+  font-weight: 600 !important;
+}
+
+/* Add blue underline to h2 section titles */
+.title.is-2::after,
+h2.title::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 5px;
+  background-color: #3b82f6;
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Hide hr elements that come after section titles since we have the blue underline */
+.title.is-2+hr,
+h2.title+hr {
+  display: none;
+}
+
+.title.is-3,
+h3.title {
+  font-size: 1.375rem !important;
+  font-weight: 600 !important;
+}
+
+.title.is-4,
+h4.title {
+  font-size: 1.1rem !important;
+}
+
+.title.is-5,
+h5.title {
+  font-size: 1rem !important;
+}
+
+/* Publication title size - match main site tw-text-4xl */
+.publication-title {
+  font-size: 2.25rem !important;
+  line-height: 1.3 !important;
+  font-family: var(--lab-font-mono) !important;
+  font-weight: 500 !important;
+}
+
+/* Responsive typography - mobile first approach */
+@media (max-width: 640px) {
+
+  /* Mobile: smaller text */
+  body {
+    font-size: 0.95rem !important;
+  }
+
+  .publication-title {
+    font-size: 1.5rem !important;
+  }
+
+  .title.is-2,
+  h2.title {
+    font-size: 1.375rem !important;
+  }
+
+  .title.is-3,
+  h3.title {
+    font-size: 1.125rem !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+
+  /* Tablet: medium text */
+  body {
+    font-size: 1rem !important;
+  }
+
+  .publication-title {
+    font-size: 1.875rem !important;
+  }
+
+  .title.is-2,
+  h2.title {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* Link styling */
+a {
+  color: var(--lab-link-color);
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--lab-link-hover);
+}
+
+/* Author links */
+.publication-authors a,
+.author-block a {
+  color: var(--lab-link-color) !important;
+  text-decoration: none;
+}
+
+.publication-authors a:hover,
+.author-block a:hover {
+  text-decoration: underline;
+  color: var(--lab-link-hover) !important;
+}
+
+/* Button and link styling - match main site person-page-links */
+.button,
+.link-block a,
+a.button {
+  display: inline-block !important;
+  font-family: var(--lab-font-mono) !important;
+  color: black !important;
+  padding: 6px 10px !important;
+  border: 1px solid rgb(209 213 219) !important;
+  border-radius: 0 !important;
+  transition: all 0.2s !important;
+  cursor: pointer;
+  font-size: 0.9rem !important;
+  background-color: transparent !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  margin-right: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.button:hover,
+.link-block a:hover,
+a.button:hover {
+  border-color: rgb(75 85 99) !important;
+  background-color: #f3f3f3b4 !important;
+  color: black !important;
+}
+
+/* Card/Section styling */
+.box,
+.card {
+  border: 2px solid transparent;
+  background-color: var(--lab-bg-subtle);
+  transition: all 0.2s ease;
+}
+
+.box:hover,
+.card:hover {
+  border-color: var(--lab-border-hover);
+}
+
+/* Footer styling */
+.footer {
+  background-color: var(--lab-bg);
+  border-top: 1px solid var(--lab-border-color);
+  font-family: var(--lab-font-mono);
+  font-size: 0.75rem !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 1.5rem !important;
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+}
+
+.footer * {
+  font-size: 0.75rem !important;
+}
+
+/* Make footer content full width instead of 66.67% */
+.footer .column.is-8 {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.footer a {
+  color: var(--lab-primary-text);
+}
+
+.footer a:hover {
+  color: var(--lab-link-hover);
+}
+
+/* Remove extra space after footer */
+body {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Hero section styling */
+.hero {
+  background-color: var(--lab-bg);
+}
+
+.hero.is-light {
+  background-color: var(--lab-bg-subtle);
+}
+
+/* Abstract and description text */
+.abstract,
+.publication-description,
+p {
+  font-family: var(--lab-font-serif) !important;
+  line-height: 1.75 !important;
+  color: var(--lab-primary-text);
+  font-size: 1.0625rem !important;
+}
+
+/* Meta information */
+.publication-authors,
+.publication-venue,
+.is-size-5 {
+  font-family: var(--lab-font-serif) !important;
+  line-height: 1.75 !important;
+  font-size: 1.0625rem !important;
+}
+
+/* Code blocks */
+code,
+pre {
+  font-family: var(--lab-font-mono);
+  background-color: var(--lab-bg-subtle);
+}
+
+/* Table styling */
+table {
+  border-collapse: collapse;
+  font-family: var(--lab-font-serif);
+}
+
+table th {
+  font-family: var(--lab-font-mono);
+  font-weight: 600;
+}
+
+table td,
+table th {
+  border: 1px solid var(--lab-border-color);
+  padding: 0.75rem;
+}
+
+table tr:hover {
+  background-color: var(--lab-bg-subtle);
+}
+
+/* Section spacing */
+section {
+  padding: 3rem 1.5rem !important;
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 2rem 1rem !important;
+  }
+}
+
+/* Image containers */
+.image-container img,
+figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* BibTeX styling */
+.bibtex,
+pre {
+  font-family: var(--lab-font-mono);
+  font-size: 0.875rem;
+  background-color: var(--lab-bg-subtle);
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+pre code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Navbar styling (if present) */
+.navbar {
+  background-color: var(--lab-bg);
+  border-bottom: 1px solid var(--lab-border-color);
+  font-family: var(--lab-font-mono);
+}
+
+.navbar-item:hover {
+  background-color: var(--lab-bg-subtle);
+  color: var(--lab-primary-text);
+}
+
+/* Lab branding footer */
+.lab-attribution {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--lab-border-color);
+  text-align: center;
+  font-family: var(--lab-font-mono);
+  font-size: 0.875rem;
+  color: var(--lab-secondary-text);
+}
+
+.lab-attribution a {
+  color: var(--lab-link-color);
+  text-decoration: none;
+}
+
+.lab-attribution a:hover {
+  text-decoration: underline;
+}
