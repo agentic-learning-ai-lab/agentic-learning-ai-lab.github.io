@@ -45,11 +45,30 @@ function toggleFullPaper() {
 
         // Load paper content if not already loaded
         if (!paperContentLoaded) {
-            loadPaperContent();
+            loadPaperContent().then(() => {
+                // Scroll to introduction after content loads
+                scrollToIntroduction();
+            });
+        } else {
+            // Content already loaded, scroll immediately
+            scrollToIntroduction();
         }
+    }
+}
 
-        // Scroll to the full paper section
-        fullPaperView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+function scrollToIntroduction() {
+    // Try to find the first section (usually introduction)
+    const firstSection = document.querySelector('#paper-content section[id^="S"]');
+
+    if (firstSection) {
+        // Scroll to the first section
+        firstSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        // Fallback: scroll to paper content
+        const paperContent = document.getElementById('paper-content');
+        if (paperContent) {
+            paperContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 }
 
