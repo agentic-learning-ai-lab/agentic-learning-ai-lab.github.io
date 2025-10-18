@@ -33,8 +33,8 @@ const execAsync = promisify(require('child_process').exec);
 // Configuration
 const PAPERS_YAML = path.join(__dirname, '../data/papers.yaml');
 const OUTPUT_DIR = path.join(__dirname, '../research');
-const ARXIV_HTML_BASE = 'https://ar5iv.labs.arxiv.org/html/';
-const ARXIV_ASSETS_BASE = 'https://ar5iv.labs.arxiv.org/html/';
+const ARXIV_HTML_BASE = 'https://arxiv.org/html/';
+const ARXIV_ASSETS_BASE = 'https://arxiv.org/html/';
 
 /**
  * Download HTML from a URL with retry logic
@@ -157,11 +157,28 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
     throw new Error(`Could not extract arXiv ID from ${arxivUrl}`);
   }
 
-  const ar5ivUrl = `${ARXIV_HTML_BASE}${arxivId}`;
+  // Try experimental arXiv first, fall back to ar5iv if it fails
+  let html;
+  let source = 'arxiv-experimental';
+  let useAr5iv = false;
 
   try {
-    // Download the HTML
-    const html = await downloadHtml(ar5ivUrl);
+    const experimentalUrl = `${ARXIV_HTML_BASE}${arxivId}`;
+    html = await downloadHtml(experimentalUrl);
+  } catch (error) {
+    // If experimental arXiv fails, try ar5iv as fallback
+    console.log(`  Experimental arXiv failed, trying ar5iv fallback...`);
+    try {
+      const ar5ivUrl = `https://ar5iv.labs.arxiv.org/html/${arxivId}`;
+      html = await downloadHtml(ar5ivUrl);
+      source = 'ar5iv';
+      useAr5iv = true;
+    } catch (ar5ivError) {
+      throw new Error(`Both experimental arXiv and ar5iv failed: ${error.message}`);
+    }
+  }
+
+  try {
 
     // Extract the main article content
     const articleMatch = html.match(/<article[^>]*class="ltx_document[^"]*"[^>]*>([\s\S]*?)<\/article>/);
@@ -172,7 +189,8 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
 
     let content = articleMatch[1];
 
-    // Remove ar5iv-specific elements we don't want
+    // Remove navigation and other elements we don't want
+    content = content.replace(/<nav[^>]*class="ltx_page_navbar"[^>]*>[\s\S]*?<\/nav>/g, '');
     content = content.replace(/<div[^>]*class="ltx_page_logo"[^>]*>[\s\S]*?<\/div>/g, '');
     content = content.replace(/<footer[^>]*>[\s\S]*?<\/footer>/g, '');
 
@@ -189,15 +207,34 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
     await fs.ensureDir(assetsDir);
 
     // Find all image references
-    const imageRegex = /src="\/html\/(\d{4}\.\d{4,5})\/assets\/([^"]+)"/g;
-    const images = [];
+    // Experimental arXiv uses simple filenames (x1.png), ar5iv uses full paths (/html/.../assets/x.png)
+    let imageRegex, images = [];
     let match;
-    while ((match = imageRegex.exec(content)) !== null) {
-      images.push({
-        arxivId: match[1],
-        filename: match[2],
-        fullMatch: match[0]
-      });
+
+    if (useAr5iv) {
+      // ar5iv format: /html/{arxiv_id}/assets/{filename}
+      imageRegex = /src="\/html\/(\d{4}\.\d{4,5})\/assets\/([^"]+)"/g;
+      while ((match = imageRegex.exec(content)) !== null) {
+        images.push({
+          arxivId: match[1],
+          filename: match[2],
+          fullMatch: match[0]
+        });
+      }
+    } else {
+      // Experimental arXiv format: simple filenames like x1.png
+      // Extract version from base tag or construct it
+      const baseMatch = html.match(/<base\s+href="\/html\/(\d{4}\.\d{4,5}v\d+)\/"/);
+      const versionedId = baseMatch ? baseMatch[1] : `${arxivId}v1`;
+
+      imageRegex = /src="([^"\/]+\.(?:png|jpg|jpeg|gif|svg))"/gi;
+      while ((match = imageRegex.exec(content)) !== null) {
+        images.push({
+          versionedId: versionedId,
+          filename: match[1],
+          fullMatch: match[0]
+        });
+      }
     }
 
     // Download each unique image
@@ -205,7 +242,14 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
     for (const img of images) {
       if (downloadedImages.has(img.filename)) continue;
 
-      const imageUrl = `${ARXIV_ASSETS_BASE}${img.arxivId}/assets/${img.filename}`;
+      // Construct the full image URL based on source
+      let imageUrl;
+      if (useAr5iv) {
+        imageUrl = `https://ar5iv.labs.arxiv.org/html/${img.arxivId}/assets/${img.filename}`;
+      } else {
+        imageUrl = `${ARXIV_ASSETS_BASE}${img.versionedId}/${img.filename}`;
+      }
+
       const localPath = path.join(assetsDir, img.filename);
 
       try {
@@ -219,8 +263,42 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
     }
 
     // Update image paths to point to local assets
-    content = content.replace(/src="\/html\/(\d{4}\.\d{4,5})\/assets\/([^"]+)"/g,
-      'src="./assets/$2"');
+    if (useAr5iv) {
+      content = content.replace(/src="\/html\/\d{4}\.\d{4,5}\/assets\/([^"]+)"/g,
+        'src="./assets/$1"');
+    } else {
+      content = content.replace(/src="([^"\/]+\.(?:png|jpg|jpeg|gif|svg))"/gi,
+        'src="./assets/$1"');
+    }
+
+    // Fix double commas in citations (common in experimental arXiv HTML)
+    content = content.replace(/,,\s*/g, ', ');
+
+    // Convert all arXiv URLs with anchors to relative anchor links
+    // e.g., https://arxiv.org/html/2510.05558v1#bib.bib23 -> #bib.bib23
+    content = content.replace(/href="https:\/\/arxiv\.org\/html\/[^"]*?(#[^"]*)"/g, 'href="$1"');
+
+    // Normalize citation links: move author names outside of <a> tags
+    // Convert: <a>Author et al., Year</a> -> Author et al., <a>Year</a>
+    content = content.replace(/<a class="ltx_ref" href="([^"]*)"[^>]*>([^<,]+,\s*)(\d{4}[a-z]?)(,?\s*)<\/a>/g,
+      '$2<a class="ltx_ref" href="$1" title="">$3</a>$4');
+
+    // Clean up trailing comma-space before closing parenthesis in citations
+    content = content.replace(/,\s+\)/g, ')');
+
+    // Clean up comma-space-semicolon pattern in citations
+    content = content.replace(/,\s+;/g, ';');
+
+    // Clean up double comma pattern in cite blocks (especially in tables)
+    // Pattern: "Author et al.,<span>, </span><a>year</a>" -> "Author et al., <a>year</a>"
+    content = content.replace(/,<span class="ltx_text"[^>]*>,\s*<\/span>/g, ', ');
+
+    // Remove LaTeX table formatting macros that failed to render (like \rowcolor)
+    content = content.replace(/<span class="ltx_ERROR undefined">\\rowcolor<\/span>/g, '');
+    content = content.replace(/<span class="ltx_ERROR undefined">\\[a-zA-Z]+<\/span>/g, '');
+
+    // Remove [HTML]colorcode patterns that appear in table cells (leftover from \rowcolor)
+    content = content.replace(/\[HTML\][a-fA-F0-9]{6}/g, '');
 
     // Extract inline styles if any
     const styleMatch = html.match(/<style[^>]*>([\s\S]*?)<\/style>/gi);
@@ -231,7 +309,7 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
       html: content.trim(),
       css: styles,
       arxiv_id: arxivId,
-      source: 'ar5iv',
+      source: source,
       generated: new Date().toISOString()
     };
 

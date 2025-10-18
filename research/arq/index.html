@@ -72,13 +72,30 @@
         referrerpolicy="no-referrer"
     ></script>
     
-    <script src="/search.js"></script></head>
+    <script src="/search.js"></script>    <!-- ArXiv paper styling -->
+    <link rel="stylesheet" href="/css/arxiv-paper.css" />
+    <!-- MathJax for rendering mathematical equations -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
 
 <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
     <header
         class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-between">
-        <a class="tw-h-[120px] tw-p-[4px] tw-w-[120px] tw-text-2xl tw-font-medium" href="/">
-            agentic learning <br /> ai lab
+        <a class="tw-h-[120px] tw-p-[4px] tw-flex tw-items-center tw-pt-[10px]" href="/">
+            <img src="/assets/images/logos/logo.svg" alt="Agentic Learning AI Lab"
+                style="height: 80px; max-width: 200px; width: auto;">
         </a>
         <div class="collapsible-header animated-collapse max-lg:tw-shadow-md" id="collapsed-header-items">
             <div
@@ -122,7 +139,7 @@
             Local Reinforcement Learning with Action-Conditioned Root Mean Squared Q-Functions
         </h3>
 
-        <div class="tw-my-4 max-md:tw-h-[3px] max-md:tw-w-[40px] tw-h-[5px] tw-w-[60px] tw-bg-gray-300 ">
+        <div class="section-underline tw-my-4">
         </div>
 
         <div class="tw-gap-2 tw-max-w-100">
@@ -140,7 +157,13 @@
             </p>
             <div class="tw-flex tw-mt-8 tw-gap-x-2 tw-gap-y-4 tw-min-w-[100px] tw-flex-wrap">
                 <div class="tw-flex-col person-page-links">
-                    <a href="/research/arq/paper.pdf">
+                    <a href="#" onclick="toggleFullPaper(); return false;" id="toggle-full-paper-btn">
+                        <span id="toggle-full-paper-text">Full Paper (HTML)</span>
+                        <i class="bi bi-arrow-right" id="toggle-full-paper-icon"></i>
+                    </a>
+                </div>
+                <div class="tw-flex-col person-page-links">
+                    <a href="https://arxiv.org/pdf/2510.06649">
                         <span>Full Paper (PDF)</span>
                         <i class="bi bi-arrow-right"></i>
                     </a>
@@ -156,6 +179,47 @@
 
     </section>
 
+    <!-- Full paper view (hidden by default) -->
+    <section id="full-paper-view" class="tw-hidden tw-w-full tw-flex-col tw-px-[5%] max-lg:tw-px-4">
+        <hr class="tw-my-4" />
+        <div id="paper-loading" class="tw-text-center tw-py-8">
+            <p class="tw-text-gray-600">Loading paper...</p>
+        </div>
+
+        <!-- Mobile navigation toggle -->
+        <button id="mobile-nav-toggle" class="paper-mobile-nav-toggle lg:tw-hidden" onclick="toggleMobileNav()">
+            <i class="bi bi-list"></i>
+            <span>Table of Contents</span>
+        </button>
+
+        <!-- Mobile navigation drawer -->
+        <div id="paper-nav-mobile" class="paper-mobile-nav tw-hidden lg:tw-hidden"
+            onclick="if(event.target === this) toggleMobileNav()">
+            <div class="paper-mobile-nav-content">
+                <div class="paper-mobile-nav-header">
+                    <h3>Table of Contents</h3>
+                    <button onclick="event.stopPropagation(); toggleMobileNav()" class="paper-mobile-nav-close">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+                <nav id="paper-toc-mobile" class="paper-toc-mobile"></nav>
+            </div>
+        </div>
+
+        <!-- Desktop layout with sidebar -->
+        <div class="paper-layout">
+            <!-- Sticky sidebar navigation (desktop only) -->
+            <aside class="paper-sidebar max-lg:tw-hidden">
+                <div class="paper-sidebar-sticky">
+                    <h3 class="paper-sidebar-title">Table of Contents</h3>
+                    <nav id="paper-toc" class="paper-toc"></nav>
+                </div>
+            </aside>
+
+            <!-- Main paper content with max-width -->
+            <div id="paper-content" class="arxiv-paper-content paper-main-content"></div>
+        </div>
+    </section>
 
     <hr class="tw-mt-4" />
     <footer class="tw-mt-auto tw-flex tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4  tw-min-h-[100px] tw-w-full tw-place-items-center tw-gap-3 tw-text-black
@@ -182,5 +246,6 @@
         </div>
     </footer></body>
 <script src="/index.js"></script>
+<script src="/paper-view.js"></script>
 
 </html>
