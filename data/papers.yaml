@@ -9,7 +9,7 @@
   pdf: 'https://arxiv.org/pdf/2510.06649'
   webpage: 'https://agenticlearning.ai/arq/'
   permalink: arq
-  enable_full_paper: false
+  enable_full_paper: true
   research_areas:
     - adaptive-agents-and-foundation-models
   date: 2025-10-08T00:00:00.000Z
@@ -31,7 +31,7 @@
   date: 2025-10-07T00:00:00.000Z
   journal: CoRR
   is_recent: true
-  enable_full_paper: false
+  enable_full_paper: true
 - title: 'StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding'
   image: /assets/images/papers/stream_mem.png
   authors:
@@ -265,7 +265,7 @@
   date: 2024-02-01T00:00:00.000Z
   journal: The 46th Annual Meeting of the Cognitive Science Society (CogSci 2024)
   is_recent: false
-  enable_full_paper: true
+  enable_full_paper: false
 - title: Learning and Forgetting Unsafe Examples in Large Language Models
   image: /assets/images/papers/learning_and_forgetting_llm.png
   authors:
