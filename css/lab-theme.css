@@ -60,8 +60,8 @@ h2.title {
   font-weight: 600 !important;
 }
 
-/* Add blue underline to h2 section titles */
-.title.is-2::after,
+/* Blue underline removed for cleaner appearance */
+/* .title.is-2::after,
 h2.title::after {
   content: '';
   display: block;
@@ -70,13 +70,13 @@ h2.title::after {
   background-color: #3b82f6;
   margin-top: 0.5rem;
   margin-bottom: 0.75rem;
-}
+} */
 
-/* Hide hr elements that come after section titles since we have the blue underline */
-.title.is-2+hr,
+/* Show hr elements that come after section titles */
+/* .title.is-2+hr,
 h2.title+hr {
   display: none;
-}
+} */
 
 .title.is-3,
 h3.title {
