@@ -52,6 +52,15 @@
   description: "Yanlai Yang is a PhD student in Computer Science at NYU Courant, advised by Prof. Mengye Ren in the CILVR Lab. Starting Fall 2024, he also works as a Visiting Researcher at Meta. Prior to joining NYU, he got his Bachelor's degree in Computer Science and Applied Math at UC Berkeley. He was a recipient of the Mark D. Weiser Excellence in Computing Scholarship and the Outstanding Student Instructor Award at UC Berkeley."
   google_scholar: "QWd5d1oAAAAJ"
   current: true
+- 
+  name: "Wun Ting Chan"
+  image: "/assets/images/people/wun_ting_chan.jpg"
+  position: "Master Student"
+  webpage: "https://ting.directory"
+  permalink: "wun-ting-chan"
+  description: "Wun Ting Chan is an M.S. student in Computer Science at NYU’s Courant Institute. Her work focuses on test-time adaptation for video generative models. Previously, she worked at Hong Kong’s Laboratory for Artificial Intelligence in Design (AiDLab) on applications of 3D generative models, and she hold a B.S. in Computer Science from The Evergreen State College and a B.F.A. from the Northwest College of Art."
+  google_scholar: ""
+  current: true
 -
   name: "Amelia (Hui) Dai"
   image: "/assets/images/people/amelia_dai.jpg"
@@ -67,7 +76,7 @@
   position: "Master Student"
   webpage: "https://www.linkedin.com/in/xiaoyang-jiang-1979aa28a/"
   permalink: "xavier-jiang"
-  description: ""
+  description: "Xavier is currently a Master’s student in Data Science at New York University. He is interested in Artificial Intelligence and Robotics. He worked on projects related to contrastive learning, vision language models, continual learning, reinforcement learning, and neuromorphic computing (spiking neural networks). He likes gaming, badminton, and rock climbing. He has a cute cat named Frosty."
   google_scholar: ""
   current: true
 -
@@ -80,6 +89,24 @@
   google_scholar: ""
   current: true
 -
+  name: "Dahye Kim"
+  image: "/assets/images/people/dahye_kim.jpg"
+  position: "Master Student"
+  webpage: "https://www.linkedin.com/in/da-hye-kim-574988182/"
+  permalink: "dahye-kim"
+  description: "Dahye is a Master’s student in Computer Science at New York University, advised by Prof. Mengye Ren. Her research interests include multimodal learning and reasoning, as well as computer vision. Prior to NYU, she earned a BS in Computer Science and Quantitative Social Analysis from the Hong Kong University of Science and Technology."
+  google_scholar: ""
+  current: true
+-
+  name: "Anurup Naskar"
+  image: "/assets/images/people/anurup_naskar.jpg"
+  position: "Master Student"
+  webpage: ""
+  permalink: "anurup-naskar"
+  description: "Anurup is a Master’s student in Computer Science at New York University, currently working under the supervision of Prof. Mengye Ren and Ying Wang. His research focuses on multimodal learning, with an emphasis on building and evaluating vision–language systems. Prior to NYU, he completed his undergraduate degree in Computer Science and Engineering at Jadavpur University."
+  google_scholar: "g_yV5gIAAAAJ"
+  current: true
+-
   name: "Arjun Prasad"
   image: "/assets/images/people/arjun_prasad.jpg"
   position: "Master Student"
@@ -90,11 +117,11 @@
   current: true
 -
   name: "Zhenbang Yang"
-  image: "/assets/images/home/forest.jpg"
+  image: "/assets/images/people/zhenbang_yang.jpg"
   position: "Master Student"
-  webpage: ""
+  webpage: "https://www.linkedin.com/in/zhenbang-yang-625b6a2a4/"
   permalink: "zhenbang-yang"
-  description: ""
+  description: "Zhenbang is an M.S. student in Computer Science at NYU Courant. He obtained his Bachelor's degree in Intelligence Science and Technology from Sun Yat-sen University."
   google_scholar: ""
   current: true
 -
@@ -108,11 +135,11 @@
   current: true
 -
   name: "Weizhen Zhou"
-  image: "/assets/images/home/forest.jpg"
+  image: "/assets/images/people/weizhen_zhou.jpg"
   position: "Master Student"
-  webpage: ""
+  webpage: "https://www.linkedin.com/in/weizhen-zhou/"
   permalink: "weizhen-zhou"
-  description: ""
+  description: "Weizhen is an M.S. student in Computer Engineering at NYU Tandon School of Engineering. He obtained his Bachelor's degree in Computer Science from ShanghaiTech University."
   google_scholar: ""
   current: true
 -
