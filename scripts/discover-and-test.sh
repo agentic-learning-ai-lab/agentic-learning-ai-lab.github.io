@@ -2,6 +2,12 @@
 
 # Discover all project websites and test theme application
 # This is a DRY RUN by default - use --apply to actually make changes
+#
+# Usage:
+#   ./discover-and-test.sh                    - Dry run (show what would change)
+#   ./discover-and-test.sh --apply            - Apply changes to repos
+#   ./discover-and-test.sh --force-update     - Dry run with force update
+#   ./discover-and-test.sh --apply --force-update - Apply updates even if components exist
 
 set -e
 
@@ -9,6 +15,11 @@ PAPERS_YAML="data/papers.yaml"
 ORG="agentic-learning-ai-lab"
 WORK_DIR="/tmp/lab-project-test"
 DRY_RUN=true
+FORCE_UPDATE=false
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+LAB_HEADER_FILE="$REPO_ROOT/includes/lab-header.html"
+LAB_ATTRIBUTION_FILE="$REPO_ROOT/includes/lab-attribution.html"
 
 # Colors
 GREEN='\033[0;32m'
@@ -16,12 +27,25 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-if [ "$1" = "--apply" ]; then
-    DRY_RUN=false
+# Parse arguments
+for arg in "$@"; do
+    if [ "$arg" = "--apply" ]; then
+        DRY_RUN=false
+    elif [ "$arg" = "--force-update" ]; then
+        FORCE_UPDATE=true
+    fi
+done
+
+if [ "$DRY_RUN" = false ]; then
     echo -e "${YELLOW}⚠ APPLY MODE - will make actual changes${NC}"
 else
     echo -e "${GREEN}DRY RUN MODE - no changes will be made${NC}"
     echo "Use --apply to actually push changes"
+    echo "Use --force-update to update existing components (useful after changing includes/lab-header.html or includes/lab-attribution.html)"
+fi
+
+if [ "$FORCE_UPDATE" = true ]; then
+    echo -e "${YELLOW}⚠ FORCE UPDATE MODE - will replace existing header/footer with latest versions${NC}"
 fi
 echo ""
 
@@ -89,7 +113,7 @@ for slug in $project_slugs; do
 
                 # Check current status
                 has_theme=$(grep -q "lab-theme.css" index.html && echo "yes" || echo "no")
-                has_header=$(grep -q "agentic learning" index.html && echo "yes" || echo "no")
+                has_header=$(grep -q "agentic learning\|Agentic Learning" index.html && echo "yes" || echo "no")
                 has_attr=$(grep -q "lab-attribution" index.html && echo "yes" || echo "no")
 
                 echo "  Current status:"
@@ -102,6 +126,14 @@ for slug in $project_slugs; do
                     needs_update=true
                 fi
 
+                # Force update if flag is set
+                if [ "$FORCE_UPDATE" = true ]; then
+                    needs_update=true
+                    echo "  Force update enabled - will update components"
+                fi
+
+                echo "  needs_update=$needs_update"
+
                 if [ "$needs_update" = true ]; then
                     echo ""
                     echo "  Would update with missing components..."
@@ -112,19 +144,24 @@ for slug in $project_slugs; do
                         # Backup
                         cp index.html index.html.backup
 
-                        # Add lab header after <body> tag (if not present)
-                        if [ "$has_header" = "no" ]; then
-                            echo "    Adding lab header..."
-                            sed -i '' '/<body>/a\
-\
-<!-- Lab Header -->\
-<div style="background-color: #fff; border-bottom: 1px solid #e5e7eb; padding: 0.5rem 2rem; font-family: '"'"'Space Mono'"'"', monospace;">\
-  <a href="https://agenticlearning.ai/" style="text-decoration: none; color: #000; font-size: 1.5rem; font-weight: 500; display: inline-block; max-width: 120px; line-height: 1.2;">\
-    agentic learning<br>ai lab\
-  </a>\
-</div>\
+                        # Add/Update lab header after <body> tag
+                        if [ "$has_header" = "no" ] || [ "$FORCE_UPDATE" = true ]; then
+                            if [ "$has_header" = "yes" ] && [ "$FORCE_UPDATE" = true ]; then
+                                echo "    Removing old lab header..."
+                                # Remove existing header (between <body> and first section/main content)
+                                # This removes the Lab Header div
+                                sed -i '' '/<!-- Lab Header -->/,/<\/div>/d' index.html
+                            fi
 
-' index.html
+                            echo "    Adding lab header..."
+                            # Read header content from file
+                            HEADER_CONTENT=$(cat "$LAB_HEADER_FILE")
+                            # Create a temporary file with the header content
+                            echo "$HEADER_CONTENT" > /tmp/lab-header-insert.txt
+                            # Insert after <body> tag using awk
+                            awk '/<body>/ {print; system("cat /tmp/lab-header-insert.txt"); print ""; next} 1' index.html > index.html.tmp
+                            mv index.html.tmp index.html
+                            rm /tmp/lab-header-insert.txt
                         fi
 
                         # Add lab theme CSS (if not present)
@@ -139,15 +176,24 @@ for slug in $project_slugs; do
                             fi
                         fi
 
-                        # Add lab attribution (if not present)
-                        if [ "$has_attr" = "no" ]; then
+                        # Add/Update lab attribution (if not present)
+                        if [ "$has_attr" = "no" ] || [ "$FORCE_UPDATE" = true ]; then
+                            if [ "$has_attr" = "yes" ] && [ "$FORCE_UPDATE" = true ]; then
+                                echo "    Removing old lab attribution..."
+                                # Remove existing attribution div
+                                sed -i '' '/<div class="lab-attribution">/,/<\/div>/d' index.html
+                            fi
+
                             echo "    Adding lab attribution..."
                             if grep -q "</footer>" index.html; then
-                                sed -i '' '/<\/footer>/i\
-          <div class="lab-attribution">\
-            Part of the <a href="https://agenticlearning.ai/" target="_blank">Agentic Learning AI Lab</a> at New York University\
-          </div>
-' index.html
+                                # Read attribution content from file
+                                ATTRIBUTION_CONTENT=$(cat "$LAB_ATTRIBUTION_FILE")
+                                # Create a temporary file with the attribution content
+                                echo "$ATTRIBUTION_CONTENT" > /tmp/lab-attribution-insert.txt
+                                # Insert before </footer> tag using awk
+                                awk '/<\/footer>/ {system("cat /tmp/lab-attribution-insert.txt"); print; next} 1' index.html > index.html.tmp
+                                mv index.html.tmp index.html
+                                rm /tmp/lab-attribution-insert.txt
                             fi
                         fi
 
@@ -212,13 +258,25 @@ PYTHON_SCRIPT
 
                             # Commit and push
                             git add index.html
-                            git commit -m "Add unified lab theme styling
 
-- Added lab header with logo linking to main site
+                            # Determine commit message based on what was updated
+                            if [ "$FORCE_UPDATE" = true ]; then
+                                COMMIT_MSG="Update lab theme components
+
+- Updated lab header from agenticlearning.ai
+- Updated lab attribution in footer
+- Maintains existing project styling"
+                            else
+                                COMMIT_MSG="Add unified lab theme styling
+
+- Added lab header from agenticlearning.ai
 - Added lab-theme.css from main lab website
 - Added lab attribution in footer
 - Restructured BibTeX section to match other sections
 - Maintains existing project styling"
+                            fi
+
+                            git commit -m "$COMMIT_MSG"
 
                             echo "  Pushing to origin/$web_branch..."
                             git push origin "$web_branch"
@@ -230,9 +288,14 @@ PYTHON_SCRIPT
                         fi
                     else
                         # Show what would be added
-                        if [ "$has_header" = "no" ]; then
-                            echo "  [DRY RUN] Would add after <body>:"
-                            echo '    <!-- Lab Header with "agentic learning ai lab" logo -->'
+                        if [ "$has_header" = "no" ] || [ "$FORCE_UPDATE" = true ]; then
+                            if [ "$has_header" = "yes" ] && [ "$FORCE_UPDATE" = true ]; then
+                                echo "  [DRY RUN] Would remove old header and replace with:"
+                            else
+                                echo "  [DRY RUN] Would add after <body>:"
+                            fi
+                            echo "    Content from: $LAB_HEADER_FILE"
+                            cat "$LAB_HEADER_FILE" | sed 's/^/    /'
                             echo ""
                         fi
                         if [ "$has_theme" = "no" ]; then
@@ -240,11 +303,15 @@ PYTHON_SCRIPT
                             echo '    <link rel="stylesheet" href="https://agenticlearning.ai/css/lab-theme.css">'
                             echo ""
                         fi
-                        if [ "$has_attr" = "no" ]; then
-                            echo "  [DRY RUN] Would add before </footer>:"
-                            echo '    <div class="lab-attribution">'
-                            echo '      Part of the <a href="https://agenticlearning.ai/">Agentic Learning AI Lab</a> at NYU'
-                            echo '    </div>'
+                        if [ "$has_attr" = "no" ] || [ "$FORCE_UPDATE" = true ]; then
+                            if [ "$has_attr" = "yes" ] && [ "$FORCE_UPDATE" = true ]; then
+                                echo "  [DRY RUN] Would remove old attribution and replace with:"
+                            else
+                                echo "  [DRY RUN] Would add before </footer>:"
+                            fi
+                            echo "    Content from: $LAB_ATTRIBUTION_FILE"
+                            cat "$LAB_ATTRIBUTION_FILE" | sed 's/^/    /'
+                            echo ""
                         fi
                     fi
                 else

@@ -1,6 +1,16 @@
 [
   {
     "type": "paper",
+    "title": "In-Context Clustering with Large Language Models",
+    "authors": "Ying Wang, Mengye Ren, and Andrew Gordon Wilson",
+    "abstract": "In-Context Clustering (ICC) is a flexible LLM-based procedure for clustering data from diverse distributions.",
+    "image": "/assets/images/papers/icc.png",
+    "thumbnail": "/assets/images/thumbnails/icc.png",
+    "url": "/research/icc/",
+    "keywords": "in-context clustering with large language models ying wang mengye ren andrew gordon wilson in-context clustering (icc) is a flexible llm-based procedure for clustering data from diverse distributions. concept-learning-and-abstraction"
+  },
+  {
+    "type": "paper",
     "title": "Local Reinforcement Learning with Action-Conditioned Root Mean Squared Q-Functions",
     "authors": "Frank (Zequan) Wu and Mengye Ren",
     "abstract": "Action-conditioned Root mean squared Q-Functions (ARQ) is a novel backprop-free value estimation method that applies a goodness function and action conditioning for local reinforcement learning.",

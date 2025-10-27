@@ -1,3 +1,21 @@
+- title: In-Context Clustering with Large Language Models
+  image: /assets/images/papers/icc.png
+  authors:
+    - Ying Wang
+    - Mengye Ren
+    - Andrew Gordon Wilson
+  short_abstract: In-Context Clustering (ICC) is a flexible LLM-based procedure for clustering data from diverse distributions.
+  abstract: 'We propose In-Context Clustering (ICC), a flexible LLM-based procedure for clustering data from diverse distributions. Unlike traditional clustering algorithms constrained by predefined similarity measures, ICC flexibly captures complex relationships among inputs through an attention mechanism. We show that pretrained LLMs exhibit impressive zero-shot clustering capabilities on text-encoded numeric data, with attention matrices showing salient cluster patterns. Spectral clustering using attention matrices offers surprisingly competitive performance. We further enhance the clustering capabilities of LLMs on numeric and image data through fine-tuning using the Next Token Prediction (NTP) loss. Moreover, the flexibility of LLM prompting enables text-conditioned image clustering, a capability that classical clustering methods lack. Our work extends in-context learning to an unsupervised setting, showcasing the effectiveness and flexibility of LLMs for clustering.'
+  arxiv: 'https://arxiv.org/abs/2510.08466'
+  pdf: 'https://arxiv.org/pdf/2510.08466'
+  webpage: 'https://agenticlearning.ai/icc/'
+  permalink: icc
+  enable_full_paper: true
+  research_areas:
+    - concept-learning-and-abstraction
+  date: 2025-10-09T00:00:00.000Z
+  journal: CoRR
+  is_recent: true
 - title: Local Reinforcement Learning with Action-Conditioned Root Mean Squared Q-Functions
   image: /assets/images/papers/arq.png
   authors:

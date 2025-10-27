@@ -15,6 +15,7 @@ cp -R contact out/
 cp -R assets out/
 cp -R css out/
 cp -R areas out/
+cp -R includes out/
 
 echo ""
 find out/ -print
