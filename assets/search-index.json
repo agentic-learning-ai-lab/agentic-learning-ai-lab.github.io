@@ -221,6 +221,16 @@
   },
   {
     "type": "person",
+    "title": "Wun Ting Chan",
+    "position": "Master Student",
+    "description": "Wun Ting Chan is an M.S. student in Computer Science at NYU’s Courant Institute. Her work focuses on test-time adaptation for video generative models. Previously, she worked at Hong Kong’s Laboratory for Artificial Intelligence in Design (AiDLab) on applications of 3D generative models, and she hold a B.S. in Computer Science from The Evergreen State College and a B.F.A. from the Northwest College of Art.",
+    "image": "/assets/images/people/wun_ting_chan.jpg",
+    "thumbnail": "/assets/images/thumbnails/wun_ting_chan.jpg",
+    "url": "/people/wun-ting-chan/",
+    "keywords": "wun ting chan master student wun ting chan is an m.s. student in computer science at nyu’s courant institute. her work focuses on test-time adaptation for video generative models. previously, she worked at hong kong’s laboratory for artificial intelligence in design (aidlab) on applications of 3d generative models, and she hold a b.s. in computer science from the evergreen state college and a b.f.a. from the northwest college of art."
+  },
+  {
+    "type": "person",
     "title": "Amelia (Hui) Dai",
     "position": "Master Student",
     "description": "Amelia (Hui) Dai is a PhD student at University of Chicago. She obtained her Master's degree at NYU Center for Data Science, working with Prof. Mengye Ren in the Agentic Learning AI Lab and Prof. Krzysztof J. Geras. Her research interests include understanding LLMs (capabilities and limitations) and AI in healthcare. Recently, her work includes evaluating the generalization ability of LLMs and multi-modal learning for breast cancer detection. Previously, she completed her BS in Statistics at The Chinese University of Hong Kong, Shenzhen. Outside of school, she also does hiphop dancing!",
@@ -233,11 +243,11 @@
     "type": "person",
     "title": "Xavier (Xiaoyang) Jiang",
     "position": "Master Student",
-    "description": "",
+    "description": "Xavier is currently a Master’s student in Data Science at New York University. He is interested in Artificial Intelligence and Robotics. He worked on projects related to contrastive learning, vision language models, continual learning, reinforcement learning, and neuromorphic computing (spiking neural networks). He likes gaming, badminton, and rock climbing. He has a cute cat named Frosty.",
     "image": "/assets/images/people/xavier_jiang.jpg",
     "thumbnail": "/assets/images/thumbnails/xavier_jiang.jpg",
     "url": "/people/xavier-jiang/",
-    "keywords": "xavier (xiaoyang) jiang master student "
+    "keywords": "xavier (xiaoyang) jiang master student xavier is currently a master’s student in data science at new york university. he is interested in artificial intelligence and robotics. he worked on projects related to contrastive learning, vision language models, continual learning, reinforcement learning, and neuromorphic computing (spiking neural networks). he likes gaming, badminton, and rock climbing. he has a cute cat named frosty."
   },
   {
     "type": "person",
@@ -248,6 +258,26 @@
     "thumbnail": "/assets/images/thumbnails/jinran_jin.jpg",
     "url": "/people/jinran-jin/",
     "keywords": "jinran jin master student jinran is a second-year master's student in data science at the courant institute of mathematical sciences at nyu. he received his bs in statistics and data science from the university of california, santa barbara. his research focuses on machine reasoning, particularly self-correction in language models."
+  },
+  {
+    "type": "person",
+    "title": "Dahye Kim",
+    "position": "Master Student",
+    "description": "Dahye is a Master’s student in Computer Science at New York University, advised by Prof. Mengye Ren. Her research interests include multimodal learning and reasoning, as well as computer vision. Prior to NYU, she earned a BS in Computer Science and Quantitative Social Analysis from the Hong Kong University of Science and Technology.",
+    "image": "/assets/images/people/dahye_kim.jpg",
+    "thumbnail": "/assets/images/thumbnails/dahye_kim.jpg",
+    "url": "/people/dahye-kim/",
+    "keywords": "dahye kim master student dahye is a master’s student in computer science at new york university, advised by prof. mengye ren. her research interests include multimodal learning and reasoning, as well as computer vision. prior to nyu, she earned a bs in computer science and quantitative social analysis from the hong kong university of science and technology."
+  },
+  {
+    "type": "person",
+    "title": "Anurup Naskar",
+    "position": "Master Student",
+    "description": "Anurup is a Master’s student in Computer Science at New York University, currently working under the supervision of Prof. Mengye Ren and Ying Wang. His research focuses on multimodal learning, with an emphasis on building and evaluating vision–language systems. Prior to NYU, he completed his undergraduate degree in Computer Science and Engineering at Jadavpur University.",
+    "image": "/assets/images/people/anurup_naskar.jpg",
+    "thumbnail": "/assets/images/thumbnails/anurup_naskar.jpg",
+    "url": "/people/anurup-naskar/",
+    "keywords": "anurup naskar master student anurup is a master’s student in computer science at new york university, currently working under the supervision of prof. mengye ren and ying wang. his research focuses on multimodal learning, with an emphasis on building and evaluating vision–language systems. prior to nyu, he completed his undergraduate degree in computer science and engineering at jadavpur university."
   },
   {
     "type": "person",
@@ -263,11 +293,11 @@
     "type": "person",
     "title": "Zhenbang Yang",
     "position": "Master Student",
-    "description": "",
-    "image": "/assets/images/home/forest.jpg",
-    "thumbnail": "/assets/images/thumbnails/forest.jpg",
+    "description": "Zhenbang is an M.S. student in Computer Science at NYU Courant. He obtained his Bachelor's degree in Intelligence Science and Technology from Sun Yat-sen University.",
+    "image": "/assets/images/people/zhenbang_yang.jpg",
+    "thumbnail": "/assets/images/thumbnails/zhenbang_yang.jpg",
     "url": "/people/zhenbang-yang/",
-    "keywords": "zhenbang yang master student "
+    "keywords": "zhenbang yang master student zhenbang is an m.s. student in computer science at nyu courant. he obtained his bachelor's degree in intelligence science and technology from sun yat-sen university."
   },
   {
     "type": "person",
@@ -283,11 +313,11 @@
     "type": "person",
     "title": "Weizhen Zhou",
     "position": "Master Student",
-    "description": "",
-    "image": "/assets/images/home/forest.jpg",
-    "thumbnail": "/assets/images/thumbnails/forest.jpg",
+    "description": "Weizhen is an M.S. student in Computer Engineering at NYU Tandon School of Engineering. He obtained his Bachelor's degree in Computer Science from ShanghaiTech University.",
+    "image": "/assets/images/people/weizhen_zhou.jpg",
+    "thumbnail": "/assets/images/thumbnails/weizhen_zhou.jpg",
     "url": "/people/weizhen-zhou/",
-    "keywords": "weizhen zhou master student "
+    "keywords": "weizhen zhou master student weizhen is an m.s. student in computer engineering at nyu tandon school of engineering. he obtained his bachelor's degree in computer science from shanghaitech university."
   },
   {
     "type": "person",
