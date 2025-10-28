@@ -132,7 +132,7 @@
     - learning-from-visual-experience
   date: 2025-06-04T00:00:00.000Z
   journal: The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)
-  is_recent: true
+  is_recent: false
   enable_full_paper: true
 - title: 'Memory Storyboard: Leveraging Temporal Segmentation for Streaming Self-Supervised Learning from Egocentric Videos'
   image: /assets/images/papers/memory_storyboard.png
@@ -149,7 +149,7 @@
     - learning-from-visual-experience
   date: 2025-01-21T00:00:00.000Z
   journal: The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)
-  is_recent: true
+  is_recent: false
   enable_full_paper: true
 - title: Are LLMs Prescient? A Continuous Evaluation using Daily News as Oracle
   image: /assets/images/papers/are_llms_prescient.png
@@ -167,7 +167,7 @@
     - adaptive-agents-and-foundation-models
   date: 2024-11-13T00:00:00.000Z
   journal: The 42nd International Conference on Machine Learning (ICML 2025)
-  is_recent: true
+  is_recent: false
   enable_full_paper: true
 - title: 'PooDLe: Pooled and Dense Self-Supervised Learning from Naturalistic Videos'
   image: /assets/images/papers/poodle.webp
@@ -187,7 +187,7 @@
     - learning-from-visual-experience
   date: 2024-08-20T00:00:00.000Z
   journal: The 13th International Conference on Learning Representations (ICLR 2025)
-  is_recent: true
+  is_recent: false
   enable_full_paper: true
 - title: 'ProCreate, Don''t Reproduce! Propulsive Energy Diffusion for Creative Generation'
   image: /assets/images/papers/procreate.png
