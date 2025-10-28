@@ -319,7 +319,7 @@ header>.collapsible-header {
 }
 
 /* Responsive adjustments for text overlay on small screens */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .text-overlay {
         left: 5%;
         right: 5%;
