@@ -156,6 +156,55 @@
   border: 1px solid #fee2e2;
 }
 
+/* Blockquotes - highlighted key questions/statements */
+.arxiv-paper-content blockquote,
+.arxiv-paper-content .ltx_quote {
+  margin: 1.5rem 0;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-left: 4px solid #3b82f6;
+  font-style: italic;
+  color: #334155;
+}
+
+.arxiv-paper-content blockquote p,
+.arxiv-paper-content .ltx_quote p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.arxiv-paper-content blockquote em,
+.arxiv-paper-content .ltx_quote em {
+  font-style: italic;
+}
+
+/* LaTeX font classes */
+.arxiv-paper-content .ltx_font_sansserif {
+  font-family: "Space Mono", "SF Mono", "Monaco", Consolas, "Courier New", ui-monospace, monospace;
+}
+
+.arxiv-paper-content .ltx_font_bold {
+  font-weight: 700;
+}
+
+.arxiv-paper-content .ltx_font_sansserif.ltx_font_bold {
+  font-family: "Space Mono", "SF Mono", "Monaco", Consolas, "Courier New", ui-monospace, monospace;
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Takeaway box heading styling */
+.arxiv-paper-content blockquote .ltx_font_sansserif.ltx_font_bold,
+.arxiv-paper-content .ltx_quote .ltx_font_sansserif.ltx_font_bold {
+  font-family: "Space Mono", "SF Mono", "Monaco", Consolas, "Courier New", ui-monospace, monospace;
+  font-weight: 700;
+  font-style: normal;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  line-height: 1.7;
+}
+
 .arxiv-paper-content pre code {
   padding: 0;
   background-color: transparent;
