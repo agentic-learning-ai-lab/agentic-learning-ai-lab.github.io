@@ -1,3 +1,22 @@
+- title: When Does Verification Pay Off? A Closer Look at LLMs as Solution Verifiers
+  image: /assets/images/papers/llm-verification.png
+  authors:
+    - Jack Lu
+    - Ryan Teehan
+    - Jinran Jin
+    - Mengye Ren
+  short_abstract: Cross-family verification is found to be especially effective, and post-training reduces self-improvement but strengthens cross-family improvement.
+  abstract: 'Large language models (LLMs) can act as both problem solvers and solution verifiers, with verifiers improving solver performance by selecting high-quality answers from a pool of candidates. However, prior studies of solver-verifier interactions have been limited, focusing mainly on self-verification and rarely examining how verifiers judge outputs from models in their own or in another model family. Modern LLMs also undergo extensive post-training, but its effect on verification remains unclear. We present a systematic study across 37 models spanning multiple families, sizes, and base vs. post-trained variants, evaluated on 9 benchmarks covering logical reasoning, structured puzzles, symbolic computation, mathematics, commonsense, factual recall, and domain knowledge. We compare self-verification with verification within the same family and across different families. To support this, we introduce and empirically validate verifier gain, a metric that predicts the performance improvements from test-time verifier-based rejection sampling. We analyze how metrics like verifier gain and false positive rate scale with model size and post-training, and characterize differences in dataset verifiability. Our findings show that cross-family verification is especially effective; post-training reduces self-improvement but strengthens cross-family improvement; and mathematical and logical tasks exhibit the highest inherent verifiability.'
+  arxiv: 'https://arxiv.org/abs/2512.02304'
+  pdf: 'https://arxiv.org/pdf/2512.02304'
+  webpage: 'https://agenticlearning.ai/llm-verification/'
+  permalink: llm-verification
+  enable_full_paper: true
+  research_areas:
+    - adaptive-agents-and-foundation-models
+  date: 2025-12-2T00:00:00.000Z
+  journal: CoRR
+  is_recent: true
 - title: In-Context Clustering with Large Language Models
   image: /assets/images/papers/icc.png
   authors:

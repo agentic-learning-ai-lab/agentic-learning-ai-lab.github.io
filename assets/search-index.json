@@ -1,6 +1,16 @@
 [
   {
     "type": "paper",
+    "title": "When Does Verification Pay Off? A Closer Look at LLMs as Solution Verifiers",
+    "authors": "Jack Lu, Ryan Teehan, Jinran Jin, and Mengye Ren",
+    "abstract": "Cross-family verification is found to be especially effective, and post-training reduces self-improvement but strengthens cross-family improvement.",
+    "image": "/assets/images/papers/llm-verification.png",
+    "thumbnail": "/assets/images/thumbnails/llm-verification.png",
+    "url": "/research/llm-verification/",
+    "keywords": "when does verification pay off? a closer look at llms as solution verifiers jack lu ryan teehan jinran jin mengye ren cross-family verification is found to be especially effective, and post-training reduces self-improvement but strengthens cross-family improvement. adaptive-agents-and-foundation-models"
+  },
+  {
+    "type": "paper",
     "title": "In-Context Clustering with Large Language Models",
     "authors": "Ying Wang, Mengye Ren, and Andrew Gordon Wilson",
     "abstract": "In-Context Clustering (ICC) is a flexible LLM-based procedure for clustering data from diverse distributions.",
