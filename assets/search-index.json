@@ -361,13 +361,23 @@
   },
   {
     "type": "person",
-    "title": "Frank (Zequan) Wu",
+    "title": "Suliang Jin",
     "position": "Visiting Researcher",
-    "description": "Frank (Zequan) Wu is a visiting researcher and an Algorithm Engineer. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning.",
-    "image": "/assets/images/people/frank_wu.jpg",
-    "thumbnail": "/assets/images/thumbnails/frank_wu.jpg",
-    "url": "/people/frank-wu/",
-    "keywords": "frank (zequan) wu visiting researcher frank (zequan) wu is a visiting researcher and an algorithm engineer. he previously graduated with a joint bachelor degree in computer science and mathematics from nyu, where he worked with prof. mengye ren on the forward-forward algorithm. his primary interests lie in exploring new, emerging paradigms to train deep neural networks. recently, his work has focused on localized learning and reinforcement learning."
+    "description": "Suliang Jin is a Master’s student at University of Michigan. He was also an undergraduate there. His prior research work has been leveraging LLM and CoT to automate the assessment on subjective tasks. At NYU, he is conducting research on assessment on LLM creativity.",
+    "image": "/assets/images/people/suliang_jin.jpg",
+    "thumbnail": "/assets/images/thumbnails/suliang_jin.jpg",
+    "url": "/people/suliang-jin/",
+    "keywords": "suliang jin visiting researcher suliang jin is a master’s student at university of michigan. he was also an undergraduate there. his prior research work has been leveraging llm and cot to automate the assessment on subjective tasks. at nyu, he is conducting research on assessment on llm creativity."
+  },
+  {
+    "type": "person",
+    "title": "Isabel Zhou",
+    "position": "Visiting Researcher",
+    "description": "Isabel Zhou is a machine learning researcher with a strong interest in memory systems and architectures. She has prior industry experience building graph neural networks and low rank subspace adaptation of transformers in large language models. Her current work centers on researching creativity in large language models using data attribution methods.",
+    "image": "/assets/images/people/isabel_zhou.jpg",
+    "thumbnail": "/assets/images/thumbnails/isabel_zhou.jpg",
+    "url": "/people/isabel-zhou/",
+    "keywords": "isabel zhou visiting researcher isabel zhou is a machine learning researcher with a strong interest in memory systems and architectures. she has prior industry experience building graph neural networks and low rank subspace adaptation of transformers in large language models. her current work centers on researching creativity in large language models using data attribution methods."
   },
   {
     "type": "person",
@@ -378,6 +388,16 @@
     "thumbnail": "/assets/images/thumbnails/will_wu.jpg",
     "url": "/people/will-wu/",
     "keywords": "will wu undergraduate student will wu is a second-year undergraduate at nyu's stern school of business. he is conducting research under professor mengye ren through the data science research program for undergraduates, focusing on agent research for real-time forecasting markets with guidance from professor ren and amelia dai. beyond his research, will is passionate about robotics, swimming, and board games."
+  },
+  {
+    "type": "person",
+    "title": "Frank (Zequan) Wu",
+    "position": "Visiting Researcher",
+    "description": "Frank (Zequan) Wu is a Master's student at CMU. He was a visiting researcher at NYU and an Algorithm Engineer. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning.",
+    "image": "/assets/images/people/frank_wu.jpg",
+    "thumbnail": "/assets/images/thumbnails/frank_wu.jpg",
+    "url": "/people/frank-wu/",
+    "keywords": "frank (zequan) wu visiting researcher frank (zequan) wu is a master's student at cmu. he was a visiting researcher at nyu and an algorithm engineer. he previously graduated with a joint bachelor degree in computer science and mathematics from nyu, where he worked with prof. mengye ren on the forward-forward algorithm. his primary interests lie in exploring new, emerging paradigms to train deep neural networks. recently, his work has focused on localized learning and reinforcement learning."
   },
   {
     "type": "person",

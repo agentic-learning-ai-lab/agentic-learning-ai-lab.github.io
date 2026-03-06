@@ -114,7 +114,7 @@
   permalink: "arjun-prasad"
   description: "Arjun Parasuram Prasad is a Master’s student in Computer Science at NYU’s Courant Institute, working with Prof. Mengye Ren in the Agentic AI Learning Lab. His research interests include search and ranking, NLP, and developing ML systems. His prior research includes applying ML to problems in software testing and IoT systems. He holds a B.E. in Computer Science from BITS Pilani – Hyderabad Campus."
   google_scholar: ""
-  current: true
+  current: false
 -
   name: "Zhenbang Yang"
   image: "/assets/images/people/zhenbang_yang.jpg"
@@ -160,13 +160,22 @@
   description: "Steven is a visiting researcher and a 4th Year CS Undergraduate from University of Toronto. His current research focuses on pushing the frontiers of in-context learning to enable language models to learn at test-time, touching upon ideas like infinite-context learning and concept learning. Previously, Steven worked on efficient algorithms for neural fields at DGP, UofT and NGai Lab, HKU."
   google_scholar: "2ASNx9AAAAAJ"
   current: true
--
-  name: "Frank (Zequan) Wu"
-  image: "/assets/images/people/frank_wu.jpg"
+- 
+  name: "Suliang Jin"
+  image: "/assets/images/people/suliang_jin.jpg"
   position: "Visiting Researcher"
-  webpage: "https://www.linkedin.com/in/frank-wu-1636911ba/"
-  permalink: "frank-wu"
-  description: "Frank (Zequan) Wu is a visiting researcher and an Algorithm Engineer. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning."
+  webpage: ""
+  permalink: "suliang-jin"
+  description: "Suliang Jin is a Master’s student at University of Michigan. He was also an undergraduate there. His prior research work has been leveraging LLM and CoT to automate the assessment on subjective tasks. At NYU, he is conducting research on assessment on LLM creativity."
+  google_scholar: ""
+  current: true
+- 
+  name: "Isabel Zhou"
+  image: "/assets/images/people/isabel_zhou.jpg"
+  position: "Visiting Researcher"
+  webpage: ""
+  permalink: "isabel-zhou"
+  description: "Isabel Zhou is a machine learning researcher with a strong interest in memory systems and architectures. She has prior industry experience building graph neural networks and low rank subspace adaptation of transformers in large language models. Her current work centers on researching creativity in large language models using data attribution methods."
   google_scholar: ""
   current: true
 -
@@ -178,6 +187,15 @@
   description: "Will Wu is a second-year undergraduate at NYU's Stern School of Business. He is conducting research under Professor Mengye Ren through the Data Science Research Program for Undergraduates, focusing on agent research for real-time forecasting markets with guidance from Professor Ren and Amelia Dai. Beyond his research, Will is passionate about robotics, swimming, and board games."
   google_scholar: ""
   current: true
+-
+  name: "Frank (Zequan) Wu"
+  image: "/assets/images/people/frank_wu.jpg"
+  position: "Visiting Researcher"
+  webpage: "https://www.linkedin.com/in/frank-wu-1636911ba/"
+  permalink: "frank-wu"
+  description: "Frank (Zequan) Wu is a Master's student at CMU. He was a visiting researcher at NYU and an Algorithm Engineer. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning."
+  google_scholar: ""
+  current: false
 -
   name: "Alex N. Wang"
   image: "/assets/images/people/alex_wang.jpg"
