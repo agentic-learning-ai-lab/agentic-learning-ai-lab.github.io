@@ -1,5 +1,49 @@
+- title: Temporal Straightening for Latent Planning
+  image: /assets/images/papers/temporal_straightening.png
+  authors:
+    - Ying Wang
+    - Oumayma Bounou
+    - Gaoyue Zhou
+    - Randall Balestriero
+    - Tim G. J. Rudner
+    - Yann LeCun
+    - Mengye Ren
+  short_abstract: Inspired by the perceptual straightening hypothesis in human vision, we introduce temporal straightening to improve representation learning for latent planning.
+  abstract: 'Learning good representations is essential for latent planning with world models. While pretrained visual encoders produce strong semantic visual features, they are not tailored to planning and contain information irrelevant -- or even detrimental -- to planning. Inspired by the perceptual straightening hypothesis in human visual processing, we introduce temporal straightening to improve representation learning for latent planning. Using a curvature regularizer that encourages locally straightened latent trajectories, we jointly learn an encoder and a predictor. We show that reducing curvature this way makes the Euclidean distance in latent space a better proxy for the geodesic distance and improves the conditioning of the planning objective. We demonstrate empirically that temporal straightening makes gradient-based planning more stable and yields significantly higher success rates across a suite of goal-reaching tasks.'
+  arxiv: 'https://arxiv.org/abs/2603.12231'
+  pdf: 'https://arxiv.org/pdf/2603.12231'
+  webpage: 'https://agenticlearning.ai/temporal-straightening/'
+  permalink: temporal-straightening
+  enable_full_paper: true
+  research_areas:
+    - learning-from-visual-experience
+  date: 2026-3-12T00:00:00.000Z
+  journal: CoRR
+  is_recent: true
+- title: 'MA-EgoQA: Question Answering over Egocentric Videos from Multiple Embodied Agents'
+  image: /assets/images/papers/ma_egoqa.png
+  authors:
+    - Kangsan Kim
+    - Yanlai Yang
+    - Suji Kim
+    - Woongyeong Yeo
+    - Youngwan Lee
+    - Mengye Ren
+    - Sung Ju Hwang
+  short_abstract: We introduce a new benchmark to evaluate multiple embodied AI agents collaborate to answer human queries from their past experiences.
+  abstract: 'As embodied models become powerful, humans will collaborate with multiple embodied AI agents at their workplace or home in the future. To ensure better communication between human users and the multi-agent system, it is crucial to interpret incoming information from agents in parallel and refer to the appropriate context for each query. Existing challenges include effectively compressing and communicating high volumes of individual sensory inputs in the form of video and correctly aggregating multiple egocentric videos to construct system-level memory. In this work, we first formally define a novel problem of understanding multiple long-horizon egocentric videos simultaneously collected from embodied agents. To facilitate research in this direction, we introduce MultiAgent-EgoQA (MA-EgoQA), a benchmark designed to systemically evaluate existing models in our scenario. MA-EgoQA provides 1.7k questions unique to multiple egocentric streams, spanning five categories: social interaction, task coordination, theory-of-mind, temporal reasoning, and environmental interaction. We further propose a simple baseline model for MA-EgoQA named EgoMAS, which leverages shared memory across embodied agents and agent-wise dynamic retrieval. Through comprehensive evaluation across diverse baselines and EgoMAS on MA-EgoQA, we find that current approaches are unable to effectively handle multiple egocentric streams, highlighting the need for future advances in system-level understanding across the agents.'
+  arxiv: 'https://arxiv.org/abs/2603.09827'
+  pdf: 'https://arxiv.org/pdf/2603.09827'
+  webpage: 'https://agenticlearning.ai/ma-egoqa/'
+  permalink: ma-egoqa
+  enable_full_paper: true
+  research_areas:
+    - adaptive-agents-and-foundation-models
+  date: 2026-3-10T00:00:00.000Z
+  journal: CoRR
+  is_recent: true
 - title: When Does Verification Pay Off? A Closer Look at LLMs as Solution Verifiers
-  image: /assets/images/papers/llm-verification.png
+  image: /assets/images/papers/llm_verification.png
   authors:
     - Jack Lu
     - Ryan Teehan

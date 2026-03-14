@@ -222,18 +222,35 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
         });
       }
     } else {
-      // Experimental arXiv format: simple filenames like x1.png
-      // Extract version from base tag or construct it
+      // Experimental arXiv format: filenames like x1.png or paths like 2603.12231v1/x1.png
+      // Extract version from base tag
       const baseMatch = html.match(/<base\s+href="\/html\/(\d{4}\.\d{4,5}v\d+)\/"/);
-      const versionedId = baseMatch ? baseMatch[1] : `${arxivId}v1`;
+      let versionedId = baseMatch ? baseMatch[1] : null;
 
-      imageRegex = /src="([^"\/]+\.(?:png|jpg|jpeg|gif|svg))"/gi;
+      // Match both simple filenames (x1.png) and paths with subdirectories (2603.12231v1/images/foo.png)
+      imageRegex = /src="([^"]+\.(?:png|jpg|jpeg|gif|svg))"/gi;
       while ((match = imageRegex.exec(content)) !== null) {
+        let filename = match[1];
+        // Strip any versioned ID prefix (e.g., "2603.12231v2/x1.png" -> "x1.png")
+        // and detect the version from the path if we don't have it from <base>
+        const versionMatch = filename.match(/^(\d{4}\.\d{4,5}v\d+)\//);
+        if (versionMatch) {
+          if (!versionedId) {
+            versionedId = versionMatch[1];
+          }
+          filename = filename.substring(versionMatch[0].length);
+        }
         images.push({
           versionedId: versionedId,
-          filename: match[1],
+          filename: filename,
+          originalSrc: match[1],
           fullMatch: match[0]
         });
+      }
+
+      // Fallback if no version found anywhere
+      if (!versionedId) {
+        versionedId = `${arxivId}v1`;
       }
     }
 
@@ -267,8 +284,12 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
       content = content.replace(/src="\/html\/\d{4}\.\d{4,5}\/assets\/([^"]+)"/g,
         'src="./assets/$1"');
     } else {
-      content = content.replace(/src="([^"\/]+\.(?:png|jpg|jpeg|gif|svg))"/gi,
-        'src="./assets/$1"');
+      // Replace all image src paths, stripping any versioned ID prefix
+      for (const img of images) {
+        if (img.originalSrc !== `./assets/${img.filename}`) {
+          content = content.split(`src="${img.originalSrc}"`).join(`src="./assets/${img.filename}"`);
+        }
+      }
     }
 
     // Fix double commas in citations (common in experimental arXiv HTML)
@@ -370,15 +391,22 @@ async function downloadAndCompileLatex(arxivUrl, outputPath) {
       throw new Error('Could not find main .tex file');
     }
 
-    // Compile the LaTeX using pdflatex
-    // Run twice to resolve references, suppress output
+    // Compile the LaTeX using pdflatex with bibtex for references
     const latexCmd = `pdflatex -interaction=nonstopmode -halt-on-error "${mainTexFile}" > /dev/null 2>&1`;
+    const bibCmd = `bibtex "${mainTexFile.replace('.tex', '')}" > /dev/null 2>&1`;
 
     try {
+      // Full compilation cycle: pdflatex -> bibtex -> pdflatex -> pdflatex
+      await execAsync(latexCmd, { cwd: tempDir });
+      // Run bibtex if a .bib file exists
+      const bibFiles = (await fs.readdir(tempDir)).filter(f => f.endsWith('.bib'));
+      if (bibFiles.length > 0) {
+        await execAsync(bibCmd, { cwd: tempDir }).catch(() => {});
+      }
       await execAsync(latexCmd, { cwd: tempDir });
       await execAsync(latexCmd, { cwd: tempDir });
     } catch (compileError) {
-      // Try with latexmk as fallback
+      // Try with latexmk as fallback (handles bibtex automatically)
       await execAsync(`latexmk -pdf -interaction=nonstopmode "${mainTexFile}" > /dev/null 2>&1`, { cwd: tempDir });
     }
 

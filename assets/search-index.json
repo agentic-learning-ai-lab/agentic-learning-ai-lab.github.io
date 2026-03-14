@@ -1,11 +1,31 @@
 [
   {
     "type": "paper",
+    "title": "Temporal Straightening for Latent Planning",
+    "authors": "Ying Wang, Oumayma Bounou, Gaoyue Zhou, Randall Balestriero, Tim G. J. Rudner, Yann LeCun, and Mengye Ren",
+    "abstract": "Inspired by the perceptual straightening hypothesis in human vision, we introduce temporal straightening to improve representation learning for latent planning.",
+    "image": "/assets/images/papers/temporal_straightening.png",
+    "thumbnail": "/assets/images/thumbnails/temporal_straightening.png",
+    "url": "/research/temporal-straightening/",
+    "keywords": "temporal straightening for latent planning ying wang oumayma bounou gaoyue zhou randall balestriero tim g. j. rudner yann lecun mengye ren inspired by the perceptual straightening hypothesis in human vision, we introduce temporal straightening to improve representation learning for latent planning. learning-from-visual-experience"
+  },
+  {
+    "type": "paper",
+    "title": "MA-EgoQA: Question Answering over Egocentric Videos from Multiple Embodied Agents",
+    "authors": "Kangsan Kim, Yanlai Yang, Suji Kim, Woongyeong Yeo, Youngwan Lee, Mengye Ren, and Sung Ju Hwang",
+    "abstract": "We introduce a new benchmark to evaluate multiple embodied AI agents collaborate to answer human queries from their past experiences.",
+    "image": "/assets/images/papers/ma_egoqa.png",
+    "thumbnail": "/assets/images/thumbnails/ma_egoqa.png",
+    "url": "/research/ma-egoqa/",
+    "keywords": "ma-egoqa: question answering over egocentric videos from multiple embodied agents kangsan kim yanlai yang suji kim woongyeong yeo youngwan lee mengye ren sung ju hwang we introduce a new benchmark to evaluate multiple embodied ai agents collaborate to answer human queries from their past experiences. adaptive-agents-and-foundation-models"
+  },
+  {
+    "type": "paper",
     "title": "When Does Verification Pay Off? A Closer Look at LLMs as Solution Verifiers",
     "authors": "Jack Lu, Ryan Teehan, Jinran Jin, and Mengye Ren",
     "abstract": "Cross-family verification is found to be especially effective, and post-training reduces self-improvement but strengthens cross-family improvement.",
-    "image": "/assets/images/papers/llm-verification.png",
-    "thumbnail": "/assets/images/thumbnails/llm-verification.png",
+    "image": "/assets/images/papers/llm_verification.png",
+    "thumbnail": "/assets/images/thumbnails/llm_verification.png",
     "url": "/research/llm-verification/",
     "keywords": "when does verification pay off? a closer look at llms as solution verifiers jack lu ryan teehan jinran jin mengye ren cross-family verification is found to be especially effective, and post-training reduces self-improvement but strengthens cross-family improvement. adaptive-agents-and-foundation-models"
   },
