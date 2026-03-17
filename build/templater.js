@@ -49,7 +49,6 @@ function doTemplating(input, output) {
     else if (input == "person.hbs") {
         // Generate individual person
         for (const person of documents.people) {
-            console.log(person.name)
             const output_new = output.replace("{{permalink}}", person.permalink);
             if (!fs.existsSync(path.dirname(output_new))){
                 fs.mkdirSync(path.dirname(output_new), { recursive: true });
@@ -68,7 +67,6 @@ function doTemplating(input, output) {
                 }
             }
             person.papers = papers_;
-            console.log(person.papers);
             fs.writeFileSync(output_new, template(person));
         }
 
@@ -77,23 +75,18 @@ function doTemplating(input, output) {
         // Generate individual research area
         for (const ra of documents.research_areas) {
             const output_new = output.replace("{{permalink}}", ra.permalink);
-            console.log(output_new);
             if (!fs.existsSync(path.dirname(output_new))){
-                console.log(path.dirname(output_new));
                 fs.mkdirSync(path.dirname(output_new), { recursive: true });
             }
             const papers = [];
             for (const p of documents.papers){
                 for (const ra2 of p.research_areas){
-                    console.log(ra2, ra.permalink);
                     if (ra2 === ra.permalink){
                         papers.push(p);
                     }
                 }
             }
             ra.papers = papers;
-            console.log("papers");
-            console.log(papers);
             fs.writeFileSync(output_new, template(ra));
         }
 
@@ -114,7 +107,6 @@ function parseDocuments() {
     const people = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/people.yaml')));
     const people_current = people.filter(x => x.current);
     const people_alumni = people.filter(x => !x.current);
-    console.log(people_alumni);
 
     // Normalize the data
     for (const ra of research_areas) {
@@ -177,7 +169,6 @@ function registerHelpers(handlebars) {
       return moment.utc(date).format(format);
     });
     handlebars.registerHelper('formatAuthors', function (authors) {
-        console.log(authors);
         if (authors.length == 0) {
           return "";
         }
@@ -190,12 +181,13 @@ function registerHelpers(handlebars) {
         }
     });
 
+    // Cache people map for formatAuthorsWithLinks (avoid re-parsing YAML per call)
+    let _peopleMap = null;
     handlebars.registerHelper('formatAuthorsWithLinks', function (authors) {
-        console.log('formatAuthorsWithLinks', authors);
-
-        // Load people data to check for existing pages
-        const peopleData = parseDocuments().people;
-        const peopleMap = new Map(peopleData.map(p => [p.name, p.permalink]));
+        if (!_peopleMap) {
+            const peopleData = parseDocuments().people;
+            _peopleMap = new Map(peopleData.map(p => [p.name, p.permalink]));
+        }
 
         if (!authors || authors.length == 0) {
           return "";
@@ -203,8 +195,8 @@ function registerHelpers(handlebars) {
 
         // Format each author with link if they have a page
         const formattedAuthors = authors.map(author => {
-            if (peopleMap.has(author)) {
-                return `<a href="/people/${peopleMap.get(author)}/">${author}</a>`;
+            if (_peopleMap.has(author)) {
+                return `<a href="/people/${_peopleMap.get(author)}/">${author}</a>`;
             }
             return author;
         });

@@ -3,9 +3,15 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 // Read all data files
-const papers = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/papers.yaml'), 'utf8'));
-const people = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/people.yaml'), 'utf8'));
-const researchAreas = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/research_areas.yaml'), 'utf8'));
+let papers, people, researchAreas;
+try {
+    papers = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/papers.yaml'), 'utf8'));
+    people = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/people.yaml'), 'utf8'));
+    researchAreas = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/research_areas.yaml'), 'utf8'));
+} catch (err) {
+    console.error('Failed to load YAML data files:', err.message);
+    process.exit(1);
+}
 
 // Build search index
 const searchIndex = [];

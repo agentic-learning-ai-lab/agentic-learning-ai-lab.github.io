@@ -13,7 +13,6 @@
     "build:compress": "node ./build/compress_assets.js",
     "build:compress:force": "node ./build/compress_assets.js --force",
     "build:pages": "node ./build/build_pages.js",
-    "build-in-place": "npm run build",
     "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && node ./build/generate_search_index.js && npm run build:arxiv && npm run build:compress && npm run build:pages"
   },
   "keywords": [],
