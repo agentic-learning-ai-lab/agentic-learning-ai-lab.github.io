@@ -1,14 +1,13 @@
 # Git LFS - Paper PDFs
-research/*/paper.pdf filter=lfs diff=lfs merge=lfs -text
+research/**/*.pdf filter=lfs diff=lfs merge=lfs -text
 
 # Git LFS - Paper HTML assets (images from arXiv)
-research/*/assets/** filter=lfs diff=lfs merge=lfs -text
-# Git LFS - Large site images
-assets/images/papers/*.png filter=lfs diff=lfs merge=lfs -text
-assets/images/background/*.png filter=lfs diff=lfs merge=lfs -text
-research/**/*.pdf filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.png filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.jpg filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.gif filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.svg filter=lfs diff=lfs merge=lfs -text
+
+# Git LFS - Large site images
+assets/images/papers/*.png filter=lfs diff=lfs merge=lfs -text
+assets/images/background/*.png filter=lfs diff=lfs merge=lfs -text
