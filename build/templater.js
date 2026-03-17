@@ -31,7 +31,7 @@ function doTemplating(input, output) {
         for (const paper of documents.papers) {
             const output_new = output.replace("{{permalink}}", paper.permalink);
             if (!fs.existsSync(path.dirname(output_new))){
-                fs.mkdirSync(path.dirname(output_new));
+                fs.mkdirSync(path.dirname(output_new), { recursive: true });
             }
             // Set has_full_paper flag if enable_full_paper is specified
             paper.has_full_paper = !!paper.enable_full_paper;
@@ -52,7 +52,7 @@ function doTemplating(input, output) {
             console.log(person.name)
             const output_new = output.replace("{{permalink}}", person.permalink);
             if (!fs.existsSync(path.dirname(output_new))){
-                fs.mkdirSync(path.dirname(output_new));
+                fs.mkdirSync(path.dirname(output_new), { recursive: true });
             }
             var papers_ = [];
             for (const paper of documents.papers) {
@@ -80,7 +80,7 @@ function doTemplating(input, output) {
             console.log(output_new);
             if (!fs.existsSync(path.dirname(output_new))){
                 console.log(path.dirname(output_new));
-                fs.mkdirSync(path.dirname(output_new));
+                fs.mkdirSync(path.dirname(output_new), { recursive: true });
             }
             const papers = [];
             for (const p of documents.papers){
@@ -109,9 +109,9 @@ function compileTemplate(handlebars, input) {
 }
 
 function parseDocuments() {
-    const research_areas = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, '../data/research_areas.yaml')));
-    const papers = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, '../data/papers.yaml')));
-    const people = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname, '../data/people.yaml')));
+    const research_areas = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/research_areas.yaml')));
+    const papers = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/papers.yaml')));
+    const people = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/people.yaml')));
     const people_current = people.filter(x => x.current);
     const people_alumni = people.filter(x => !x.current);
     console.log(people_alumni);

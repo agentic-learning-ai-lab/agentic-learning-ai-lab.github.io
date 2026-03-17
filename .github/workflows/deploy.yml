@@ -37,11 +37,13 @@ jobs:
 
       - name: Prepare output
         run: |
+          set -e
           mkdir -p out
           cp index.html index.js search.js person.js paper-view.js out/
           cp site.webmanifest favicon.ico out/
+          cp research.js out/
           cp -R people out/
-          cp -R research research.js out/
+          cp -R research out/
           cp -R contact out/
           cp -R assets out/
           cp -R css out/
