@@ -435,6 +435,99 @@ async function downloadAndCompileLatex(arxivUrl, outputPath) {
 }
 
 /**
+ * Check if Ghostscript is available
+ */
+async function isGhostscriptAvailable() {
+  try {
+    await execAsync('gs --version');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Compress a PDF using Ghostscript
+ * @param {string} pdfPath - Path to the PDF to compress
+ * @returns {object} { originalSize, compressedSize, skipped }
+ */
+async function compressPdf(pdfPath) {
+  const tempOutput = pdfPath + '.tmp-compressed';
+  try {
+    await execAsync(
+      `gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/prepress ` +
+      `-dNOPAUSE -dQUIET -dBATCH -sOutputFile="${tempOutput}" "${pdfPath}"`
+    );
+    const originalSize = (await fs.stat(pdfPath)).size;
+    const compressedSize = (await fs.stat(tempOutput)).size;
+
+    // Only replace if compression actually helped (>10% reduction)
+    if (compressedSize < originalSize * 0.9) {
+      await fs.move(tempOutput, pdfPath, { overwrite: true });
+      return { originalSize, compressedSize, skipped: false };
+    } else {
+      await fs.remove(tempOutput);
+      return { originalSize, compressedSize: originalSize, skipped: true };
+    }
+  } catch (error) {
+    await fs.remove(tempOutput).catch(() => {});
+    throw error;
+  }
+}
+
+/**
+ * Compress all PDFs in the research directory
+ */
+async function compressAllPdfs(force = false) {
+  const gsAvailable = await isGhostscriptAvailable();
+  if (!gsAvailable) {
+    console.log('\n⚠️  Ghostscript not found, skipping PDF compression');
+    return;
+  }
+
+  console.log('\n🗜️  Compressing PDFs with Ghostscript...\n');
+  let compressed = 0;
+  let skipped = 0;
+
+  const dirs = await fs.readdir(OUTPUT_DIR);
+  for (const dir of dirs) {
+    const pdfPath = path.join(OUTPUT_DIR, dir, 'paper.pdf');
+    if (!await fs.pathExists(pdfPath)) continue;
+
+    // Check marker file for caching
+    const markerPath = pdfPath + '.gs-compressed';
+    if (!force && await fs.pathExists(markerPath)) {
+      const pdfStat = await fs.stat(pdfPath);
+      const markerStat = await fs.stat(markerPath);
+      if (markerStat.mtime >= pdfStat.mtime) {
+        skipped++;
+        continue;
+      }
+    }
+
+    try {
+      const result = await compressPdf(pdfPath);
+      // Touch marker file
+      await fs.ensureFile(markerPath);
+      const now = new Date();
+      await fs.utimes(markerPath, now, now);
+
+      if (!result.skipped) {
+        const saved = ((1 - result.compressedSize / result.originalSize) * 100).toFixed(1);
+        console.log(`  ✅ ${dir}: ${(result.originalSize / 1024 / 1024).toFixed(1)}MB → ${(result.compressedSize / 1024 / 1024).toFixed(1)}MB (${saved}% saved)`);
+        compressed++;
+      } else {
+        skipped++;
+      }
+    } catch (err) {
+      console.warn(`  ⚠️  ${dir}: compression failed: ${err.message}`);
+    }
+  }
+
+  console.log(`\n  PDF compression: ${compressed} compressed, ${skipped} skipped`);
+}
+
+/**
  * Main build function
  * @param {Object} options - Build options
  * @param {boolean} options.force - Force re-download of existing papers
@@ -522,6 +615,11 @@ async function buildPapers(options = {}) {
     }
   }
 
+  // Compress PDFs
+  if (buildPdf) {
+    await compressAllPdfs(force);
+  }
+
   // Print summary
   console.log('\n' + '='.repeat(50));
   console.log('📊 Build Summary');
@@ -563,4 +661,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { buildPapers, downloadArxivHtml, downloadAndCompileLatex };
+module.exports = { buildPapers, downloadArxivHtml, downloadAndCompileLatex, compressAllPdfs };

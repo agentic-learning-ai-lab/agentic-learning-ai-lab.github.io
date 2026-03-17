@@ -4,6 +4,10 @@ out/
 staging/
 other_assets/
 
+# Compression markers
+research/*/assets/.compressed/
+research/*/*.gs-compressed
+
 # LaTeX build artifacts (keep source .tex and images, ignore build files)
 papers-latex/**/paper.html
 papers-latex/**/*.aux
