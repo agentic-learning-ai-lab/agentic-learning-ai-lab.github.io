@@ -1,84 +1,33 @@
 #!/bin/bash
-## Run this from project root
-## Usage:
-##   ./deploy.sh          - Deploy to production (main branch)
-##   ./deploy.sh staging  - Build to staging directory for local testing
+## Build to staging directory for local testing
+## Usage: ./deploy.sh staging
+##
+## Production deployment is handled by GitHub Actions (push to main).
 
-set -e # Exit with nonzero exit code if anything fails
+set -e
 
-SOURCE_BRANCH="dev"
-TARGET_BRANCH="main"
-STAGING_MODE=false
-
-# Check if staging mode
-if [ "$1" = "staging" ]; then
-    STAGING_MODE=true
-    echo "Building for local staging..."
-else
-    echo "Deploying to production..."
+if [ "$1" != "staging" ]; then
+    echo "Production deployment is now handled by GitHub Actions."
+    echo "Push to main branch to deploy."
+    echo ""
+    echo "For local testing:"
+    echo "  ./deploy.sh staging"
+    exit 1
 fi
 
-function doCompile {
-    ./build.sh
-}
+echo "Building for local staging..."
 
-if [ "$STAGING_MODE" = true ]; then
-    # Staging mode: build to local staging directory
+rm -rf staging
+mkdir -p staging
 
-    # Clean staging directory
-    rm -rf staging
-    mkdir -p staging
+./build.sh
 
-    # Run our compile script to out/
-    doCompile
+mv out staging/site
 
-    # Move out/ to staging/
-    mv out staging/site
-
-    echo ""
-    echo "✓ Staging build complete!"
-    echo ""
-    echo "Files in staging/site:"
-    find staging/site -type f | head -20
-    echo "..."
-    echo ""
-    echo "To test locally:"
-    echo "  cd staging/site && python3 -m http.server 8000"
-    echo "  Then open http://localhost:8000"
-    echo ""
-else
-    # Production mode: deploy to GitHub Pages
-
-    # Save some useful information
-    REPO=`git config remote.origin.url`
-    SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
-    SHA=`git rev-parse --verify HEAD`
-
-    # Clone the existing gh-pages for this repo into out/
-    # Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deply)
-    rm -rf out
-    git clone $REPO out
-    cd out
-    git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
-    cd ..
-
-    # Clean out existing contents
-    rm -rf out/**/* || exit 0
-
-    # Run our compile script
-    doCompile
-
-    # Now let's go have some fun with the cloned repo
-    cd out
-
-    # Commit the "changes", i.e. the new version.
-    # The delta will show diffs between new and old versions.
-    git add --all .
-    git commit -m "Deploy to GitHub Pages: ${SHA}"
-
-    # Now that we're all set up, we can push.
-    git push $REPO $TARGET_BRANCH
-
-    echo ""
-    echo "✓ Deployed to GitHub Pages!"
-fi
+echo ""
+echo "Staging build complete!"
+echo ""
+echo "To test locally:"
+echo "  cd staging/site && python3 -m http.server 8000"
+echo "  Then open http://localhost:8000"
+echo ""
