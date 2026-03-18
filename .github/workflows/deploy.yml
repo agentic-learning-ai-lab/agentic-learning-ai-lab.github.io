@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,6 +28,27 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+
+      - name: Cache LaTeX
+        id: cache-texlive
+        uses: actions/cache@v4
+        with:
+          path: |
+            /usr/share/texlive
+            /usr/share/texmf
+            /var/lib/texmf
+          key: texlive-${{ runner.os }}-v1
+
+      - name: Install LaTeX and Ghostscript
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            texlive \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-bibtex-extra \
+            biber \
+            ghostscript
 
       - name: Install dependencies
         run: npm ci

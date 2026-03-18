@@ -13,7 +13,8 @@
     "build:compress": "node ./build/compress_assets.js",
     "build:compress:force": "node ./build/compress_assets.js --force",
     "build:pages": "node ./build/build_pages.js",
-    "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && node ./build/generate_search_index.js && npm run build:arxiv && npm run build:compress && npm run build:pages"
+    "build:favicons": "node ./build/generate_favicons.js",
+    "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && node ./build/generate_search_index.js && npm run build:arxiv:pdf && npm run build:compress && npm run build:pages"
   },
   "keywords": [],
   "author": "Paul, Mengye Ren",
@@ -36,6 +37,7 @@
     "cross-env": "^7.0.3",
     "fs-extra": "^11.2.0",
     "postcss": "^8.4.33",
-    "postcss-simple-vars": "^7.0.1"
+    "postcss-simple-vars": "^7.0.1",
+    "sharp": "^0.33.2"
   }
 }

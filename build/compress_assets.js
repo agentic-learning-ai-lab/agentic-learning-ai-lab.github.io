@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // Compress paper assets (images) downloaded from arXiv.
-// Resizes PNGs and JPGs in research assets to max 1400px width using sips.
+// Resizes PNGs and JPGs in research assets to max 1400px width using sharp.
 // Uses a .compressed marker directory for caching.
 //
 // Usage:
@@ -10,51 +10,40 @@
 
 const fs = require('fs-extra');
 const path = require('path');
-const { exec } = require('child_process');
-const { promisify } = require('util');
-const execAsync = promisify(exec);
+const sharp = require('sharp');
 
 const MAX_WIDTH = 1400;
 const RESEARCH_DIR = path.resolve(__dirname, '../research');
 const MARKER_DIR_NAME = '.compressed';
 
-/**
- * Get image dimensions via sips
- */
-async function getImageWidth(imagePath) {
-  const { stdout } = await execAsync(`sips -g pixelWidth "${imagePath}"`);
-  const match = stdout.match(/pixelWidth: (\d+)/);
-  return match ? parseInt(match[1]) : null;
-}
-
-/**
- * Compress a single image in-place
- */
 async function compressImage(imagePath) {
   const ext = path.extname(imagePath).toLowerCase();
-  const width = await getImageWidth(imagePath);
+  const metadata = await sharp(imagePath).metadata();
+  const width = metadata.width;
 
   if (!width || width <= MAX_WIDTH) {
     return { skipped: true, reason: 'already small' };
   }
 
   const originalSize = (await fs.stat(imagePath)).size;
+  const tempPath = imagePath + '.tmp';
 
-  // Resize to max width, maintaining aspect ratio
-  await execAsync(`sips --resampleWidth ${MAX_WIDTH} "${imagePath}"`);
+  let pipeline = sharp(imagePath)
+    .resize(MAX_WIDTH, null, { withoutEnlargement: true });
 
-  // Set JPEG quality
   if (ext === '.jpg' || ext === '.jpeg') {
-    await execAsync(`sips -s formatOptions 80 "${imagePath}"`);
+    pipeline = pipeline.jpeg({ quality: 80 });
+  } else if (ext === '.png') {
+    pipeline = pipeline.png();
   }
+
+  await pipeline.toFile(tempPath);
+  await fs.move(tempPath, imagePath, { overwrite: true });
 
   const compressedSize = (await fs.stat(imagePath)).size;
   return { originalSize, compressedSize, skipped: false };
 }
 
-/**
- * Process all assets in research directories
- */
 async function compressAllAssets(force = false) {
   console.log('Compressing paper assets...\n');
 
@@ -73,14 +62,12 @@ async function compressAllAssets(force = false) {
 
     const markerDir = path.join(assetsDir, MARKER_DIR_NAME);
 
-    // If force, remove all markers
     if (force && await fs.pathExists(markerDir)) {
       await fs.remove(markerDir);
     }
 
     await fs.ensureDir(markerDir);
 
-    // Find all images recursively
     const images = [];
     async function findImages(searchDir) {
       const entries = await fs.readdir(searchDir, { withFileTypes: true });
@@ -103,11 +90,9 @@ async function compressAllAssets(force = false) {
 
     let dirCompressed = 0;
     for (const imagePath of images) {
-      // Marker path: relative path from assets dir, stored in .compressed/
       const relPath = path.relative(assetsDir, imagePath);
       const markerPath = path.join(markerDir, relPath);
 
-      // Check cache
       if (!force && await fs.pathExists(markerPath)) {
         const imgStat = await fs.stat(imagePath);
         const markerStat = await fs.stat(markerPath);
@@ -119,7 +104,6 @@ async function compressAllAssets(force = false) {
 
       try {
         const result = await compressImage(imagePath);
-        // Create marker (ensure subdirectory exists for nested paths)
         await fs.ensureDir(path.dirname(markerPath));
         await fs.ensureFile(markerPath);
 
@@ -149,7 +133,6 @@ async function compressAllAssets(force = false) {
   }
 }
 
-// Run if executed directly
 if (require.main === module) {
   const args = process.argv.slice(2);
   const force = args.includes('--force') || args.includes('-f');

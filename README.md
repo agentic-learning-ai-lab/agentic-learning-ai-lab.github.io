@@ -11,8 +11,9 @@ Source for [agenticlearning.ai](https://agenticlearning.ai).
 
 - Node.js 20+
 - [Git LFS](https://git-lfs.com/) (PDFs and paper images are stored via LFS)
-- macOS (build scripts use `sips` for image processing)
-- [Ghostscript](https://www.ghostscript.com/) (`brew install ghostscript`) for PDF compression
+- [Ghostscript](https://www.ghostscript.com/) for PDF compression (optional locally — CI handles it)
+
+Image processing uses [sharp](https://sharp.pixelplumbing.com/) (cross-platform, installed via npm).
 
 ## Setup
 
