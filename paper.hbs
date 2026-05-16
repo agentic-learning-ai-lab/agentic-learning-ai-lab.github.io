@@ -77,12 +77,14 @@
                     </a>
                 </div>
                 {{/if}}
+                {{#if has_pdf_link}}
                 <div class="tw-flex-col person-page-links">
                     <a href="{{#if has_local_pdf}}{{{local_pdf}}}{{else}}{{{pdf}}}{{/if}}">
                         <span>Full Paper (PDF)</span>
                         <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
+                {{/if}}
                 {{#if webpage}}
                 <div class="tw-flex-col person-page-links">
                     <a href={{{webpage}}}>

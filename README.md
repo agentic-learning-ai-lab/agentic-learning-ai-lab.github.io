@@ -24,6 +24,12 @@ cd agentic-learning-ai-lab.github.io
 npm install
 ```
 
+## For agents and future contributors
+
+Agent-oriented guidance — pipeline details, code review checklist, public-repo
+secrets policy, paper-onboarding flow — lives in [`CLAUDE.md`](./CLAUDE.md).
+Internal planning docs live under `notes/`.
+
 ## Development
 
 Start Tailwind in watch mode:
