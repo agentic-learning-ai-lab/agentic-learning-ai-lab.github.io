@@ -2,6 +2,10 @@ node_modules/
 *.DS_Store
 out/
 staging/
+.venv/
+
+# Stale output from arxiv_latex_cleaner — see build/clean_latex.js
+research/*/latex_arXiv/
 
 # Compression markers
 research/*/assets/.compressed/

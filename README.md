@@ -22,6 +22,7 @@ git lfs install
 git clone git@github.com:agentic-learning-ai-lab/agentic-learning-ai-lab.github.io.git
 cd agentic-learning-ai-lab.github.io
 npm install
+npm run setup:python   # one-time: creates .venv/ with arxiv_latex_cleaner
 ```
 
 ## For agents and future contributors

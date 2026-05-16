@@ -49,8 +49,31 @@ jobs:
             biber \
             ghostscript
 
+      - name: Install Python build deps (arxiv_latex_cleaner)
+        # Ephemeral runner — system pip is fine; no need for a venv.
+        run: pip install --break-system-packages -r build/requirements.txt
+
       - name: Install dependencies
         run: npm ci
+
+      - name: Verify committed LaTeX sources are clean (defense-in-depth)
+        # No author comments in committed research/*/latex/**/*.tex (excluding
+        # %!TEX magic comments which are functional engine hints). .sty and
+        # .cls are NOT checked: they're typically third-party stylesheets
+        # (conference templates) whose license/header comments are intentional
+        # and legally required; arxiv_latex_cleaner doesn't touch them either.
+        run: |
+          set -e
+          violations=$(find research -path '*/latex/*.tex' -type f \
+            -exec grep -HnE '^[[:space:]]*%' {} \; | grep -vE '^\S+:\S+:[[:space:]]*%[[:space:]]*!TEX' || true)
+          if [ -n "$violations" ]; then
+            echo "❌ Uncleaned LaTeX comments found in committed source:"
+            echo "$violations" | head -30
+            echo
+            echo "Run 'npm run latex:clean -- <slug>' locally and recommit."
+            exit 1
+          fi
+          echo "✅ committed LaTeX sources are clean"
 
       - name: Build site
         run: npm run build

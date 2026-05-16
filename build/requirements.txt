@@ -1,0 +1,7 @@
+# Python deps for the build pipeline.
+#
+# Local install (one-time per clone):
+#   npm run setup:python
+# This creates .venv/ and installs into it. CI installs system-wide on
+# its ephemeral runner (see .github/workflows/deploy.yml).
+arxiv-latex-cleaner>=1.0.11

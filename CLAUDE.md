@@ -211,6 +211,47 @@ will fail. Two ways to handle this:
 Locally, you'll need the relevant engine installed (`tlmgr install xetex` /
 `tlmgr install luatex`).
 
+### Author comments in LaTeX source — stripped automatically
+
+This repo is public; any committed `.tex` is world-readable and
+Google-indexable. Author comments routinely contain TODOs, reviewer
+responses ("R2 said..."), commented-out figures from alternate
+experiments, internal scratch, and funding details that aren't meant for
+public view. We strip them before the source ever enters the working
+tree at its permanent location.
+
+How it happens, by entry path:
+
+- **arXiv fetch.** `ensureLatexSource()` extracts the tarball into
+  `research/<slug>/latex/`, then immediately runs
+  `cleanLatexSource()`, which shells out to
+  [`arxiv_latex_cleaner`](https://github.com/google-research/arxiv-latex-cleaner)
+  with `--keep_bib`. The cleaner strips comment lines + commented-out
+  blocks while preserving `%!TEX` magic comments and other functional
+  patterns. Author sees a one-line summary (`🧹 cleaned ...: stripped N
+  comment lines`) in the build log, then commits the cleaned source.
+
+- **Position paper drop.** Author hand-drops `research/<slug>/latex/`
+  (no arxiv URL). Before committing, run
+  `npm run latex:clean -- <slug>` once. Same cleaner, same flags.
+
+- **Defense in depth.** CI greps every committed
+  `research/**/latex/**/*.tex` for non-magic-comment lines and fails
+  the PR if any are found. (`.sty` / `.cls` files are skipped — they're
+  usually third-party stylesheets whose license/header comments are
+  intentional, and the cleaner leaves them alone too.) Authors who
+  forgot to run the cleaner see the failure with a "run npm run
+  latex:clean and recommit" hint.
+
+Note: cleaning on the CI runner is *not* a privacy guarantee — CI
+doesn't push back to the repo, so cleaning that happens during a CI
+recompile is ephemeral. The guarantee comes from local cleaning + the
+author committing the cleaned tree.
+
+`arxiv_latex_cleaner` is installed via `npm run setup:python` (creates
+`.venv/` locally) or directly via `pip install` in CI. The exact pinned
+dep is in `build/requirements.txt`.
+
 ## Code review and audit checklist (before pushing to dev → main)
 
 Run through this list before opening a PR or merging `dev` → `main`:

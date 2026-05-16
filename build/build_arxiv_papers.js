@@ -426,7 +426,108 @@ async function ensureLatexSource(arxivUrl, latexDir, { force = false } = {}) {
   if (!await findMainTexFile(latexDir)) {
     throw new Error(`No .tex with \\documentclass found in ${latexDir} after extract`);
   }
+
+  // Strip author comments before this source ever gets committed. See
+  // cleanLatexSource() docstring for why.
+  await cleanLatexSource(latexDir);
+
   return latexDir;
+}
+
+/**
+ * Locate the arxiv_latex_cleaner binary.
+ *
+ * Priority: local venv (.venv/bin/arxiv_latex_cleaner) → PATH. Local
+ * developers run `npm run setup:python` once to create the venv; CI
+ * installs system-wide on its ephemeral runner.
+ */
+async function findArxivLatexCleaner() {
+  const venvBin = path.join(__dirname, '..', '.venv/bin/arxiv_latex_cleaner');
+  if (await fs.pathExists(venvBin)) return venvBin;
+  try {
+    await execAsync('arxiv_latex_cleaner --help');
+    return 'arxiv_latex_cleaner';
+  } catch {
+    throw new Error(
+      'arxiv_latex_cleaner not found. Run `npm run setup:python` to install the build venv, ' +
+      'or `pip install arxiv-latex-cleaner` system-wide.'
+    );
+  }
+}
+
+/**
+ * Strip author comments from a LaTeX source tree in place.
+ *
+ * Why: this repo is public, so any committed .tex is world-readable and
+ * indexable. Author comments commonly contain TODOs, reviewer responses,
+ * internal scratch, commented-out figures showing alternate experiments,
+ * and other things that shouldn't be public. We run arxiv_latex_cleaner
+ * (which strips comments + commented-out blocks while preserving %!TEX
+ * magic comments and other functional patterns) before the source ever
+ * enters the working tree at a permanent location.
+ *
+ * Called from inside ensureLatexSource after extraction. For
+ * hand-dropped position-paper source, use the standalone CLI:
+ * `npm run latex:clean -- <slug-or-path>`.
+ *
+ * Idempotent: running on already-cleaned source produces no further
+ * changes.
+ *
+ * @param {string} latexDir - the dir to clean in place
+ * @returns {Promise<{stripped: number}>} stat on what was cleaned
+ */
+async function cleanLatexSource(latexDir) {
+  const cleaner = await findArxivLatexCleaner();
+
+  const parent = path.dirname(latexDir);
+  const base = path.basename(latexDir);
+  const cleanedDir = path.join(parent, `${base}_arXiv`);
+
+  // arxiv_latex_cleaner writes to <input>_arXiv/. Wipe any stale output
+  // from a previous interrupted run before we start.
+  await fs.remove(cleanedDir);
+
+  const preCount = await countCommentLines(latexDir);
+
+  // --keep_bib: don't drop .bib files (we want them committed).
+  // Defaults otherwise: no image resizing, no PDF compression.
+  await execAsync(`"${cleaner}" --keep_bib "${base}"`, { cwd: parent });
+
+  if (!await fs.pathExists(cleanedDir)) {
+    throw new Error(`arxiv_latex_cleaner did not produce ${cleanedDir}`);
+  }
+
+  // Replace the original with the cleaned tree.
+  await fs.remove(latexDir);
+  await fs.move(cleanedDir, latexDir);
+
+  const postCount = await countCommentLines(latexDir);
+  const stripped = preCount - postCount;
+  console.log(`    🧹 cleaned ${path.relative(process.cwd(), latexDir)}: stripped ${stripped} comment lines`);
+  return { stripped };
+}
+
+/**
+ * Count author-comment lines across .tex files in a dir. Only .tex —
+ * arxiv_latex_cleaner doesn't touch .sty/.cls files (they're typically
+ * third-party with intentional license/header comments). Excludes
+ * `%!TEX` / `% !TEX` magic comments (functional engine hints).
+ */
+async function countCommentLines(latexDir) {
+  let count = 0;
+  const entries = await fs.readdir(latexDir, { withFileTypes: true });
+  for (const ent of entries) {
+    const full = path.join(latexDir, ent.name);
+    if (ent.isDirectory()) {
+      count += await countCommentLines(full);
+    } else if (ent.name.endsWith('.tex')) {
+      const content = await fs.readFile(full, 'utf8');
+      for (const line of content.split('\n')) {
+        if (/^\s*%/.test(line) && !/^\s*%\s*!TEX/i.test(line)) count++;
+      }
+    }
+  }
+  return count;
 }
 
 /**
@@ -794,4 +895,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { buildPapers, downloadArxivHtml, ensureLatexSource, compileLatex, compressAllPdfs };
+module.exports = { buildPapers, downloadArxivHtml, ensureLatexSource, compileLatex, cleanLatexSource, compressAllPdfs };
