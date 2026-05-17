@@ -20,6 +20,8 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const crypto = require('crypto');
+const glob = require('glob');
 const { execFile } = require('child_process');
 const { promisify } = require('util');
 const execFileAsync = promisify(execFile);
@@ -27,7 +29,7 @@ const execFileAsync = promisify(execFile);
 const {
   ROOT,
   CDN_BASE,
-  hashFile,
+  HASH_LEN,
   loadManifest,
   saveManifest,
   uploadToR2,
@@ -43,6 +45,46 @@ const TAR_EXCLUDES = [
   '*.cache', '*.spl', 'paper.pdf',
   '__MACOSX', '.DS_Store',
 ];
+
+/**
+ * True if `relPath` (a path relative to the source dir) matches any glob in
+ * TAR_EXCLUDES. Patterns are either `*.ext` (basename suffix) or a literal
+ * basename. Keep this simple — TAR_EXCLUDES is curated.
+ */
+function isExcluded(relPath) {
+  const base = path.basename(relPath);
+  return TAR_EXCLUDES.some(p =>
+    p.startsWith('*.') ? base.endsWith(p.slice(1)) : base === p
+  );
+}
+
+/**
+ * SHA-256 of a source tree's *contents*, independent of tar packaging.
+ *
+ * Why: tar (especially BSD tar on macOS) bakes file mtimes and directory
+ * iteration order into the bytes. A fresh extract from arXiv produces a
+ * tarball whose bytes differ run-to-run even when the source content is
+ * identical, which would falsely diff against the manifest. By hashing
+ * the *contents* (relpath + bytes, sorted) we get a stable identity for
+ * "this tree of files" — same content always yields the same hash.
+ *
+ * The hash becomes the R2 key. The tarball bytes uploaded at that key
+ * are just storage; they don't have to be byte-identical across re-packs.
+ */
+async function hashSourceTree(srcDir) {
+  const files = glob
+    .sync('**/*', { cwd: srcDir, nodir: true, dot: true })
+    .filter(rel => !isExcluded(rel))
+    .sort();
+  const hash = crypto.createHash('sha256');
+  for (const rel of files) {
+    hash.update(rel, 'utf8');
+    hash.update('\0');
+    hash.update(await fs.readFile(path.join(srcDir, rel)));
+    hash.update('\0');
+  }
+  return hash.digest('hex').slice(0, HASH_LEN);
+}
 
 /**
  * Tar a directory into a destination .tar.gz file. Uses BSD/GNU tar's
@@ -69,14 +111,10 @@ async function packOne(slug, { keep = false } = {}) {
   // Clean comments in place. Idempotent — re-cleaning is a no-op.
   await cleanLatexSource(latexDir);
 
-  const tmpDir = path.join(ROOT, '.cache', 'latex-pack');
-  await fs.ensureDir(tmpDir);
-  const tarPath = path.join(tmpDir, `${slug}.tar.gz`);
-  await fs.remove(tarPath); // re-pack may rewrite a stale tarball
-
-  await tarDir(latexDir, tarPath);
-
-  const hash = await hashFile(tarPath);
+  // Hash the tree contents first. If unchanged from what the manifest
+  // already points at, skip tarring + uploading entirely. See
+  // hashSourceTree docstring for why we hash contents (not tar bytes).
+  const hash = await hashSourceTree(latexDir);
   const r2Key = `${hash}/${slug}.tar.gz`;
   const cdnUrl = `${CDN_BASE}/${r2Key}`;
 
@@ -85,16 +123,20 @@ async function packOne(slug, { keep = false } = {}) {
   const alreadyAtSameUrl = manifest[logicalPath] === cdnUrl;
 
   if (alreadyAtSameUrl) {
-    console.log(`   ⤳  ${slug}: tarball hash unchanged (${hash}); skip upload`);
+    console.log(`   ⤳  ${slug}: tree content unchanged (${hash}); skip upload`);
   } else {
+    const tmpDir = path.join(ROOT, '.cache', 'latex-pack');
+    await fs.ensureDir(tmpDir);
+    const tarPath = path.join(tmpDir, `${slug}.tar.gz`);
+    await fs.remove(tarPath);
+    await tarDir(latexDir, tarPath);
     const sizeMb = ((await fs.stat(tarPath)).size / 1024 / 1024).toFixed(2);
     console.log(`   ⬆️  ${slug}: ${sizeMb} MB → ${r2Key}`);
     await uploadToR2(r2Key, tarPath);
     manifest[logicalPath] = cdnUrl;
     await saveManifest(manifest);
+    await fs.remove(tarPath);
   }
-
-  await fs.remove(tarPath);
 
   if (!keep) {
     await fs.remove(latexDir);
