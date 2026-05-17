@@ -14,7 +14,9 @@
     "build:compress:force": "node ./build/compress_assets.js --force",
     "build:pages": "node ./build/build_pages.js",
     "build:favicons": "node ./build/generate_favicons.js",
-    "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && node ./build/generate_search_index.js && npm run build:arxiv:pdf && npm run build:compress && npm run build:pages"
+    "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && node ./build/generate_search_index.js && npm run build:arxiv:pdf && npm run build:compress && npm run build:pages",
+    "setup:python": "python3 -m venv .venv && .venv/bin/pip install --upgrade pip --quiet && .venv/bin/pip install -r build/requirements.txt --quiet",
+    "latex:clean": "node ./build/clean_latex.js"
   },
   "keywords": [],
   "author": "Paul, Mengye Ren",

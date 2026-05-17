@@ -29,6 +29,7 @@ function doTemplating(input, output) {
                 paper.has_local_pdf = true;
                 paper.local_pdf = `/research/${paper.permalink}/paper.pdf`;
             }
+            paper.has_pdf_link = paper.has_local_pdf || !!paper.pdf;
 
             fs.writeFileSync(output_new, template(paper));
         }

@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -18,10 +20,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Checkout without LFS — we'll pull LFS objects from cache below.
+      # Why: a fresh `lfs: true` checkout pulls every LFS blob (~265 MB
+      # today) on every CI run, burning the org's LFS bandwidth quota.
+      # Caching .git/lfs across runs makes the steady-state "no LFS files
+      # changed" case a no-op.
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false
+
+      # Cache key is the hash of every LFS pointer file (the tiny text
+      # stubs left in the working tree when lfs: false). When any
+      # LFS-tracked file changes, its pointer SHA changes, the key shifts,
+      # we miss; otherwise we hit and `git lfs pull` is a no-op.
+      - name: Cache LFS objects
+        id: cache-lfs
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.gitattributes', 'research/**/paper.pdf', 'research/**/assets/**', 'research/**/latex/**', 'assets/images/**') }}
+          restore-keys: |
+            lfs-
+
+      - name: Pull LFS objects
+        run: git lfs pull
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -29,16 +52,12 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Cache LaTeX
-        id: cache-texlive
-        uses: actions/cache@v4
-        with:
-          path: |
-            /usr/share/texlive
-            /usr/share/texmf
-            /var/lib/texmf
-          key: texlive-${{ runner.os }}-v1
-
+      # NOTE: a previous version of this workflow had an actions/cache step
+      # for /usr/share/texlive that did nothing — apt-get install runs
+      # unconditionally and overwrites the cached paths, and the
+      # /usr/bin/latexmk etc. weren't cached. Dropped pending a real fix
+      # (likely: container image with TeX preinstalled, or apt-cache via
+      # /var/cache/apt/archives with a gate).
       - name: Install LaTeX and Ghostscript
         run: |
           sudo apt-get update
@@ -46,17 +65,48 @@ jobs:
             texlive \
             texlive-latex-extra \
             texlive-fonts-recommended \
+            texlive-fonts-extra \
             texlive-bibtex-extra \
+            texlive-xetex \
+            texlive-luatex \
             biber \
             ghostscript
+
+      - name: Install Python build deps (arxiv_latex_cleaner)
+        # Ephemeral runner — system pip is fine; no need for a venv.
+        run: pip install --break-system-packages -r build/requirements.txt
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify committed LaTeX sources are clean (defense-in-depth)
+        # No author comments in committed research/*/latex/**/*.tex (excluding
+        # %!TEX magic comments which are functional engine hints). .sty and
+        # .cls are NOT checked: they're typically third-party stylesheets
+        # (conference templates) whose license/header comments are intentional
+        # and legally required; arxiv_latex_cleaner doesn't touch them either.
+        run: |
+          set -e
+          violations=$(find research -path '*/latex/*.tex' -type f \
+            -exec grep -HnE '^[[:space:]]*%' {} \; | grep -vE '^\S+:\S+:[[:space:]]*%[[:space:]]*!TEX' || true)
+          if [ -n "$violations" ]; then
+            echo "❌ Uncleaned LaTeX comments found in committed source:"
+            echo "$violations" | head -30
+            echo
+            echo "Run 'npm run latex:clean -- <slug>' locally and recommit."
+            exit 1
+          fi
+          echo "✅ committed LaTeX sources are clean"
+
       - name: Build site
         run: npm run build
 
+      # The remaining steps assemble + upload the Pages artifact for the
+      # actual deploy. PR builds skip them — we only want PR runs to
+      # verify the build succeeds (registers the `build` status check)
+      # without pushing anything live.
       - name: Prepare output
+        if: github.event_name != 'pull_request'
         run: |
           set -e
           mkdir -p out
@@ -72,11 +122,13 @@ jobs:
           cp -R includes out/
 
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: out
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:

@@ -22,7 +22,14 @@ git lfs install
 git clone git@github.com:agentic-learning-ai-lab/agentic-learning-ai-lab.github.io.git
 cd agentic-learning-ai-lab.github.io
 npm install
+npm run setup:python   # one-time: creates .venv/ with arxiv_latex_cleaner
 ```
+
+## For agents and future contributors
+
+Agent-oriented guidance — pipeline details, code review checklist, public-repo
+secrets policy, paper-onboarding flow — lives in [`CLAUDE.md`](./CLAUDE.md).
+Internal planning docs live under `notes/`.
 
 ## Development
 

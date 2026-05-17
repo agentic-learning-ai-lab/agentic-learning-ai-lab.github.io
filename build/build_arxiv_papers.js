@@ -347,91 +347,307 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
 }
 
 /**
- * Download and compile LaTeX source from arXiv
- * @param {string} arxivUrl - arXiv URL or ID
- * @param {string} outputPath - Where to save the compiled PDF
+ * Find the main .tex file in a directory (one with \documentclass).
+ * Prefers main.tex or ms.tex by convention.
  */
-async function downloadAndCompileLatex(arxivUrl, outputPath) {
-  const arxivId = extractArxivId(arxivUrl);
+async function findMainTexFile(latexDir) {
+  const files = await fs.readdir(latexDir);
+  const preferred = files.find(f => f === 'main.tex' || f === 'ms.tex');
+  if (preferred) return preferred;
 
+  for (const file of files.filter(f => f.endsWith('.tex'))) {
+    const content = await fs.readFile(path.join(latexDir, file), 'utf8');
+    if (content.includes('\\documentclass')) {
+      return file;
+    }
+  }
+  return null;
+}
+
+/**
+ * Ensure LaTeX source exists at latexDir. Idempotent: if the directory is
+ * already populated with a .tex containing \documentclass, returns immediately.
+ *
+ * If absent and `arxivUrl` is set, fetches https://arxiv.org/e-print/<id>
+ * and extracts into latexDir. If absent and no arxivUrl, returns null
+ * (position-paper case — author must drop source in by hand).
+ *
+ * @param {string|null} arxivUrl
+ * @param {string} latexDir - Persistent location, e.g. research/<slug>/latex
+ * @param {object} options - { force: re-fetch even if source exists }
+ * @returns {Promise<string|null>} latexDir, or null if no source available
+ */
+async function ensureLatexSource(arxivUrl, latexDir, { force = false } = {}) {
+  const sourcePresent = await fs.pathExists(latexDir) && await findMainTexFile(latexDir);
+
+  if (sourcePresent && !force) {
+    return latexDir;
+  }
+  if (sourcePresent && force && !arxivUrl) {
+    // Force flag can only re-fetch when we have a URL; for hand-dropped
+    // position-paper source, keep what's there.
+    return latexDir;
+  }
+  if (!arxivUrl) {
+    return null;
+  }
+
+  const arxivId = extractArxivId(arxivUrl);
   if (!arxivId) {
     throw new Error(`Could not extract arXiv ID from ${arxivUrl}`);
   }
 
-  // arXiv source is available at https://arxiv.org/e-print/{arxiv_id}
-  const sourceUrl = `https://arxiv.org/e-print/${arxivId}`;
-  const tempDir = path.join(require('os').tmpdir(), `arxiv_${arxivId}_${Date.now()}`);
-  const tarPath = path.join(tempDir, 'source.tar.gz');
+  await fs.ensureDir(latexDir);
+  const tarPath = path.join(latexDir, 'source.tar.gz');
+
+  console.log(`    fetching LaTeX source from arxiv.org/e-print/${arxivId}`);
+  await downloadFile(`https://arxiv.org/e-print/${arxivId}`, tarPath);
 
   try {
-    await fs.ensureDir(tempDir);
-
-    // Download the source tarball
-    await downloadFile(sourceUrl, tarPath);
-
-    // Extract the tarball
-    await execAsync(`tar -xzf source.tar.gz`, { cwd: tempDir });
-
-    // Find the main .tex file
-    const files = await fs.readdir(tempDir);
-    let mainTexFile = files.find(f => f === 'main.tex' || f === 'ms.tex');
-
-    if (!mainTexFile) {
-      // Look for any .tex file that contains \documentclass
-      for (const file of files.filter(f => f.endsWith('.tex'))) {
-        const content = await fs.readFile(path.join(tempDir, file), 'utf8');
-        if (content.includes('\\documentclass')) {
-          mainTexFile = file;
-          break;
-        }
-      }
-    }
-
-    if (!mainTexFile) {
-      throw new Error('Could not find main .tex file');
-    }
-
-    // Compile the LaTeX using pdflatex with bibtex for references
-    const latexCmd = `pdflatex -interaction=nonstopmode -halt-on-error "${mainTexFile}" > /dev/null 2>&1`;
-    const bibCmd = `bibtex "${mainTexFile.replace('.tex', '')}" > /dev/null 2>&1`;
-
-    try {
-      // Full compilation cycle: pdflatex -> bibtex -> pdflatex -> pdflatex
-      await execAsync(latexCmd, { cwd: tempDir });
-      // Run bibtex if a .bib file exists
-      const bibFiles = (await fs.readdir(tempDir)).filter(f => f.endsWith('.bib'));
-      if (bibFiles.length > 0) {
-        await execAsync(bibCmd, { cwd: tempDir }).catch(() => {});
-      }
-      await execAsync(latexCmd, { cwd: tempDir });
-      await execAsync(latexCmd, { cwd: tempDir });
-    } catch (compileError) {
-      // Try with latexmk as fallback (handles bibtex automatically)
-      await execAsync(`latexmk -pdf -interaction=nonstopmode "${mainTexFile}" > /dev/null 2>&1`, { cwd: tempDir });
-    }
-
-    // Copy the PDF to the output location
-    const pdfFile = mainTexFile.replace('.tex', '.pdf');
-    const pdfPath = path.join(tempDir, pdfFile);
-
-    if (await fs.pathExists(pdfPath)) {
-      await fs.ensureDir(path.dirname(outputPath));
-      await fs.copy(pdfPath, outputPath);
+    // arXiv e-prints are usually gzipped tar, occasionally plain tar,
+    // rarely a single .tex, and occasionally a PDF-only submission.
+    const fileType = await execAsync(`file "${tarPath}"`);
+    const fileInfo = fileType.stdout;
+    if (fileInfo.includes('gzip') || fileInfo.includes('tar archive')) {
+      const flag = fileInfo.includes('gzip') ? '-xzf' : '-xf';
+      await execAsync(`tar ${flag} "${path.basename(tarPath)}"`, { cwd: latexDir });
+    } else if (fileInfo.includes('LaTeX') || fileInfo.includes('ASCII') || fileInfo.includes('Unicode text')) {
+      await fs.move(tarPath, path.join(latexDir, 'main.tex'), { overwrite: true });
+      return latexDir; // findMainTexFile will succeed on the renamed file
     } else {
-      throw new Error('PDF file was not generated');
+      throw new Error(`Unexpected e-print payload for ${arxivId}: ${fileInfo.trim()}`);
     }
-
-  } catch (error) {
-    console.error(`Failed to compile LaTeX: ${error.message}`);
-    throw error;
   } finally {
-    // Clean up temporary directory
-    try {
-      await fs.remove(tempDir);
-    } catch (cleanupError) {
-      console.warn(`Warning: Failed to clean up temp directory: ${cleanupError.message}`);
+    // Drop the tarball whether extract succeeded or threw; a stale tarball
+    // would otherwise leave the dir in a half-populated state next run.
+    await fs.remove(tarPath).catch(() => {});
+  }
+
+  if (!await findMainTexFile(latexDir)) {
+    throw new Error(`No .tex with \\documentclass found in ${latexDir} after extract`);
+  }
+
+  // Strip author comments before this source ever gets committed. See
+  // cleanLatexSource() docstring for why.
+  await cleanLatexSource(latexDir);
+
+  return latexDir;
+}
+
+/**
+ * Locate the arxiv_latex_cleaner binary.
+ *
+ * Priority: local venv (.venv/bin/arxiv_latex_cleaner) → PATH. Local
+ * developers run `npm run setup:python` once to create the venv; CI
+ * installs system-wide on its ephemeral runner.
+ */
+async function findArxivLatexCleaner() {
+  const venvBin = path.join(__dirname, '..', '.venv/bin/arxiv_latex_cleaner');
+  if (await fs.pathExists(venvBin)) return venvBin;
+  try {
+    await execAsync('arxiv_latex_cleaner --help');
+    return 'arxiv_latex_cleaner';
+  } catch {
+    throw new Error(
+      'arxiv_latex_cleaner not found. Run `npm run setup:python` to install the build venv, ' +
+      'or `pip install arxiv-latex-cleaner` system-wide.'
+    );
+  }
+}
+
+/**
+ * Strip author comments from a LaTeX source tree in place.
+ *
+ * Why: this repo is public, so any committed .tex is world-readable and
+ * indexable. Author comments commonly contain TODOs, reviewer responses,
+ * internal scratch, commented-out figures showing alternate experiments,
+ * and other things that shouldn't be public. We run arxiv_latex_cleaner
+ * (which strips comments + commented-out blocks while preserving %!TEX
+ * magic comments and other functional patterns) before the source ever
+ * enters the working tree at a permanent location.
+ *
+ * Called from inside ensureLatexSource after extraction. For
+ * hand-dropped position-paper source, use the standalone CLI:
+ * `npm run latex:clean -- <slug-or-path>`.
+ *
+ * Idempotent: running on already-cleaned source produces no further
+ * changes.
+ *
+ * @param {string} latexDir - the dir to clean in place
+ * @returns {Promise<{stripped: number}>} stat on what was cleaned
+ */
+async function cleanLatexSource(latexDir) {
+  const cleaner = await findArxivLatexCleaner();
+
+  const parent = path.dirname(latexDir);
+  const base = path.basename(latexDir);
+  const cleanedDir = path.join(parent, `${base}_arXiv`);
+
+  // arxiv_latex_cleaner writes to <input>_arXiv/. Wipe any stale output
+  // from a previous interrupted run before we start.
+  await fs.remove(cleanedDir);
+
+  const preCount = await countCommentLines(latexDir);
+
+  // --keep_bib: don't drop .bib files (we want them committed).
+  // Defaults otherwise: no image resizing, no PDF compression.
+  await execAsync(`"${cleaner}" --keep_bib "${base}"`, { cwd: parent });
+
+  if (!await fs.pathExists(cleanedDir)) {
+    throw new Error(`arxiv_latex_cleaner did not produce ${cleanedDir}`);
+  }
+
+  // Replace the original with the cleaned tree.
+  await fs.remove(latexDir);
+  await fs.move(cleanedDir, latexDir);
+
+  const postCount = await countCommentLines(latexDir);
+  const stripped = preCount - postCount;
+  console.log(`    🧹 cleaned ${path.relative(process.cwd(), latexDir)}: stripped ${stripped} comment lines`);
+  return { stripped };
+}
+
+/**
+ * Count author-comment lines across .tex files in a dir. Only .tex —
+ * arxiv_latex_cleaner doesn't touch .sty/.cls files (they're typically
+ * third-party with intentional license/header comments). Excludes
+ * `%!TEX` / `% !TEX` magic comments (functional engine hints).
+ */
+async function countCommentLines(latexDir) {
+  let count = 0;
+  const entries = await fs.readdir(latexDir, { withFileTypes: true });
+  for (const ent of entries) {
+    const full = path.join(latexDir, ent.name);
+    if (ent.isDirectory()) {
+      count += await countCommentLines(full);
+    } else if (ent.name.endsWith('.tex')) {
+      const content = await fs.readFile(full, 'utf8');
+      for (const line of content.split('\n')) {
+        if (/^\s*%/.test(line) && !/^\s*%\s*!TEX/i.test(line)) count++;
+      }
     }
   }
+  return count;
+}
+
+/**
+ * Compile LaTeX in-place from a persistent source directory, copy PDF to output.
+ *
+ * Uses latexmk (handles bibtex/biber + multi-pass automatically); falls back
+ * to a pdflatex/bibtex/pdflatex/pdflatex cycle if latexmk is missing. Build
+ * artifacts (.aux/.log/.fls/...) are gitignored under research/*\/latex/, so
+ * we leave them in place — latexmk uses them for incremental rebuilds.
+ *
+ * @param {string} latexDir
+ * @param {string} outputPath - Where to copy the compiled PDF
+ */
+/**
+ * Detect which LaTeX engine a source tree needs (pdflatex / xelatex / lualatex).
+ *
+ * Looked-for signals, in priority order:
+ *   1. `%!TEX program = xelatex` / `% !TEX TS-program = xelatex` magic comment
+ *      (TeXShop/Overleaf/VSCode convention; lets authors force an engine).
+ *   2. Any \usepackage of fontspec, xeCJK, polyglossia, mathspec → xelatex.
+ *      These packages won't compile under pdflatex.
+ *   3. Default → pdflatex.
+ *
+ * Only inspects the main .tex (not \input/\include'd files). If a paper
+ * hides its engine-specific package behind a subfile, add the magic
+ * comment to main.tex.
+ */
+async function detectLatexEngine(latexDir, mainTexFile) {
+  const content = await fs.readFile(path.join(latexDir, mainTexFile), 'utf8');
+
+  const magic = content.match(/^\s*%\s*!TEX\s+(?:TS-)?program\s*=\s*(\w+)/im);
+  if (magic) {
+    const engine = magic[1].toLowerCase();
+    if (engine === 'xelatex' || engine === 'lualatex' || engine === 'pdflatex') return engine;
+  }
+
+  // Canonical xelatex-only packages — also catches multi-package braces like
+  // \usepackage{fontspec,polyglossia} and \RequirePackage{...} from class files.
+  const usePkg = /\\(?:usepackage|RequirePackage)(?:\[[^\]]*\])?\{([^}]*)\}/g;
+  for (const match of content.matchAll(usePkg)) {
+    const names = match[1].split(',').map(s => s.trim());
+    if (names.some(n => /^(fontspec|xeCJK|polyglossia|mathspec|unicode-math)$/.test(n))) {
+      return 'xelatex';
+    }
+    // Heuristic: a package whose name contains "xelatex" or "lualatex" is almost
+    // always a custom style that pulls in fontspec/etc. internally (e.g.
+    // agenticlearning-xelatex.sty). The detector only scans the main .tex, not
+    // adjacent .sty files, so this is the escape hatch for custom-style papers.
+    if (names.some(n => /xelatex/i.test(n))) return 'xelatex';
+    if (names.some(n => /lualatex/i.test(n))) return 'lualatex';
+  }
+
+  return 'pdflatex';
+}
+
+async function compileLatex(latexDir, outputPath) {
+  const mainTexFile = await findMainTexFile(latexDir);
+  if (!mainTexFile) {
+    throw new Error(`No .tex with \\documentclass found in ${latexDir}`);
+  }
+
+  const engine = await detectLatexEngine(latexDir, mainTexFile);
+  const latexmkFlag = engine === 'xelatex' ? '-xelatex'
+                    : engine === 'lualatex' ? '-lualatex'
+                    : '-pdf';
+  const jobname = mainTexFile.replace(/\.tex$/, '');
+  const compileCmd = `${engine} -interaction=nonstopmode -halt-on-error "${mainTexFile}"`;
+  const bibtexCmd = `bibtex "${jobname}"`;
+  const biberCmd = `biber "${jobname}"`;
+
+  if (engine !== 'pdflatex') {
+    console.log(`    using ${engine} (detected from source)`);
+  }
+
+  let latexmkErr = null;
+  try {
+    await execAsync(`latexmk ${latexmkFlag} -interaction=nonstopmode "${mainTexFile}"`, { cwd: latexDir });
+  } catch (err) {
+    latexmkErr = err;
+    try {
+      // Manual fallback cycle. After the first pass, decide between biber and
+      // bibtex by whether biblatex emitted a .bcf control file (biber) vs. an
+      // .aux with \bibdata (bibtex). latexmk normally chooses correctly; we
+      // only land here when latexmk failed or isn't installed.
+      await execAsync(compileCmd, { cwd: latexDir });
+      const files = await fs.readdir(latexDir);
+      const hasBcf = files.includes(`${jobname}.bcf`);
+      const hasBib = files.some(f => f.endsWith('.bib'));
+      if (hasBcf) {
+        await execAsync(biberCmd, { cwd: latexDir }).catch(() => {});
+      } else if (hasBib) {
+        await execAsync(bibtexCmd, { cwd: latexDir }).catch(() => {});
+      }
+      await execAsync(compileCmd, { cwd: latexDir });
+      await execAsync(compileCmd, { cwd: latexDir });
+    } catch (compileErr) {
+      const latexmkDetail = (latexmkErr.stderr || latexmkErr.message || '').slice(0, 300);
+      const fallbackDetail = (compileErr.stderr || compileErr.message || '').slice(0, 300);
+      const logPath = path.join(latexDir, `${jobname}.log`);
+      throw new Error(
+        `LaTeX compile failed in ${latexDir} (engine: ${engine}).\n` +
+        `  See full log: ${logPath}\n` +
+        `  latexmk: ${latexmkDetail}\n` +
+        `  ${engine} fallback: ${fallbackDetail}`
+      );
+    }
+  }
+
+  const pdfPath = path.join(latexDir, mainTexFile.replace('.tex', '.pdf'));
+  if (!await fs.pathExists(pdfPath)) {
+    throw new Error(`PDF was not generated at ${pdfPath}`);
+  }
+
+  await fs.ensureDir(path.dirname(outputPath));
+  await fs.copy(pdfPath, outputPath);
+
+  // Remove the intermediate PDF so it doesn't get picked up by the LFS rule
+  // for research/**/latex/**/*.pdf (which is intended for figure binaries).
+  // latexmk will regenerate it on the next run regardless.
+  await fs.remove(pdfPath).catch(() => {});
 }
 
 /**
@@ -545,10 +761,21 @@ async function buildPapers(options = {}) {
   // Load papers configuration
   const papersData = yaml.load(await fs.readFile(PAPERS_YAML, 'utf-8'));
 
-  // For HTML: only papers with enable_full_paper
-  // For PDF: all papers with arXiv links
+  // For HTML: only papers with enable_full_paper (HTML must come from arxiv).
+  // For PDF: papers with an arxiv URL (we'll fetch source) OR with a
+  // pre-existing research/<slug>/latex/ containing a real .tex (position papers).
   const htmlPapers = papersData.filter(paper => paper.arxiv && paper.enable_full_paper);
-  const pdfPapers = papersData.filter(paper => paper.arxiv);
+  const pdfPapers = [];
+  for (const paper of papersData) {
+    if (paper.arxiv) {
+      pdfPapers.push(paper);
+      continue;
+    }
+    const latexDir = path.join(OUTPUT_DIR, paper.permalink, 'latex');
+    if (await fs.pathExists(latexDir) && await findMainTexFile(latexDir)) {
+      pdfPapers.push(paper);
+    }
+  }
 
   if (htmlPapers.length === 0 && !buildPdf) {
     console.log('No papers with both arxiv and enable_full_paper found in papers.yaml');
@@ -598,15 +825,22 @@ async function buildPapers(options = {}) {
     for (const paper of pdfPapers) {
       try {
         const pdfOutputPath = path.join(OUTPUT_DIR, paper.permalink, 'paper.pdf');
+        const latexDir = path.join(OUTPUT_DIR, paper.permalink, 'latex');
 
         if (!force && await fs.pathExists(pdfOutputPath)) {
           console.log(`⏭️  [PDF] ${paper.permalink} - already exists`);
           pdfSkipped++;
         } else {
           console.log(`⬇️  [PDF] ${paper.permalink} - compiling...`);
-          await downloadAndCompileLatex(paper.arxiv, pdfOutputPath);
-          console.log(`✅ [PDF] ${paper.permalink} - complete`);
-          pdfCompiled++;
+          const resolved = await ensureLatexSource(paper.arxiv, latexDir, { force });
+          if (!resolved) {
+            console.log(`⏭️  [PDF] ${paper.permalink} - no arxiv URL and no latex/ source, skipping`);
+            pdfSkipped++;
+          } else {
+            await compileLatex(latexDir, pdfOutputPath);
+            console.log(`✅ [PDF] ${paper.permalink} - complete`);
+            pdfCompiled++;
+          }
         }
       } catch (error) {
         console.error(`❌ [PDF] ${paper.permalink} - failed: ${error.message}`);
@@ -661,4 +895,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { buildPapers, downloadArxivHtml, downloadAndCompileLatex, compressAllPdfs };
+module.exports = { buildPapers, downloadArxivHtml, ensureLatexSource, compileLatex, cleanLatexSource, compressAllPdfs };

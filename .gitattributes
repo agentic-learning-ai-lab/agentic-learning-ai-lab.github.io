@@ -1,4 +1,4 @@
-# Git LFS - Paper PDFs
+# Git LFS - Paper PDFs (final compiled PDFs only; build intermediates are gitignored)
 research/**/*.pdf filter=lfs diff=lfs merge=lfs -text
 
 # Git LFS - Paper HTML assets (images from arXiv)
@@ -7,6 +7,13 @@ research/**/assets/**/*.jpg filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.gif filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.svg filter=lfs diff=lfs merge=lfs -text
+
+# Git LFS - LaTeX source figures (binary-heavy; intermediates are gitignored)
+research/**/latex/**/*.pdf filter=lfs diff=lfs merge=lfs -text
+research/**/latex/**/*.png filter=lfs diff=lfs merge=lfs -text
+research/**/latex/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+research/**/latex/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+research/**/latex/**/*.eps filter=lfs diff=lfs merge=lfs -text
 
 # Git LFS - Large site images
 assets/images/papers/*.png filter=lfs diff=lfs merge=lfs -text

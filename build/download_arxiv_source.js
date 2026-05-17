@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * Script to download LaTeX source from arXiv
- * Usage: node download_arxiv_source.js <arxiv_id> <output_dir>
- * Example: node download_arxiv_source.js 2508.15717 papers-latex/stream-mem
+ * Standalone CLI to download LaTeX source from arXiv into research/<slug>/latex/.
+ *
+ * The core fetch+extract logic also lives in build/build_arxiv_papers.js
+ * (ensureLatexSource). This script exists for one-off manual fetches.
+ *
+ * Usage:
+ *   node download_arxiv_source.js <arxiv_id> <output_dir>
+ *   node download_arxiv_source.js 2508.15717 research/stream-mem/latex
+ *   node download_arxiv_source.js --all   # all papers missing research/<slug>/latex/
  */
 
 const fs = require('fs-extra');
@@ -151,21 +157,29 @@ async function downloadArxivSource(arxivInput, outputDir) {
 }
 
 /**
- * Download sources for all papers with arxiv links but no latex_dir
+ * Download source for every paper with an arxiv link whose research/<slug>/latex/
+ * directory is missing or empty.
  */
 async function downloadAllMissing() {
   const yaml = require('js-yaml');
   const papersPath = path.resolve(__dirname, '../data/papers.yaml');
   const papers = yaml.load(await fs.readFile(papersPath, 'utf-8'));
 
-  const missing = papers.filter(p => p.arxiv && !p.latex_dir);
+  const missing = [];
+  for (const p of papers) {
+    if (!p.arxiv) continue;
+    const latexDir = path.resolve(__dirname, '../research', p.permalink, 'latex');
+    if (!await fs.pathExists(latexDir) || (await fs.readdir(latexDir)).length === 0) {
+      missing.push(p);
+    }
+  }
 
   if (missing.length === 0) {
-    console.log('All papers with arXiv links already have latex_dir set!');
+    console.log('All papers with arXiv links already have research/<slug>/latex/ populated.');
     return;
   }
 
-  console.log(`Found ${missing.length} paper(s) with arXiv links but no latex_dir:\n`);
+  console.log(`Found ${missing.length} paper(s) with missing LaTeX source:\n`);
 
   for (const paper of missing) {
     console.log(`\n${'='.repeat(60)}`);
@@ -174,20 +188,15 @@ async function downloadAllMissing() {
     console.log(`arXiv: ${paper.arxiv}`);
     console.log('='.repeat(60));
 
-    const outputDir = path.resolve(__dirname, '../papers-latex', paper.permalink);
+    const outputDir = path.resolve(__dirname, '../research', paper.permalink, 'latex');
 
     try {
       await downloadArxivSource(paper.arxiv, outputDir);
-      console.log(`\n✓ Successfully downloaded source for ${paper.permalink}`);
-      console.log(`  Add this to papers.yaml: latex_dir: "${paper.permalink}"`);
+      console.log(`\n✓ Source downloaded to research/${paper.permalink}/latex/`);
     } catch (error) {
       console.error(`\n❌ Failed to download ${paper.permalink}:`, error.message);
     }
   }
-
-  console.log('\n' + '='.repeat(60));
-  console.log('Done! Remember to add latex_dir to papers.yaml for each paper.');
-  console.log('='.repeat(60));
 }
 
 // Main execution
@@ -213,9 +222,9 @@ if (require.main === module) {
     console.log('Usage:');
     console.log('  Download specific paper:');
     console.log('    node download_arxiv_source.js <arxiv_id> <output_dir>');
-    console.log('    node download_arxiv_source.js 2508.15717 papers-latex/stream-mem');
+    console.log('    node download_arxiv_source.js 2508.15717 research/stream-mem/latex');
     console.log('');
-    console.log('  Download all papers with arXiv links but no latex_dir:');
+    console.log('  Download all papers whose research/<slug>/latex/ is missing:');
     console.log('    node download_arxiv_source.js --all');
     process.exit(1);
   }

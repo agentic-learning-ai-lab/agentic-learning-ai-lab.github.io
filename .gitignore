@@ -2,13 +2,30 @@ node_modules/
 *.DS_Store
 out/
 staging/
-other_assets/
+.venv/
+
+# Stale output from arxiv_latex_cleaner — see build/clean_latex.js
+research/*/latex_arXiv/
 
 # Compression markers
 research/*/assets/.compressed/
 research/*/*.gs-compressed
 
-# LaTeX build artifacts (keep source .tex and images, ignore build files)
+# LaTeX build artifacts in research/<slug>/latex/ (keep source, drop intermediates)
+research/*/latex/**/*.aux
+research/*/latex/**/*.log
+research/*/latex/**/*.out
+research/*/latex/**/*.toc
+research/*/latex/**/*.bbl
+research/*/latex/**/*.blg
+research/*/latex/**/*.fls
+research/*/latex/**/*.fdb_latexmk
+research/*/latex/**/*.synctex.gz
+research/*/latex/**/*.xml
+research/*/latex/**/*.cache
+research/*/latex/**/paper.pdf
+
+# Legacy LaTeX path — kept until any leftover papers-latex/ trees are migrated
 papers-latex/**/paper.html
 papers-latex/**/*.aux
 papers-latex/**/*.log
