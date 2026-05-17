@@ -157,6 +157,67 @@ function registerHelpers(handlebars) {
         return logicalPath;
     });
 
+    // {{cdnUrlWebp '/assets/images/papers/foo.png'}} →
+    //   'https://cdn.agenticlearning.ai/<hash>/foo.webp' if a sibling
+    //   .webp exists in the manifest, else the original cdnUrl.
+    //
+    // Used for CSS background-image (no <picture> element available).
+    // Browsers without WebP support (~2%) see no background; we accept
+    // that for a research lab site. For <img> elements use {{pictureCdn}}
+    // which keeps a PNG fallback.
+    function webpVariant(logicalPath) {
+        return logicalPath.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+    }
+    handlebars.registerHelper('cdnUrlWebp', function (logicalPath) {
+        if (!logicalPath) return '';
+        const manifest = loadAssetsManifest();
+        const webpPath = webpVariant(logicalPath);
+        if (manifest[webpPath]) return manifest[webpPath];
+        // No .webp in manifest — fall back to cdnUrl of the original.
+        // This is the migration-friendly path: a fresh paper with no
+        // sync:r2 run yet still renders correctly.
+        if (manifest[logicalPath]) return manifest[logicalPath];
+        _cdnMisses.add(logicalPath);
+        return logicalPath;
+    });
+
+    // {{pictureCdn '/assets/images/papers/foo.png' alt='hero' class='tw-w-full'}}
+    //   →  <picture>
+    //        <source srcset="<webp-cdn-url>" type="image/webp">
+    //        <img src="<png-cdn-url>" alt="hero" class="tw-w-full" loading="lazy">
+    //      </picture>
+    //
+    // Use for any <img> element that should benefit from WebP. The PNG
+    // fallback inside <img> guarantees correctness on browsers without
+    // WebP support. Loading="lazy" is the modern default; pass
+    // `eager="true"` for above-the-fold images that should preload.
+    //
+    // Hash options: alt, class, eager. (Handlebars block helpers receive
+    // hash args via options.hash.) Class is intentionally raw — we want
+    // Tailwind classes pass-through.
+    handlebars.registerHelper('pictureCdn', function (logicalPath, options) {
+        if (!logicalPath) return '';
+        const manifest = loadAssetsManifest();
+        const hash = (options && options.hash) || {};
+
+        // Resolve PNG/JPG URL (always present — that's the original asset).
+        const pngUrl = manifest[logicalPath] || (_cdnMisses.add(logicalPath), logicalPath);
+
+        // Resolve WebP URL (optional — graceful when missing).
+        const webpPath = webpVariant(logicalPath);
+        const webpUrl = manifest[webpPath];
+
+        const altAttr = ` alt="${(hash.alt || '').replace(/"/g, '&quot;')}"`;
+        const classAttr = hash.class ? ` class="${hash.class}"` : '';
+        const loadingAttr = hash.eager ? '' : ' loading="lazy"';
+
+        const sourceTag = webpUrl
+            ? `<source srcset="${webpUrl}" type="image/webp">`
+            : '';
+        const out = `<picture>${sourceTag}<img src="${pngUrl}"${altAttr}${classAttr}${loadingAttr}></picture>`;
+        return new handlebars.SafeString(out);
+    });
+
     handlebars.registerHelper('formatDate', function (date, format) {
         return moment.utc(date).format(format);
     });
