@@ -34,11 +34,16 @@ class TarballNotFoundError extends Error {
 }
 
 /**
- * Stream an HTTPS URL to a local file via a .tmp sidecar, rename on finish.
- * A SIGINT mid-download leaves the .tmp behind (harmless — next run sees
- * the absence of the final path and re-downloads). Without the rename,
- * we'd leave a truncated final file that subsequent cache-hit checks
- * would happily reuse.
+ * Stream an HTTPS URL to a local file via a `.tmp` sidecar, rename on
+ * finish. A SIGINT or transport error leaves at most the `.tmp` behind —
+ * subsequent runs see no final file and re-download. Without the
+ * sidecar, a truncated direct write would be silently reused as a
+ * cache hit on the next run.
+ *
+ * Three failure modes are explicitly handled:
+ *   - non-200 response → reject, no file written
+ *   - response stream error mid-body → reject + tmp cleanup
+ *   - write stream error → reject + tmp cleanup
  */
 function downloadViaHttps(url, outputPath) {
   return new Promise((resolve, reject) => {
@@ -58,16 +63,27 @@ function downloadViaHttps(url, outputPath) {
       fs.ensureDirSync(path.dirname(outputPath));
       const tmpPath = `${outputPath}.tmp`;
       const out = fs.createWriteStream(tmpPath);
+      let settled = false;
+      const fail = async (err) => {
+        if (settled) return;
+        settled = true;
+        try { out.destroy(); } catch {}
+        await fs.remove(tmpPath).catch(() => {});
+        reject(err);
+      };
+      res.on('error', fail);
+      out.on('error', fail);
       res.pipe(out);
       out.on('finish', async () => {
+        if (settled) return;
+        settled = true;
         try {
           await fs.move(tmpPath, outputPath, { overwrite: true });
           resolve();
-        } catch (err) { reject(err); }
-      });
-      out.on('error', async (err) => {
-        await fs.remove(tmpPath).catch(() => {});
-        reject(err);
+        } catch (err) {
+          await fs.remove(tmpPath).catch(() => {});
+          reject(err);
+        }
       });
     }).on('error', reject);
   });

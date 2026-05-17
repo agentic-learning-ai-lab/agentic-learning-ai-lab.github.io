@@ -47,14 +47,20 @@ const TAR_EXCLUDES = [
 ];
 
 /**
- * True if `relPath` (a path relative to the source dir) matches any glob in
- * TAR_EXCLUDES. Patterns are either `*.ext` (basename suffix) or a literal
- * basename. Keep this simple — TAR_EXCLUDES is curated.
+ * True if `relPath` (a path relative to the source dir) has *any* path
+ * segment matching a TAR_EXCLUDES pattern. Patterns are either `*.ext`
+ * (suffix on a segment) or a literal segment name. Checking every
+ * segment — not just the basename — matters for directory-name excludes
+ * like `__MACOSX`: tar's `--exclude __MACOSX` drops the whole directory,
+ * and we mirror that here so the content hash stays consistent with what
+ * actually gets uploaded.
  */
 function isExcluded(relPath) {
-  const base = path.basename(relPath);
-  return TAR_EXCLUDES.some(p =>
-    p.startsWith('*.') ? base.endsWith(p.slice(1)) : base === p
+  const segments = relPath.split(path.sep);
+  return segments.some(seg =>
+    TAR_EXCLUDES.some(p =>
+      p.startsWith('*.') ? seg.endsWith(p.slice(1)) : seg === p
+    )
   );
 }
 

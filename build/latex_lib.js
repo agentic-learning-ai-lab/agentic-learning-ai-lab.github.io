@@ -125,18 +125,26 @@ async function countCommentLines(latexDir) {
 
 /**
  * Find the main .tex file in a directory (one with \documentclass).
- * Prefers main.tex or ms.tex by convention.
+ * Prefers main.tex or ms.tex by convention — but still verifies the
+ * preferred file actually contains \documentclass (a stub main.tex that
+ * just \inputs the real preamble doesn't satisfy our compile contract).
  */
 async function findMainTexFile(latexDir) {
   const files = await fs.readdir(latexDir);
-  const preferred = files.find(f => f === 'main.tex' || f === 'ms.tex');
-  if (preferred) return preferred;
 
-  for (const file of files.filter(f => f.endsWith('.tex'))) {
+  const hasDocumentclass = async (file) => {
     const content = await fs.readFile(path.join(latexDir, file), 'utf8');
-    if (content.includes('\\documentclass')) {
-      return file;
+    return content.includes('\\documentclass');
+  };
+
+  for (const preferred of ['main.tex', 'ms.tex']) {
+    if (files.includes(preferred) && await hasDocumentclass(preferred)) {
+      return preferred;
     }
+  }
+  for (const file of files.filter(f => f.endsWith('.tex'))) {
+    if (file === 'main.tex' || file === 'ms.tex') continue; // tried above
+    if (await hasDocumentclass(file)) return file;
   }
   return null;
 }

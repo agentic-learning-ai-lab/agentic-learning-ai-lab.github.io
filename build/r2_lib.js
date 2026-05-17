@@ -21,7 +21,6 @@ const {
   S3Client,
   PutObjectCommand,
   HeadObjectCommand,
-  GetObjectCommand,
 } = require('@aws-sdk/client-s3');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -106,22 +105,6 @@ async function uploadToR2(key, filePath, opts = {}) {
   }));
 }
 
-/**
- * Download an R2 object to a local file. Streams directly to disk so the
- * body never sits in memory. Used for tarball pulls during build.
- */
-async function downloadFromR2(key, outputPath) {
-  const res = await s3Client().send(new GetObjectCommand({ Bucket: BUCKET, Key: key }));
-  await fs.ensureDir(path.dirname(outputPath));
-  await new Promise((resolve, reject) => {
-    const out = fs.createWriteStream(outputPath);
-    res.Body.pipe(out);
-    res.Body.on('error', reject);
-    out.on('finish', resolve);
-    out.on('error', reject);
-  });
-}
-
 async function loadManifest() {
   if (await fs.pathExists(MANIFEST_PATH)) {
     return await fs.readJson(MANIFEST_PATH);
@@ -156,7 +139,6 @@ module.exports = {
   contentType,
   r2ObjectExists,
   uploadToR2,
-  downloadFromR2,
   loadManifest,
   saveManifest,
   keyFromCdnUrl,
