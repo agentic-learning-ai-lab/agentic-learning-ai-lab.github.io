@@ -18,10 +18,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Checkout without LFS — we'll pull LFS objects from cache below.
+      # Why: a fresh `lfs: true` checkout pulls every LFS blob (~265 MB
+      # today) on every CI run, burning the org's LFS bandwidth quota.
+      # Caching .git/lfs across runs makes the steady-state "no LFS files
+      # changed" case a no-op.
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false
+
+      # Cache key is the hash of every LFS pointer file (the tiny text
+      # stubs left in the working tree when lfs: false). When any
+      # LFS-tracked file changes, its pointer SHA changes, the key shifts,
+      # we miss; otherwise we hit and `git lfs pull` is a no-op.
+      - name: Cache LFS objects
+        id: cache-lfs
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.gitattributes', 'research/**/paper.pdf', 'research/**/assets/**', 'research/**/latex/**', 'assets/images/**') }}
+          restore-keys: |
+            lfs-
+
+      - name: Pull LFS objects
+        run: git lfs pull
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
