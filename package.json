@@ -10,13 +10,15 @@
     "build:arxiv": "node ./build/build_arxiv_papers.js",
     "build:arxiv:force": "node ./build/build_arxiv_papers.js --force",
     "build:arxiv:pdf": "node ./build/build_arxiv_papers.js --pdf",
+    "latex:bootstrap": "node ./build/build_arxiv_papers.js --latex-only",
     "build:compress": "node ./build/compress_assets.js",
     "build:compress:force": "node ./build/compress_assets.js --force",
     "build:pages": "node ./build/build_pages.js",
     "build:favicons": "node ./build/generate_favicons.js",
     "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && node ./build/generate_search_index.js && npm run build:arxiv:pdf && npm run build:compress && npm run build:pages",
     "setup:python": "python3 -m venv .venv && .venv/bin/pip install --upgrade pip --quiet && .venv/bin/pip install -r build/requirements.txt --quiet",
-    "latex:clean": "node ./build/clean_latex.js"
+    "latex:clean": "node ./build/clean_latex.js",
+    "sync:r2": "node ./build/sync_to_r2.js"
   },
   "keywords": [],
   "author": "Paul, Mengye Ren",
@@ -32,14 +34,17 @@
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "slugg": "^1.0.0",
-"swiper": "^11.1.1",
+    "swiper": "^11.1.1",
     "tailwindcss": "^3.4.1"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1048.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^17.4.2",
     "fs-extra": "^11.2.0",
     "postcss": "^8.4.33",
     "postcss-simple-vars": "^7.0.1",
-    "sharp": "^0.33.2"
+    "sharp": "^0.33.2",
+    "tslib": "^2.8.1"
   }
 }

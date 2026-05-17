@@ -1,0 +1,236 @@
+#!/usr/bin/env node
+
+/**
+ * Sync site binaries (paper PDFs, hero images, arxiv figures, etc.) to
+ * Cloudflare R2. Generates assets-manifest.json mapping each logical
+ * path → its CDN URL.
+ *
+ * Idempotent: files whose content hash already exists on R2 are skipped.
+ * A re-run with no local changes is a no-op (just HEADs).
+ *
+ * Usage:
+ *   npm run sync:r2          # uses .env / GitHub Actions secrets
+ *   node build/sync_to_r2.js # same
+ *
+ * Required env vars (in .env locally, GitHub Actions secrets in CI):
+ *   R2_ACCESS_KEY_ID
+ *   R2_SECRET_ACCESS_KEY
+ *   R2_ACCOUNT_ID
+ *   R2_BUCKET                (optional; defaults to 'agenticlearning-assets')
+ *   R2_CDN_BASE_URL          (optional; defaults to 'https://cdn.agenticlearning.ai')
+ *
+ * See notes/cf-migration.md for the design rationale.
+ */
+
+require('dotenv').config();
+
+const fs = require('fs-extra');
+const path = require('path');
+const crypto = require('crypto');
+const glob = require('glob');
+const yaml = require('js-yaml');
+const {
+  S3Client,
+  PutObjectCommand,
+  HeadObjectCommand,
+} = require('@aws-sdk/client-s3');
+
+const ROOT = path.resolve(__dirname, '..');
+const PAPERS_YAML = path.join(ROOT, 'data/papers.yaml');
+const MANIFEST_PATH = path.join(ROOT, 'assets-manifest.json');
+
+// Glob patterns to sync. Paths relative to repo root.
+// Order matters only for log output. Use the most specific pattern first
+// when a file might match multiple (paper.pdf is special-cased separately).
+const SYNC_PATHS = [
+  'research/**/paper.pdf',
+  'research/**/assets/**/*.{png,jpg,jpeg,gif,svg,webp}',
+  'assets/images/papers/**/*.{png,jpg,jpeg,gif,webp}',
+  'assets/images/people/**/*.{png,jpg,jpeg,gif,webp}',
+  'assets/images/background/**/*.{png,jpg,jpeg,gif,webp}',
+  'assets/images/home/**/*.{png,jpg,jpeg,gif,webp}',
+];
+
+const BUCKET = process.env.R2_BUCKET || 'agenticlearning-assets';
+const CDN_BASE = (process.env.R2_CDN_BASE_URL || 'https://cdn.agenticlearning.ai').replace(/\/$/, '');
+const HASH_LEN = 16; // first N hex chars of SHA-256, ~2^64 collision space — fine at our scale
+
+function requireEnv(name) {
+  if (!process.env[name]) {
+    console.error(`Missing required env var: ${name}`);
+    console.error('See .env (local) or GitHub Actions secrets (CI). See build/sync_to_r2.js docstring.');
+    process.exit(1);
+  }
+  return process.env[name];
+}
+
+const s3 = new S3Client({
+  region: 'auto',
+  endpoint: `https://${requireEnv('R2_ACCOUNT_ID')}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: requireEnv('R2_ACCESS_KEY_ID'),
+    secretAccessKey: requireEnv('R2_SECRET_ACCESS_KEY'),
+  },
+});
+
+/**
+ * SHA-256 hash of a file's contents, hex-encoded, truncated to HASH_LEN.
+ * Stream-based so big files don't load into memory.
+ */
+function hashFile(filePath) {
+  return new Promise((resolve, reject) => {
+    const hash = crypto.createHash('sha256');
+    const stream = fs.createReadStream(filePath);
+    stream.on('data', (d) => hash.update(d));
+    stream.on('end', () => resolve(hash.digest('hex').slice(0, HASH_LEN)));
+    stream.on('error', reject);
+  });
+}
+
+/**
+ * Compute the basename to use on R2 for a given local file path.
+ *
+ * Special case: research/<slug>/paper.pdf → <slug>.pdf so downloads have
+ * meaningful filenames in the user's browser (not "paper.pdf" × 20).
+ * All other files keep their original basename — those are already
+ * descriptive (e.g. 'teaser.png', 'method.pdf').
+ */
+function cdnBasename(localPath) {
+  const m = localPath.match(/^research\/([^/]+)\/paper\.pdf$/);
+  if (m) return `${m[1]}.pdf`;
+  return path.basename(localPath);
+}
+
+/**
+ * MIME type for an upload. Conservative — falls back to octet-stream.
+ */
+function contentType(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  return {
+    '.pdf': 'application/pdf',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
+    '.webp': 'image/webp',
+    '.mp4': 'video/mp4',
+  }[ext] || 'application/octet-stream';
+}
+
+async function r2ObjectExists(key) {
+  try {
+    await s3.send(new HeadObjectCommand({ Bucket: BUCKET, Key: key }));
+    return true;
+  } catch (err) {
+    if (err.$metadata?.httpStatusCode === 404 || err.name === 'NotFound') {
+      return false;
+    }
+    throw err;
+  }
+}
+
+async function uploadToR2(key, filePath) {
+  const body = await fs.readFile(filePath);
+  await s3.send(new PutObjectCommand({
+    Bucket: BUCKET,
+    Key: key,
+    Body: body,
+    ContentType: contentType(filePath),
+    // Long cache: hash-keyed paths are content-addressed and immutable.
+    CacheControl: 'public, max-age=31536000, immutable',
+  }));
+}
+
+/**
+ * Resolve all candidate files from the configured glob patterns.
+ * Returns paths relative to repo root.
+ */
+function collectFiles() {
+  const seen = new Set();
+  for (const pattern of SYNC_PATHS) {
+    for (const match of glob.sync(pattern, { cwd: ROOT, nodir: true })) {
+      seen.add(match);
+    }
+  }
+  return [...seen].sort();
+}
+
+async function main() {
+  console.log(`R2 sync → bucket=${BUCKET}  cdn=${CDN_BASE}\n`);
+
+  const files = collectFiles();
+  if (files.length === 0) {
+    console.error('No files matched the configured patterns. Check SYNC_PATHS.');
+    process.exit(1);
+  }
+  console.log(`Found ${files.length} candidate files\n`);
+
+  // Warn (but don't fail) on oversized files. Future work: pre-compress.
+  const OVERSIZE_THRESHOLD_MB = 5;
+  const oversize = [];
+  for (const f of files) {
+    const sz = (await fs.stat(path.join(ROOT, f))).size;
+    if (sz > OVERSIZE_THRESHOLD_MB * 1024 * 1024) {
+      oversize.push({ file: f, mb: (sz / 1024 / 1024).toFixed(1) });
+    }
+  }
+  if (oversize.length > 0) {
+    console.log(`⚠️  ${oversize.length} file(s) >${OVERSIZE_THRESHOLD_MB} MB (consider pre-compression):`);
+    for (const o of oversize) console.log(`    ${o.mb} MB  ${o.file}`);
+    console.log();
+  }
+
+  const manifest = {};
+  let uploaded = 0, skipped = 0, failed = 0, bytesUp = 0;
+
+  for (const file of files) {
+    try {
+      const abs = path.join(ROOT, file);
+      const hash = await hashFile(abs);
+      const basename = cdnBasename(file);
+      const r2Key = `${hash}/${basename}`;
+      const cdnUrl = `${CDN_BASE}/${r2Key}`;
+      const logicalPath = '/' + file;
+
+      if (await r2ObjectExists(r2Key)) {
+        skipped++;
+      } else {
+        const sz = (await fs.stat(abs)).size;
+        await uploadToR2(r2Key, abs);
+        bytesUp += sz;
+        uploaded++;
+        console.log(`⬆️  ${logicalPath} → ${r2Key}`);
+      }
+
+      manifest[logicalPath] = cdnUrl;
+    } catch (err) {
+      console.error(`❌ ${file}: ${err.message}`);
+      failed++;
+    }
+  }
+
+  // Sort manifest keys for deterministic diffs across builds.
+  const sortedManifest = {};
+  for (const key of Object.keys(manifest).sort()) {
+    sortedManifest[key] = manifest[key];
+  }
+  await fs.writeJson(MANIFEST_PATH, sortedManifest, { spaces: 2 });
+
+  console.log(`\n📊 Sync summary`);
+  console.log(`   ⬆️  Uploaded: ${uploaded} (${(bytesUp / 1024 / 1024).toFixed(1)} MB)`);
+  console.log(`   ⏭️  Skipped:  ${skipped}`);
+  if (failed > 0) console.log(`   ❌ Failed:   ${failed}`);
+  console.log(`   📋 Manifest written to ${path.relative(ROOT, MANIFEST_PATH)} (${Object.keys(sortedManifest).length} entries)\n`);
+
+  if (failed > 0) process.exit(2);
+}
+
+if (require.main === module) {
+  main().catch(err => {
+    console.error('Sync failed:', err);
+    process.exit(1);
+  });
+}
+
+module.exports = { cdnBasename, hashFile };
