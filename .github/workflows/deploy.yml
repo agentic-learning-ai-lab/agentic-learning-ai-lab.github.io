@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -99,7 +101,12 @@ jobs:
       - name: Build site
         run: npm run build
 
+      # The remaining steps assemble + upload the Pages artifact for the
+      # actual deploy. PR builds skip them — we only want PR runs to
+      # verify the build succeeds (registers the `build` status check)
+      # without pushing anything live.
       - name: Prepare output
+        if: github.event_name != 'pull_request'
         run: |
           set -e
           mkdir -p out
@@ -115,11 +122,13 @@ jobs:
           cp -R includes out/
 
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: out
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:
