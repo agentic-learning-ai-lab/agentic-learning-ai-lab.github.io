@@ -35,36 +35,7 @@ Volume: ~1000+ figure PNGs across 19 papers. Sharp lossless encode is
 fast (~10 sec for the full set). Touches `generate_webp.js`,
 `rewrite_paper_content.js`, possibly `sync_to_r2.js` if needed.
 
-### 2. Atomic write in `rewrite_paper_content.js`
-
-For consistency with `generate_webp.js`. Today `fs.writeJson` is not
-atomic — a SIGKILL mid-write leaves a truncated paper-content.json that
-the next build's regex-based detection won't catch (no marker, no size
-check). Write to `.tmp` + `fs.move` mirrors the pattern from
-`generate_webp.js`. ~5 min.
-
-### 3. CI-side `npm run sync:r2`
-
-Now that sync is ~1.2s steady-state, putting it in
-`.github/workflows/deploy.yml` is viable. Catches the "author forgot to
-run sync" mistake at PR time.
-
-```yaml
-- name: Sync new assets to R2
-  if: github.event_name != 'pull_request'
-  env:
-    R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-    R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-    R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-    R2_BUCKET: agenticlearning-assets
-    R2_CDN_BASE_URL: https://cdn.agenticlearning.ai
-  run: npm run sync:r2
-```
-
-Defer until: multiple contributors start adding papers and "forgot to
-run sync" becomes a regular review issue.
-
-### 4. Reap orphan R2 blobs
+### 2. Reap orphan R2 blobs
 
 Every re-encode (paper.pdf recompile, image quality bump, latex re-pack)
 uploads new content-addressed objects to R2 and leaves the old hash
@@ -85,7 +56,7 @@ that:
 
 ~50 LoC. Defer until storage actually matters (probably years).
 
-### 5. LFS-free migration for new content
+### 3. LFS-free migration for new content
 
 Today, new assets matching `.gitattributes` patterns get LFS-tracked
 *and* synced to R2 (duplicate storage). LFS quota currently ~265 MB / 1
@@ -96,7 +67,7 @@ add the same paths to `.gitignore` so `git add` doesn't auto-stage
 binaries. Author workflow becomes: drop locally → `sync:r2` → commit
 only the manifest entry. Note already documented in `cf-migration.md`.
 
-### 6. Project pages
+### 4. Project pages
 
 `notes/project-pages-migration.md` is the spec. Self-contained design
 doc; read it before touching project pages.
@@ -105,12 +76,9 @@ doc; read it before touching project pages.
 
 Pick by impact / urgency. Today's ordering (most useful first):
 
-1. **Project pages** (6) — high author-facing value, several papers
+1. **Project pages** (4) — high author-facing value, several papers
    already want this.
 2. **WebP for arxiv figures** (1) — biggest remaining bandwidth win on
    the Full Paper HTML view; one focused PR.
-3. **Atomic write fix** (2) — small consistency cleanup; bundle with
-   any rewrite_paper_content.js change.
-4. **CI-side sync** (3) — defer until pain shows up.
-5. **Orphan R2 reaper** (4) — write when free tier matters; not soon.
-6. **LFS-free** (5) — defer until quota pinches.
+3. **Orphan R2 reaper** (2) — write when free tier matters; not soon.
+4. **LFS-free** (3) — defer until quota pinches.

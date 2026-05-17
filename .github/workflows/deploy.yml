@@ -80,6 +80,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Sync any newly-committed asset binaries to R2 and refresh
+      # assets-manifest.json before build. Gated on push-to-main (not
+      # PRs from forks — those can't safely use the R2 write creds).
+      # Catches the "author forgot to run sync:r2" mistake by re-syncing
+      # at deploy time. The manifest update is in-process only; the
+      # subsequent Build site step picks it up so paper-content
+      # rewrites and template cdnUrl lookups see fresh CDN URLs.
+      - name: Sync assets to R2
+        if: github.event_name != 'pull_request'
+        env:
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: agenticlearning-assets
+          R2_CDN_BASE_URL: https://cdn.agenticlearning.ai
+        run: npm run sync:r2
+
       - name: Build site
         run: npm run build
 

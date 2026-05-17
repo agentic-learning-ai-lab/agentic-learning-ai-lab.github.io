@@ -18,7 +18,7 @@
   research_areas:
     - learning-from-visual-experience
   date: 2026-3-12T00:00:00.000Z
-  journal: CoRR
+  journal: The 43rd International Conference on Machine Learning (ICML 2026)
   is_recent: true
 - title: 'MA-EgoQA: Question Answering over Egocentric Videos from Multiple Embodied Agents'
   image: /assets/images/papers/ma_egoqa.png
@@ -94,7 +94,7 @@
   research_areas:
     - adaptive-agents-and-foundation-models
   date: 2025-10-08T00:00:00.000Z
-  journal: CoRR
+  journal: The 14th International Conference on Learning Representations (ICLR 2026)
   is_recent: true
 - title: 'Midway Network: Learning Representations for Recognition and Motion from Latent Dynamics'
   image: /assets/images/papers/midway_network.png
@@ -110,7 +110,7 @@
   research_areas:
     - learning-from-visual-experience
   date: 2025-10-07T00:00:00.000Z
-  journal: CoRR
+  journal: The 14th International Conference on Learning Representations (ICLR 2026)
   is_recent: true
   enable_full_paper: true
 - title: 'StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding'
@@ -153,7 +153,7 @@
     - adaptive-agents-and-foundation-models
     - concept-learning-and-abstraction
   date: 2025-07-06T00:00:00.000Z
-  journal: CoRR
+  journal: The 43rd International Conference on Machine Learning (ICML 2026)
   is_recent: true
   enable_full_paper: true
 - title: 'Discrete JEPA: Learning Discrete Token Representations without Reconstruction'
