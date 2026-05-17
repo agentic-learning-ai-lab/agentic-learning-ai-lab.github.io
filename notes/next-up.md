@@ -9,34 +9,52 @@ Big-picture history lives in git log and the per-design docs
 
 ## Queue
 
-### 1. Phase 4e — arxiv HTML inline figures via CDN
+### 1. WebP for arxiv inline figures
 
-The "Full Paper (HTML)" view (when `enable_full_paper: true`) loads
-`paper-content.json` and injects its embedded HTML through
-`paper-view.js`. That HTML has `<img src="./assets/x1.png">` references
-that resolve to `agenticlearning.ai/research/<slug>/assets/x1.png` (local
-LFS), not the CDN.
+`research/<slug>/assets/*.png` (the matplotlib plots, methods diagrams,
+results figures embedded in the Full Paper HTML view) currently ship as
+PNG. Spot-checked compression on a few: 180 KB → 32 KB at q98 (17% of
+PNG), with anti-aliased text staying crisp. ~80% bandwidth savings on
+the Full Paper HTML view.
 
-Fix: runtime rewrite the `./assets/<x>` paths to their CDN URLs by
-looking up `assets-manifest.json` in the browser. Sketch:
+**Use lossless WebP**, not lossy. Academic figures contain text labels
+and line-art, where lossy artifacts (mosquito noise around glyphs) are
+visible even at q98. Lossless WebP still beats PNG by ~20-30% on these
+files and removes the quality-risk axis entirely.
 
-```js
-const manifest = await fetch('/assets-manifest.json').then(r => r.json());
-function rewriteCdn(html, permalink) {
-  return html.replace(
-    /src="\.\/assets\/([^"]+)"/g,
-    (m, rel) => {
-      const url = manifest[`/research/${permalink}/assets/${rel}`];
-      return url ? `src="${url}"` : m;
-    }
-  );
-}
-```
+Implementation paths considered:
+- A. Extend `generate_webp.js` to include `research/**/assets/`. Extend
+  `rewrite_paper_content.js` to substitute `.png` → `.webp` URL when
+  manifest has the .webp sibling. Browsers without WebP support get
+  broken figures (~2%; we accept this trade-off for backgrounds today).
+- B. Wrap each `<img>` with `<picture>` inside the arxiv HTML during
+  rewrite. Preserves PNG fallback. More HTML parsing, slightly larger
+  paper-content.json. Safer for older browsers.
 
-Touches: `paper-view.js`. ~1 hr including a manual cross-browser check.
-Low urgency — feature works fine via LFS today.
+Volume: ~1000+ figure PNGs across 19 papers. Sharp lossless encode is
+fast (~10 sec for the full set). Touches `generate_webp.js`,
+`rewrite_paper_content.js`, possibly `sync_to_r2.js` if needed.
 
-### 2. CI-side `npm run sync:r2`
+### 2. LFS-track WebP files in `.gitattributes`
+
+Today `assets/images/**/*.webp` is committed as raw git blobs (not LFS).
+The q85 → q98 bump in PR #6 grew webp content from ~5 MB to ~16 MB,
+all baked into git history. Adding `assets/images/**/*.webp filter=lfs`
+to `.gitattributes` prevents future bloat (existing blobs stay where
+they are — would need `git lfs migrate import` for a full cleanup).
+
+One-line `.gitattributes` rule + `git rm --cached` + `git add` to
+re-stage existing webps through LFS. ~5 min.
+
+### 3. Atomic write in `rewrite_paper_content.js`
+
+For consistency with `generate_webp.js`. Today `fs.writeJson` is not
+atomic — a SIGKILL mid-write leaves a truncated paper-content.json that
+the next build's regex-based detection won't catch (no marker, no size
+check). Write to `.tmp` + `fs.move` mirrors the pattern from
+`generate_webp.js`. ~5 min.
+
+### 4. CI-side `npm run sync:r2`
 
 Now that sync is ~1.2s steady-state, putting it in
 `.github/workflows/deploy.yml` is viable. Catches the "author forgot to
@@ -57,7 +75,7 @@ run sync" mistake at PR time.
 Defer until: multiple contributors start adding papers and "forgot to
 run sync" becomes a regular review issue.
 
-### 3. LFS-free migration for new content
+### 5. LFS-free migration for new content
 
 Today, new assets matching `.gitattributes` patterns get LFS-tracked
 *and* synced to R2 (duplicate storage). LFS quota currently ~265 MB / 1
@@ -68,7 +86,7 @@ add the same paths to `.gitignore` so `git add` doesn't auto-stage
 binaries. Author workflow becomes: drop locally → `sync:r2` → commit
 only the manifest entry. Note already documented in `cf-migration.md`.
 
-### 4. Project pages
+### 6. Project pages
 
 `notes/project-pages-migration.md` is the spec. Self-contained design
 doc; read it before touching project pages.
@@ -77,8 +95,13 @@ doc; read it before touching project pages.
 
 Pick by impact / urgency. Today's ordering (most useful first):
 
-1. **Project pages** (4) — high author-facing value, several papers
+1. **Project pages** (6) — high author-facing value, several papers
    already want this.
-2. **Phase 4e** (1) — narrow scope but only affects HTML-view papers.
-3. **CI-side sync** (2) — defer until pain shows up.
-4. **LFS-free** (3) — defer until quota pinches.
+2. **WebP for arxiv figures** (1) — biggest remaining bandwidth win on
+   the Full Paper HTML view; one focused PR.
+3. **LFS-track webps** (2) — small repo-health follow-up; bundle with
+   the next webp-touching PR.
+4. **Atomic write fix** (3) — small consistency cleanup; bundle with
+   any rewrite_paper_content.js change.
+5. **CI-side sync** (4) — defer until pain shows up.
+6. **LFS-free** (5) — defer until quota pinches.
