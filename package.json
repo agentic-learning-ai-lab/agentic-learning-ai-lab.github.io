@@ -10,7 +10,6 @@
     "build:arxiv": "node ./build/build_arxiv_papers.js",
     "build:arxiv:force": "node ./build/build_arxiv_papers.js --force",
     "build:arxiv:pdf": "node ./build/build_arxiv_papers.js --pdf",
-    "latex:bootstrap": "node ./build/build_arxiv_papers.js --latex-only",
     "build:compress": "node ./build/compress_assets.js",
     "build:compress:force": "node ./build/compress_assets.js --force",
     "build:pages": "node ./build/build_pages.js",
@@ -18,6 +17,9 @@
     "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && node ./build/generate_search_index.js && npm run build:arxiv:pdf && npm run build:compress && npm run build:pages",
     "setup:python": "python3 -m venv .venv && .venv/bin/pip install --upgrade pip --quiet && .venv/bin/pip install -r build/requirements.txt --quiet",
     "latex:clean": "node ./build/clean_latex.js",
+    "latex:fetch": "node ./build/latex_fetch.js",
+    "latex:pack": "node ./build/latex_pack.js",
+    "latex:update": "node ./build/latex_update.js",
     "sync:r2": "node ./build/sync_to_r2.js"
   },
   "keywords": [],
