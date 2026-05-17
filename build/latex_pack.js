@@ -33,7 +33,7 @@ const {
   uploadToR2,
 } = require('./r2_lib');
 
-const { cleanLatexSource } = require('./build_arxiv_papers');
+const { cleanLatexSource, manifestKey } = require('./latex_lib');
 
 // Build aux + macOS cruft never go into the tarball. The "source of truth"
 // is .tex / .bib / .sty / .cls + figure binaries the author authored.
@@ -43,16 +43,6 @@ const TAR_EXCLUDES = [
   '*.cache', '*.spl', 'paper.pdf',
   '__MACOSX', '.DS_Store',
 ];
-
-/**
- * Logical manifest path for a paper's tarball.
- *   /research/<slug>/latex.tar.gz
- * The manifest never holds a direct R2 URL for the latex/ tree itself —
- * only this single tarball entry.
- */
-function manifestKey(slug) {
-  return `/research/${slug}/latex.tar.gz`;
-}
 
 /**
  * Tar a directory into a destination .tar.gz file. Uses BSD/GNU tar's
@@ -166,4 +156,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { packOne, packAll, manifestKey };
+module.exports = { packOne, packAll };

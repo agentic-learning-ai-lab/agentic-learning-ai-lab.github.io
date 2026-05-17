@@ -3,25 +3,21 @@
 /**
  * Strip author comments from a paper's LaTeX source.
  *
- * For papers fetched from arXiv this runs automatically inside
- * ensureLatexSource() in build_arxiv_papers.js. This CLI is for
- * position papers (no arxiv URL, source dropped in by hand) — author
- * runs it once before committing.
+ * Almost never run directly — `latex:pack` and `latex:update` both call
+ * cleanLatexSource() before tarring, which is the actual privacy
+ * boundary. This CLI is a hand-tool for inspecting cleaning behavior on
+ * a dropped-in tree without going through the upload flow.
  *
  * Usage:
  *   npm run latex:clean -- <slug>
  *   npm run latex:clean -- <path-to-latex-dir>
  *
- * Examples:
- *   npm run latex:clean -- conceptual-creativity
- *   npm run latex:clean -- research/conceptual-creativity/latex
- *
- * See cleanLatexSource() in build_arxiv_papers.js for the why and what.
+ * See cleanLatexSource() in build/latex_lib.js for the why and what.
  */
 
 const fs = require('fs-extra');
 const path = require('path');
-const { cleanLatexSource } = require('./build_arxiv_papers.js');
+const { cleanLatexSource } = require('./latex_lib.js');
 
 async function main() {
   const arg = process.argv[2];

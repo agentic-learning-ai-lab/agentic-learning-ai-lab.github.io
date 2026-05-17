@@ -91,6 +91,10 @@ async function r2ObjectExists(key) {
 }
 
 async function uploadToR2(key, filePath, opts = {}) {
+  // Read into memory (vs. stream) so the S3 SDK auto-computes the
+  // Content-MD5 header — R2 then rejects the upload if bytes were
+  // corrupted in flight. This is why we don't HEAD-verify after PUT:
+  // the integrity check is already inline.
   const body = await fs.readFile(filePath);
   await s3Client().send(new PutObjectCommand({
     Bucket: BUCKET,

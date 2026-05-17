@@ -153,6 +153,10 @@ local (gitignored):
   .cache/latex-build/<slug>/         (compile workdir)
 ```
 
+The entire `.cache/` tree is safe to `rm -rf` anytime — it's all
+regenerable from R2. Wipe it if a download looks corrupt or if disk
+pressure is real (~100 MB at current paper count).
+
 **Pipeline behavior** (see `build/build_arxiv_papers.js`):
 
 PDF compile uses a two-layer skip:

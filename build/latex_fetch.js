@@ -24,16 +24,22 @@ const { execFile } = require('child_process');
 const { promisify } = require('util');
 const execFileAsync = promisify(execFile);
 
-const {
-  ROOT,
-  loadManifest,
-  downloadFromR2,
-  keyFromCdnUrl,
-} = require('./r2_lib');
-const { manifestKey } = require('./latex_pack');
+const { ROOT, keyFromCdnUrl, loadManifest } = require('./r2_lib');
+const { manifestKey } = require('./latex_lib');
 
 const CACHE_DIR = path.join(ROOT, '.cache', 'latex-tarballs');
 
+class TarballNotFoundError extends Error {
+  constructor(message) { super(message); this.name = 'TarballNotFoundError'; }
+}
+
+/**
+ * Stream an HTTPS URL to a local file via a .tmp sidecar, rename on finish.
+ * A SIGINT mid-download leaves the .tmp behind (harmless — next run sees
+ * the absence of the final path and re-downloads). Without the rename,
+ * we'd leave a truncated final file that subsequent cache-hit checks
+ * would happily reuse.
+ */
 function downloadViaHttps(url, outputPath) {
   return new Promise((resolve, reject) => {
     https.get(url, (res) => {
@@ -41,27 +47,39 @@ function downloadViaHttps(url, outputPath) {
         downloadViaHttps(res.headers.location, outputPath).then(resolve, reject);
         return;
       }
+      if (res.statusCode === 404) {
+        reject(new TarballNotFoundError(`HTTP 404 for ${url}`));
+        return;
+      }
       if (res.statusCode !== 200) {
         reject(new Error(`HTTP ${res.statusCode} for ${url}`));
         return;
       }
       fs.ensureDirSync(path.dirname(outputPath));
-      const out = fs.createWriteStream(outputPath);
+      const tmpPath = `${outputPath}.tmp`;
+      const out = fs.createWriteStream(tmpPath);
       res.pipe(out);
-      out.on('finish', resolve);
-      out.on('error', reject);
+      out.on('finish', async () => {
+        try {
+          await fs.move(tmpPath, outputPath, { overwrite: true });
+          resolve();
+        } catch (err) { reject(err); }
+      });
+      out.on('error', async (err) => {
+        await fs.remove(tmpPath).catch(() => {});
+        reject(err);
+      });
     }).on('error', reject);
   });
 }
 
 /**
- * Download the tarball for `slug` into `.cache/latex-tarballs/<hash>.tar.gz`.
- * Cache hit if the file already exists at that path. Returns the cached
- * path.
+ * Download the tarball for `slug` into `.cache/latex-tarballs/<hash>/<slug>.tar.gz`.
+ * Cache hit if the final file (no .tmp) already exists; content-addressed
+ * naming means stale cache hits are not a concern (different content →
+ * different hash → different cache path).
  */
 async function ensureTarballCached(slug, cdnUrl) {
-  // Cache key is the hash directory in the CDN URL, e.g. "ab12cd34.../slug.tar.gz".
-  // Same content-addressed naming means hash collisions don't happen.
   const r2Key = keyFromCdnUrl(cdnUrl);
   if (!r2Key) throw new Error(`Manifest URL doesn't point at CDN: ${cdnUrl}`);
   const cachedPath = path.join(CACHE_DIR, r2Key);
@@ -70,14 +88,20 @@ async function ensureTarballCached(slug, cdnUrl) {
   }
   await fs.ensureDir(path.dirname(cachedPath));
 
-  // Prefer public CDN GET (no creds, served from edge). Fall back to
-  // authenticated R2 GET if the public path 404s or DNS fails — useful
-  // when CDN is misconfigured but R2 is otherwise reachable.
+  // Public CDN GET only — no authenticated R2 fallback. A 404 here means
+  // the manifest references a non-existent tarball, which is an explicit
+  // author-facing bug, not a transport issue worth retrying via creds.
   try {
     await downloadViaHttps(cdnUrl, cachedPath);
-  } catch (httpsErr) {
-    console.warn(`   ⤳  CDN fetch failed (${httpsErr.message}); falling back to authenticated R2`);
-    await downloadFromR2(r2Key, cachedPath);
+  } catch (err) {
+    if (err instanceof TarballNotFoundError) {
+      throw new Error(
+        `LaTeX tarball for "${slug}" is missing from R2 (${cdnUrl}). ` +
+        `Manifest entry is stale. Run \`npm run latex:update ${slug}\` ` +
+        `(arXiv) or \`npm run latex:pack ${slug}\` (position paper) to rebuild it.`
+      );
+    }
+    throw err;
   }
   return cachedPath;
 }
