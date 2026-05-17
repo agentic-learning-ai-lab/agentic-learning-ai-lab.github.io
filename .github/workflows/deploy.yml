@@ -84,9 +84,11 @@ jobs:
       # assets-manifest.json before build. Gated on push-to-main (not
       # PRs from forks — those can't safely use the R2 write creds).
       # Catches the "author forgot to run sync:r2" mistake by re-syncing
-      # at deploy time. The manifest update is in-process only; the
-      # subsequent Build site step picks it up so paper-content
-      # rewrites and template cdnUrl lookups see fresh CDN URLs.
+      # at deploy time. sync:r2 writes assets-manifest.json to disk in
+      # the runner workspace; the next step (Build site) reads it from
+      # disk so paper-content rewrites and template cdnUrl lookups pick
+      # up fresh CDN URLs. The manifest update is not pushed back to
+      # git — author re-runs sync:r2 locally before committing.
       - name: Sync assets to R2
         if: github.event_name != 'pull_request'
         env:
