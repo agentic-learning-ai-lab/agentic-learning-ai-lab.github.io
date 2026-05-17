@@ -748,9 +748,13 @@ async function compressAllPdfs(force = false) {
  * @param {Object} options - Build options
  * @param {boolean} options.force - Force re-download of existing papers
  * @param {boolean} options.buildPdf - Build PDFs from LaTeX source
+ * @param {boolean} options.latexOnly - Bootstrap mode: fetch + clean LaTeX
+ *   source only, skip HTML download / PDF compile / compression. Existing
+ *   paper.pdf files are untouched. Used for one-shot population of
+ *   research/<slug>/latex/ across many papers.
  */
 async function buildPapers(options = {}) {
-  const { force = false, buildPdf = false } = options;
+  const { force = false, buildPdf = false, latexOnly = false } = options;
 
   console.log('Building papers from arXiv...\n');
 
@@ -760,6 +764,47 @@ async function buildPapers(options = {}) {
 
   // Load papers configuration
   const papersData = yaml.load(await fs.readFile(PAPERS_YAML, 'utf-8'));
+
+  // --latex-only: bootstrap mode. Populate research/<slug>/latex/ for every
+  // paper with an arxiv URL. ensureLatexSource fetches + cleans (no compile),
+  // so existing paper.pdf files are not regenerated.
+  if (latexOnly) {
+    console.log('📦 Bootstrap mode: populating research/<slug>/latex/ for papers with arxiv URLs.');
+    console.log('   Existing paper.pdf files are untouched.\n');
+    let fetched = 0, skipped = 0, failed = 0;
+    for (const paper of papersData) {
+      if (!paper.arxiv) {
+        console.log(`⏭️  ${paper.permalink} - no arxiv URL, skipping`);
+        skipped++;
+        continue;
+      }
+      const latexDir = path.join(OUTPUT_DIR, paper.permalink, 'latex');
+      const alreadyPopulated = await fs.pathExists(latexDir) && await findMainTexFile(latexDir);
+      if (alreadyPopulated && !force) {
+        console.log(`⏭️  ${paper.permalink} - latex/ already populated`);
+        skipped++;
+        continue;
+      }
+      try {
+        console.log(`⬇️  ${paper.permalink} - fetching + cleaning...`);
+        await ensureLatexSource(paper.arxiv, latexDir, { force });
+        fetched++;
+      } catch (err) {
+        // Continue on per-paper failure so a single bad e-print doesn't
+        // abort the batch. Bootstrap caller can re-run after addressing.
+        console.error(`❌ ${paper.permalink} - ${err.message}`);
+        failed++;
+      }
+    }
+    console.log('\n' + '='.repeat(50));
+    console.log('📊 Bootstrap Summary');
+    console.log('='.repeat(50));
+    console.log(`  ✅ Populated: ${fetched}`);
+    console.log(`  ⏭️  Skipped:   ${skipped}`);
+    if (failed > 0) console.log(`  ❌ Failed:    ${failed}`);
+    console.log('');
+    return;
+  }
 
   // For HTML: only papers with enable_full_paper (HTML must come from arxiv).
   // For PDF: papers with an arxiv URL (we'll fetch source) OR with a
@@ -880,16 +925,18 @@ async function buildPapers(options = {}) {
 
 // Run if executed directly
 if (require.main === module) {
-  // Check for command line arguments
   const args = process.argv.slice(2);
   const force = args.includes('--force') || args.includes('-f');
   const buildPdf = args.includes('--pdf') || args.includes('-p');
+  const latexOnly = args.includes('--latex-only');
 
-  if (buildPdf) {
+  if (latexOnly) {
+    console.log('📦 LaTeX-only mode: fetch + clean source, no compile.\n');
+  } else if (buildPdf) {
     console.log('📄 PDF compilation enabled\n');
   }
 
-  buildPapers({ force, buildPdf }).catch(error => {
+  buildPapers({ force, buildPdf, latexOnly }).catch(error => {
     console.error('Build failed:', error);
     process.exit(1);
   });

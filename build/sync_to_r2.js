@@ -157,7 +157,8 @@ function collectFiles() {
 }
 
 async function main() {
-  console.log(`R2 sync → bucket=${BUCKET}  cdn=${CDN_BASE}\n`);
+  const verify = process.argv.includes('--verify');
+  console.log(`R2 sync → bucket=${BUCKET}  cdn=${CDN_BASE}${verify ? '  (verify mode: HEAD-check every file)' : ''}\n`);
 
   const files = collectFiles();
   if (files.length === 0) {
@@ -181,8 +182,17 @@ async function main() {
     console.log();
   }
 
+  // Use the committed manifest as the "already uploaded" cache. Content-hash
+  // addressing means an existing entry whose URL matches what we'd compute
+  // *must* be on R2 (modulo manual deletion / storage failure — rare).
+  //
+  // --verify falls back to a HEAD request per file as defense against drift.
+  const existingManifest = await fs.pathExists(MANIFEST_PATH)
+    ? await fs.readJson(MANIFEST_PATH)
+    : {};
+
   const manifest = {};
-  let uploaded = 0, skipped = 0, failed = 0, bytesUp = 0;
+  let uploaded = 0, cached = 0, failed = 0, bytesUp = 0;
 
   for (const file of files) {
     try {
@@ -193,8 +203,16 @@ async function main() {
       const cdnUrl = `${CDN_BASE}/${r2Key}`;
       const logicalPath = '/' + file;
 
-      if (await r2ObjectExists(r2Key)) {
-        skipped++;
+      // Trust the manifest first (free). Fall back to HEAD only in --verify mode.
+      let needsUpload;
+      if (existingManifest[logicalPath] === cdnUrl) {
+        needsUpload = verify ? !(await r2ObjectExists(r2Key)) : false;
+      } else {
+        needsUpload = true;
+      }
+
+      if (!needsUpload) {
+        cached++;
       } else {
         const sz = (await fs.stat(abs)).size;
         await uploadToR2(r2Key, abs);
@@ -218,9 +236,9 @@ async function main() {
   await fs.writeJson(MANIFEST_PATH, sortedManifest, { spaces: 2 });
 
   console.log(`\n📊 Sync summary`);
-  console.log(`   ⬆️  Uploaded: ${uploaded} (${(bytesUp / 1024 / 1024).toFixed(1)} MB)`);
-  console.log(`   ⏭️  Skipped:  ${skipped}`);
-  if (failed > 0) console.log(`   ❌ Failed:   ${failed}`);
+  console.log(`   ⬆️  Uploaded:    ${uploaded} (${(bytesUp / 1024 / 1024).toFixed(1)} MB)`);
+  console.log(`   💾 Cache hits:  ${cached}${verify ? ' (HEAD-verified)' : ' (manifest-trusted)'}`);
+  if (failed > 0) console.log(`   ❌ Failed:      ${failed}`);
   console.log(`   📋 Manifest written to ${path.relative(ROOT, MANIFEST_PATH)} (${Object.keys(sortedManifest).length} entries)\n`);
 
   if (failed > 0) process.exit(2);
