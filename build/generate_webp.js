@@ -40,7 +40,17 @@ async function generateOne(sourcePath) {
     if (dst.mtime >= src.mtime) return { skipped: true };
   }
 
-  await sharp(sourcePath).webp({ quality: QUALITY }).toFile(webpPath);
+  // Atomic write: encode to .tmp, rename on success. A SIGKILL or OOM
+  // mid-encode otherwise leaves a truncated .webp that the mtime-based
+  // cache would happily reuse on the next run.
+  const tmpPath = `${webpPath}.tmp`;
+  try {
+    await sharp(sourcePath).webp({ quality: QUALITY }).toFile(tmpPath);
+    await fs.move(tmpPath, webpPath, { overwrite: true });
+  } catch (err) {
+    await fs.remove(tmpPath).catch(() => {});
+    throw err;
+  }
   return { skipped: false, webpPath };
 }
 

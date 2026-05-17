@@ -9,6 +9,7 @@ Plan for moving the lab site from "pure GitHub Pages + LFS" to "Cloudflare-front
 | A | Cloudflare in front of GH Pages | ✅ Live — DNS proxied, two Cache Rules active |
 | B | Site binaries (paper.pdf, hero images, headshots) on R2 | ✅ Done in PR #2 — `build/sync_to_r2.js` + `{{cdnUrl}}` helper |
 | B (LaTeX) | LaTeX source as tar.gz on R2 | ✅ Done in PR #4 — see [latex-tarball-storage.md](latex-tarball-storage.md) |
+| B (WebP) | WebP siblings for hero/card/headshot images | ✅ Done in PR #5 — `build/generate_webp.js` + `{{pictureCdn}}` helper |
 | C | Full Cloudflare Pages migration | ⏸ Deferred — not motivated unless GH Pages CI becomes painful |
 | D | HK/SG mirror for China latency | ❌ Dropped — A's edge is sufficient |
 
