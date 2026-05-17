@@ -4,6 +4,11 @@ out/
 staging/
 .venv/
 
+# Local secrets — see scripts/setup_r2_secrets.sh
+.env
+.env.local
+.env.*.local
+
 # Stale output from arxiv_latex_cleaner — see build/clean_latex.js
 research/*/latex_arXiv/
 
