@@ -6,6 +6,20 @@ const handlebarsFactory = require('handlebars');
 const moment = require('moment');
 
 const TEMPLATES_DIR = path.resolve(__dirname, '../templates');
+const ASSETS_MANIFEST_PATH = path.resolve(__dirname, '../assets-manifest.json');
+
+// Memoized once-per-process — build_pages.js spawns one templater
+// subprocess per template, so this loads ~7 times per build, ~negligible.
+let _manifest = null;
+function loadAssetsManifest() {
+    if (_manifest !== null) return _manifest;
+    if (fs.existsSync(ASSETS_MANIFEST_PATH)) {
+        _manifest = JSON.parse(fs.readFileSync(ASSETS_MANIFEST_PATH, 'utf-8'));
+    } else {
+        _manifest = {};
+    }
+    return _manifest;
+}
 
 doTemplating(process.argv[2], process.argv[3]);
 
@@ -116,6 +130,18 @@ function registerPartials(handlebars) {
 }
 
 function registerHelpers(handlebars) {
+    // {{cdnUrl '/research/<slug>/paper.pdf'}} → 'https://cdn.agenticlearning.ai/<hash>/<slug>.pdf'
+    //
+    // Looks up `logicalPath` in assets-manifest.json (populated by
+    // build/sync_to_r2.js). Falls back to the local path if the manifest
+    // doesn't have an entry — graceful degradation lets us migrate
+    // templates incrementally without breaking pages mid-migration.
+    handlebars.registerHelper('cdnUrl', function (logicalPath) {
+        if (!logicalPath) return '';
+        const manifest = loadAssetsManifest();
+        return manifest[logicalPath] || logicalPath;
+    });
+
     handlebars.registerHelper('formatDate', function (date, format) {
         return moment.utc(date).format(format);
     });
