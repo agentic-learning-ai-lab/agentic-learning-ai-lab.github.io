@@ -1,12 +1,13 @@
 # Git LFS - Paper PDFs (final compiled PDFs only; build intermediates are gitignored)
 research/**/*.pdf filter=lfs diff=lfs merge=lfs -text
 
-# Git LFS - Paper HTML assets (images from arXiv)
+# Git LFS - Paper HTML assets (images from arXiv) + lossless WebP siblings
 research/**/assets/**/*.png filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.jpg filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.gif filter=lfs diff=lfs merge=lfs -text
 research/**/assets/**/*.svg filter=lfs diff=lfs merge=lfs -text
+research/**/assets/**/*.webp filter=lfs diff=lfs merge=lfs -text
 
 # LaTeX source lives as tar.gz on R2 — research/<slug>/latex/ never enters git.
 # See notes/latex-tarball-storage.md.
