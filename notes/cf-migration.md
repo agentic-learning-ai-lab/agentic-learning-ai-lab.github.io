@@ -1,8 +1,19 @@
 # Cloudflare migration — design and roadmap
 
-Plan for moving the lab site from "pure GitHub Pages + LFS" to "Cloudflare-fronted GH Pages + R2 for binaries." Written 2026-05-16 while pausing the LaTeX bootstrap (we don't want to commit ~120 MB of binaries to LFS if those assets will move to R2 shortly anyway).
+Plan for moving the lab site from "pure GitHub Pages + LFS" to "Cloudflare-fronted GH Pages + R2 for binaries." Written 2026-05-16.
 
-**Design only — no code yet.**
+## Status (2026-05-17)
+
+| Lever | What | Status |
+|---|---|---|
+| A | Cloudflare in front of GH Pages | ✅ Live — DNS proxied, two Cache Rules active |
+| B | Site binaries (paper.pdf, hero images, headshots) on R2 | ✅ Done in PR #2 — `build/sync_to_r2.js` + `{{cdnUrl}}` helper |
+| B (LaTeX) | LaTeX source as tar.gz on R2 | ✅ Done in PR #4 — see [latex-tarball-storage.md](latex-tarball-storage.md) |
+| B (WebP) | WebP siblings for hero/card/headshot images | ✅ Done in PR #5 — `build/generate_webp.js` + `{{pictureCdn}}` helper |
+| C | Full Cloudflare Pages migration | ⏸ Deferred — not motivated unless GH Pages CI becomes painful |
+| D | HK/SG mirror for China latency | ❌ Dropped — A's edge is sufficient |
+
+What remains: Phase 4e (arxiv HTML inline figures via CDN) and the LFS-free migration when LFS quota actually pinches. See [next-up.md](next-up.md).
 
 ## Today's state (recap)
 

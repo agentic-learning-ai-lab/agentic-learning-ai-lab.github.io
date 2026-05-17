@@ -157,6 +157,58 @@ function registerHelpers(handlebars) {
         return logicalPath;
     });
 
+    // {{pictureCdn '/assets/images/papers/foo.png' alt='hero' class='tw-w-full'}}
+    //   →  <picture>
+    //        <source srcset="<webp-cdn-url>" type="image/webp">
+    //        <img src="<png-cdn-url>" alt="hero" class="tw-w-full" loading="lazy">
+    //      </picture>
+    //
+    // Use for any <img> element that should benefit from WebP. The PNG
+    // fallback inside <img> guarantees correctness on browsers without
+    // WebP support.
+    //
+    // Hash options:
+    //   alt    — alt text (escaped)
+    //   class  — class attribute (raw passthrough for Tailwind class lists)
+    //   eager  — true: omit loading=lazy and add fetchpriority=high
+    //            (for above-the-fold LCP images)
+    //
+    // Edge case: if `logicalPath` itself already ends in .webp (a paper
+    // that ships a WebP-only source image — see poodle/osiris/ssl
+    // childs-perspective), no PNG fallback exists, so we skip the
+    // <source> tag and emit a single <img> pointing at the webp. Old
+    // browsers without WebP support will fail on these specific images;
+    // that's the existing data contract, not a regression from this PR.
+    function webpVariant(logicalPath) {
+        return logicalPath.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+    }
+    handlebars.registerHelper('pictureCdn', function (logicalPath, options) {
+        if (!logicalPath) return '';
+        const manifest = loadAssetsManifest();
+        const hash = (options && options.hash) || {};
+
+        // Resolve the primary image URL (the "fallback" inside <img>).
+        const primaryUrl = manifest[logicalPath] || (_cdnMisses.add(logicalPath), logicalPath);
+
+        // Resolve a separate WebP source ONLY when the original isn't
+        // already .webp. Same URL on both branches → redundant source,
+        // emit just <img>.
+        const isAlreadyWebp = /\.webp$/i.test(logicalPath);
+        const webpPath = webpVariant(logicalPath);
+        const webpUrl = !isAlreadyWebp && manifest[webpPath];
+
+        const escapedAlt = handlebars.escapeExpression(hash.alt || '');
+        const altAttr = ` alt="${escapedAlt}"`;
+        const classAttr = hash.class ? ` class="${hash.class}"` : '';
+        const loadingAttr = hash.eager ? ' fetchpriority="high"' : ' loading="lazy"';
+
+        const sourceTag = webpUrl
+            ? `<source srcset="${webpUrl}" type="image/webp">`
+            : '';
+        const out = `<picture>${sourceTag}<img src="${primaryUrl}"${altAttr}${classAttr}${loadingAttr}></picture>`;
+        return new handlebars.SafeString(out);
+    });
+
     handlebars.registerHelper('formatDate', function (date, format) {
         return moment.utc(date).format(format);
     });
