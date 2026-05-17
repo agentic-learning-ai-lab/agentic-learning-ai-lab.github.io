@@ -60,7 +60,18 @@ async function main() {
     });
 
     if (data.html !== before) {
-      await fs.writeJson(abs, data, { spaces: 2 });
+      // Atomic write: write to .tmp + rename. A SIGKILL mid-write
+      // otherwise leaves a truncated paper-content.json that the next
+      // build's regex-based detection can't catch (no marker, no size
+      // check). Mirrors the pattern in build/generate_webp.js.
+      const tmp = `${abs}.tmp`;
+      try {
+        await fs.writeJson(tmp, data, { spaces: 2 });
+        await fs.move(tmp, abs, { overwrite: true });
+      } catch (err) {
+        await fs.remove(tmp).catch(() => {});
+        throw err;
+      }
       rewritten++;
     } else {
       unchanged++;
