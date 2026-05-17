@@ -21,7 +21,11 @@ const fs = require('fs-extra');
 const path = require('path');
 const sharp = require('sharp');
 
-const QUALITY = 85;
+// q98 is the practical "imperceptible to the eye unless zoomed in" point.
+// q85 was visibly softer on detail-heavy hero images and AI-generated
+// backgrounds; q98 keeps the WebP wire-format win (still 10-20× smaller
+// than PNG for photo content) while preserving visible detail.
+const QUALITY = 98;
 
 const ROOT = path.resolve(__dirname, '..');
 const WEBP_DIRS = [

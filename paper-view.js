@@ -91,7 +91,8 @@ async function loadPaperContent() {
             document.head.appendChild(styleEl);
         }
 
-        // Inject HTML content
+        // data.html ships with CDN URLs already baked in (see
+        // build/rewrite_paper_content.js). No runtime rewriting needed.
         contentEl.innerHTML = data.html;
         loadingEl.style.display = 'none';
         paperContentLoaded = true;
