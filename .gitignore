@@ -9,26 +9,18 @@ staging/
 .env.local
 .env.*.local
 
-# Stale output from arxiv_latex_cleaner — see build/clean_latex.js
+# LaTeX source lives as tar.gz on R2, never in git. Local research/<slug>/latex/
+# is a transient extract from `npm run latex:fetch <slug>` for editing, and from
+# the build pipeline's R2 download branch. See notes/latex-tarball-storage.md.
+research/*/latex/
 research/*/latex_arXiv/
+
+# Build pipeline cache for downloaded tarballs + compile workdirs.
+.cache/
 
 # Compression markers
 research/*/assets/.compressed/
 research/*/*.gs-compressed
-
-# LaTeX build artifacts in research/<slug>/latex/ (keep source, drop intermediates)
-research/*/latex/**/*.aux
-research/*/latex/**/*.log
-research/*/latex/**/*.out
-research/*/latex/**/*.toc
-research/*/latex/**/*.bbl
-research/*/latex/**/*.blg
-research/*/latex/**/*.fls
-research/*/latex/**/*.fdb_latexmk
-research/*/latex/**/*.synctex.gz
-research/*/latex/**/*.xml
-research/*/latex/**/*.cache
-research/*/latex/**/paper.pdf
 
 # Legacy LaTeX path — kept until any leftover papers-latex/ trees are migrated
 papers-latex/**/paper.html

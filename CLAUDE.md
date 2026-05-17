@@ -31,12 +31,12 @@ data/                       # YAML sources (papers, people, areas, alumni)
   research_areas.yaml
   alumni.yaml
 
-research/<slug>/            # Per-paper directory (source + cached artifacts)
+research/<slug>/            # Per-paper directory (cached artifacts only)
   index.html                #   built from paper.hbs — generated, but committed
   paper.pdf                 #   compiled PDF (LFS)
   paper-content.json        #   arXiv HTML extraction (cached, committed)
   assets/                   #   images for the HTML view (LFS)
-  latex/                    #   LaTeX source (see "LaTeX source and PDFs")
+  # latex/ is transient (gitignored). Real source is a tar.gz on R2.
 
 areas/<slug>/index.html     # Generated from research_area.hbs (committed)
 people/<slug>/index.html    # Generated from person.hbs (committed)
@@ -51,8 +51,13 @@ assets/
 build/                      # All build scripts (Node, no bundler)
   build_pages.js            #   Top-level driver — runs templater.js per template
   templater.js              #   Handlebars renderer; iterates papers/people/areas
-  build_arxiv_papers.js     #   arXiv HTML download + LaTeX→PDF compile
-  download_arxiv_source.js  #   Standalone helper for fetching LaTeX source
+  build_arxiv_papers.js     #   arXiv HTML download + LaTeX→PDF compile (R2 source)
+  r2_lib.js                 #   Shared S3 client + manifest helpers for R2 scripts
+  sync_to_r2.js             #   Bulk site asset sync (images, paper.pdf)
+  latex_pack.js             #   Publish local research/<slug>/latex/ → R2 tarball
+  latex_fetch.js            #   Download R2 tarball → research/<slug>/latex/
+  latex_update.js           #   Re-fetch from arXiv → clean → R2 tarball
+  clean_latex.js            #   CLI wrapper for arxiv_latex_cleaner
   compress_assets.js        #   Resize arXiv-downloaded images to ≤1400px width
   generate_thumbnails.js    #   Sharp-based 256x256 thumbnails
   generate_search_index.js  #   Builds assets/search-index.json from YAML
@@ -125,55 +130,82 @@ If you change the build pipeline, update this workflow too.
 
 ## LaTeX source and PDFs
 
-We persist LaTeX source per paper at `research/<slug>/latex/`. This is the
-single source of truth for compiled PDFs and lets us self-host papers
-that are **not** on arXiv (e.g. position papers).
+LaTeX source lives as one `tar.gz` per paper on Cloudflare R2. Nothing
+under `research/<slug>/latex/` is ever committed — that path is a
+transient extract used only during local editing or during a fresh
+compile. The compiled `paper.pdf` stays committed via LFS as the build
+artifact. See `notes/latex-tarball-storage.md` for the full design.
 
 **Layout:**
 
 ```
-research/<slug>/
-  latex/
-    main.tex                  (or any *.tex with \documentclass)
-    refs.bib
-    figures/...
-  paper.pdf                   (compiled artifact, committed via LFS)
-  paper.pdf.gs-compressed     (Ghostscript marker, gitignored)
+git:
+  research/<slug>/paper.pdf          (compiled artifact, LFS)
+  research/<slug>/paper.pdf.gs-compressed  (Ghostscript marker, gitignored)
+  assets-manifest.json               (records /research/<slug>/latex.tar.gz → CDN URL)
+
+R2 (cdn.agenticlearning.ai):
+  <hash>/<slug>.tar.gz               (cleaned LaTeX source, content-addressed)
+
+local (gitignored):
+  research/<slug>/latex/             (transient extract, present only during editing)
+  .cache/latex-tarballs/             (download cache for tarballs)
+  .cache/latex-build/<slug>/         (compile workdir)
 ```
+
+The entire `.cache/` tree is safe to `rm -rf` anytime — it's all
+regenerable from R2. Wipe it if a download looks corrupt or if disk
+pressure is real (~100 MB at current paper count).
 
 **Pipeline behavior** (see `build/build_arxiv_papers.js`):
 
-The build is two layers of skip:
+PDF compile uses a two-layer skip:
 
 1. **Outer skip — compiled PDF.** If `research/<slug>/paper.pdf` exists,
-   the build does nothing for that paper unless `--force` is passed. This
-   is what makes CI fast: PDFs are committed via LFS and almost never
-   regenerated.
-2. **Inner skip — LaTeX source.** Only triggered when the outer skip
-   doesn't apply (no PDF yet, or `--force`). The source is then resolved:
-   - If `research/<slug>/latex/` already has a `.tex` with
-     `\documentclass`, use it. Don't refetch.
-   - Else if `paper.arxiv` is set, download
-     `https://arxiv.org/e-print/<id>` and extract into `latex/`.
-   - Else (no source, no arxiv), the paper is a self-hosted draft. Author
-     must drop a `latex/` tree in by hand. The build skips with a clear
-     message until they do.
+   the build does nothing for that paper unless `--force` is passed. CI
+   hits this in 99% of runs.
+2. **Inner resolve — paper.pdf missing.** `resolveLatexSourceForCompile()`
+   picks source in this order:
+   - If `research/<slug>/latex/` exists locally with a `.tex` containing
+     `\documentclass` → use in place (author is mid-edit).
+   - Else if `assets-manifest.json` has `/research/<slug>/latex.tar.gz` →
+     download tarball from R2 (cached in `.cache/latex-tarballs/`),
+     extract to `.cache/latex-build/<slug>/`, compile there.
+   - Else → print a hint telling the author to run
+     `npm run latex:update <slug>` (arXiv bootstrap) or
+     `npm run latex:pack <slug>` (position paper). The build never
+     auto-fetches from arXiv or auto-writes to R2.
 
-**To regenerate a PDF after editing source.** Delete
-`research/<slug>/paper.pdf`, then run `npm run build:arxiv:pdf`. Or pass
-`--force` (refreshes *all* PDFs). Editing `latex/` alone does not bust the
-cache.
+**Author scripts:**
 
-**LFS rules** are in `.gitattributes`:
+```
+npm run latex:fetch  <slug>   # R2 → research/<slug>/latex/ (for editing)
+npm run latex:pack   <slug>   # local tree → clean → tar → R2 → manifest → delete local
+npm run latex:update <slug>   # arXiv → clean → tar → R2 → manifest → invalidate paper.pdf
+npm run latex:clean  <slug>   # run arxiv_latex_cleaner only (rarely needed directly)
+npm run build:arxiv:pdf       # compile any missing paper.pdf (cache-first)
+```
 
-- `research/**/latex/**/*.{pdf,png,jpg,jpeg,eps}` → LFS (figure binaries).
-- `research/**/latex/**/*.{aux,log,out,toc,bbl,blg,fls,fdb_latexmk,synctex.gz,xml,cache}` → **gitignored** (build artifacts).
-- `research/**/latex/**/paper.pdf` (inside latex/) → gitignored. The
-  committed PDF lives at `research/<slug>/paper.pdf`, not inside `latex/`.
+`latex:pack --all` packs every `research/<slug>/latex/` tree it finds —
+useful when a batch of papers are seeded locally and need bulk upload.
 
-When a paper's arXiv version changes substantively, run
-`npm run build:arxiv:force -- --pdf` to refetch source and recompile. By
-default re-fetching is skipped because the local `latex/` already exists.
+**To regenerate a PDF after editing source:**
+
+```bash
+npm run latex:fetch <slug>    # if you don't already have the tree
+# ...edit...
+npm run latex:pack <slug>     # publishes new tarball to R2
+rm research/<slug>/paper.pdf  # invalidate compiled cache
+npm run build:arxiv:pdf       # recompile from new R2 tarball
+git add research/<slug>/paper.pdf assets-manifest.json && git commit
+```
+
+**When an arXiv version bumps**, skip the manual fetch/edit:
+
+```bash
+npm run latex:update <slug>   # refetches from arXiv, cleans, publishes, invalidates paper.pdf
+npm run build:arxiv:pdf
+```
 
 **Local LaTeX install.** The compile prefers `latexmk` and falls back to a
 direct compile + `bibtex` cycle using the detected engine. `latexmk`
@@ -211,46 +243,26 @@ will fail. Two ways to handle this:
 Locally, you'll need the relevant engine installed (`tlmgr install xetex` /
 `tlmgr install luatex`).
 
-### Author comments in LaTeX source — stripped automatically
+### Author comments in LaTeX source — stripped before upload
 
-This repo is public; any committed `.tex` is world-readable and
-Google-indexable. Author comments routinely contain TODOs, reviewer
-responses ("R2 said..."), commented-out figures from alternate
-experiments, internal scratch, and funding details that aren't meant for
-public view. We strip them before the source ever enters the working
-tree at its permanent location.
+This repo is public, and so is the R2 bucket. Author comments routinely
+contain TODOs, reviewer responses ("R2 said..."), commented-out figures
+from alternate experiments, internal scratch, and funding details that
+aren't meant for public view. The cleaning step is now baked into the
+publish path — there is no committed `.tex` to scan, so the only place
+this can leak is the tarball uploaded to R2.
 
-How it happens, by entry path:
-
-- **arXiv fetch.** `ensureLatexSource()` extracts the tarball into
-  `research/<slug>/latex/`, then immediately runs
-  `cleanLatexSource()`, which shells out to
-  [`arxiv_latex_cleaner`](https://github.com/google-research/arxiv-latex-cleaner)
-  with `--keep_bib`. The cleaner strips comment lines + commented-out
-  blocks while preserving `%!TEX` magic comments and other functional
-  patterns. Author sees a one-line summary (`🧹 cleaned ...: stripped N
-  comment lines`) in the build log, then commits the cleaned source.
-
-- **Position paper drop.** Author hand-drops `research/<slug>/latex/`
-  (no arxiv URL). Before committing, run
-  `npm run latex:clean -- <slug>` once. Same cleaner, same flags.
-
-- **Defense in depth.** CI greps every committed
-  `research/**/latex/**/*.tex` for non-magic-comment lines and fails
-  the PR if any are found. (`.sty` / `.cls` files are skipped — they're
-  usually third-party stylesheets whose license/header comments are
-  intentional, and the cleaner leaves them alone too.) Authors who
-  forgot to run the cleaner see the failure with a "run npm run
-  latex:clean and recommit" hint.
-
-Note: cleaning on the CI runner is *not* a privacy guarantee — CI
-doesn't push back to the repo, so cleaning that happens during a CI
-recompile is ephemeral. The guarantee comes from local cleaning + the
-author committing the cleaned tree.
+`latex:pack` and `latex:update` run
+[`arxiv_latex_cleaner`](https://github.com/google-research/arxiv-latex-cleaner)
+on the local `research/<slug>/latex/` tree **immediately before tarring**.
+The cleaner strips comment lines and commented-out blocks while
+preserving `%!TEX` magic comments and other functional patterns. Author
+sees a one-line summary (`🧹 cleaned ...: stripped N comment lines`) in
+the script log.
 
 `arxiv_latex_cleaner` is installed via `npm run setup:python` (creates
-`.venv/` locally) or directly via `pip install` in CI. The exact pinned
-dep is in `build/requirements.txt`.
+`.venv/` locally). The pinned dep is in `build/requirements.txt`. CI does
+not need it — `.tex` never enters git.
 
 ## Code review and audit checklist (before pushing to dev → main)
 
@@ -316,20 +328,28 @@ over it.
    `journal`, `research_areas`, `abstract`, `short_abstract`. Optional:
    `arxiv`, `pdf`, `webpage`, `enable_full_paper`, `is_recent`.
 2. Drop the hero image at `assets/images/papers/<snake_case>.png`.
-3. If the paper is on arXiv: `npm run build:arxiv:pdf` will fetch source
-   into `research/<slug>/latex/` and compile `paper.pdf`. Commit both.
-4. If the paper isn't on arXiv: drop the LaTeX source under
-   `research/<slug>/latex/` by hand, then run `npm run build`.
-5. **Run `npm run sync:r2`** to upload the new hero image and paper.pdf
-   to Cloudflare R2, then commit the updated `assets-manifest.json`.
-   If you forget: templates fall back to local paths (site still works,
-   just from GH Pages origin instead of CDN), and `npm run build` prints
-   a `⚠️ cdnUrl lookup fell back to local` warning naming the missed
-   paths. New assets currently still get LFS-tracked too (we'll revisit
+3. Get the LaTeX source onto R2:
+   - On arXiv: `npm run latex:update <slug>` fetches from
+     `https://arxiv.org/e-print/<id>`, cleans, tars, uploads to R2,
+     writes a manifest entry, and invalidates any stale paper.pdf.
+   - Not on arXiv: drop the source at `research/<slug>/latex/` (the
+     directory is gitignored), then run `npm run latex:pack <slug>`.
+     Same effect — clean, tar, upload, manifest, then auto-delete the
+     local tree.
+4. `npm run build:arxiv:pdf` compiles `paper.pdf` by downloading the
+   tarball from R2 (cached in `.cache/`).
+5. `npm run sync:r2` uploads the new hero image and paper.pdf to R2 and
+   updates `assets-manifest.json`. If you forget: templates fall back to
+   local paths (site still works, just from GH Pages origin instead of
+   CDN), and `npm run build` prints a
+   `⚠️ cdnUrl lookup fell back to local` warning naming the missed paths.
+   New site assets currently still get LFS-tracked too (we'll revisit
    that when LFS quota becomes tight — see `notes/cf-migration.md`).
 6. Run `npm run build` end-to-end and check
    `research/<slug>/index.html` opens correctly.
-7. Walk the audit checklist above. Then commit.
+7. Walk the audit checklist above. Then commit
+   (`paper.pdf` + `assets-manifest.json` are the only LaTeX-related files
+   that ever get committed).
 
 ## When the user asks you to update something
 

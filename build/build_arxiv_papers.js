@@ -1,25 +1,36 @@
 #!/usr/bin/env node
 
 /**
- * Build script to download arXiv HTML papers and compile PDFs from LaTeX source
+ * Build script: ingest arXiv HTML for the "Full Paper" view, and compile
+ * PDFs from LaTeX source that lives as tar.gz on R2 (see
+ * notes/latex-tarball-storage.md).
  *
- * This script:
- * 1. Reads papers.yaml to find papers with arxiv links and enable_full_paper: true
- * 2. Downloads HTML from ar5iv.labs.arxiv.org
- * 3. Extracts and cleans the main content
- * 4. Downloads images and updates paths
- * 5. Saves it for embedding in the paper template
- * 6. Optionally downloads LaTeX source and compiles PDFs
+ * HTML path: downloads from arxiv.org/html (with ar5iv fallback),
+ * extracts, fixes citation/image paths, writes paper-content.json.
+ *
+ * PDF path: outer skip on research/<slug>/paper.pdf existing (CI hits
+ * this 99% of the time). When recompile is needed, resolves source via
+ * resolveLatexSourceForCompile():
+ *   1. local research/<slug>/latex/ (gitignored, present mid-edit)
+ *   2. R2 tarball via assets-manifest.json (downloaded + extracted to
+ *      .cache/latex-build/<slug>/)
+ *   3. otherwise, prints a hint to run `npm run latex:update <slug>`.
+ *
+ * Bootstrap (first-time fetch from arXiv) and re-publish (after edits)
+ * are explicit author actions in latex_update.js / latex_pack.js — the
+ * build never auto-fetches from arXiv or auto-writes to R2.
  *
  * Usage:
- *   node build/build_arxiv_papers.js              # Build HTML only
- *   node build/build_arxiv_papers.js --pdf        # Build HTML and PDFs
- *   node build/build_arxiv_papers.js --force      # Force re-download existing papers
- *   node build/build_arxiv_papers.js --pdf --force # Build everything, force re-download
+ *   node build/build_arxiv_papers.js              # HTML only
+ *   node build/build_arxiv_papers.js --pdf        # HTML + recompile any missing PDFs
+ *   node build/build_arxiv_papers.js --force      # Force re-download HTML
+ *   node build/build_arxiv_papers.js --pdf --force # Recompile every PDF (downloads
+ *                                                   # every tarball from CDN — slow,
+ *                                                   # rarely useful in CI)
  *
  * Requirements for PDF compilation:
- *   - pdflatex or latexmk must be installed
- *   - Full LaTeX distribution (texlive, mactex, etc.)
+ *   - latexmk (with pdflatex / xelatex / lualatex backends) installed
+ *   - Ghostscript for post-compile PDF compression
  */
 
 const fs = require('fs-extra');
@@ -30,11 +41,22 @@ const { promisify } = require('util');
 
 const execAsync = promisify(require('child_process').exec);
 
+const {
+  cleanLatexSource,
+  findMainTexFile,
+  manifestKey,
+} = require('./latex_lib');
+
 // Configuration
 const PAPERS_YAML = path.join(__dirname, '../data/papers.yaml');
 const OUTPUT_DIR = path.join(__dirname, '../research');
 const ARXIV_HTML_BASE = 'https://arxiv.org/html/';
 const ARXIV_ASSETS_BASE = 'https://arxiv.org/html/';
+
+// Temp compile workdir when source comes from an R2 tarball. Stays out of
+// git; `npm run latex:fetch` extracts to research/<slug>/latex/ (also
+// gitignored) when the author wants the source persistent for editing.
+const COMPILE_CACHE = path.join(__dirname, '..', '.cache', 'latex-build');
 
 /**
  * Download HTML from a URL with retry logic
@@ -347,51 +369,26 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
 }
 
 /**
- * Find the main .tex file in a directory (one with \documentclass).
- * Prefers main.tex or ms.tex by convention.
- */
-async function findMainTexFile(latexDir) {
-  const files = await fs.readdir(latexDir);
-  const preferred = files.find(f => f === 'main.tex' || f === 'ms.tex');
-  if (preferred) return preferred;
-
-  for (const file of files.filter(f => f.endsWith('.tex'))) {
-    const content = await fs.readFile(path.join(latexDir, file), 'utf8');
-    if (content.includes('\\documentclass')) {
-      return file;
-    }
-  }
-  return null;
-}
-
-/**
- * Ensure LaTeX source exists at latexDir. Idempotent: if the directory is
- * already populated with a .tex containing \documentclass, returns immediately.
+ * Fetch LaTeX source for a paper from arXiv into latexDir.
  *
- * If absent and `arxivUrl` is set, fetches https://arxiv.org/e-print/<id>
- * and extracts into latexDir. If absent and no arxivUrl, returns null
- * (position-paper case — author must drop source in by hand).
+ * This is the *only* arXiv ingest path. It is called from latex_update.js
+ * (author-driven refresh), not from the build — the build resolves
+ * source from R2 instead. See notes/latex-tarball-storage.md.
  *
- * @param {string|null} arxivUrl
- * @param {string} latexDir - Persistent location, e.g. research/<slug>/latex
- * @param {object} options - { force: re-fetch even if source exists }
- * @returns {Promise<string|null>} latexDir, or null if no source available
+ * For the common tar/gzip e-print path, cleans author comments before
+ * returning. For the rare "arXiv served a single .tex" case, the file is
+ * renamed to main.tex and returned uncleaned — but that's safe because
+ * the caller (latex_update → packOne) always re-cleans before tarring.
+ * The privacy boundary lives in packOne, not here.
+ *
+ * @param {string} arxivUrl
+ * @param {string} latexDir - Where to extract (typically research/<slug>/latex/)
+ * @returns {Promise<string>} latexDir
  */
-async function ensureLatexSource(arxivUrl, latexDir, { force = false } = {}) {
-  const sourcePresent = await fs.pathExists(latexDir) && await findMainTexFile(latexDir);
-
-  if (sourcePresent && !force) {
-    return latexDir;
-  }
-  if (sourcePresent && force && !arxivUrl) {
-    // Force flag can only re-fetch when we have a URL; for hand-dropped
-    // position-paper source, keep what's there.
-    return latexDir;
-  }
+async function ensureLatexSource(arxivUrl, latexDir, _opts = {}) {
   if (!arxivUrl) {
-    return null;
+    throw new Error('ensureLatexSource requires an arxiv URL');
   }
-
   const arxivId = extractArxivId(arxivUrl);
   if (!arxivId) {
     throw new Error(`Could not extract arXiv ID from ${arxivUrl}`);
@@ -413,13 +410,11 @@ async function ensureLatexSource(arxivUrl, latexDir, { force = false } = {}) {
       await execAsync(`tar ${flag} "${path.basename(tarPath)}"`, { cwd: latexDir });
     } else if (fileInfo.includes('LaTeX') || fileInfo.includes('ASCII') || fileInfo.includes('Unicode text')) {
       await fs.move(tarPath, path.join(latexDir, 'main.tex'), { overwrite: true });
-      return latexDir; // findMainTexFile will succeed on the renamed file
+      return latexDir;
     } else {
       throw new Error(`Unexpected e-print payload for ${arxivId}: ${fileInfo.trim()}`);
     }
   } finally {
-    // Drop the tarball whether extract succeeded or threw; a stale tarball
-    // would otherwise leave the dir in a half-populated state next run.
     await fs.remove(tarPath).catch(() => {});
   }
 
@@ -427,107 +422,78 @@ async function ensureLatexSource(arxivUrl, latexDir, { force = false } = {}) {
     throw new Error(`No .tex with \\documentclass found in ${latexDir} after extract`);
   }
 
-  // Strip author comments before this source ever gets committed. See
-  // cleanLatexSource() docstring for why.
   await cleanLatexSource(latexDir);
-
   return latexDir;
 }
 
 /**
- * Locate the arxiv_latex_cleaner binary.
+ * Resolve LaTeX source for a paper into a compile-ready directory.
  *
- * Priority: local venv (.venv/bin/arxiv_latex_cleaner) → PATH. Local
- * developers run `npm run setup:python` once to create the venv; CI
- * installs system-wide on its ephemeral runner.
+ * Priority:
+ *   1. research/<slug>/latex/ exists with a .tex containing \documentclass
+ *      → use in place (author is mid-edit; respect their working tree).
+ *   2. research/<slug>/latex/ exists but has no main .tex → error. This
+ *      catches half-extracted / mid-bootstrap state. Silently falling
+ *      back to R2 here would compile a *stale* tarball and overwrite the
+ *      author's in-progress work as the build output.
+ *   3. assets-manifest.json has /research/<slug>/latex.tar.gz → download
+ *      from R2 via public CDN (cached in .cache/latex-tarballs/), extract
+ *      to .cache/latex-build/<slug>/.
+ *   4. Otherwise → throw with a hint pointing at latex:update or latex:pack.
+ *
+ * The build never auto-fetches from arXiv or auto-uploads to R2.
+ * Bootstrapping is an explicit author action.
+ *
+ * @returns {Promise<string>} absolute path to a directory containing
+ *   the .tex with \documentclass.
  */
-async function findArxivLatexCleaner() {
-  const venvBin = path.join(__dirname, '..', '.venv/bin/arxiv_latex_cleaner');
-  if (await fs.pathExists(venvBin)) return venvBin;
-  try {
-    await execAsync('arxiv_latex_cleaner --help');
-    return 'arxiv_latex_cleaner';
-  } catch {
+async function resolveLatexSourceForCompile(slug) {
+  // Lazy-require latex_fetch because the build is the only caller of
+  // this function — defers loading dotenv / S3 init until actually needed.
+  const { loadManifest } = require('./r2_lib');
+  const { ensureTarballCached } = require('./latex_fetch');
+
+  const persistentDir = path.join(OUTPUT_DIR, slug, 'latex');
+  if (await fs.pathExists(persistentDir)) {
+    if (await findMainTexFile(persistentDir)) {
+      return persistentDir;
+    }
     throw new Error(
-      'arxiv_latex_cleaner not found. Run `npm run setup:python` to install the build venv, ' +
-      'or `pip install arxiv-latex-cleaner` system-wide.'
+      `research/${slug}/latex/ exists but has no .tex with \\documentclass. ` +
+      `This looks like a half-bootstrapped tree. Either finish the bootstrap ` +
+      `(\`npm run latex:fetch ${slug}\` or \`npm run latex:update ${slug}\`) ` +
+      `or remove the directory so the build can resolve source from R2.`
     );
   }
-}
 
-/**
- * Strip author comments from a LaTeX source tree in place.
- *
- * Why: this repo is public, so any committed .tex is world-readable and
- * indexable. Author comments commonly contain TODOs, reviewer responses,
- * internal scratch, commented-out figures showing alternate experiments,
- * and other things that shouldn't be public. We run arxiv_latex_cleaner
- * (which strips comments + commented-out blocks while preserving %!TEX
- * magic comments and other functional patterns) before the source ever
- * enters the working tree at a permanent location.
- *
- * Called from inside ensureLatexSource after extraction. For
- * hand-dropped position-paper source, use the standalone CLI:
- * `npm run latex:clean -- <slug-or-path>`.
- *
- * Idempotent: running on already-cleaned source produces no further
- * changes.
- *
- * @param {string} latexDir - the dir to clean in place
- * @returns {Promise<{stripped: number}>} stat on what was cleaned
- */
-async function cleanLatexSource(latexDir) {
-  const cleaner = await findArxivLatexCleaner();
-
-  const parent = path.dirname(latexDir);
-  const base = path.basename(latexDir);
-  const cleanedDir = path.join(parent, `${base}_arXiv`);
-
-  // arxiv_latex_cleaner writes to <input>_arXiv/. Wipe any stale output
-  // from a previous interrupted run before we start.
-  await fs.remove(cleanedDir);
-
-  const preCount = await countCommentLines(latexDir);
-
-  // --keep_bib: don't drop .bib files (we want them committed).
-  // Defaults otherwise: no image resizing, no PDF compression.
-  await execAsync(`"${cleaner}" --keep_bib "${base}"`, { cwd: parent });
-
-  if (!await fs.pathExists(cleanedDir)) {
-    throw new Error(`arxiv_latex_cleaner did not produce ${cleanedDir}`);
+  const manifest = await loadManifest();
+  const cdnUrl = manifest[manifestKey(slug)];
+  if (!cdnUrl) {
+    throw new Error(
+      `No LaTeX source available for "${slug}". ` +
+      `Run \`npm run latex:update ${slug}\` to bootstrap from arXiv, ` +
+      `or drop source at research/${slug}/latex/ and run \`npm run latex:pack ${slug}\`.`
+    );
   }
 
-  // Replace the original with the cleaned tree.
-  await fs.remove(latexDir);
-  await fs.move(cleanedDir, latexDir);
+  // Reuse the public-CDN fetch + on-disk cache from latex_fetch. Throws
+  // a domain-specific TarballNotFoundError if the manifest references a
+  // tarball that's missing from R2.
+  const tarPath = await ensureTarballCached(slug, cdnUrl);
 
-  const postCount = await countCommentLines(latexDir);
-  const stripped = preCount - postCount;
-  console.log(`    🧹 cleaned ${path.relative(process.cwd(), latexDir)}: stripped ${stripped} comment lines`);
-  return { stripped };
-}
+  const workDir = path.join(COMPILE_CACHE, slug);
+  // Wipe stale workdir; tarball extract should produce a fresh tree.
+  if (await fs.pathExists(workDir)) await fs.remove(workDir);
+  await fs.ensureDir(workDir);
 
-/**
- * Count author-comment lines across .tex files in a dir. Only .tex —
- * arxiv_latex_cleaner doesn't touch .sty/.cls files (they're typically
- * third-party with intentional license/header comments). Excludes
- * `%!TEX` / `% !TEX` magic comments (functional engine hints).
- */
-async function countCommentLines(latexDir) {
-  let count = 0;
-  const entries = await fs.readdir(latexDir, { withFileTypes: true });
-  for (const ent of entries) {
-    const full = path.join(latexDir, ent.name);
-    if (ent.isDirectory()) {
-      count += await countCommentLines(full);
-    } else if (ent.name.endsWith('.tex')) {
-      const content = await fs.readFile(full, 'utf8');
-      for (const line of content.split('\n')) {
-        if (/^\s*%/.test(line) && !/^\s*%\s*!TEX/i.test(line)) count++;
-      }
-    }
+  // Tar was packed with "-C <parent> latex" (basename "latex"). Extracting
+  // into workDir gives workDir/latex/<contents>.
+  await execAsync(`tar -xzf "${tarPath}" -C "${workDir}"`);
+  const innerLatexDir = path.join(workDir, 'latex');
+  if (!await fs.pathExists(innerLatexDir) || !await findMainTexFile(innerLatexDir)) {
+    throw new Error(`Extracted tarball for ${slug} does not contain a latex/ tree with .tex`);
   }
-  return count;
+  return innerLatexDir;
 }
 
 /**
@@ -746,81 +712,27 @@ async function compressAllPdfs(force = false) {
 /**
  * Main build function
  * @param {Object} options - Build options
- * @param {boolean} options.force - Force re-download of existing papers
+ * @param {boolean} options.force - Force re-download/recompile of existing papers
  * @param {boolean} options.buildPdf - Build PDFs from LaTeX source
- * @param {boolean} options.latexOnly - Bootstrap mode: fetch + clean LaTeX
- *   source only, skip HTML download / PDF compile / compression. Existing
- *   paper.pdf files are untouched. Used for one-shot population of
- *   research/<slug>/latex/ across many papers.
  */
 async function buildPapers(options = {}) {
-  const { force = false, buildPdf = false, latexOnly = false } = options;
+  const { force = false, buildPdf = false } = options;
 
   console.log('Building papers from arXiv...\n');
 
   if (force) {
-    console.log('⚠️  Force mode: Re-downloading all papers\n');
+    console.log('⚠️  Force mode: re-downloading / recompiling all papers\n');
   }
 
   // Load papers configuration
   const papersData = yaml.load(await fs.readFile(PAPERS_YAML, 'utf-8'));
 
-  // --latex-only: bootstrap mode. Populate research/<slug>/latex/ for every
-  // paper with an arxiv URL. ensureLatexSource fetches + cleans (no compile),
-  // so existing paper.pdf files are not regenerated.
-  if (latexOnly) {
-    console.log('📦 Bootstrap mode: populating research/<slug>/latex/ for papers with arxiv URLs.');
-    console.log('   Existing paper.pdf files are untouched.\n');
-    let fetched = 0, skipped = 0, failed = 0;
-    for (const paper of papersData) {
-      if (!paper.arxiv) {
-        console.log(`⏭️  ${paper.permalink} - no arxiv URL, skipping`);
-        skipped++;
-        continue;
-      }
-      const latexDir = path.join(OUTPUT_DIR, paper.permalink, 'latex');
-      const alreadyPopulated = await fs.pathExists(latexDir) && await findMainTexFile(latexDir);
-      if (alreadyPopulated && !force) {
-        console.log(`⏭️  ${paper.permalink} - latex/ already populated`);
-        skipped++;
-        continue;
-      }
-      try {
-        console.log(`⬇️  ${paper.permalink} - fetching + cleaning...`);
-        await ensureLatexSource(paper.arxiv, latexDir, { force });
-        fetched++;
-      } catch (err) {
-        // Continue on per-paper failure so a single bad e-print doesn't
-        // abort the batch. Bootstrap caller can re-run after addressing.
-        console.error(`❌ ${paper.permalink} - ${err.message}`);
-        failed++;
-      }
-    }
-    console.log('\n' + '='.repeat(50));
-    console.log('📊 Bootstrap Summary');
-    console.log('='.repeat(50));
-    console.log(`  ✅ Populated: ${fetched}`);
-    console.log(`  ⏭️  Skipped:   ${skipped}`);
-    if (failed > 0) console.log(`  ❌ Failed:    ${failed}`);
-    console.log('');
-    return;
-  }
-
   // For HTML: only papers with enable_full_paper (HTML must come from arxiv).
-  // For PDF: papers with an arxiv URL (we'll fetch source) OR with a
-  // pre-existing research/<slug>/latex/ containing a real .tex (position papers).
+  // For PDF: every paper. resolveLatexSourceForCompile will gracefully skip
+  // papers with no available source (via the outer paper.pdf-exists skip
+  // for already-built papers, or with a clear error for unbootstrapped ones).
   const htmlPapers = papersData.filter(paper => paper.arxiv && paper.enable_full_paper);
-  const pdfPapers = [];
-  for (const paper of papersData) {
-    if (paper.arxiv) {
-      pdfPapers.push(paper);
-      continue;
-    }
-    const latexDir = path.join(OUTPUT_DIR, paper.permalink, 'latex');
-    if (await fs.pathExists(latexDir) && await findMainTexFile(latexDir)) {
-      pdfPapers.push(paper);
-    }
-  }
+  const pdfPapers = papersData;
 
   if (htmlPapers.length === 0 && !buildPdf) {
     console.log('No papers with both arxiv and enable_full_paper found in papers.yaml');
@@ -865,33 +777,56 @@ async function buildPapers(options = {}) {
   }
 
   // Process PDF papers
+  let pdfUnresolved = 0;
   if (buildPdf && pdfPapers.length > 0) {
     console.log('\n📚 Compiling PDFs from LaTeX source...\n');
     for (const paper of pdfPapers) {
       try {
         const pdfOutputPath = path.join(OUTPUT_DIR, paper.permalink, 'paper.pdf');
-        const latexDir = path.join(OUTPUT_DIR, paper.permalink, 'latex');
 
+        // Outer skip: if paper.pdf already exists in git, do nothing.
+        // This is the common path in CI — almost no paper is recompiled
+        // on a normal build.
         if (!force && await fs.pathExists(pdfOutputPath)) {
           console.log(`⏭️  [PDF] ${paper.permalink} - already exists`);
           pdfSkipped++;
-        } else {
-          console.log(`⬇️  [PDF] ${paper.permalink} - compiling...`);
-          const resolved = await ensureLatexSource(paper.arxiv, latexDir, { force });
-          if (!resolved) {
-            console.log(`⏭️  [PDF] ${paper.permalink} - no arxiv URL and no latex/ source, skipping`);
-            pdfSkipped++;
-          } else {
-            await compileLatex(latexDir, pdfOutputPath);
-            console.log(`✅ [PDF] ${paper.permalink} - complete`);
-            pdfCompiled++;
-          }
+          continue;
         }
+
+        console.log(`⬇️  [PDF] ${paper.permalink} - compiling...`);
+        let sourceDir;
+        try {
+          sourceDir = await resolveLatexSourceForCompile(paper.permalink);
+        } catch (resolveErr) {
+          // "No source available" is expected when authoring a new paper
+          // locally (manifest entry not yet written). In CI it indicates
+          // a regression — someone landed a paper.yaml entry without
+          // running latex:update/latex:pack first. Skip locally, fail in
+          // CI.
+          console.log(`⏭️  [PDF] ${paper.permalink} - ${resolveErr.message}`);
+          pdfUnresolved++;
+          pdfSkipped++;
+          continue;
+        }
+        await compileLatex(sourceDir, pdfOutputPath);
+        console.log(`✅ [PDF] ${paper.permalink} - complete`);
+        pdfCompiled++;
       } catch (error) {
         console.error(`❌ [PDF] ${paper.permalink} - failed: ${error.message}`);
         failed++;
       }
     }
+  }
+
+  // In CI, an unresolved paper means a manifest entry is missing or
+  // paper.pdf is missing without a publish. Locally, leave it as a hint.
+  if (pdfUnresolved > 0 && process.env.CI === 'true') {
+    console.error(
+      `\n❌ ${pdfUnresolved} paper(s) had no LaTeX source available and ` +
+      `no committed paper.pdf — looks like a missed latex:update/latex:pack ` +
+      `before commit. Failing the CI build.`
+    );
+    process.exit(1);
   }
 
   // Compress PDFs
@@ -928,18 +863,22 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const force = args.includes('--force') || args.includes('-f');
   const buildPdf = args.includes('--pdf') || args.includes('-p');
-  const latexOnly = args.includes('--latex-only');
 
-  if (latexOnly) {
-    console.log('📦 LaTeX-only mode: fetch + clean source, no compile.\n');
-  } else if (buildPdf) {
+  if (buildPdf) {
     console.log('📄 PDF compilation enabled\n');
   }
 
-  buildPapers({ force, buildPdf, latexOnly }).catch(error => {
+  buildPapers({ force, buildPdf }).catch(error => {
     console.error('Build failed:', error);
     process.exit(1);
   });
 }
 
-module.exports = { buildPapers, downloadArxivHtml, ensureLatexSource, compileLatex, cleanLatexSource, compressAllPdfs };
+module.exports = {
+  buildPapers,
+  downloadArxivHtml,
+  ensureLatexSource,
+  resolveLatexSourceForCompile,
+  compileLatex,
+  compressAllPdfs,
+};
