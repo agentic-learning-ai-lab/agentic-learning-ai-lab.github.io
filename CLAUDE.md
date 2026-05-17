@@ -320,9 +320,16 @@ over it.
    into `research/<slug>/latex/` and compile `paper.pdf`. Commit both.
 4. If the paper isn't on arXiv: drop the LaTeX source under
    `research/<slug>/latex/` by hand, then run `npm run build`.
-5. Run `npm run build` end-to-end and check
+5. **Run `npm run sync:r2`** to upload the new hero image and paper.pdf
+   to Cloudflare R2, then commit the updated `assets-manifest.json`.
+   If you forget: templates fall back to local paths (site still works,
+   just from GH Pages origin instead of CDN), and `npm run build` prints
+   a `⚠️ cdnUrl lookup fell back to local` warning naming the missed
+   paths. New assets currently still get LFS-tracked too (we'll revisit
+   that when LFS quota becomes tight — see `notes/cf-migration.md`).
+6. Run `npm run build` end-to-end and check
    `research/<slug>/index.html` opens correctly.
-6. Walk the audit checklist above. Then commit.
+7. Walk the audit checklist above. Then commit.
 
 ## When the user asks you to update something
 

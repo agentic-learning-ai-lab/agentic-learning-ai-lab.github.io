@@ -21,7 +21,20 @@ function loadAssetsManifest() {
     return _manifest;
 }
 
+// Collect cdnUrl lookups that fell back to local paths. Printed at end
+// so authors notice when they've added an asset but forgotten to run
+// `npm run sync:r2`. Doesn't fail the build — fallback already works.
+const _cdnMisses = new Set();
+
 doTemplating(process.argv[2], process.argv[3]);
+
+process.on('exit', () => {
+    if (_cdnMisses.size > 0) {
+        console.warn(`⚠️  ${_cdnMisses.size} cdnUrl lookup(s) fell back to local (not in assets-manifest.json):`);
+        for (const p of _cdnMisses) console.warn(`     ${p}`);
+        console.warn(`   Run 'npm run sync:r2' and recommit assets-manifest.json to fix.`);
+    }
+});
 
 function doTemplating(input, output) {
     const handlebars = handlebarsFactory.create();
@@ -139,7 +152,9 @@ function registerHelpers(handlebars) {
     handlebars.registerHelper('cdnUrl', function (logicalPath) {
         if (!logicalPath) return '';
         const manifest = loadAssetsManifest();
-        return manifest[logicalPath] || logicalPath;
+        if (manifest[logicalPath]) return manifest[logicalPath];
+        _cdnMisses.add(logicalPath);
+        return logicalPath;
     });
 
     handlebars.registerHelper('formatDate', function (date, format) {
