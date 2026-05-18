@@ -108,6 +108,7 @@
   pdf: 'https://arxiv.org/pdf/2510.05558'
   webpage: 'https://agenticlearning.ai/midway-network/'
   permalink: midway-network
+  project_page: true
   research_areas:
     - learning-from-visual-experience
   date: 2025-10-07T00:00:00.000Z

@@ -787,7 +787,8 @@ section {
 }
 .project-section + .project-section::before,
 .project-prose + .project-section::before,
-.project-prose > .project-section:first-child::before {
+.project-prose > .project-section:first-child::before,
+.project-tldr::before {
     content: '';
     display: block;
     width: 120px;

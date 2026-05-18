@@ -24,7 +24,7 @@
          of action buttons. Same font as the legacy Bulma project
          pages, so the new project pages stay visually consistent
          with the old ones during the migration window. -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.4/css/academicons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" />
     {{#if project_page.custom_css_href}}
     <!-- Per-project CSS: assets/projects/<slug>/style.css. Auto-linked
          when present so project-specific rules (e.g., color-coded
@@ -104,6 +104,16 @@
         <!-- Abstract: full-width light-tint background row, content
              constrained + centered within. Body text overrides body's
              mono → serif for readability. -->
+        {{#if short_abstract}}
+        <!-- TL;DR lede above the full Abstract — a one-sentence digest
+             pulled from papers.yaml's `short_abstract` field, which we
+             already maintain for cards, search index, and OG tags.
+             Sits between the action-button row and the Abstract block. -->
+        <section class="project-tldr tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-12">
+            <p class="project-prose"><strong>TL;DR:</strong> {{{short_abstract}}}</p>
+        </section>
+        {{/if}}
+
         <section class="tw-bg-gray-50 tw-py-16">
             <div class="tw-max-w-4xl tw-mx-auto tw-px-6">
                 <h2 class="tw-text-3xl max-md:tw-text-2xl tw-font-semibold tw-tracking-tight tw-mb-6 tw-text-center">Abstract</h2>
