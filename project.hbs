@@ -165,18 +165,19 @@
     {{> footer}}
 
     {{#if project_page.carousel}}
-    <!-- Vanilla one-at-a-time carousel for any .project-carousel
-         block in the MD body. ~50 lines; no dependencies. Swiper /
-         bulma-carousel didn't survive this site's CSS reset, so this
-         avoids libraries entirely. Active slide's video plays while
-         the carousel is in the viewport; pauses when scrolled out
-         or when the user navigates to a different slide. -->
+    <!-- Vanilla carousel for any .project-carousel block in the MD
+         body. No dependencies — Swiper / Swiper-element / bulma-
+         carousel all silently failed in our Tailwind-preflight setup
+         during the lifelong-memory pilot. Supports: prev/next chevron
+         buttons + pagination dots (auto-injected), touch swipe on
+         mobile, IntersectionObserver-driven autoplay of the active
+         slide's video, user-paused state preserved across scroll-in/
+         out, slide animation via translateX on a flex-row track. -->
     <script>
       (function () {
         var SVG_PREV = '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/></svg>';
         var SVG_NEXT = '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>';
         var carousels = document.querySelectorAll('.project-carousel');
-        console.log('[project-carousel] init: found', carousels.length, 'carousel(s)');
         carousels.forEach(function (root) {
           var items = root.querySelectorAll(':scope > .item');
           if (items.length === 0) return;
