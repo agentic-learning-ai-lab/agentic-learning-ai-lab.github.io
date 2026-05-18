@@ -74,17 +74,16 @@
 .project-carousel-prev { left: 0.5rem; }
 .project-carousel-next { right: 0.5rem; }
 
-/* Narrow viewports: shrink the side padding + button size so the
-   video has room. Below ~640px the 6rem padding eats too much of
-   the available width. */
+/* Narrow viewports: hide the chevron buttons (touch swipe replaces
+   them) and drop the side padding so the video has the full width.
+   The pagination dots still show as a visual progress indicator. */
 @media (max-width: 640px) {
     .project-carousel {
-        padding: 0 3rem 3rem;
+        padding: 0 0 3rem;
     }
     .project-carousel-prev,
     .project-carousel-next {
-        width: 36px;
-        height: 36px;
+        display: none;
     }
 }
 .project-carousel-pagination {

@@ -59,49 +59,49 @@ We visualize the raw predictions of the LLM below. The LLM generates high-qualit
 
 <div class="project-carousel lm-carousel">
   <div class="item">
-    <video autoplay muted loop playsinline width="600">
+    <video autoplay muted loop playsinline preload="auto" width="600">
       <source src="/assets/projects/lifelong-memory/open_fridge.mp4" type="video/mp4">
     </video>
     <p><strong>Query:</strong> What time did I open the fridge?<br><strong>LLM:</strong> C opens the fridge at 480–540.</p>
   </div>
   <div class="item">
-    <video autoplay muted loop playsinline width="600">
+    <video autoplay muted loop playsinline preload="auto" width="600">
       <source src="/assets/projects/lifelong-memory/bucket.mp4" type="video/mp4">
     </video>
     <p><strong>Query:</strong> Where did I put the bucket?<br><strong>LLM:</strong> The bucket is mentioned as being put on the ground twice in this interval.</p>
   </div>
   <div class="item">
-    <video autoplay muted loop playsinline width="600">
+    <video autoplay muted loop playsinline preload="auto" width="600">
       <source src="/assets/projects/lifelong-memory/fridge.mp4" type="video/mp4">
     </video>
     <p><strong>Query:</strong> What did I put in the refrigerator?<br><strong>LLM:</strong> You put a bottle in the refrigerator.</p>
   </div>
   <div class="item">
-    <video autoplay muted loop playsinline width="600">
+    <video autoplay muted loop playsinline preload="auto" width="600">
       <source src="/assets/projects/lifelong-memory/fueltank.mp4" type="video/mp4">
     </video>
     <p><strong>Query:</strong> Did I leave the fuel tank open?<br><strong>LLM:</strong> You opened the tank, but it is not specified whether you left it open or not.</p>
   </div>
   <div class="item">
-    <video autoplay muted loop playsinline width="600">
+    <video autoplay muted loop playsinline preload="auto" width="600">
       <source src="/assets/projects/lifelong-memory/keg.mp4" type="video/mp4">
     </video>
     <p><strong>Query:</strong> What color is the keg I picked from the floor?<br><strong>LLM:</strong> You picked up a jerrycan from the ground and put it down on the floor, but the color of the keg is not specified in the memory.</p>
   </div>
   <div class="item">
-    <video autoplay muted loop playsinline width="600">
+    <video autoplay muted loop playsinline preload="auto" width="600">
       <source src="/assets/projects/lifelong-memory/drink.mp4" type="video/mp4">
     </video>
     <p><strong>Query:</strong> Where was the can drink before I drank it?<br><strong>LLM:</strong> C picks a can. This is the action before C drank from the can.</p>
   </div>
   <div class="item">
-    <video autoplay muted loop playsinline width="600">
+    <video autoplay muted loop playsinline preload="auto" width="600">
       <source src="/assets/projects/lifelong-memory/wood.mp4" type="video/mp4">
     </video>
     <p><strong>Query:</strong> How many wood planks did I carry?<br><strong>LLM:</strong> C carries the wood. The exact number of planks is not specified.</p>
   </div>
   <div class="item">
-    <video autoplay muted loop playsinline width="600">
+    <video autoplay muted loop playsinline preload="auto" width="600">
       <source src="/assets/projects/lifelong-memory/egg.mp4" type="video/mp4">
     </video>
     <p><strong>Query:</strong> Where was the egg before I picked it?<br><strong>LLM:</strong> The egg was in the fridge before you picked it.</p>

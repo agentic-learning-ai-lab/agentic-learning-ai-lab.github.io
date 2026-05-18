@@ -116,7 +116,7 @@
         <section class="tw-bg-gray-50 tw-py-16">
             <div class="tw-max-w-4xl tw-mx-auto tw-px-6">
                 <h2 class="tw-text-3xl max-md:tw-text-2xl tw-font-semibold tw-tracking-tight tw-mb-6 tw-text-center">Abstract</h2>
-                <p class="tw-text-justify project-prose">{{{abstract}}}</p>
+                <p class="project-prose">{{{abstract}}}</p>
             </div>
         </section>
 
@@ -283,6 +283,24 @@
               }
             });
           });
+          // Touch swipe support — primary navigation on mobile where
+          // the chevron buttons are hidden. Horizontal threshold
+          // 40px; vertical-dominant gestures fall through to scroll.
+          var touchStartX = null;
+          var touchStartY = null;
+          root.addEventListener('touchstart', function (e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+          }, { passive: true });
+          root.addEventListener('touchend', function (e) {
+            if (touchStartX === null) return;
+            var dx = e.changedTouches[0].clientX - touchStartX;
+            var dy = e.changedTouches[0].clientY - touchStartY;
+            touchStartX = null;
+            if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+              go(idx + (dx < 0 ? 1 : -1));
+            }
+          }, { passive: true });
           // Position buttons again once each video reports its
           // intrinsic dimensions — the aspect-ratio CSS reserves
           // 16:9 by default, but the real video may be a different
