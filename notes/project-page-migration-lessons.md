@@ -356,6 +356,136 @@ The carousel *script* itself is general infrastructure (one
 implementation for any project that opts in via `carousel: true`),
 so it lives in `project.hbs`, not per-project.
 
+## Mobile / iOS video gotchas (added 2026-05-19)
+
+After shipping the `lifelong-memory` carousel, the user reported on
+real iOS Safari: controls visible, black frame, duration stuck at
+0:00, tapping play did nothing. Spent ~12 commits chasing the wrong
+hypotheses before `ffprobe` revealed the smoking gun. Three real
+issues, in roughly the order they bite:
+
+### 1. Codec: VP9 is not supported by iOS Safari `<video>`
+
+The single biggest lesson. The 8 gallery clips in `lifelong-memory`
+were VP9-encoded MP4 files. iOS Safari `<video>` decodes H.264 (AVC),
+H.265 (HEVC, iOS 11+), and AV1 (iOS 17+ on supported hardware) —
+**not VP9**, which is Google/WebM's codec. The video element accepts
+the file and renders the controls bar, but the decoder bails silently
+and the playback never starts. The symptom is exactly what we saw:
+0:00 duration, no first frame, no tap-play response.
+
+The other inline videos on the page (`stageone.mp4`, `stagethree.mp4`,
+`lifelongmemory_full.mp4`) were H.264, which is why they played fine
+and made the asymmetry confusing.
+
+**Always run before uploading any video:**
+
+```bash
+ffprobe -v error -select_streams v -show_entries stream=codec_name \
+        -of csv=p=0 path/to/video.mp4
+```
+
+If the output is `vp9`, `av01`, or anything other than `h264`,
+re-encode to H.264 with:
+
+```bash
+ffmpeg -i in.mp4 \
+       -c:v libx264 -preset medium -crf 23 \
+       -profile:v high -level 4.0 -pix_fmt yuv420p \
+       -movflags +faststart \
+       -c:a aac -b:a 128k -ac 2 \
+       out.mp4
+```
+
+`-profile:v high -level 4.0 -pix_fmt yuv420p` is the safe iOS combo.
+CRF 23 is roughly visually lossless at the bitrates these clips use.
+
+### 2. Faststart: `moov` atom must be at the front
+
+MP4 container has a metadata index ("moov atom") that ffmpeg by
+default writes at the **end** of the file. Mobile browsers then have
+to download the entire file before they know duration / codec /
+keyframes — and over cellular they often give up first, leaving the
+player at 0:00 indefinitely.
+
+`ffmpeg -i in.mp4 -c copy -movflags +faststart out.mp4` is a fast
+lossless re-mux that moves the moov atom to the front. The
+re-encode command above already includes `+faststart`. Verify with:
+
+```bash
+xxd file.mp4 | head -5 | grep -E 'moov|mdat'
+```
+
+`moov` should appear before `mdat` in the output.
+
+### 3. CSS `aspect-ratio` on `<video>` inside `transform`-composited parent
+
+Reviewer-agent-found, iOS-specific. When a `<video>` has its layout
+box reserved by CSS `aspect-ratio` (instead of by intrinsic
+dimensions from the video file), and its ancestor uses `transform:
+translateX(...)` (which the carousel track does for slide animation),
+iOS Safari composites the video onto a separate GPU layer but never
+attaches the video texture to it. Native controls remain interactive
+above the empty layer; the frame stays black.
+
+Don't combine `aspect-ratio` + `<video>` + a `transform`-ed ancestor.
+Either:
+- let the video size itself from intrinsic dimensions (drop
+  `aspect-ratio`, accept a small layout shift on metadata-load), or
+- use `margin-left: -N%` instead of `transform: translateX(-N%)` for
+  the carousel's slide animation (less smooth on mobile but no GPU
+  layer).
+
+The first option is what `lifelong-memory`'s style.css does — see
+the comment block in `.lm-carousel video`.
+
+### Pre-flight checklist for any project page with video
+
+Before `npm run sync:r2` on a new migration's MP4s:
+
+```bash
+# Confirm codec is H.264 on every video
+for f in assets/projects/<slug>/*.mp4; do
+  printf '%-30s %s\n' "$f" "$(ffprobe -v error \
+    -select_streams v -show_entries stream=codec_name \
+    -of default=noprint_wrappers=1:nokey=1 "$f")"
+done
+
+# Confirm faststart on every video
+for f in assets/projects/<slug>/*.mp4; do
+  xxd "$f" | head -5 | grep -q moov && echo "$f: OK" || echo "$f: MISSING faststart"
+done
+```
+
+Both should print `h264` and `OK` for every file. If not, re-encode
+before continuing.
+
+## Vanilla carousel widget
+
+The `lifelong-memory` page introduced a small generic carousel for
+any project that needs to show multiple videos / images in a
+swipe-through format. Behavior:
+
+- Author opts in with `carousel: true` in MD frontmatter.
+- Inline HTML in the MD body: `<div class="project-carousel">` with
+  child `<div class="item">` slides (no further wrapping required).
+  Per-project CSS adds a class like `.lm-carousel` for slide-content
+  styling.
+- The init JS in `project.hbs` (gated on `project_page.carousel`)
+  injects a track wrapper around the items, prev/next chevron
+  buttons (Bootstrap inline SVG), pagination dots, touch-swipe
+  handler, IntersectionObserver-driven autoplay of the active
+  video (with `data-user-paused` flag preserving manual pauses
+  across scroll-in/out), and a positionButtons routine that pins
+  the chevrons to the active video's vertical center.
+- On viewports below 768px the chevron buttons hide and touch-swipe
+  takes over. Pagination dots remain as a progress indicator.
+
+If a second project adopts the carousel, the shared chrome rules
+(currently in the per-project style.css) should be promoted to
+`css/index.css` and the project-specific styles (slide content,
+e.g. `.lm-carousel video` sizing) stay per-project.
+
 ## Remaining queue
 
 As of 2026-05-19, the migrated projects are `anticipatory-recovery`,
