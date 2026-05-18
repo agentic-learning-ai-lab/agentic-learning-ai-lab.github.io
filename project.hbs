@@ -201,7 +201,17 @@
             // Respect a user-initiated pause — if they clicked-pause
             // the active video, don't restart it when the
             // IntersectionObserver fires on scroll-in.
-            if (v && !v.dataset.userPaused) v.play().catch(function () {});
+            if (!v || v.dataset.userPaused) return;
+            // Bump preload to auto and call load() so iOS Safari
+            // actually fetches metadata for the active slide
+            // (preload="metadata" alone gets deferred on mobile
+            // when there are many <video> elements on the page —
+            // the 8 carousel clips otherwise sit at 0:00 forever).
+            if (v.preload !== 'auto') {
+              v.preload = 'auto';
+              v.load();
+            }
+            v.play().catch(function () {});
           }
           function pauseAll() {
             root.querySelectorAll('video').forEach(function (v) {
