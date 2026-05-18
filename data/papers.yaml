@@ -382,6 +382,7 @@
   pdf: 'https://arxiv.org/pdf/2312.05269'
   webpage: 'https://agenticlearning.ai/lifelong-memory/'
   permalink: lifelong-memory
+  project_page: true
   research_areas:
     - learning-from-visual-experience
     - adaptive-agents-and-foundation-models

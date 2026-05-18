@@ -1,0 +1,123 @@
+/* Per-project styles for lifelong-memory.
+
+   The Visualization section renders 8 video clips with LLM-query
+   captions in a small vanilla carousel (see the init script in
+   project.hbs, gated on `carousel: true` in MD frontmatter).
+   The carousel HTML is just `<div class="project-carousel">` with
+   children `<div class="item">`; the init script injects prev/next
+   buttons and pagination dots after the items. */
+
+/* --- shared carousel chrome (lives here for now; promote to
+       css/index.css if a second project adopts the pattern) --- */
+.project-carousel {
+    position: relative;
+    /* Wider than the 600px video so the chevron buttons get
+       breathing room on the sides without forcing the video to
+       shrink (video keeps its max-width: 600px). */
+    max-width: 840px;
+    margin: 1.5rem auto;
+    padding: 0 6rem 3rem;
+}
+.project-carousel > .item {
+    display: none;
+    text-align: center;
+}
+.project-carousel > .item.is-active {
+    display: block;
+}
+.project-carousel-prev,
+.project-carousel-next {
+    position: absolute;
+    /* Center the button against the *video* element, not the whole
+       slide. Below the video sits ~0.75rem margin + ~3rem caption +
+       3rem pagination padding (~6.75rem total); subtract half that
+       (~3.4rem) so the button optically aligns with the video's
+       midline regardless of caption length variation. */
+    top: calc(50% - 3.4rem);
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    background: #fff;
+    color: #2c2c2c;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+.project-carousel-prev:hover,
+.project-carousel-next:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+    color: #3b82f6;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.project-carousel-prev svg,
+.project-carousel-next svg {
+    display: block;
+    /* Optical centering inside the circle — the chevron's
+       geometric center is at viewBox y=8 but the eye reads it as
+       slightly high, so nudge down a couple px. */
+    transform: translateY(1px);
+}
+/* Inside the carousel padding rather than overflowing it — keeps
+   the buttons safely within the surrounding column on narrow
+   viewports (where the carousel itself shrinks to fit). */
+.project-carousel-prev { left: 0.5rem; }
+.project-carousel-next { right: 0.5rem; }
+
+/* Narrow viewports: shrink the side padding + button size so the
+   video has room. Below ~640px the 6rem padding eats too much of
+   the available width. */
+@media (max-width: 640px) {
+    .project-carousel {
+        padding: 0 3rem 3rem;
+    }
+    .project-carousel-prev,
+    .project-carousel-next {
+        width: 36px;
+        height: 36px;
+    }
+}
+.project-carousel-pagination {
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+.project-carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d1d5db;
+    border: none;
+    margin: 0 4px;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.15s;
+}
+.project-carousel-dot.is-active { background: #3b82f6; }
+.project-carousel-dot:hover { background: #9ca3af; }
+
+/* --- lifelong-memory slide content --- */
+.lm-carousel video {
+    max-width: 100%;
+    width: 600px;
+    height: auto;
+    border-radius: 0.25rem;
+}
+.lm-carousel p {
+    margin: 0.75rem auto 0;
+    max-width: 600px;
+    font-size: 0.95em;
+    color: #4b5563;
+    line-height: 1.5;
+    text-align: left;
+}

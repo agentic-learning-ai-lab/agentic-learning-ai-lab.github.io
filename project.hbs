@@ -125,7 +125,7 @@
              H2 headings in the MD body (project_page_loader.js extracts
              slug+text into project_page.toc). Sits between the Abstract
              block and the first body section. -->
-        <nav class="project-toc tw-max-w-4xl tw-mx-auto tw-px-6 tw-py-8" aria-label="Table of contents">
+        <nav class="project-toc tw-max-w-4xl tw-mx-auto tw-px-6 tw-pt-8 tw-pb-12" aria-label="Table of contents">
             <span class="project-toc-label">Contents:</span>
             {{#each project_page.toc}}
             <a href="#{{slug}}">{{{text}}}</a>
@@ -163,6 +163,119 @@
     </main>
 
     {{> footer}}
+
+    {{#if project_page.carousel}}
+    <!-- Vanilla one-at-a-time carousel for any .project-carousel
+         block in the MD body. ~50 lines; no dependencies. Swiper /
+         bulma-carousel didn't survive this site's CSS reset, so this
+         avoids libraries entirely. Active slide's video plays while
+         the carousel is in the viewport; pauses when scrolled out
+         or when the user navigates to a different slide. -->
+    <script>
+      (function () {
+        var SVG_PREV = '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/></svg>';
+        var SVG_NEXT = '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>';
+        var carousels = document.querySelectorAll('.project-carousel');
+        console.log('[project-carousel] init: found', carousels.length, 'carousel(s)');
+        carousels.forEach(function (root) {
+          var items = root.querySelectorAll(':scope > .item');
+          if (items.length === 0) return;
+          var idx = 0;
+          var inView = false;
+          function playActive() {
+            var v = items[idx].querySelector('video');
+            // Respect a user-initiated pause — if they clicked-pause
+            // the active video, don't restart it when the
+            // IntersectionObserver fires on scroll-in.
+            if (v && !v.dataset.userPaused) v.play().catch(function () {});
+          }
+          function pauseAll() {
+            root.querySelectorAll('video').forEach(function (v) { v.pause(); });
+          }
+          function go(i) {
+            idx = (i + items.length) % items.length;
+            items.forEach(function (it, j) {
+              it.classList.toggle('is-active', j === idx);
+            });
+            dots.forEach(function (d, j) {
+              d.classList.toggle('is-active', j === idx);
+            });
+            pauseAll();
+            // Navigating to a slide is a fresh interaction — clear
+            // its user-paused flag so the carousel auto-plays it.
+            var nv = items[idx].querySelector('video');
+            if (nv) delete nv.dataset.userPaused;
+            if (inView) playActive();
+          }
+          var prev = document.createElement('button');
+          prev.className = 'project-carousel-prev';
+          prev.setAttribute('aria-label', 'Previous slide');
+          prev.innerHTML = SVG_PREV;
+          prev.addEventListener('click', function () { go(idx - 1); });
+          var next = document.createElement('button');
+          next.className = 'project-carousel-next';
+          next.setAttribute('aria-label', 'Next slide');
+          next.innerHTML = SVG_NEXT;
+          next.addEventListener('click', function () { go(idx + 1); });
+          var pagination = document.createElement('div');
+          pagination.className = 'project-carousel-pagination';
+          var dots = [];
+          items.forEach(function (_, i) {
+            var d = document.createElement('button');
+            d.className = 'project-carousel-dot';
+            d.setAttribute('aria-label', 'Slide ' + (i + 1));
+            d.addEventListener('click', function () { go(i); });
+            pagination.appendChild(d);
+            dots.push(d);
+          });
+          root.appendChild(prev);
+          root.appendChild(next);
+          root.appendChild(pagination);
+          go(0);
+          // Click-to-toggle play/pause on each video — saves us from
+          // showing the browser's full controls bar (play, volume,
+          // fullscreen, timeline). Cursor: pointer signals it's
+          // clickable without any overlay UI.
+          root.querySelectorAll('video').forEach(function (v) {
+            v.style.cursor = 'pointer';
+            v.addEventListener('click', function () {
+              if (v.paused) {
+                v.play().catch(function () {});
+                delete v.dataset.userPaused;
+              } else {
+                v.pause();
+                // Mark so the IntersectionObserver doesn't re-start
+                // the video the next time the carousel scrolls back
+                // into view. Cleared on slide navigation or on a
+                // subsequent click-play.
+                v.dataset.userPaused = '1';
+              }
+            });
+          });
+          // IntersectionObserver: only play the active video while
+          // the carousel is on screen. Threshold 0.25 = start
+          // playing when ~quarter visible.
+          if (typeof IntersectionObserver !== 'undefined') {
+            var io = new IntersectionObserver(function (entries) {
+              entries.forEach(function (entry) {
+                inView = entry.isIntersecting;
+                if (inView) {
+                  playActive();
+                } else {
+                  pauseAll();
+                }
+              });
+            }, { threshold: 0.25 });
+            io.observe(root);
+          } else {
+            // No IntersectionObserver — just play on init.
+            inView = true;
+            playActive();
+          }
+        });
+      })();
+    </script>
+    {{/if}}
 </body>
 <!-- /index.js provides toggleHeader() (mobile hamburger menu) and
      openSearch(). Both are referenced by the shared header partial. -->

@@ -239,20 +239,135 @@ Then fix via Python `.replace('\x00…', '…')` rather than the Edit tool.
 3. **PR `dev` → `main`** when a batch is ready. Don't merge one
    project at a time; bundle.
 
+## Lessons from the `lifelong-memory` migration (added 2026-05-18)
+
+That page was the first one with significant *interactive* content
+(8-clip video gallery + 11 videos total). Confronting it surfaced
+several patterns worth writing down.
+
+### Carousel libraries silently failed; vanilla JS works
+
+Tried Swiper (traditional API), Swiper element (web component), and
+bulma-carousel in succession. All three loaded their bundle scripts
+and ran their init code, but rendered an empty or broken carousel
+in our setup. The likely culprit is Tailwind's preflight reset
+(`* { box-sizing: border-box }`, `video { max-width: 100% }`, and
+the `* { margin: 0 }` family) fighting each library's slide-width
+calculations. We didn't isolate the exact rule.
+
+The fix that worked: a ~50-line vanilla JS carousel that doesn't
+calculate slide widths at all — it just toggles `.is-active` on the
+target `<div class="item">` and hides the others with
+`display: none`. Lives inline in `project.hbs`, gated on
+`carousel: true` in the MD frontmatter. The init injects prev/next
+buttons and pagination dots after the items.
+
+If a future migration needs a polished carousel with swipe gestures
++ transition animations, debug the library conflict properly rather
+than chaining yet another framework on top. The vanilla version is
+the floor; everything else builds up.
+
+### Video gallery: pause/play behavior
+
+Pattern that ended up working for `lifelong-memory`'s gallery:
+
+- `<video autoplay muted loop playsinline width="600">` — no
+  `controls` attribute (full-screen, volume, timeline UI is too
+  heavy for a thumb-scroll demo).
+- `IntersectionObserver` with `threshold: 0.25` — only the active
+  slide's video plays, and only while the carousel is ≥25% visible.
+  Pauses when the user scrolls away.
+- `cursor: pointer` + click handler on each `<video>` toggles
+  play/pause. Lightest possible "do-something" affordance.
+- Track manual pause via `data-user-paused` attribute on the video.
+  When IntersectionObserver fires `playActive()`, it skips videos
+  with the flag. Cleared on slide navigation (prev/next/dot click)
+  so a new slide gets a fresh autoplay chance.
+
+### markdown-it terminates HTML blocks on blank lines
+
+Spent a build cycle on this: a `<swiper-container>` with blank
+lines between `<swiper-slide>` children rendered as empty slides
+(content stripped). CommonMark's type-6 / type-7 HTML block ends
+at the first blank line — markdown-it follows that. Keep
+multi-block HTML embeds (carousels, tables, custom containers) as
+one contiguous run of non-blank lines.
+
+### Optical centering of carousel chevron buttons
+
+A button positioned at `top: 50%; transform: translateY(-50%)`
+centers against the *container*. But:
+
+- The carousel container has `padding-bottom` reserved for the
+  pagination dots (~3rem).
+- Each slide has a video plus a caption `<p>` below it.
+
+Both pull the container's geometric midpoint south of where the
+*video* element sits. To center the button against the video,
+compensate via the `top` calc:
+
+```css
+.project-carousel-prev,
+.project-carousel-next {
+    top: calc(50% - 3.4rem);
+    transform: translateY(-50%);
+}
+```
+
+The 3.4rem ≈ half of (caption_height + caption_margin +
+pagination_padding). A static offset is a compromise — slides with
+notably longer/shorter captions will drift. For pixel-perfect
+centering on every slide, measure with JS after each slide change.
+
+### SVG icons beat icon-fonts for centering
+
+Bootstrap Icons (icon-font) sit on a font baseline that's
+unpredictable to optically center inside a circular button. Inline
+SVG with explicit `viewBox` has a predictable bounding box — pin
+it inside the button with flex centering, and add a `translateY(1px)`
+hack if the path's geometric center reads slightly high to the eye
+(chevrons typically do).
+
+### Carousel responsive math
+
+When the carousel has chevron buttons inside horizontal padding,
+the math to avoid squeezing the video:
+
+```
+container_max_width >= video_max_width + 2 * (padding_horizontal)
+```
+
+For a 600px video with 6rem (96px) padding each side, the carousel
+needs `max-width >= 792px`. Otherwise the video shrinks below its
+intended max-width on wide viewports. On narrow viewports
+(`@media (max-width: 640px)`) shrink the padding to 3rem + button
+size to 36px so the video has room to breathe.
+
+### Per-project CSS scope
+
+`assets/projects/<slug>/style.css` is the right home for visual
+rules that won't generalize (Llama3/Qwen color spans on
+`llm-verification`, the `lm-carousel` slide content styles on
+`lifelong-memory`). The shared `.project-carousel*` chrome
+currently lives in the per-project CSS too — promote to
+`css/index.css` once a second project adopts the carousel pattern.
+
+The carousel *script* itself is general infrastructure (one
+implementation for any project that opts in via `carousel: true`),
+so it lives in `project.hbs`, not per-project.
+
 ## Remaining queue
 
-As of 2026-05-18, the migrated projects are
-`anticipatory-recovery` and `llm-verification`. Still to do (from
-the per-project repo list):
+As of 2026-05-19, the migrated projects are `anticipatory-recovery`,
+`llm-verification`, `midway-network`, and `lifelong-memory`. Still to
+do (from the per-project repo list):
 
-- `lifelong-memory`
 - `procreate-diffusion`
 - `daily-oracle`
 - `memory-storyboard`
 - `college`
 - `icc`
 - `context-tuning`
-- `midway-network`
 - `arq`
 - `temporal-straightening`
 
