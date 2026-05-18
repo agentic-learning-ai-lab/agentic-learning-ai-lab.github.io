@@ -28,12 +28,11 @@
 .project-carousel-prev,
 .project-carousel-next {
     position: absolute;
-    /* Center the button against the *video* element, not the whole
-       slide. Below the video sits ~0.75rem margin + ~3rem caption +
-       3rem pagination padding (~6.75rem total); subtract half that
-       (~3.4rem) so the button optically aligns with the video's
-       midline regardless of caption length variation. */
-    top: calc(50% - 3.4rem);
+    /* `top` is set dynamically by JS to match the active video's
+       vertical center — handles variable caption length and any
+       video aspect ratio. Fallback initial 50% so the button is
+       visible during the first frame before JS positions it. */
+    top: 50%;
     transform: translateY(-50%);
     width: 42px;
     height: 42px;
@@ -63,9 +62,12 @@
     display: block;
     /* Optical centering inside the circle — the chevron's
        geometric center is at viewBox y=8 but the eye reads it as
-       slightly high, so nudge down a couple px. */
-    transform: translateY(1px);
+       slightly high, so nudge down 1px. Also nudge each chevron
+       toward its outer edge (left arrow leans left, right arrow
+       leans right) — a subtle directional cue. */
 }
+.project-carousel-prev svg { transform: translate(-1px, 1px); }
+.project-carousel-next svg { transform: translate( 1px, 1px); }
 /* Inside the carousel padding rather than overflowing it — keeps
    the buttons safely within the surrounding column on narrow
    viewports (where the carousel itself shrinks to fit). */
@@ -110,8 +112,16 @@
 .lm-carousel video {
     max-width: 100%;
     width: 600px;
+    /* Reserve a 16:9 box even before <video> elements report their
+       intrinsic dimensions — needed especially on iOS Safari, where
+       autoplay can be deferred enough that the element stays 0×0 on
+       first paint (so the carousel area looks empty). object-fit:
+       contain letterboxes any non-16:9 source rather than cropping. */
+    aspect-ratio: 16 / 9;
     height: auto;
+    object-fit: contain;
     border-radius: 0.25rem;
+    background: #000;
 }
 .lm-carousel p {
     margin: 0.75rem auto 0;

@@ -192,6 +192,36 @@
           function pauseAll() {
             root.querySelectorAll('video').forEach(function (v) { v.pause(); });
           }
+          function positionButtons() {
+            // Pin the prev/next chevrons against the *active video's*
+            // vertical center, not the container's. The container
+            // height varies with caption length, so a static CSS
+            // offset would jump between slides. Run on slide change,
+            // metadata-load, video-resize, and window resize.
+            var v = items[idx].querySelector('video');
+            if (!v) return;
+            var rootTop = root.getBoundingClientRect().top;
+            var videoRect = v.getBoundingClientRect();
+            // Skip if layout hasn't settled (video still 0×0). The
+            // ResizeObserver below will fire positionButtons again
+            // once dimensions are real.
+            if (videoRect.height === 0) return;
+            var centerPx = (videoRect.top - rootTop) + videoRect.height / 2;
+            prev.style.top = centerPx + 'px';
+            next.style.top = centerPx + 'px';
+          }
+          function schedulePosition() {
+            // Defer to after the next paint so aspect-ratio CSS
+            // (used to reserve a 16:9 box before video metadata
+            // loads) has been applied by layout. Mobile Safari needs
+            // this — synchronous getBoundingClientRect right after
+            // class-flips sometimes reports 0×0.
+            if (typeof requestAnimationFrame !== 'undefined') {
+              requestAnimationFrame(positionButtons);
+            } else {
+              positionButtons();
+            }
+          }
           function go(i) {
             idx = (i + items.length) % items.length;
             items.forEach(function (it, j) {
@@ -206,6 +236,7 @@
             var nv = items[idx].querySelector('video');
             if (nv) delete nv.dataset.userPaused;
             if (inView) playActive();
+            schedulePosition();
           }
           var prev = document.createElement('button');
           prev.className = 'project-carousel-prev';
@@ -252,6 +283,25 @@
               }
             });
           });
+          // Position buttons again once each video reports its
+          // intrinsic dimensions — the aspect-ratio CSS reserves
+          // 16:9 by default, but the real video may be a different
+          // ratio, which shifts the optical center.
+          root.querySelectorAll('video').forEach(function (v) {
+            v.addEventListener('loadedmetadata', schedulePosition);
+          });
+          // ResizeObserver catches the case where aspect-ratio CSS
+          // applies in a later layout pass than the initial JS run
+          // (Mobile Safari is the typical offender).
+          if (typeof ResizeObserver !== 'undefined') {
+            var ro = new ResizeObserver(schedulePosition);
+            items.forEach(function (it) {
+              var v = it.querySelector('video');
+              if (v) ro.observe(v);
+            });
+          }
+          // Reposition on viewport changes too.
+          window.addEventListener('resize', schedulePosition);
           // IntersectionObserver: only play the active video while
           // the carousel is on screen. Threshold 0.25 = start
           // playing when ~quarter visible.
