@@ -182,6 +182,14 @@
           if (items.length === 0) return;
           var idx = 0;
           var inView = false;
+          // Wrap the slides in a flex-row track that we translate
+          // horizontally for the slide-in animation. The injected
+          // prev/next/pagination buttons are position:absolute
+          // siblings of the track inside `.project-carousel`.
+          var track = document.createElement('div');
+          track.className = 'project-carousel-track';
+          items.forEach(function (item) { track.appendChild(item); });
+          root.insertBefore(track, root.firstChild);
           function playActive() {
             var v = items[idx].querySelector('video');
             // Respect a user-initiated pause — if they clicked-pause
@@ -224,6 +232,9 @@
           }
           function go(i) {
             idx = (i + items.length) % items.length;
+            // Slide the track. Each slide is 100% wide so the
+            // active one shifts into view at -idx * 100%.
+            track.style.transform = 'translateX(-' + (idx * 100) + '%)';
             items.forEach(function (it, j) {
               it.classList.toggle('is-active', j === idx);
             });

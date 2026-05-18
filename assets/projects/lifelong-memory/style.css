@@ -17,24 +17,25 @@
     max-width: 840px;
     margin: 1.5rem auto;
     padding: 0 6rem 3rem;
-    /* All slides occupy the same grid cell — lets us cross-fade
-       between them via opacity and keeps the container height
-       constant (= tallest slide). The prev/next/pagination
-       elements injected by the init JS are position:absolute, so
-       they sit outside the grid flow. */
-    display: grid;
+    overflow: hidden;
 }
-.project-carousel > .item {
-    grid-column: 1;
-    grid-row: 1;
-    opacity: 0;
-    pointer-events: none;
+/* Track wrapper injected by the init JS — holds all .item slides
+   in a flex row and slides them horizontally via translateX. */
+.project-carousel-track {
+    display: flex;
+    transition: transform 0.3s ease;
+    will-change: transform;
+}
+.project-carousel-track > .item {
+    flex: 0 0 100%;
+    min-width: 0;
     text-align: center;
-    transition: opacity 0.3s ease;
 }
-.project-carousel > .item.is-active {
-    opacity: 1;
-    pointer-events: auto;
+/* Pre-init fallback: while the JS is still wrapping items in the
+   track, hide all but the first so the carousel doesn't briefly
+   render as a vertical stack of all 8 slides. */
+.project-carousel > .item:not(:first-child) {
+    display: none;
 }
 .project-carousel-prev,
 .project-carousel-next {
