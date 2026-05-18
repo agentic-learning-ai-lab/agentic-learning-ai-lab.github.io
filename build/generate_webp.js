@@ -40,6 +40,11 @@ const SOURCES = [
   { glob: 'assets/images/background/*.{png,jpg,jpeg}', opts: { quality: 98 } },
   { glob: 'assets/images/home/*.{png,jpg,jpeg}',       opts: { quality: 98 } },
   { glob: 'assets/images/people/*.{png,jpg,jpeg}',     opts: { quality: 98 } },
+  // Project page assets — marketing-style figures + hero shots.
+  // Treated like site images (q98 lossy). For pages that need
+  // pixel-perfect lossless renders, hand-drop .webp directly and
+  // skip generation by removing the source .png.
+  { glob: 'assets/projects/**/*.{png,jpg,jpeg}',       opts: { quality: 98 } },
   // Arxiv inline figures — text + line-art. Lossless.
   { glob: 'research/*/assets/**/*.{png,jpg,jpeg}',     opts: { lossless: true } },
 ];
