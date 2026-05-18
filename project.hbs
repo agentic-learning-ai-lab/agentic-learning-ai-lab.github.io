@@ -41,7 +41,7 @@
         <hr class="tw-mb-20" />
 
         <!-- Title + author block + action buttons (centered). -->
-        <section class="tw-max-w-3xl tw-mx-auto tw-px-[5%] max-md:tw-px-4 tw-text-center tw-mb-12">
+        <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-text-center tw-mb-12">
             <h1 class="tw-text-4xl tw-font-bold tw-leading-tight tw-tracking-tight max-md:tw-text-2xl">{{{title}}}</h1>
             <p class="tw-text-lg max-md:tw-text-base tw-mt-8">{{{formatAuthorsForProjectPage authors project_page.affiliations}}}</p>
             <p class="tw-text-base tw-mt-2 tw-text-gray-600">{{{formatAffiliationsForProjectPage authors project_page.affiliations}}}</p>
@@ -65,7 +65,7 @@
              set in papers.yaml — most academic project pages don't have a hero
              between the title and the abstract. -->
         {{#with project_page.hero}}
-        <section class="tw-max-w-3xl tw-mx-auto tw-px-[5%] max-md:tw-px-4 tw-mb-12">
+        <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-12">
             <figure class="tw-text-center">
                 {{{pictureCdn src alt=../title class="tw-w-full tw-rounded-lg tw-shadow-sm" eager=true}}}
                 {{#if caption}}<figcaption class="tw-text-sm tw-text-gray-600 tw-mt-3 tw-italic">{{{caption}}}</figcaption>{{/if}}
@@ -77,7 +77,7 @@
              constrained + centered within. Body text overrides body's
              mono → serif for readability. -->
         <section class="tw-bg-gray-50 tw-py-16 tw-mb-20">
-            <div class="tw-max-w-3xl tw-mx-auto tw-px-[5%] max-md:tw-px-4">
+            <div class="tw-max-w-4xl tw-mx-auto tw-px-6">
                 <h2 class="tw-text-3xl max-md:tw-text-2xl tw-font-semibold tw-tracking-tight tw-mb-6 tw-text-center">Abstract</h2>
                 <p class="tw-text-justify project-prose">{{{abstract}}}</p>
             </div>
@@ -86,7 +86,7 @@
         <!-- Sections: title (mono inherited) + body (serif override for
              readable prose) + optional figures (centered). -->
         {{#each project_page.sections}}
-        <section class="tw-max-w-3xl tw-mx-auto tw-px-[5%] max-md:tw-px-4 tw-mb-12 project-section">
+        <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-12 project-section">
             {{#if title}}<h2 class="tw-text-3xl max-md:tw-text-2xl tw-font-semibold tw-tracking-tight tw-mb-6">{{{title}}}</h2>{{/if}}
             {{#if body}}<div class="project-section-body project-prose tw-space-y-5">{{{body}}}</div>{{/if}}
             {{#if figures}}
@@ -106,7 +106,7 @@
 
         <!-- Per-paper custom HTML escape hatch (interactive demos, etc). -->
         {{#if project_page.custom_html_inline}}
-        <section class="tw-max-w-5xl tw-mx-auto tw-px-[5%] max-md:tw-px-4 tw-mb-20">
+        <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-20">
             {{{project_page.custom_html_inline}}}
         </section>
         {{/if}}
@@ -115,7 +115,7 @@
              code block (Space Mono is great for the site's chrome but
              stylized for code). -->
         {{#if project_page.bibtex}}
-        <section class="tw-max-w-3xl tw-mx-auto tw-px-[5%] max-md:tw-px-4 tw-mb-12 project-section">
+        <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-12 project-section">
             <h2 class="tw-text-3xl max-md:tw-text-2xl tw-font-semibold tw-tracking-tight tw-mb-6">BibTeX</h2>
             <pre class="project-bibtex tw-bg-gray-100 tw-p-4 tw-rounded tw-text-sm tw-leading-snug tw-overflow-x-auto"><code>{{project_page.bibtex}}</code></pre>
         </section>

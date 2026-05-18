@@ -18,6 +18,14 @@ research/*/latex_arXiv/
 # Build pipeline cache for downloaded tarballs + compile workdirs.
 .cache/
 
+# Generated project page output dirs. URL is /<slug>/ at root for inbound-link
+# stability, so the build writes here. Gitignored to keep the repo root clean.
+# Author runs `npm run build` to regenerate locally; CI rebuilds for deploy.
+# Add one line per project as it lands.
+# Long-term: migrate to out/<slug>/ via a `npm run preview` task — see
+# notes/next-up.md. Until then, list project permalinks here.
+/anticipatory-recovery/
+
 # Compression markers
 research/*/assets/.compressed/
 research/*/*.gs-compressed
