@@ -207,6 +207,21 @@ function loadOne(slug) {
     // handles `$$…$$` inside <p> fine, so leave it.
     rendered = rendered.replace(/<!--MATH(\d+)-->/g, (_, i) => mathStash[+i]);
 
+    // Rewrite local /assets/projects/<slug>/... references to the
+    // manifest CDN URL when available. The image renderer already
+    // does this for `![]()` markdown, but inline HTML <video> and
+    // <source> tags pass through markdown-it untouched. Without
+    // this rewrite they'd be served from CF Pages origin instead
+    // of the CDN — slower, and CF Pages serves large MP4s with
+    // less mobile-friendly headers (no proper range requests).
+    const manifest = loadManifest();
+    const assetPrefix = `/assets/projects/${slug}/`;
+    const assetPattern = new RegExp(`(["'\\(])(${assetPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^"'\\)\\s]+)`, 'g');
+    rendered = rendered.replace(assetPattern, (_, quote, logical) => {
+        const cdn = manifest[logical];
+        return cdn ? `${quote}${cdn}` : `${quote}${logical}`;
+    });
+
     // markdown-it wraps standalone-image lines in <p>...</p>, producing
     // invalid `<p><figure>...</figure></p>` (figure is block-level). Unwrap.
     rendered = rendered.replace(/<p>\s*(<figure[\s\S]*?<\/figure>)\s*<\/p>/g, '$1');
