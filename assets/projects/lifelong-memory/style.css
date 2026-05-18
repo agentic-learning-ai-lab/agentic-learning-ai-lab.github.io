@@ -25,11 +25,21 @@
    into the padding area. */
 .project-carousel-viewport {
     overflow: hidden;
+    /* Force max-width: 100% of parent — without this, browsers
+       can occasionally let a flex track's content-size leak into
+       the viewport's intrinsic width on narrow screens, pushing
+       the whole carousel past the viewport's right edge. */
+    width: 100%;
+    max-width: 100%;
 }
 /* Track wrapper injected by the init JS — holds all .item slides
    in a flex row and slides them horizontally via translateX. */
 .project-carousel-track {
     display: flex;
+    /* Pin to viewport width — items overflow inside via flex-basis
+       100%, but the track box itself must equal the viewport so
+       translateX percentages resolve correctly. */
+    width: 100%;
     transition: transform 0.3s ease;
     will-change: transform;
 }
