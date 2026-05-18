@@ -111,10 +111,20 @@ staging/                    # Local-only staging mirror — gitignored
 5. `build:compress` — resize arXiv-downloaded images to ≤1400px wide
    (cached via `.compressed/` marker dir).
 6. `build:pages` — render every `*.hbs` via Handlebars into HTML.
+7. `build:assemble` — copy all serving artifacts (root HTML + JS, plus
+   `people/`, `research/`, `areas/`, `assets/`, `css/`, `contact/`,
+   `includes/`) into `out/`. `out/` is the deployable bundle —
+   identical layout for local preview, CF Pages, and GH Pages
+   production. Project page output goes to `out/<slug>/` directly
+   (via `project.hbs`'s route), so this step doesn't need per-project
+   logic.
 
-Local dev: `npm run start:tailwind` to watch styles, then run a static
-server (`python3 -m http.server 8000` from the repo root). Don't ship a
-new build pipeline; extend this one.
+Local dev: `npm run preview` runs the full build pipeline and then
+serves `out/` via `python3 -m http.server 8000`. For style-only
+iteration without rebuilding everything, `npm run start:tailwind`
+watches `css/tailwind.css`; separate `npm run build:pages` + manual
+serve still works if you want it. Don't ship a new build pipeline;
+extend this one.
 
 ### CI
 

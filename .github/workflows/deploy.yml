@@ -102,25 +102,11 @@ jobs:
       - name: Build site
         run: npm run build
 
-      # The remaining steps assemble + upload the Pages artifact for the
-      # actual deploy. PR builds skip them — we only want PR runs to
-      # verify the build succeeds (registers the `build` status check)
-      # without pushing anything live.
-      - name: Prepare output
-        if: github.event_name != 'pull_request'
-        run: |
-          set -e
-          mkdir -p out
-          cp index.html index.js search.js person.js paper-view.js out/
-          cp site.webmanifest favicon.ico out/
-          cp research.js out/
-          cp -R people out/
-          cp -R research out/
-          cp -R contact out/
-          cp -R assets out/
-          cp -R css out/
-          cp -R areas out/
-          cp -R includes out/
+      # `out/` is assembled by `npm run build:assemble`, which is the
+      # last step of `npm run build` above. The same script is used for
+      # local preview (`npm run preview`) and by Cloudflare Pages —
+      # all three environments produce identical bundles. No inline
+      # cp list to maintain.
 
       - name: Upload artifact
         if: github.event_name != 'pull_request'
