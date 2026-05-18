@@ -211,11 +211,32 @@ function loadOne(slug) {
     // invalid `<p><figure>...</figure></p>` (figure is block-level). Unwrap.
     rendered = rendered.replace(/<p>\s*(<figure[\s\S]*?<\/figure>)\s*<\/p>/g, '$1');
 
+    // Extract H2 titles into a table-of-contents array and inject an
+    // `id` attribute on each <h2> so the ToC pill bar in project.hbs
+    // can anchor-scroll to them. Slug is derived from the heading's
+    // plain-text content (stripping any inner <em>/<strong> markup).
+    //
+    // Authors can override the ToC pill label per heading by writing
+    // `## Long heading {data-toc=Short}` in MD — markdown-it-attrs
+    // attaches the attribute, we read it for the ToC text, then strip
+    // it from the rendered HTML so it doesn't leak into the page.
+    const toc = [];
+    rendered = rendered.replace(/<h2([^>]*)>([\s\S]+?)<\/h2>/g, (_, attrs, inner) => {
+        const tocMatch = attrs.match(/\s*data-toc="([^"]+)"/);
+        const tocLabel = tocMatch ? tocMatch[1] : inner;
+        const plainText = inner.replace(/<[^>]+>/g, '').trim();
+        const slug = plainText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        toc.push({ slug, text: tocLabel });
+        const cleanAttrs = attrs.replace(/\s*data-toc="[^"]+"/, '');
+        return `<h2 id="${slug}"${cleanAttrs}>${inner}</h2>`;
+    });
+
     const body_html = wrapSections(rendered);
 
     return {
         ...frontmatter,
         body_html,
+        toc,
     };
 }
 

@@ -18,7 +18,7 @@ bibtex: |
   }
 ---
 
-## Overview of Our Study
+## Overview of Our Study {data-toc=Overview}
 
 Let's quickly go over our experimental setup, how we measure verification ability, and different verification settings.
 
@@ -52,7 +52,7 @@ We compare three ways of pairing solvers and verifiers:
 - **Intra-Family Verification:** solver and verifier come from the same model family but have different sizes.
 - **Cross-Family Verification:** solver and verifier are drawn from different model families or differ in base vs. post-trained.
 
-## Does Verifier Gain Predict Improvements from Resampling?
+## Does Verifier Gain Predict Improvements from Resampling? {data-toc="Verifier Gain"}
 
 Our verifier gain metric estimates the expected improvement in a solver's accuracy when using a verifier for rejection sampling. To assess how well this metric predicts real performance, we conduct rejection sampling experiments across all solver-verifier pairs from a 12-model subset of our post-trained models. For each problem in each dataset, the solver generates solutions until the verifier labels one as correct, for up to 10 attempts; if no such solution is found, we retain the final attempt.
 
@@ -60,7 +60,7 @@ Our verifier gain metric estimates the expected improvement in a solver's accura
 
 ![](results_empirical_gap_scatterplot-1.png){width=600}
 
-## Do Better Solvers Make Better Verifiers?
+## Do Better Solvers Make Better Verifiers? {data-toc="Solver Skill"}
 
 We first analyze whether a model's solver performance correlates with its performance as a verifier. For each of our 21 post-trained models and each dataset, we evaluate verification on the same set of solver models to obtain verifier accuracy, FPR, FNR, and gain for every solver-verifier pair. For each verifier, we then divide the verifier metrics into three verification settings and average within each setting over solvers and datasets. From the figure below, we realize the answer to this question depends on the verification setting and discover the following takeaways.
 
@@ -70,7 +70,7 @@ We first analyze whether a model's solver performance correlates with its perfor
 
 ![](results_cross_dataset_verifier_scatterplots_solver_acc-1.png){width=600}
 
-## Are Verifiers Biased Toward Solutions That Resemble Their Own?
+## Are Verifiers Biased Toward Solutions That Resemble Their Own? {data-toc="Similarity Bias"}
 
 From the last sections, we saw that reasoning models benefit less from self- and intra-family verification due to high FPR (in comparison to cross-family verification), hinting at an LLM bias in accepting incorrect solutions that resemble their own. To directly investigate this behavior, we conduct cross-verification experiments using 12 post-trained models and compute all verifier metrics for each pair. For each pair, we plot the verifier metric against the **solver-verifier similarity score**, defined as the average cosine similarity between the two models' solution embeddings across all dataset problems. The figure below confirms this hypothesis.
 
@@ -78,7 +78,7 @@ From the last sections, we saw that reasoning models benefit less from self- and
 
 ![](results_verifier_similarity_scatterplot-1.png){width=500}
 
-## How Does Reasoning Post-Training Affect Solver and Verifier Performance?
+## How Does Reasoning Post-Training Affect Solver and Verifier Performance? {data-toc=Post-Training}
 
 Our analysis focuses on the <span class="model-qwen25">Qwen2.5-Base</span>/<span class="model-qwen25">Qwen2.5</span> and <span class="model-qwen3">Qwen3-Base</span>/<span class="model-qwen3">Qwen3</span> model pairs. For each model, we compute verifier metrics against all solvers and datasets, partition results by verification setting, and average within families. From the figure below, we realize the following takeaway.
 
@@ -86,7 +86,7 @@ Our analysis focuses on the <span class="model-qwen25">Qwen2.5-Base</span>/<span
 
 ![](results_posttraining_verifier_barplots_remove_llama-1.png){width=600}
 
-## How Does Task Type Affect Verifiability?
+## How Does Task Type Affect Verifiability? {data-toc="Task Type"}
 
 Thus far, we have examined verifier performance and its contribution to solver accuracy through rejection sampling. We now shift to a task-level perspective and ask two questions:
 
@@ -99,7 +99,7 @@ For each of our 21 post-trained models and each dataset, we evaluate verificatio
 
 ![](results_cross_dataset_task_scatterplots-1.png){width=900}
 
-## A Checklist for Designing Effective Solver-Verifier Systems
+## A Checklist for Designing Effective Solver-Verifier Systems {data-toc=Checklist}
 
 > - **Use verifier gain, not accuracy, to evaluate a solver-verifier pair.** Verification accuracy can be misleading, while verifier gain strongly predicts actual rejection sampling gains.
 > - **Check whether the task is easier to verify than to solve.** Logical and mathematical reasoning tasks yield higher verifier gains than knowledge-recall tasks.

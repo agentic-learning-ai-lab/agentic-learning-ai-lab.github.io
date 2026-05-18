@@ -25,13 +25,13 @@ Prior self-supervised learning (SSL) methods have focused on learning representa
 - **Downstream performance**: Midway Network achieves strong performance on both semantic segmentation and optical flow tasks compared to prior SSL methods (DynaMo, PooDLe, DoRA, CroCo v2, etc.).
 - **Latent dynamics analysis**: We introduce a novel analysis method based on forwarded feature perturbation to interpret Midway Network's learned motion latents.
 
-## Learning recognition *and* motion from natural videos
+## Learning recognition *and* motion from natural videos {data-toc=Motivation}
 
 ![Comparison between iconic image SSL, dense video SSL, and our proposed Midway Network.](figure1.png){width=800}
 
 Object recognition and motion understanding are two intertwined core components of perception, yet most prior work in visual SSL has only focused on *one* of the two aspects. Image SSL methods (a: [I-JEPA](https://arxiv.org/abs/2301.08243), [DINO](https://arxiv.org/abs/2104.14294), [MoCo](https://arxiv.org/abs/1911.05722), [SimCLR](https://arxiv.org/abs/2002.05709)) learn semantic representations from iconic, human-curated images, while video SSL methods (b: [PooDLe](https://arxiv.org/abs/2408.11208), [DoRA](https://arxiv.org/abs/2310.08584), [VINCE](https://arxiv.org/abs/2003.07990)) learn from natural videos, yet do not capture information on object motion. SSL methods for learning motion via pixel correspondence ([UFlow](https://arxiv.org/abs/2006.04902), [SMURF](https://arxiv.org/abs/2105.07014)) or cross-view reconstruction ([CroCo v2](https://arxiv.org/abs/2211.10408)) tasks result in poor recognition features. Drawing inspiration from control and planning ([DynaMo](https://arxiv.org/abs/2409.12192), [LAPA](https://arxiv.org/abs/2410.11758)), we propose to leverage latent dynamics modeling to learn representations of video frames and the dynamics between them, i.e., motion.
 
-## Midway Network: hierarchical latent dynamics architecture
+## Midway Network: hierarchical latent dynamics architecture {data-toc=Architecture}
 
 ![](model-figure.png){width=800}
 
@@ -41,7 +41,7 @@ In standard transformer blocks, the input token is always propagated forward in 
 
 ![](gating.png){width=300}
 
-## Evaluations: semantic segmentation and optical flow
+## Evaluations: semantic segmentation and optical flow {data-toc=Evaluations}
 
 ![Semantic segmentation (frozen readout) and optical flow (finetuning) evaluations after BDD100K pretraining.](results.png){width=700}
 
@@ -56,7 +56,7 @@ Midway Network is the only model to achieve strong performance on both semantic 
 
 ![Midway Network ViT-S on FlyingThings and MPI-Sintel optical flow tasks after finetuning.](flow.png){width=700}
 
-## Analysis: forwarded feature perturbation
+## Analysis: forwarded feature perturbation {data-toc=Analysis}
 
 ![Heatmap shows similarity of forwarded propagation to original propagation. Features are perturbed at green squares in Source (shown in Target at same position for reference). Bottom right (red border) shows that Midway Network without gating units exhibits identity bias.](heatmap-perturbation.png){width=700}
 
@@ -66,6 +66,6 @@ We introduce a novel analysis method based on forwarded feature perturbation to 
 
 We can also use forwarded feature perturbation to perform high-level tracking. Specifically, we iteratively propagate a selected token from a source frame to target frame and update the selected token to be the highest similarity token in the target frame. To reduce noise, we take the top-5 most similar tokens and select the token with highest feature similarity. Midway Network can roughly track high-level regions over time, whereas tracking with DINO-IN1K feature similarity quickly diverges.
 
-## Conclusion and next steps
+## Conclusion and next steps {data-toc=Conclusion}
 
 We have proposed Midway Network, a new SSL architecture that extends latent dynamics modeling to natural videos to learn strong visual representations for two core and complementary aspects of perception. Exciting next steps include scaling up training data and model size, leveraging the learned motion latents towards control and planning tasks, and improving latent dynamics modeling on natural videos.

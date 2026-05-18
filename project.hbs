@@ -70,7 +70,7 @@
 
         <!-- Title + author block + action buttons (centered). -->
         <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-text-center tw-mb-12">
-            <h1 class="tw-text-4xl tw-font-bold tw-leading-tight tw-tracking-tight max-md:tw-text-2xl">{{{title}}}</h1>
+            <h1 class="tw-text-4xl tw-font-bold tw-leading-tight tw-tracking-tight max-md:tw-text-2xl"><a class="project-title-link" href="/research/{{{permalink}}}/">{{{title}}}</a></h1>
             <p class="tw-text-lg max-md:tw-text-base tw-mt-8">{{{formatAuthorsForProjectPage authors project_page.affiliations}}}</p>
             <p class="tw-text-base tw-mt-2 tw-text-gray-600">{{{formatAffiliationsForProjectPage authors project_page.affiliations}}}</p>
             <p class="tw-text-base tw-mt-2 tw-text-gray-500">{{journal}}</p>
@@ -85,7 +85,6 @@
                     {{#if huggingface}}<a class="project-link" href="{{huggingface}}" target="_blank">🤗 Dataset</a>{{/if}}
                     {{#if slides}}<a class="project-link" href="{{slides}}" target="_blank"><i class="bi bi-file-slides"></i> Slides</a>{{/if}}
                 {{/with}}
-                <a class="project-link" href="/research/{{{permalink}}}/"><i class="bi bi-book"></i> Read</a>
             </div>
         </section>
 
@@ -120,6 +119,19 @@
                 <p class="tw-text-justify project-prose">{{{abstract}}}</p>
             </div>
         </section>
+
+        {{#if project_page.toc}}
+        <!-- Section table-of-contents pill bar. Auto-populated from
+             H2 headings in the MD body (project_page_loader.js extracts
+             slug+text into project_page.toc). Sits between the Abstract
+             block and the first body section. -->
+        <nav class="project-toc tw-max-w-4xl tw-mx-auto tw-px-6 tw-py-8" aria-label="Table of contents">
+            <span class="project-toc-label">Contents:</span>
+            {{#each project_page.toc}}
+            <a href="#{{slug}}">{{{text}}}</a>
+            {{/each}}
+        </nav>
+        {{/if}}
 
         <!-- Body content rendered from data/projects/<slug>.md.
              The MD loader (build/project_page_loader.js) splits the

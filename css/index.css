@@ -773,6 +773,51 @@ section {
     font-size: 1rem;
 }
 
+/* Title-as-link: the H1 inside <a href="/research/<slug>/"> points
+   to the HTML render of the paper. Visually identical to a normal
+   H1 by default (no color shift, no underline); reveal underline on
+   hover so the affordance is discoverable without competing with
+   the action-button row below. */
+.project-title-link {
+    color: inherit;
+    text-decoration: none;
+}
+.project-title-link:hover {
+    text-decoration: none;
+}
+
+/* Table-of-contents pill bar, rendered between the Abstract block
+   and the body sections. Auto-populated from H2 headings in the MD
+   body (see project_page_loader.js). Outlined pills + a "Contents:"
+   label so the purpose of the row is unambiguous to a first-time
+   visitor — matches the visual language of the action buttons above
+   but at a slightly smaller scale (these are navigation, not CTAs). */
+.project-toc {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1.4;
+}
+.project-toc-label {
+    color: #6b7280;
+    font-size: 1rem;
+    margin-right: 0.25rem;
+}
+.project-toc a {
+    color: #2c2c2c;
+    text-decoration: none;
+    padding: 0.35rem 0.95rem;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    font-size: 1rem;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+.project-toc a:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
 /* Subtle short-line divider between consecutive narrative sections.
    Matches the .project-prose + .project-section case so BibTeX (which
    sits as a sibling of the project-prose wrapper rather than inside it)
@@ -781,13 +826,11 @@ section {
    intentionally emits sections without a tw-mb-* utility so this rule
    is the single source of inter-section spacing. */
 .project-section + .project-section,
-.project-prose + .project-section,
-.project-prose > .project-section:first-child {
+.project-prose + .project-section {
     padding-top: 3rem;
 }
 .project-section + .project-section::before,
 .project-prose + .project-section::before,
-.project-prose > .project-section:first-child::before,
 .project-tldr::before {
     content: '';
     display: block;

@@ -16,7 +16,7 @@ bibtex: |
   }
 ---
 
-## The Anticipatory Recovery Phenomenon
+## The Anticipatory Recovery Phenomenon {data-toc=Phenomenon}
 
 We uncover a very intriguing behavior when fine-tuning an LLM on *N* documents for *E* epochs with cyclic training, taking multiple gradient steps on each document each pass: starting from epoch 2, the loss on the first task stops increasing halfway through the cycle and starts to recover. In later epochs, more than 90% of the initial forgetting has been recovered before we cycle back to the first task. We call this surprising effect **"anticipatory recovery."**
 
@@ -30,7 +30,7 @@ In this paper, we study the simplest special case of sequential learning with te
 
 ![](cyclic_training.png){width=800}
 
-## Understanding Anticipatory Recovery
+## Understanding Anticipatory Recovery {data-toc=Understanding}
 
 We did a comprehensive analysis on how different training factors affect anticipatory recovery. We found that anticipatory recovery occurs only when the network has sufficient width and depth such that it is well fitted to each document.
 
@@ -50,7 +50,7 @@ We made some initial progress towards understanding the underlying mechanisms th
 
 ![Top 3 PCA components of last layer weights in the first 3 epochs.](spiral.png){width=400}
 
-## Prequential Evaluation
+## Prequential Evaluation {data-toc="Prequential Eval"}
 
 Prequential evaluation refers to measuring the online loss, or the loss on the upcoming task, which matters the most for real-world agents.
 
@@ -58,7 +58,7 @@ As a result of anticipatory recovery, we show that training with fixed ordering 
 
 ![](prequential.png){width=400}
 
-## Toy Computation Model
+## Toy Computation Model {data-toc="Toy Model"}
 
 We devise a computation toy model that demonstrates a similar anticipatory recovery phenomenon in its loss curve, with a single learnable linear embedding layer and a learnable target vector with task-specific mappings. Please refer to the paper for more details.
 
