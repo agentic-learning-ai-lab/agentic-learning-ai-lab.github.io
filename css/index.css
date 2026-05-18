@@ -760,7 +760,7 @@ section {
     color: #2c2c2c;
     border: 1px solid #d1d5db;
     border-radius: 999px;
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-decoration: none;
     transition: background-color 0.15s, border-color 0.15s;
 }
