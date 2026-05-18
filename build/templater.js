@@ -97,22 +97,22 @@ function doTemplating(input, output) {
         }
     }
     else if (input === "project.hbs") {
-        // Marketing landing pages at /<permalink>/. Only generated for
-        // papers that have opted in via `project_page.enabled: true`.
+        // Marketing landing pages at /<permalink>/. Opt in via
+        // `project_page: true` in data/papers.yaml — content lives in
+        // data/projects/<permalink>.md (frontmatter + markdown body).
         //
         // The permalink doubles as a top-level URL path, so it MUST NOT
-        // collide with one of our reserved routes (research/, people/,
-        // areas/, etc) — otherwise we'd shadow a real page. Guard at
-        // build time so the collision becomes a loud failure, not a
-        // silent override.
+        // collide with a reserved route.
         const RESERVED = new Set([
             'research', 'people', 'areas', 'contact',
             'assets', 'css', 'includes', 'build', 'data',
             'templates', 'notes', 'out', 'staging', 'node_modules',
         ]);
 
+        const { loadOne } = require('./project_page_loader');
+
         for (const paper of documents.papers) {
-            if (!paper.project_page || !paper.project_page.enabled) continue;
+            if (!paper.project_page) continue;
 
             if (RESERVED.has(paper.permalink)) {
                 throw new Error(
@@ -121,12 +121,46 @@ function doTemplating(input, output) {
                 );
             }
 
-            const output_new = output.replace("{{permalink}}", paper.permalink);
-            fs.mkdirSync(path.dirname(output_new), { recursive: true });
+            const projectData = loadOne(paper.permalink);
+            if (!projectData) {
+                throw new Error(
+                    `papers.yaml has project_page: true for "${paper.permalink}" ` +
+                    `but data/projects/${paper.permalink}.md doesn't exist.`
+                );
+            }
 
-            // Inline a per-project custom HTML partial if requested. Path
-            // is relative to assets/projects/<slug>/ so authors can keep
-            // it co-located with the project's other assets.
+            // Attach the loaded MD data as paper.project_page (replaces
+            // the boolean sentinel with the rich object the template
+            // expects). Fall back to top-level fields for missing links.
+            paper.project_page = projectData;
+            paper.project_page.links = paper.project_page.links || {};
+            if (!paper.project_page.links.arxiv && paper.arxiv) {
+                paper.project_page.links.arxiv = paper.arxiv;
+            }
+            // PDF link: prefer the self-hosted copy at
+            // research/<slug>/paper.pdf (served via CDN) over whatever
+            // external URL the YAML's top-level `pdf:` points at —
+            // usually arXiv's mirror, which we'd rather not send
+            // landing-page visitors to. Mirrors the has_local_pdf
+            // logic in the paper.hbs branch above.
+            if (!paper.project_page.links.pdf) {
+                const localPdfPath = path.join(__dirname, '..', 'research', paper.permalink, 'paper.pdf');
+                if (fs.existsSync(localPdfPath)) {
+                    const logical = `/research/${paper.permalink}/paper.pdf`;
+                    const manifest = loadAssetsManifest();
+                    if (manifest[logical]) {
+                        paper.project_page.links.pdf = manifest[logical];
+                    } else {
+                        paper.project_page.links.pdf = logical;
+                        _cdnMisses.add(logical);
+                    }
+                } else if (paper.pdf) {
+                    paper.project_page.links.pdf = paper.pdf;
+                }
+            }
+
+            // Inline a per-project custom HTML partial if requested.
+            // Path is relative to assets/projects/<slug>/.
             if (paper.project_page.custom_html) {
                 const customPath = path.join(
                     __dirname, '..',
@@ -139,19 +173,8 @@ function doTemplating(input, output) {
                 }
             }
 
-            // Fall back to top-level fields where project_page doesn't override.
-            // - links.arxiv/pdf: inherit from top-level fields
-            // - hero: NOT auto-inherited (most academic project pages don't
-            //   have a hero image; opt in by setting project_page.hero
-            //   explicitly in papers.yaml)
-            paper.project_page.links = paper.project_page.links || {};
-            if (!paper.project_page.links.arxiv && paper.arxiv) {
-                paper.project_page.links.arxiv = paper.arxiv;
-            }
-            if (!paper.project_page.links.pdf && paper.pdf) {
-                paper.project_page.links.pdf = paper.pdf;
-            }
-
+            const output_new = output.replace("{{permalink}}", paper.permalink);
+            fs.mkdirSync(path.dirname(output_new), { recursive: true });
             fs.writeFileSync(output_new, template(paper));
         }
     } else {
@@ -379,16 +402,23 @@ function registerHelpers(handlebars) {
 
         const formatted = authors.map((author, i) => {
             const aff = affs[i];
+            // Resolve link target in priority order:
+            //   1. explicit aff.url (external collaborator with homepage),
+            //   2. peopleMap lookup on the display name (lab member —
+            //      links to /people/<slug>/ even when affiliation is
+            //      written out explicitly), then
+            //   3. plain text.
+            // The display name prefers aff.name when given so authors
+            // can override how the name renders on the project page
+            // (e.g., expanding initials) without touching papers.yaml.
             let nameHtml;
-            if (aff) {
-                const displayName = aff.name || author;
-                nameHtml = aff.url
-                    ? `<a href="${aff.url}" target="_blank" rel="noopener">${displayName}</a>`
-                    : displayName;
-            } else if (peopleMap.has(author)) {
-                nameHtml = `<a href="/people/${peopleMap.get(author)}/">${author}</a>`;
+            const displayName = (aff && aff.name) || author;
+            if (aff && aff.url) {
+                nameHtml = `<a href="${aff.url}" target="_blank" rel="noopener">${displayName}</a>`;
+            } else if (peopleMap.has(displayName)) {
+                nameHtml = `<a href="/people/${peopleMap.get(displayName)}/">${displayName}</a>`;
             } else {
-                nameHtml = author;
+                nameHtml = displayName;
             }
             const idxList = authorAffIndex[i];
             const sup = idxList && idxList.length

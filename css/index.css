@@ -773,17 +773,25 @@ section {
     font-size: 1rem;
 }
 
-/* Subtle short-line divider between consecutive narrative sections. */
-.project-section + .project-section {
-    padding-top: 2rem;
+/* Subtle short-line divider between consecutive narrative sections.
+   Matches the .project-prose + .project-section case so BibTeX (which
+   sits as a sibling of the project-prose wrapper rather than inside it)
+   also gets a divider above. The 2rem padding-top + 2rem margin-bottom
+   on ::before keeps the gap symmetric around the line — the loader
+   intentionally emits sections without a tw-mb-* utility so this rule
+   is the single source of inter-section spacing. */
+.project-section + .project-section,
+.project-prose + .project-section {
+    padding-top: 3rem;
 }
-.project-section + .project-section::before {
+.project-section + .project-section::before,
+.project-prose + .project-section::before {
     content: '';
     display: block;
     width: 120px;
     height: 1px;
     background: #9ca3af;
-    margin: 0 auto 2rem;
+    margin: 0 auto 3rem;
 }
 
 /* Project page body links — match the academic-template look */
@@ -824,4 +832,29 @@ section {
 .project-bibtex,
 .project-bibtex code {
     font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* H2 headings inside markdown-rendered project sections.
+   The MD loader emits plain <h2> tags (markdown-it doesn't know
+   our Tailwind classes); match the styling that the Abstract/BibTeX
+   H2s use in project.hbs. */
+.project-section > h2 {
+    font-family: 'Libertinus Sans', system-ui, sans-serif;
+    font-size: 1.875rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.5rem;
+}
+@media (max-width: 768px) {
+    .project-section > h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Paragraph spacing inside project-prose */
+.project-prose p {
+    margin: 0 0 1rem;
+}
+.project-prose p:last-child {
+    margin-bottom: 0;
 }

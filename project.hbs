@@ -83,26 +83,15 @@
             </div>
         </section>
 
-        <!-- Sections: title (mono inherited) + body (serif override for
-             readable prose) + optional figures (centered). -->
-        {{#each project_page.sections}}
-        <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-12 project-section">
-            {{#if title}}<h2 class="tw-text-3xl max-md:tw-text-2xl tw-font-semibold tw-tracking-tight tw-mb-6">{{{title}}}</h2>{{/if}}
-            {{#if body}}<div class="project-section-body project-prose tw-space-y-5">{{{body}}}</div>{{/if}}
-            {{#if figures}}
-            <div class="tw-mt-12 tw-space-y-16">
-                {{#each figures}}
-                <figure class="tw-text-center">
-                    <div class="tw-mx-auto"{{#if width}} style="max-width: {{width}}px;"{{/if}}>
-                        {{{pictureCdn src alt="figure" class="tw-w-full tw-h-auto tw-rounded"}}}
-                    </div>
-                    {{#if caption}}<figcaption class="tw-text-base tw-text-gray-600 tw-mt-4 tw-italic tw-max-w-2xl tw-mx-auto">{{{caption}}}</figcaption>{{/if}}
-                </figure>
-                {{/each}}
-            </div>
-            {{/if}}
-        </section>
-        {{/each}}
+        <!-- Body content rendered from data/projects/<slug>.md.
+             The MD loader (build/project_page_loader.js) splits the
+             markdown by H2 headers into <section class="project-section">
+             wrappers, renders images as <figure>+<picture> with CDN URLs,
+             and inserts H2 titles + paragraphs + lists + links. The
+             .project-prose class applies serif body styling. -->
+        <div class="project-prose">
+            {{{project_page.body_html}}}
+        </div>
 
         <!-- Per-paper custom HTML escape hatch (interactive demos, etc). -->
         {{#if project_page.custom_html_inline}}
