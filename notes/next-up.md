@@ -7,6 +7,23 @@ touch + a rough effort estimate.
 Big-picture history lives in git log and the per-design docs
 (`cf-migration.md`, `latex-tarball-storage.md`, `project-pages-migration.md`).
 
+## Staging preview
+
+Cloudflare Pages is connected to this repo (set up 2026-05-17). Every
+push to `dev` (or any non-`main` branch) auto-builds and deploys a
+preview within ~3-4 min:
+
+- Branch alias (always latest): `dev.agentic-learning-ai-lab-github-io.pages.dev`
+- Per-commit immutable: `<short-sha>.agentic-learning-ai-lab-github-io.pages.dev`
+
+Use the branch alias for sharing iterative review links. Build logs
+live in Cloudflare dashboard → Workers & Pages → the project → Deployments.
+
+Production `agenticlearning.ai/` still flows through GH Pages (via DNS).
+CF Pages's main-branch build is a shadow deploy at the pages.dev URL.
+Flipping production entirely to CF Pages = Lever C in `cf-migration.md`,
+not currently motivated.
+
 ## Queue
 
 ### 1. Reap orphan R2 blobs
