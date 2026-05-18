@@ -367,5 +367,9 @@ over it.
   resist the urge to refactor a partial during an unrelated change.
 - If you find a real cleanup opportunity, file it in `notes/` as a
   separate doc instead of bundling.
-- Project-page work follows `notes/project-pages-migration.md`. That
-  doc is the spec — read it before touching project pages.
+- Project pages: content lives in `data/projects/<slug>.md` (YAML
+  frontmatter + markdown body). Read `data/projects/anticipatory-recovery.md`
+  for the live shape and `build/project_page_loader.js` for the renderer
+  before touching the pipeline. `notes/project-pages-migration.md` is a
+  historical design doc — the YAML-block schema it sketches is no longer
+  used (see banner at top of that doc).

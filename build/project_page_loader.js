@@ -87,6 +87,11 @@ function resolveImagePaths(src, slug) {
  * against `assets/projects/<slug>/`.
  */
 function makeRenderer(slug) {
+    // `html: true` is safe here because the only input is committed
+    // files under data/projects/, which we control. Do NOT enable this
+    // if MD ever starts coming from an untrusted source (PR-form
+    // submissions, end-user uploads, etc.) — markdown-it would pass
+    // raw HTML straight through, including any embedded <script>.
     const md = new MarkdownIt({ html: true, linkify: false, breaks: false })
         .use(mdAttrs);
 
@@ -175,19 +180,4 @@ function loadOne(slug) {
     };
 }
 
-/**
- * Load all project pages from data/projects/. Returns Map<slug, data>.
- */
-function loadAll() {
-    const map = new Map();
-    if (!fs.existsSync(PROJECTS_DIR)) return map;
-    for (const f of fs.readdirSync(PROJECTS_DIR)) {
-        if (!f.endsWith('.md')) continue;
-        const slug = f.replace(/\.md$/, '');
-        const data = loadOne(slug);
-        if (data) map.set(slug, data);
-    }
-    return map;
-}
-
-module.exports = { loadOne, loadAll };
+module.exports = { loadOne };
