@@ -5,9 +5,10 @@ module.exports = {
 	prefix: 'tw-',
 	important: false,
 	content: [
-		"**/*.{html, jsx, js}",
+		"**/*.{html,jsx,js,hbs}",
 		"**/*.js",
 		"**/*.html",
+		"**/*.hbs",
 		"*.html",
 		"**/**/*.html",
 	],
