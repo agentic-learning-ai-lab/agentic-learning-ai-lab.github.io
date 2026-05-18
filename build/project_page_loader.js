@@ -166,7 +166,29 @@ function loadOne(slug) {
     const { data: frontmatter, content: body } = matter(raw);
 
     const md = makeRenderer(slug);
-    let rendered = md.render(body);
+
+    // Stash math blocks before markdown-it sees them — otherwise it
+    // happily eats `_` as emphasis delimiters and `{` / `}` as plain
+    // text, mangling LaTeX like `\underbrace{...}_{\substack{...}}`
+    // beyond what MathJax can recover. Display ($$…$$) first because
+    // greedy doubles include any single-$ pairs inside.
+    // Use HTML-comment sentinels — markdown-it with html:true
+    // preserves them verbatim in both block and inline contexts.
+    const mathStash = [];
+    function stash(piece) {
+        mathStash.push(piece);
+        return `<!--MATH${mathStash.length - 1}-->`;
+    }
+    const protectedBody = body
+        .replace(/\$\$([\s\S]+?)\$\$/g, (_, m) => stash(`$$${m}$$`))
+        .replace(/(^|[^\\])\$([^\$\n]+?)\$/g, (_, pre, m) => `${pre}${stash(`$${m}$`)}`);
+
+    let rendered = md.render(protectedBody);
+
+    // Restore stashed math. Authors write display math on its own
+    // paragraph, which markdown-it wraps in <p>…</p> — MathJax 3
+    // handles `$$…$$` inside <p> fine, so leave it.
+    rendered = rendered.replace(/<!--MATH(\d+)-->/g, (_, i) => mathStash[+i]);
 
     // markdown-it wraps standalone-image lines in <p>...</p>, producing
     // invalid `<p><figure>...</figure></p>` (figure is block-level). Unwrap.

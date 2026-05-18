@@ -19,11 +19,39 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/libertinus-serif@5.2.1/400.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/libertinus-serif@5.2.1/400-italic.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/libertinus-serif@5.2.1/700.css" />
+    <!-- Academicons provides the proper arXiv glyph (`ai ai-arxiv`),
+         which reads more clearly than a generic "file" icon in a row
+         of action buttons. Same font as the legacy Bulma project
+         pages, so the new project pages stay visually consistent
+         with the old ones during the migration window. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.4/css/academicons.min.css" />
+    {{#if project_page.custom_css_href}}
+    <!-- Per-project CSS: assets/projects/<slug>/style.css. Auto-linked
+         when present so project-specific rules (e.g., color-coded
+         inline badges) don't bloat the site-wide stylesheet. -->
+    <link rel="stylesheet" href="{{project_page.custom_css_href}}" />
+    {{/if}}
     {{#if project_page.mathjax}}
     <!-- MathJax 3 needs no polyfill on modern browsers (ES6 native
          since ~2017). The old polyfill.io reference from the Bulma
          template was a security risk — that CDN was compromised in
-         a 2024 supply-chain attack. -->
+         a 2024 supply-chain attack.
+         Enable $-delimiters alongside the default \( \) / \[ \]
+         because markdown-it consumes `\(` as a backslash-escape for
+         `(` before MathJax ever sees it — authors writing math in
+         data/projects/<slug>.md should use $V$ for inline and $$ ... $$
+         for display. -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        options: {
+          skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      };
+    </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     {{/if}}
 </head>
@@ -49,7 +77,7 @@
 
             <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-3 tw-mt-8">
                 {{#with project_page.links}}
-                    {{#if arxiv}}<a class="project-link" href="{{arxiv}}" target="_blank"><i class="bi bi-file-earmark-text"></i> arXiv</a>{{/if}}
+                    {{#if arxiv}}<a class="project-link" href="{{arxiv}}" target="_blank"><i class="ai ai-arxiv"></i> arXiv</a>{{/if}}
                     {{#if pdf}}<a class="project-link" href="{{pdf}}" target="_blank"><i class="bi bi-file-pdf"></i> PDF</a>{{/if}}
                     {{#if poster}}<a class="project-link" href="{{poster}}" target="_blank"><i class="bi bi-easel"></i> Poster</a>{{/if}}
                     {{#if code}}<a class="project-link" href="{{code}}" target="_blank"><i class="bi bi-github"></i> Code</a>{{/if}}

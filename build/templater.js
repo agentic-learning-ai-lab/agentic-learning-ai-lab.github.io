@@ -159,6 +159,20 @@ function doTemplating(input, output) {
                 }
             }
 
+            // Convention: if assets/projects/<slug>/style.css exists,
+            // link it in the project page <head>. Lets a project carry
+            // page-scoped CSS (e.g., color-coded inline badges that
+            // don't belong in the site-wide stylesheet) without
+            // touching the global index.css. No flag in the MD
+            // frontmatter — file presence is the signal.
+            const projectCssPath = path.join(
+                __dirname, '..',
+                'assets/projects', paper.permalink, 'style.css'
+            );
+            if (fs.existsSync(projectCssPath)) {
+                paper.project_page.custom_css_href = `/assets/projects/${paper.permalink}/style.css`;
+            }
+
             // Inline a per-project custom HTML partial if requested.
             // Path is relative to assets/projects/<slug>/.
             if (paper.project_page.custom_html) {
@@ -379,7 +393,16 @@ function registerHelpers(handlebars) {
             }
             authorAffIndex.push(indices.length ? indices : null);
         }
-        return { orderedAffs, authorAffIndex };
+        // Single-affiliation shortcut: if everyone shares one
+        // affiliation, drop the superscripts entirely — the
+        // affiliations line just shows the name. Avoids the visually
+        // noisy `Jack Lu¹, Ryan Teehan¹, …` + `¹New York University`
+        // when there's nothing to disambiguate.
+        const singleAff = orderedAffs.length === 1;
+        if (singleAff) {
+            return { orderedAffs, authorAffIndex: authors.map(() => null), singleAff };
+        }
+        return { orderedAffs, authorAffIndex, singleAff };
     }
 
     // {{formatAuthorsForProjectPage authors affiliations}}
@@ -424,7 +447,14 @@ function registerHelpers(handlebars) {
             const sup = idxList && idxList.length
                 ? `<sup class="tw-text-sm">${idxList.join(',')}</sup>`
                 : '';
-            return `${nameHtml}${sup}`;
+            // Equal-contribution asterisk. Rendered as a *trailing*
+            // superscript after the affiliation number so co-first-authors
+            // read as "Jack Lu¹*" — matches the standard academic
+            // convention. The matching "* Equal contribution" footnote
+            // is emitted by formatAffiliationsForProjectPage when any
+            // entry has equal: true.
+            const eqMark = (aff && aff.equal) ? `<sup class="tw-text-sm">*</sup>` : '';
+            return `${nameHtml}${sup}${eqMark}`;
         });
 
         let result;
@@ -443,12 +473,22 @@ function registerHelpers(handlebars) {
     // Emits a numbered, deduplicated affiliations line that pairs with
     // the superscripts on the authors line. Format:
     //   <sup>1</sup>NYU, <sup>2</sup>CU Boulder, <sup>3</sup>Google DeepMind
+    //
+    // If any affiliation entry has `equal: true`, also emits an
+    // "* Equal contribution" footnote on a second line.
     handlebars.registerHelper('formatAffiliationsForProjectPage', function (authors, affiliations) {
         if (!authors || authors.length === 0) return "";
-        const { orderedAffs } = buildProjectAffMap(authors, affiliations);
-        return new handlebars.SafeString(
-            orderedAffs.map((a, i) => `<sup class="tw-text-xs">${i + 1}</sup>${a}`).join(', ')
-        );
+        const { orderedAffs, singleAff } = buildProjectAffMap(authors, affiliations);
+        const affs = Array.isArray(affiliations) ? affiliations : [];
+        const hasEqual = affs.some(a => a && a.equal);
+        // Single-affiliation: no number prefix on the affiliations
+        // line — pairs with the no-superscript rendering in
+        // formatAuthorsForProjectPage.
+        const affLine = singleAff
+            ? orderedAffs[0]
+            : orderedAffs.map((a, i) => `<sup class="tw-text-xs">${i + 1}</sup>${a}`).join(', ');
+        const eqLine = hasEqual ? `<br><sup class="tw-text-xs">*</sup>Equal contribution` : '';
+        return new handlebars.SafeString(affLine + eqLine);
     });
 }
 
