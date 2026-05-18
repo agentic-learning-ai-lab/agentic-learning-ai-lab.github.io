@@ -139,6 +139,12 @@
 .lm-carousel video {
     max-width: 100%;
     width: 600px;
+    /* Tailwind preflight makes <video> display: block, which means
+       text-align: center on the slide doesn't actually center the
+       video — it stays left-aligned. margin: 0 auto centers the
+       block element so the chevron buttons sit symmetrically
+       relative to the video edges. */
+    margin: 0 auto;
     /* min-width: 0 prevents the video's intrinsic dimensions (or
        the width="600" attribute on the element) from forcing the
        enclosing slide wider than the carousel on narrow viewports. */
