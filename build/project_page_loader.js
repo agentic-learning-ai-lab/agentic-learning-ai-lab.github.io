@@ -214,6 +214,15 @@ function loadOne(slug) {
     // this rewrite they'd be served from CF Pages origin instead
     // of the CDN — slower, and CF Pages serves large MP4s with
     // less mobile-friendly headers (no proper range requests).
+    //
+    // Assumption: this regex handles exactly one URL per quoted
+    // attribute (src="…", href="…", url(…)). It would NOT correctly
+    // rewrite a multi-URL `srcset="…, …, …"` attribute (only the
+    // first URL after the opening quote would be matched) — keep
+    // an eye out if a future project page authors `<source srcset>`
+    // by hand. The MD image renderer's webp <source> path already
+    // emits the CDN URL directly via the manifest, so it's not a
+    // problem for the existing pipeline.
     const manifest = loadManifest();
     const assetPrefix = `/assets/projects/${slug}/`;
     const assetPattern = new RegExp(`(["'\\(])(${assetPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^"'\\)\\s]+)`, 'g');

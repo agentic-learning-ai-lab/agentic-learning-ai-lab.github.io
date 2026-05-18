@@ -146,13 +146,30 @@ covers it.
 ### Project-specific styling — per-project CSS by convention
 
 If a project needs styles that don't generalize (color-coded inline
-spans, custom widget chrome), drop a `style.css` at
-`assets/projects/<slug>/style.css`. `templater.js` detects it by
-filesystem presence and emits a `<link rel="stylesheet">` in the
-project page head. No flag needed in the MD frontmatter.
+spans, custom slide content for a carousel, one-off layouts), drop a
+`style.css` at `assets/projects/<slug>/style.css`. `templater.js`
+detects it by filesystem presence (see the `projectCssPath` check in
+the `project.hbs` branch) and emits a `<link rel="stylesheet">` in
+the project page head. No flag needed in the MD frontmatter.
 
-Reserve `css/index.css` for rules that benefit every project page
-(sub-section H3 styling, blockquote callout, font inheritance, etc.).
+**Class-name convention**: scope project-specific rules under a
+short slug-derived prefix on the carousel/section root, e.g.
+`.lm-carousel` for lifelong-memory or `.model-llama3` for
+llm-verification. Keeps multi-project CSS conflict-free if the same
+project page is ever inlined elsewhere.
+
+**What lives where**:
+- `css/index.css` — anything used by ≥2 project pages or that's
+  part of the general project-page chrome (carousel widget,
+  blockquote callouts, h3 sub-section styling, font inheritance).
+- `assets/projects/<slug>/style.css` — slide-content styling,
+  one-off color palettes, project-specific layout adjustments.
+
+**Promotion rule**: when a second project adopts a pattern from
+some per-project `style.css`, promote it to `css/index.css` so the
+two projects don't drift. The carousel chrome was promoted this
+way after `lifelong-memory` shipped (originally lived in
+`assets/projects/lifelong-memory/style.css`).
 
 ### Dividers between sections — three selectors
 

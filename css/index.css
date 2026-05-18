@@ -885,6 +885,144 @@ section {
     font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 }
 
+/* === Project-carousel widget — shared chrome ============================
+   Vanilla carousel for any project page that opts in via
+   `carousel: true` in MD frontmatter (see project.hbs init JS at
+   the body end). Markup: <div class="project-carousel">…<div
+   class="item">…</div></div>; the init script wraps the items in a
+   .project-carousel-viewport > .project-carousel-track flex row and
+   injects prev/next buttons + pagination dots after the items.
+   Per-project slide-content styling (videos, captions) lives in
+   assets/projects/<slug>/style.css under that project's own class
+   (e.g. .lm-carousel). ====================================== */
+.project-carousel {
+    position: relative;
+    /* Wider than a typical 600px video so the chevron buttons get
+       breathing room outside the content without forcing it to
+       shrink. */
+    margin: 1.5rem auto;
+    padding: 0 6rem 3rem;
+    /* Defensive horizontal clip + cap at parent's width so the
+       carousel never pushes its section wider on narrow viewports. */
+    overflow-x: clip;
+    max-width: min(840px, 100%);
+}
+/* Viewport: clip box for the sliding track. Lives inside the
+   carousel's content area (after the padding), so the buttons sit
+   *outside* the viewport in the padding gutters — and adjacent
+   slides are clipped at the viewport edge instead of peeking into
+   the padding area. */
+.project-carousel-viewport {
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+/* Track wrapper injected by the init JS — holds all .item slides in
+   a flex row and slides them horizontally via translateX. */
+.project-carousel-track {
+    display: flex;
+    /* Pin to viewport width — items overflow inside via flex-basis
+       100%, but the track box itself must equal the viewport so
+       translateX percentages resolve correctly. */
+    width: 100%;
+    transition: transform 0.3s ease;
+    will-change: transform;
+}
+.project-carousel-track > .item {
+    flex: 0 0 100%;
+    min-width: 0;
+    /* Explicit width so each slide is exactly one viewport of the
+       track regardless of flex-basis intrinsic-sizing quirks. */
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+}
+/* Pre-init fallback: while the JS is still wrapping items in the
+   track, hide all but the first so the carousel doesn't briefly
+   render as a vertical stack. */
+.project-carousel > .item:not(:first-child) {
+    display: none;
+}
+.project-carousel-prev,
+.project-carousel-next {
+    position: absolute;
+    /* Static optical-center compensation: the slide's below-video
+       content (~0.75rem margin + ~3rem caption + 3rem pagination
+       padding ≈ 6.75rem, half ≈ 3.4rem) pulls the container's
+       geometric midpoint south of the video's true midpoint.
+       Approximate compromise — drifts ~10px for slides with a
+       2-line caption when others are 1 line. Per-slide JS
+       positioning was tried earlier and removed for simplicity. */
+    top: calc(50% - 3.4rem);
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    background: #fff;
+    color: #2c2c2c;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+.project-carousel-prev:hover,
+.project-carousel-next:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+    color: #3b82f6;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.project-carousel-prev svg,
+.project-carousel-next svg {
+    display: block;
+}
+/* Chevron glyph: optical-center down 1px (BS-Icons-style chevron
+   reads slightly high to the eye) + nudge each toward its outer
+   edge as a subtle directional cue. */
+.project-carousel-prev svg { transform: translate(-1px, 1px); }
+.project-carousel-next svg { transform: translate( 1px, 1px); }
+.project-carousel-prev { left: 0.5rem; }
+.project-carousel-next { right: 0.5rem; }
+.project-carousel-pagination {
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+.project-carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d1d5db;
+    border: none;
+    margin: 0 4px;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.15s;
+}
+.project-carousel-dot.is-active { background: #3b82f6; }
+.project-carousel-dot:hover { background: #9ca3af; }
+
+/* Narrow viewports: hide the chevron buttons (touch swipe replaces
+   them) and drop the side padding so content has the full width.
+   Pagination dots still show as a progress indicator. */
+@media (max-width: 768px) {
+    .project-carousel {
+        padding: 0 0 3rem;
+    }
+    .project-carousel-prev,
+    .project-carousel-next {
+        display: none;
+    }
+}
+
 /* H2 headings inside markdown-rendered project sections.
    The MD loader emits plain <h2> tags (markdown-it doesn't know
    our Tailwind classes); match the styling that the Abstract/BibTeX
