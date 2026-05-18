@@ -14,7 +14,7 @@ Plan for moving the lab site from "pure GitHub Pages + LFS" to "Cloudflare-front
 | C | Full Cloudflare Pages migration | ⏸ Deferred — not motivated unless GH Pages CI becomes painful |
 | D | HK/SG mirror for China latency | ❌ Dropped — A's edge is sufficient |
 
-What remains: bulk port of the remaining 11 project pages (template + pilot landed in PR #9 — see [project-pages-migration.md](project-pages-migration.md)), LFS-free migration when LFS quota actually pinches, and orphan-R2-blob reaper when storage matters. See [next-up.md](next-up.md).
+What remains: the LFS-free migration when LFS quota actually pinches, and orphan-R2-blob reaper when storage matters. See [next-up.md](next-up.md).
 
 ## Today's state (recap)
 
