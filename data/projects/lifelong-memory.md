@@ -117,3 +117,11 @@ Our approach achieves state-of-the-art performance on the EgoSchema benchmark fo
 ![](nlq_results.png){width=600}
 
 We also quantitatively evaluate our proposed framework with different captioning models, LLMs, pre-processing techniques, and prompts. Please read our paper for more details.
+
+## Video Presentation {data-toc=Video}
+
+<figure class="tw-text-center tw-my-10">
+  <video autoplay muted loop controls playsinline preload="metadata" style="max-width: 700px; width: 100%; height: auto; margin: 0 auto; border-radius: 0.25rem;">
+    <source src="/assets/projects/lifelong-memory/lifelongmemory_full.mp4" type="video/mp4">
+  </video>
+</figure>
