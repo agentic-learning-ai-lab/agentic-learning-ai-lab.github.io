@@ -95,65 +95,6 @@ function doTemplating(input, output) {
             ra.papers = papers;
             fs.writeFileSync(output_new, template(ra));
         }
-    }
-    else if (input === "project.hbs") {
-        // Marketing landing pages at /<permalink>/. Only generated for
-        // papers that have opted in via `project_page.enabled: true`.
-        //
-        // The permalink doubles as a top-level URL path, so it MUST NOT
-        // collide with one of our reserved routes (research/, people/,
-        // areas/, etc) — otherwise we'd shadow a real page. Guard at
-        // build time so the collision becomes a loud failure, not a
-        // silent override.
-        const RESERVED = new Set([
-            'research', 'people', 'areas', 'contact',
-            'assets', 'css', 'includes', 'build', 'data',
-            'templates', 'notes', 'out', 'staging', 'node_modules',
-        ]);
-
-        for (const paper of documents.papers) {
-            if (!paper.project_page || !paper.project_page.enabled) continue;
-
-            if (RESERVED.has(paper.permalink)) {
-                throw new Error(
-                    `permalink "${paper.permalink}" collides with a reserved top-level path; ` +
-                    `rename in data/papers.yaml before enabling project_page.`
-                );
-            }
-
-            const output_new = output.replace("{{permalink}}", paper.permalink);
-            fs.mkdirSync(path.dirname(output_new), { recursive: true });
-
-            // Inline a per-project custom HTML partial if requested. Path
-            // is relative to assets/projects/<slug>/ so authors can keep
-            // it co-located with the project's other assets.
-            if (paper.project_page.custom_html) {
-                const customPath = path.join(
-                    __dirname, '..',
-                    'assets/projects', paper.permalink, paper.project_page.custom_html
-                );
-                if (fs.existsSync(customPath)) {
-                    paper.project_page.custom_html_inline = fs.readFileSync(customPath, 'utf8');
-                } else {
-                    console.warn(`  ⚠️  project_page.custom_html points at missing file: ${customPath}`);
-                }
-            }
-
-            // Fall back to top-level fields where project_page doesn't override.
-            // - links.arxiv/pdf: inherit from top-level fields
-            // - hero: NOT auto-inherited (most academic project pages don't
-            //   have a hero image; opt in by setting project_page.hero
-            //   explicitly in papers.yaml)
-            paper.project_page.links = paper.project_page.links || {};
-            if (!paper.project_page.links.arxiv && paper.arxiv) {
-                paper.project_page.links.arxiv = paper.arxiv;
-            }
-            if (!paper.project_page.links.pdf && paper.pdf) {
-                paper.project_page.links.pdf = paper.pdf;
-            }
-
-            fs.writeFileSync(output_new, template(paper));
-        }
     } else {
         fs.writeFileSync(output, template(documents));
     }
@@ -286,23 +227,19 @@ function registerHelpers(handlebars) {
 
     // Cache people map to avoid re-parsing YAML on every call
     let _peopleMap = null;
-    function getPeopleMap() {
+    handlebars.registerHelper('formatAuthorsWithLinks', function (authors) {
         if (!_peopleMap) {
             const peopleData = parseDocuments().people;
             _peopleMap = new Map(peopleData.map(p => [p.name, p.permalink]));
         }
-        return _peopleMap;
-    }
-    handlebars.registerHelper('formatAuthorsWithLinks', function (authors) {
-        const peopleMap = getPeopleMap();
 
         if (!authors || authors.length === 0) {
             return "";
         }
 
         const formattedAuthors = authors.map(author => {
-            if (peopleMap.has(author)) {
-                return `<a href="/people/${peopleMap.get(author)}/">${author}</a>`;
+            if (_peopleMap.has(author)) {
+                return `<a href="/people/${_peopleMap.get(author)}/">${author}</a>`;
             }
             return author;
         });
@@ -317,108 +254,6 @@ function registerHelpers(handlebars) {
         }
 
         return new handlebars.SafeString(result);
-    });
-
-    // Build a shared affiliation-index map for project-page authors.
-    //
-    // Returns { orderedAffs: [aff1, aff2, ...], authorAffIndex: [[1],[2],[3,2],[1],...] }.
-    // - orderedAffs: unique affiliation strings in first-seen order.
-    // - authorAffIndex[i]: array of 1-based superscript numbers for authors[i]
-    //   (multi-aff authors get multiple indices, e.g. Mozer at DeepMind+CU).
-    // - `affiliations[i].aff` accepts a string OR an array of strings.
-    // - Null entries (or positions beyond affs.length) are treated as
-    //   lab members → "New York University".
-    function buildProjectAffMap(authors, affiliations) {
-        const affs = Array.isArray(affiliations) ? affiliations : [];
-        const orderedAffs = [];
-        const authorAffIndex = [];
-        for (let i = 0; i < authors.length; i++) {
-            const a = affs[i];
-            let affNames;
-            if (a == null) {
-                affNames = ['New York University'];
-            } else if (Array.isArray(a.aff)) {
-                affNames = a.aff;
-            } else if (a.aff) {
-                affNames = [a.aff];
-            } else {
-                authorAffIndex.push(null);
-                continue;
-            }
-            const indices = [];
-            for (const affName of affNames) {
-                let idx = orderedAffs.indexOf(affName);
-                if (idx === -1) {
-                    orderedAffs.push(affName);
-                    idx = orderedAffs.length - 1;
-                }
-                indices.push(idx + 1);
-            }
-            authorAffIndex.push(indices.length ? indices : null);
-        }
-        return { orderedAffs, authorAffIndex };
-    }
-
-    // {{formatAuthorsForProjectPage authors affiliations}}
-    //
-    // Renders author names with numbered superscripts pointing into the
-    // affiliations list below. Each author:
-    //   1. If `affiliations[i]` is non-null, link name to aff.url
-    //      (external collaborator).
-    //   2. Else look up in people.yaml → link to /people/<permalink>/.
-    //   3. Else plain text.
-    // Superscript number is the 1-based index of the author's affiliation
-    // in the deduplicated `orderedAffs` list — matches the numbering
-    // emitted by formatAffiliationsForProjectPage.
-    handlebars.registerHelper('formatAuthorsForProjectPage', function (authors, affiliations) {
-        const peopleMap = getPeopleMap();
-        const affs = Array.isArray(affiliations) ? affiliations : [];
-        if (!authors || authors.length === 0) return "";
-
-        const { authorAffIndex } = buildProjectAffMap(authors, affiliations);
-
-        const formatted = authors.map((author, i) => {
-            const aff = affs[i];
-            let nameHtml;
-            if (aff) {
-                const displayName = aff.name || author;
-                nameHtml = aff.url
-                    ? `<a href="${aff.url}" target="_blank" rel="noopener">${displayName}</a>`
-                    : displayName;
-            } else if (peopleMap.has(author)) {
-                nameHtml = `<a href="/people/${peopleMap.get(author)}/">${author}</a>`;
-            } else {
-                nameHtml = author;
-            }
-            const idxList = authorAffIndex[i];
-            const sup = idxList && idxList.length
-                ? `<sup class="tw-text-sm">${idxList.join(',')}</sup>`
-                : '';
-            return `${nameHtml}${sup}`;
-        });
-
-        let result;
-        if (formatted.length === 1) {
-            result = formatted[0];
-        } else if (formatted.length === 2) {
-            result = formatted[0] + ' and ' + formatted[1];
-        } else {
-            result = formatted.slice(0, -1).join(', ') + ', and ' + formatted[formatted.length - 1];
-        }
-        return new handlebars.SafeString(result);
-    });
-
-    // {{formatAffiliationsForProjectPage authors affiliations}}
-    //
-    // Emits a numbered, deduplicated affiliations line that pairs with
-    // the superscripts on the authors line. Format:
-    //   <sup>1</sup>NYU, <sup>2</sup>CU Boulder, <sup>3</sup>Google DeepMind
-    handlebars.registerHelper('formatAffiliationsForProjectPage', function (authors, affiliations) {
-        if (!authors || authors.length === 0) return "";
-        const { orderedAffs } = buildProjectAffMap(authors, affiliations);
-        return new handlebars.SafeString(
-            orderedAffs.map((a, i) => `<sup class="tw-text-xs">${i + 1}</sup>${a}`).join(', ')
-        );
     });
 }
 

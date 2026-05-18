@@ -41,34 +41,16 @@ add the same paths to `.gitignore` so `git add` doesn't auto-stage
 binaries. Author workflow becomes: drop locally → `sync:r2` → commit
 only the manifest entry. Note already documented in `cf-migration.md`.
 
-### 3. Bulk port remaining project pages
+### 3. Project pages
 
-Template + pilot landed in PR #9 (anticipatory-recovery). The other 11
-project pages live as per-paper repos with a `website` branch — they
-all follow the same Bulma "academic project page" template, so porting
-each is mostly:
-1. `gh repo clone agentic-learning-ai-lab/<slug>` (or grab `website`
-   branch via git archive).
-2. Add a `project_page:` block under that paper's entry in
-   `data/papers.yaml` — affiliations, links, sections (title + body
-   HTML + figures), bibtex.
-3. Copy figure assets to `assets/projects/<slug>/`.
-4. `npm run build:webp && npm run sync:r2 && npm run build` and spot-check
-   the rendered `/<slug>/` against the existing live page.
-5. PR per project (small, parallelizable).
-
-Schema, helpers, and CSS are stable. New papers can also add a
-`project_page:` block from day one.
-
-Outstanding migration work covered in `notes/project-pages-migration.md`
-(see "Migration plan" Steps 3-6): bulk port, custom-widget outliers,
-cutover, and archiving the per-project repos after a quiet period.
+`notes/project-pages-migration.md` is the spec. Self-contained design
+doc; read it before touching project pages.
 
 ## How to pick the next item
 
 Pick by impact / urgency. Today's ordering (most useful first):
 
-1. **Bulk port project pages** (3) — biggest user-facing impact remaining.
-   Mostly mechanical YAML editing now that the template is stable.
+1. **Project pages** (3) — high author-facing value, several papers
+   already want this.
 2. **Orphan R2 reaper** (1) — write when free tier matters; not soon.
 3. **LFS-free** (2) — defer until quota pinches.

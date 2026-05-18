@@ -51,8 +51,6 @@ const SYNC_PATHS = [
   'assets/images/people/**/*.{png,jpg,jpeg,gif,webp}',
   'assets/images/background/**/*.{png,jpg,jpeg,gif,webp}',
   'assets/images/home/**/*.{png,jpg,jpeg,gif,webp}',
-  // Project page assets (see project.hbs + notes/project-pages-migration.md)
-  'assets/projects/**/*.{png,jpg,jpeg,gif,webp,svg,mp4,pdf}',
 ];
 
 const BUCKET = process.env.R2_BUCKET || 'agenticlearning-assets';

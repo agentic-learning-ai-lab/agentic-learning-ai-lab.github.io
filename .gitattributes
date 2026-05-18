@@ -22,14 +22,3 @@ assets/images/background/*.png filter=lfs diff=lfs merge=lfs -text
 # PR #5 are already raw git blobs (history bloat already paid) — this
 # rule prevents further bloat going forward.
 assets/images/**/*.webp filter=lfs diff=lfs merge=lfs -text
-
-# Git LFS - Project page assets (assets/projects/<slug>/...). Hero
-# images, results figures, embedded video/posters, etc. See
-# notes/project-pages-migration.md.
-assets/projects/**/*.png filter=lfs diff=lfs merge=lfs -text
-assets/projects/**/*.jpg filter=lfs diff=lfs merge=lfs -text
-assets/projects/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
-assets/projects/**/*.gif filter=lfs diff=lfs merge=lfs -text
-assets/projects/**/*.webp filter=lfs diff=lfs merge=lfs -text
-assets/projects/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
-assets/projects/**/*.pdf filter=lfs diff=lfs merge=lfs -text
