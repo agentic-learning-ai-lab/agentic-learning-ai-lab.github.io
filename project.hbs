@@ -204,7 +204,11 @@
             if (v && !v.dataset.userPaused) v.play().catch(function () {});
           }
           function pauseAll() {
-            root.querySelectorAll('video').forEach(function (v) { v.pause(); });
+            root.querySelectorAll('video').forEach(function (v) {
+              v.dataset.programmaticPause = '1';
+              v.pause();
+              delete v.dataset.programmaticPause;
+            });
           }
           function positionButtons() {
             // Pin the prev/next chevrons against the *active video's*
@@ -280,24 +284,25 @@
           root.appendChild(next);
           root.appendChild(pagination);
           go(0);
-          // Click-to-toggle play/pause on each video — saves us from
-          // showing the browser's full controls bar (play, volume,
-          // fullscreen, timeline). Cursor: pointer signals it's
-          // clickable without any overlay UI.
+          // The gallery videos carry the native controls attribute,
+          // so the play/pause button is the browser's own — no need
+          // for a custom click handler. We still need to listen for
+          // user-initiated pause/play via the native controls so
+          // the IntersectionObserver doesn't override their intent
+          // when the carousel scrolls back into view.
           root.querySelectorAll('video').forEach(function (v) {
-            v.style.cursor = 'pointer';
-            v.addEventListener('click', function () {
-              if (v.paused) {
-                v.play().catch(function () {});
-                delete v.dataset.userPaused;
-              } else {
-                v.pause();
-                // Mark so the IntersectionObserver doesn't re-start
-                // the video the next time the carousel scrolls back
-                // into view. Cleared on slide navigation or on a
-                // subsequent click-play.
+            v.addEventListener('pause', function () {
+              // Distinguish a programmatic pause (our pauseAll on
+              // slide change / scroll-out) from the user clicking
+              // the controls pause button. The carousel sets
+              // data-programmatic-pause right before calling
+              // pauseAll, and clears it after.
+              if (!v.dataset.programmaticPause) {
                 v.dataset.userPaused = '1';
               }
+            });
+            v.addEventListener('play', function () {
+              delete v.dataset.userPaused;
             });
           });
           // Touch swipe support — primary navigation on mobile where
