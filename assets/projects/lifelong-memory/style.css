@@ -17,13 +17,24 @@
     max-width: 840px;
     margin: 1.5rem auto;
     padding: 0 6rem 3rem;
+    /* All slides occupy the same grid cell — lets us cross-fade
+       between them via opacity and keeps the container height
+       constant (= tallest slide). The prev/next/pagination
+       elements injected by the init JS are position:absolute, so
+       they sit outside the grid flow. */
+    display: grid;
 }
 .project-carousel > .item {
-    display: none;
+    grid-column: 1;
+    grid-row: 1;
+    opacity: 0;
+    pointer-events: none;
     text-align: center;
+    transition: opacity 0.3s ease;
 }
 .project-carousel > .item.is-active {
-    display: block;
+    opacity: 1;
+    pointer-events: auto;
 }
 .project-carousel-prev,
 .project-carousel-next {
