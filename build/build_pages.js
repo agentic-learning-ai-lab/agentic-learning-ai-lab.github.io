@@ -8,6 +8,10 @@ const pages = [
     { template: 'paper.hbs', output: 'research/{{permalink}}/index.html' },
     { template: 'person.hbs', output: 'people/{{permalink}}/index.html' },
     { template: 'research_area.hbs', output: 'areas/{{permalink}}/index.html' },
+    // Marketing landing pages for papers with project_page.enabled: true.
+    // Routed at the root: /<permalink>/index.html (preserves URLs from the
+    // old per-project repos, which lived at agenticlearning.ai/<slug>/).
+    { template: 'project.hbs', output: '{{permalink}}/index.html' },
 ];
 
 let failed = 0;
