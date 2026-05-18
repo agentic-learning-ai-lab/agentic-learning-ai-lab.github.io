@@ -151,30 +151,28 @@
 .project-carousel-dot.is-active { background: #3b82f6; }
 .project-carousel-dot:hover { background: #9ca3af; }
 
-/* --- lifelong-memory slide content --- */
+/* --- lifelong-memory slide content ---
+   Notable: this rule deliberately does NOT use `aspect-ratio` or
+   `object-fit` on <video>. iOS Safari composites a <video> whose
+   layout box is supplied by CSS aspect-ratio (rather than by its
+   intrinsic dimensions) onto a separate GPU layer when its
+   ancestor uses `transform: translateX(...)` (which the carousel
+   track does for the slide animation) — and the video texture
+   never attaches to that layer. Result: controls overlay shows
+   but the frame stays black. Let the video size itself from its
+   intrinsic dimensions, same as the inline Video Presentation
+   block which works correctly on phone. */
 .lm-carousel video {
+    display: block;
     max-width: 100%;
     width: 600px;
-    /* Tailwind preflight makes <video> display: block, which means
-       text-align: center on the slide doesn't actually center the
-       video — it stays left-aligned. margin: 0 auto centers the
-       block element so the chevron buttons sit symmetrically
-       relative to the video edges. */
+    height: auto;
     margin: 0 auto;
     /* min-width: 0 prevents the video's intrinsic dimensions (or
        the width="600" attribute on the element) from forcing the
        enclosing slide wider than the carousel on narrow viewports. */
     min-width: 0;
-    /* Reserve a 16:9 box even before <video> elements report their
-       intrinsic dimensions — needed especially on iOS Safari, where
-       autoplay can be deferred enough that the element stays 0×0 on
-       first paint (so the carousel area looks empty). object-fit:
-       contain letterboxes any non-16:9 source rather than cropping. */
-    aspect-ratio: 16 / 9;
-    height: auto;
-    object-fit: contain;
     border-radius: 0.25rem;
-    background: #000;
 }
 .lm-carousel p {
     margin: 0.75rem auto 0;
