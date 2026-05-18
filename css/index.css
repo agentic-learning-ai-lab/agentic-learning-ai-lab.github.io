@@ -851,8 +851,16 @@ section {
     }
 }
 
-/* Paragraph spacing inside project-prose */
+/* Paragraph spacing + font inheritance inside project-prose.
+   Tailwind's preflight applies `p { font-family: Space Mono,...; }`
+   at element specificity, which wins over inherited font-family
+   from the .project-prose wrapper. markdown-it emits <p> tags with
+   no class — so without this rule, body paragraphs silently render
+   in Space Mono while the abstract (whose <p> wears .project-prose
+   directly) stays in Libertinus Serif. font-family: inherit forces
+   them to match. */
 .project-prose p {
+    font-family: inherit;
     margin: 0 0 1rem;
 }
 .project-prose p:last-child {
