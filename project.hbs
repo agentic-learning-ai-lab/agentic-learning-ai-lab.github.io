@@ -20,7 +20,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/libertinus-serif@5.2.1/400-italic.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/libertinus-serif@5.2.1/700.css" />
     {{#if project_page.mathjax}}
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <!-- MathJax 3 needs no polyfill on modern browsers (ES6 native
+         since ~2017). The old polyfill.io reference from the Bulma
+         template was a security risk — that CDN was compromised in
+         a 2024 supply-chain attack. -->
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     {{/if}}
 </head>
