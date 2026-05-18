@@ -17,6 +17,12 @@
     max-width: 840px;
     margin: 1.5rem auto;
     padding: 0 6rem 3rem;
+    /* Defensive clip — the inner viewport already has overflow:hidden
+       but a second layer here guarantees nothing leaks past the
+       carousel's right edge into the section. Phones in DevTools
+       simulator have been showing horizontal overflow without this. */
+    overflow-x: clip;
+    max-width: min(840px, 100%);
 }
 /* Viewport: clip box for the sliding track. Lives inside the
    carousel's content area (after the padding), so the buttons sit
