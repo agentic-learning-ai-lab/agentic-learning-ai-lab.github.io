@@ -426,20 +426,24 @@ function registerHelpers(handlebars) {
         const formatted = authors.map((author, i) => {
             const aff = affs[i];
             // Resolve link target in priority order:
-            //   1. explicit aff.url (external collaborator with homepage),
-            //   2. peopleMap lookup on the display name (lab member —
-            //      links to /people/<slug>/ even when affiliation is
-            //      written out explicitly), then
-            //   3. plain text.
+            //   1. peopleMap lookup on the display name — if the author
+            //      is in data/people.yaml, always route to /people/<slug>/.
+            //      Keeps traffic to lab members on the lab's own bio
+            //      page (where their publications, affiliation, and
+            //      contact are curated) even when the project page
+            //      frontmatter happens to also list their personal URL.
+            //   2. explicit aff.url — for external collaborators with
+            //      a homepage outside the lab.
+            //   3. plain text — unknown author with no link.
             // The display name prefers aff.name when given so authors
             // can override how the name renders on the project page
             // (e.g., expanding initials) without touching papers.yaml.
             let nameHtml;
             const displayName = (aff && aff.name) || author;
-            if (aff && aff.url) {
-                nameHtml = `<a href="${aff.url}" target="_blank" rel="noopener">${displayName}</a>`;
-            } else if (peopleMap.has(displayName)) {
+            if (peopleMap.has(displayName)) {
                 nameHtml = `<a href="/people/${peopleMap.get(displayName)}/">${displayName}</a>`;
+            } else if (aff && aff.url) {
+                nameHtml = `<a href="${aff.url}" target="_blank" rel="noopener">${displayName}</a>`;
             } else {
                 nameHtml = displayName;
             }

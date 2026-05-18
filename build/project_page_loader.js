@@ -77,7 +77,24 @@ function resolveImagePaths(src, slug) {
 
     const manifest = loadManifest();
     const pngUrl = manifest[logical] || logical;
-    const webpUrl = webpLogical !== logical ? manifest[webpLogical] : null;
+
+    // WebP source: prefer the CDN URL from the manifest. If sync:r2
+    // hasn't run yet, fall back to the local sibling path when the
+    // .webp file actually exists on disk — so CF Pages staging serves
+    // WebP via origin until the manifest entry lands. Without the
+    // disk check we'd emit a broken <source> for slugs that skipped
+    // build:webp (e.g. a paper with only an external URL hero).
+    let webpUrl = null;
+    if (webpLogical !== logical) {
+        if (manifest[webpLogical]) {
+            webpUrl = manifest[webpLogical];
+        } else {
+            const webpAbs = path.join(ROOT, webpLogical.replace(/^\//, ''));
+            if (fs.existsSync(webpAbs)) {
+                webpUrl = webpLogical;
+            }
+        }
+    }
     return { pngUrl, webpUrl };
 }
 

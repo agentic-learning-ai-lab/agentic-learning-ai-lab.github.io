@@ -781,11 +781,13 @@ section {
    intentionally emits sections without a tw-mb-* utility so this rule
    is the single source of inter-section spacing. */
 .project-section + .project-section,
-.project-prose + .project-section {
+.project-prose + .project-section,
+.project-prose > .project-section:first-child {
     padding-top: 3rem;
 }
 .project-section + .project-section::before,
-.project-prose + .project-section::before {
+.project-prose + .project-section::before,
+.project-prose > .project-section:first-child::before {
     content: '';
     display: block;
     width: 120px;
@@ -875,7 +877,10 @@ section {
    the legacy per-project repos. */
 .project-prose blockquote {
     background: #f5f5f5;
-    border-left: 4px solid #3273dc;
+    /* Lab blue (--lab-link-color in lab-theme.css, also used by
+       arxiv-paper.css blockquotes). The Bulma default #3273dc from
+       the legacy academic template was a slightly different blue. */
+    border-left: 4px solid #3b82f6;
     border-radius: 4px;
     padding: 0.75rem 1rem;
     margin: 1.5rem 0;
