@@ -29,7 +29,14 @@
 .project-carousel-track > .item {
     flex: 0 0 100%;
     min-width: 0;
+    /* Explicit width so each slide is exactly one viewport of the
+       track regardless of the flex-basis intrinsic-sizing quirks
+       around <video> with a hardcoded width attribute. */
+    width: 100%;
     text-align: center;
+    /* Prevent the slide from box-sizing its padding into the 100%
+       basis — items extend cleanly edge-to-edge. */
+    box-sizing: border-box;
 }
 /* Pre-init fallback: while the JS is still wrapping items in the
    track, hide all but the first so the carousel doesn't briefly
@@ -88,8 +95,10 @@
 
 /* Narrow viewports: hide the chevron buttons (touch swipe replaces
    them) and drop the side padding so the video has the full width.
-   The pagination dots still show as a visual progress indicator. */
-@media (max-width: 640px) {
+   The pagination dots still show as a visual progress indicator.
+   Breakpoint raised to 768px so tablets and phone landscape both
+   get the no-padding layout. */
+@media (max-width: 768px) {
     .project-carousel {
         padding: 0 0 3rem;
     }
@@ -123,6 +132,10 @@
 .lm-carousel video {
     max-width: 100%;
     width: 600px;
+    /* min-width: 0 prevents the video's intrinsic dimensions (or
+       the width="600" attribute on the element) from forcing the
+       enclosing slide wider than the carousel on narrow viewports. */
+    min-width: 0;
     /* Reserve a 16:9 box even before <video> elements report their
        intrinsic dimensions — needed especially on iOS Safari, where
        autoplay can be deferred enough that the element stays 0×0 on
