@@ -182,14 +182,20 @@
           if (items.length === 0) return;
           var idx = 0;
           var inView = false;
-          // Wrap the slides in a flex-row track that we translate
-          // horizontally for the slide-in animation. The injected
-          // prev/next/pagination buttons are position:absolute
-          // siblings of the track inside `.project-carousel`.
+          // Wrap the slides in a flex-row track inside a "viewport"
+          // wrapper. The viewport carries overflow: hidden and sits
+          // inside the carousel's content box (after padding), so
+          // adjacent slides are clipped at the visible edge — not
+          // peeking into the padding gutters reserved for the
+          // prev/next buttons (which are position:absolute siblings
+          // of the viewport, sitting in the padding area).
+          var viewport = document.createElement('div');
+          viewport.className = 'project-carousel-viewport';
           var track = document.createElement('div');
           track.className = 'project-carousel-track';
           items.forEach(function (item) { track.appendChild(item); });
-          root.insertBefore(track, root.firstChild);
+          viewport.appendChild(track);
+          root.insertBefore(viewport, root.firstChild);
           function playActive() {
             var v = items[idx].querySelector('video');
             // Respect a user-initiated pause — if they clicked-pause

@@ -17,6 +17,13 @@
     max-width: 840px;
     margin: 1.5rem auto;
     padding: 0 6rem 3rem;
+}
+/* Viewport: clip box for the sliding track. Lives inside the
+   carousel's content area (after the padding), so the buttons sit
+   *outside* the viewport in the padding gutters — and adjacent
+   slides are clipped at the viewport edge instead of peeking
+   into the padding area. */
+.project-carousel-viewport {
     overflow: hidden;
 }
 /* Track wrapper injected by the init JS — holds all .item slides
