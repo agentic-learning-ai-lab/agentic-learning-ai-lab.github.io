@@ -1,9 +1,13 @@
 name: Deploy to GitHub Pages
 
 on:
+  # Production deploy on push to main only. The pull_request trigger
+  # was dropped during the CF Pages migration — PR CI was burning Git
+  # LFS bandwidth (full clone + sharp/pdf build) on every dev push for
+  # a check that never deployed anything useful. CF Pages provides the
+  # PR preview now; if you want to dry-run the deploy.yml build, use
+  # workflow_dispatch.
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
   workflow_dispatch:
 
