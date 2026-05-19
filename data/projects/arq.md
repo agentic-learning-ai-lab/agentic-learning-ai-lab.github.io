@@ -34,7 +34,7 @@ ARQ can be readily implemented on top of [Artificial Dopamine (AD)](https://arxi
 
 ![](ad_msq.png){width=750}
 
-![ARQ algorithm pseudocode.](pseudocode.png){width=1000}
+![ARQ algorithm pseudocode.](pseudocode.png)
 
 ## Results
 
