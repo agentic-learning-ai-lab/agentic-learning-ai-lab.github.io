@@ -51,8 +51,11 @@ const SYNC_PATHS = [
   'assets/images/people/**/*.{png,jpg,jpeg,gif,webp}',
   'assets/images/background/**/*.{png,jpg,jpeg,gif,webp}',
   'assets/images/home/**/*.{png,jpg,jpeg,gif,webp}',
-  // Project page assets (see project.hbs + notes/project-pages-migration.md)
-  'assets/projects/**/*.{png,jpg,jpeg,gif,webp,svg,mp4,pdf}',
+  // Project page assets (see project.hbs + notes/project-pages-migration.md).
+  // Includes .css (per-project page styles linked from project.hbs) and
+  // .csv (daily-oracle inline d3 data) so the slim CF Pages bundle can
+  // reference them via cdnUrl too.
+  'assets/projects/**/*.{png,jpg,jpeg,gif,webp,svg,mp4,pdf,css,csv}',
 ];
 
 const BUCKET = process.env.R2_BUCKET || 'agenticlearning-assets';

@@ -1,0 +1,80 @@
+name: Mirror new LFS assets to R2
+
+# Runs on every push to dev and main. Pulls LFS objects (with the
+# Actions LFS cache so it's incremental), runs `npm run sync:r2`
+# which uploads anything not yet in assets-manifest.json, and
+# commits the manifest update back to the same branch with
+# [skip ci] so it doesn't trigger itself.
+#
+# Why: Cloudflare Pages no longer pulls LFS (it builds with
+# GIT_LFS_SKIP_SMUDGE=1 and reads CDN URLs from the manifest).
+# So the manifest needs to be up-to-date BEFORE CF runs build:cf.
+# Students push binaries via LFS as usual; this action mirrors
+# them to R2 + updates the manifest so CF can serve them.
+
+on:
+  push:
+    branches: [dev, main]
+
+permissions:
+  contents: write   # required to push the manifest update back
+
+concurrency:
+  group: mirror-lfs-to-r2-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    # Skip self-triggered runs from the [skip ci] commit message tag.
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    steps:
+      - name: Checkout (without LFS)
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          # Need write access to push the manifest update back
+          persist-credentials: true
+          fetch-depth: 1
+
+      - name: Cache LFS objects
+        id: cache-lfs
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.gitattributes', 'research/**/paper.pdf', 'research/**/assets/**', 'assets/projects/**', 'assets/images/**') }}
+          restore-keys: |
+            lfs-
+
+      - name: Pull LFS objects (incremental via cache)
+        run: git lfs pull
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Sync new assets to R2 + update manifest
+        env:
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: agenticlearning-assets
+          R2_CDN_BASE_URL: https://cdn.agenticlearning.ai
+        run: npm run sync:r2
+
+      - name: Commit manifest update (if any)
+        run: |
+          if git diff --quiet assets-manifest.json; then
+            echo "manifest unchanged — nothing to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets-manifest.json
+          git commit -m "Auto-sync: mirror new LFS assets to R2 [skip ci]"
+          git push origin HEAD:${{ github.ref_name }}

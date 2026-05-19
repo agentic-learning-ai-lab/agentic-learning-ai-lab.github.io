@@ -17,7 +17,8 @@
     "build:webp": "node ./build/generate_webp.js",
     "build:rewrite-paper-content": "node ./build/rewrite_paper_content.js",
     "build:assemble": "node ./build/assemble_output.js",
-    "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && npm run build:webp && node ./build/generate_search_index.js && npm run build:arxiv:pdf && npm run build:rewrite-paper-content && npm run build:compress && npm run build:pages && npm run build:assemble",
+    "build": "npm run build:tailwind && node ./build/generate_thumbnails.js && npm run build:webp && node ./build/generate_search_index.js && npm run build:arxiv:pdf && npm run build:compress && npm run sync:r2 && npm run build:rewrite-paper-content && npm run build:pages && npm run build:assemble",
+    "build:cf": "npm run build:tailwind && node ./build/generate_search_index.js && npm run build:rewrite-paper-content && npm run build:pages && npm run build:assemble",
     "preview": "npm run build && python3 -m http.server 8000 -d out",
     "setup:python": "python3 -m venv .venv && .venv/bin/pip install --upgrade pip --quiet && .venv/bin/pip install -r build/requirements.txt --quiet",
     "latex:clean": "node ./build/clean_latex.js",
@@ -25,6 +26,7 @@
     "latex:pack": "node ./build/latex_pack.js",
     "latex:update": "node ./build/latex_update.js",
     "sync:r2": "node ./build/sync_to_r2.js",
+    "pull:r2": "node ./build/pull_from_r2.js",
     "lint:bibtex": "node ./build/lint_bibtex.js"
   },
   "keywords": [],

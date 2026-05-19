@@ -79,7 +79,7 @@
                 {{#with project_page.links}}
                     {{#if arxiv}}<a class="project-link" href="{{arxiv}}" target="_blank"><i class="ai ai-arxiv"></i> arXiv</a>{{/if}}
                     {{#if pdf}}<a class="project-link" href="{{pdf}}" target="_blank"><i class="bi bi-file-pdf"></i> PDF</a>{{/if}}
-                    {{#if poster}}<a class="project-link" href="{{poster}}" target="_blank"><i class="bi bi-easel"></i> Poster</a>{{/if}}
+                    {{#if poster}}<a class="project-link" href="{{cdnUrl poster}}" target="_blank"><i class="bi bi-easel"></i> Poster</a>{{/if}}
                     {{#if code}}<a class="project-link" href="{{code}}" target="_blank"><i class="bi bi-github"></i> Code</a>{{/if}}
                     {{#if video}}<a class="project-link" href="{{video}}" target="_blank"><i class="bi bi-play-btn"></i> Video</a>{{/if}}
                     {{#if huggingface}}<a class="project-link" href="{{huggingface}}" target="_blank">🤗 Dataset</a>{{/if}}

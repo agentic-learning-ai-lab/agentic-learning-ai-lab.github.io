@@ -170,7 +170,18 @@ function doTemplating(input, output) {
                 'assets/projects', paper.permalink, 'style.css'
             );
             if (fs.existsSync(projectCssPath)) {
-                paper.project_page.custom_css_href = `/assets/projects/${paper.permalink}/style.css`;
+                // Resolve through the manifest so CF Pages reads the
+                // stylesheet from cdn.agenticlearning.ai instead of
+                // expecting a same-origin /assets/... path (the slim
+                // out/ doesn't include project asset subtrees).
+                const logical = `/assets/projects/${paper.permalink}/style.css`;
+                const manifest = loadAssetsManifest();
+                if (manifest[logical]) {
+                    paper.project_page.custom_css_href = manifest[logical];
+                } else {
+                    paper.project_page.custom_css_href = logical;
+                    _cdnMisses.add(logical);
+                }
             }
 
             // Inline a per-project custom HTML partial if requested.

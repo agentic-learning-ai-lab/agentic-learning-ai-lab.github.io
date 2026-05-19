@@ -97,46 +97,84 @@ staging/                    # Local-only staging mirror — gitignored
 
 ## Build pipeline
 
-`npm run build` runs, in order:
+There are two flows: the **full build** (local + the GH Action that
+mirrors binaries to R2) and the **slim build** (Cloudflare Pages
+production / preview). They share most steps but differ on which
+ones can run without binary assets being present.
+
+### `npm run build` — full (local)
+
+Used for local development and the GH `mirror-lfs-to-r2.yml` Action.
+Requires LFS objects to be hydrated and R2 credentials in env.
 
 1. `build:tailwind` — compile + minify `css/tailwind.css` → `tailwind-build.css`.
 2. `generate_thumbnails.js` — 256×256 crops of paper/people images.
-3. `generate_search_index.js` — emit `assets/search-index.json`.
-4. `build:arxiv:pdf` — for each paper:
-   - download arXiv HTML if `enable_full_paper: true`,
-   - ensure `research/<slug>/latex/` exists (fetch + extract source if not),
-   - compile `paper.pdf` from `research/<slug>/latex/`,
-   - compress the PDF via Ghostscript.
+3. `build:webp` — Sharp-driven WebP companions for every PNG/JPG.
+4. `generate_search_index.js` — emit `assets/search-index.json`.
+5. `build:arxiv:pdf` — for each paper: download arXiv HTML if
+   `enable_full_paper: true`, ensure `research/<slug>/latex/` exists,
+   compile `paper.pdf`, Ghostscript-compress.
    See [LaTeX source and PDFs](#latex-source-and-pdfs).
-5. `build:compress` — resize arXiv-downloaded images to ≤1400px wide
-   (cached via `.compressed/` marker dir).
-6. `build:pages` — render every `*.hbs` via Handlebars into HTML.
-7. `build:assemble` — copy all serving artifacts (root HTML + JS, plus
-   `people/`, `research/`, `areas/`, `assets/`, `css/`, `contact/`,
-   `includes/`) into `out/`. `out/` is the deployable bundle —
-   identical layout for local preview, CF Pages, and GH Pages
-   production. Project page output goes to `out/<slug>/` directly
-   (via `project.hbs`'s route), so this step doesn't need per-project
-   logic.
+6. `build:compress` — resize arXiv-downloaded images to ≤1400px wide.
+7. **`sync:r2`** — upload any new files (PNGs, WebPs, PDFs, CSVs,
+   per-project CSS, videos, etc.) to R2 and update `assets-manifest.json`.
+   Must precede the next two steps so they see the fresh manifest.
+8. `build:rewrite-paper-content` — rewrite `./assets/X` in each
+   `paper-content.json` to absolute CDN URLs via the manifest.
+9. `build:pages` — render every `*.hbs` via Handlebars. The `cdnUrl`
+   helper reads `assets-manifest.json` and bakes
+   `https://cdn.agenticlearning.ai/...` URLs into the HTML.
+10. `build:assemble` — copy the slim set of serving artifacts into
+    `out/` (HTML, JS, CSS, favicons, logos, `search-index.json`,
+    `_redirects`; no binary subtrees).
 
-Local dev: `npm run preview` runs the full build pipeline and then
-serves `out/` via `python3 -m http.server 8000`. For style-only
-iteration without rebuilding everything, `npm run start:tailwind`
-watches `css/tailwind.css`; separate `npm run build:pages` + manual
-serve still works if you want it. Don't ship a new build pipeline;
-extend this one.
+### `npm run build:cf` — slim (Cloudflare Pages)
 
-### CI
+Used by CF Pages cloud builds. Skips every step that needs binary
+assets or R2 credentials. The manifest committed to git is the
+source of truth for CDN URLs.
 
-`.github/workflows/deploy.yml` runs on push to `main` and on manual
-dispatch. It:
+1. `build:tailwind`
+2. `generate_search_index.js`
+3. `build:rewrite-paper-content` — no-op if manifest already current;
+   safe to run again.
+4. `build:pages`
+5. `build:assemble`
 
-1. Checks out with Git LFS.
-2. Installs Node 20 + TeXLive + Ghostscript.
-3. Runs `npm ci && npm run build`.
-4. Assembles `out/` and uploads it as the GitHub Pages artifact.
+CF clone runs with `GIT_LFS_SKIP_SMUDGE=1`; LFS pointer files in
+the working tree are never opened. The build produces a ~2 MB
+`out/` bundle: HTML, JS, CSS, favicons, logos, search index, and
+per-research-paper `index.html` (no `assets/`, no `paper.pdf`).
 
-If you change the build pipeline, update this workflow too.
+### Deployable bundle layout (`out/`)
+
+```
+out/
+  index.html, index.js, search.js, person.js, ...   # ~50 KB total
+  _redirects, site.webmanifest, favicon.ico
+  css/tailwind-build.css                            # ~150 KB
+  people/index.html, people/<slug>/index.html × N   # ~10 KB each
+  research/index.html, research/<slug>/index.html × N
+  areas/index.html, areas/<slug>/index.html × N
+  contact/index.html, includes/lab-header.html, ...
+  assets/images/favicons/* + logos/* + search-index.json
+  <project-slug>/index.html × N                     # project pages
+```
+
+Every other URL the rendered HTML references lives on
+`cdn.agenticlearning.ai/<hash>/<file>` (R2-served). The mapping
+is `assets-manifest.json` (~1245 entries, committed to git).
+
+### CI workflows
+
+- `.github/workflows/mirror-lfs-to-r2.yml` — runs on push to `dev`
+  and `main`. Pulls LFS (Actions cache makes this incremental),
+  runs `npm run sync:r2`, commits any manifest update back to the
+  branch with `[skip ci]`. This is what keeps the manifest in sync
+  with new binary asset commits — so CF Pages always sees a fresh
+  manifest by the time it builds.
+- `.github/workflows/deploy.yml` — legacy GH Pages deploy
+  (to be retired now that CF Pages serves production).
 
 ## LaTeX source and PDFs
 
@@ -348,18 +386,20 @@ over it.
      local tree.
 4. `npm run build:arxiv:pdf` compiles `paper.pdf` by downloading the
    tarball from R2 (cached in `.cache/`).
-5. `npm run sync:r2` uploads the new hero image and paper.pdf to R2 and
-   updates `assets-manifest.json`. If you forget: templates fall back to
-   local paths (site still works, just from GH Pages origin instead of
-   CDN), and `npm run build` prints a
-   `⚠️ cdnUrl lookup fell back to local` warning naming the missed paths.
-   New site assets currently still get LFS-tracked too (we'll revisit
-   that when LFS quota becomes tight — see `notes/cf-migration.md`).
-6. Run `npm run build` end-to-end and check
-   `research/<slug>/index.html` opens correctly.
+5. `npm run build` runs the full local pipeline end-to-end, which
+   includes `sync:r2` (uploads the new hero image, paper.pdf, and
+   any per-project assets to R2 + updates `assets-manifest.json`).
+   Templates render with the new manifest entries baked in as
+   `https://cdn.agenticlearning.ai/...` URLs. If `sync:r2` is
+   skipped or fails, `build:pages` prints a
+   `⚠️ cdnUrl lookup fell back to local` warning naming the missed
+   paths — those'll 404 on CF Pages since the slim `out/` doesn't
+   include binary subtrees. See `notes/lfs-migration.md`.
+6. Check `out/<slug>/index.html` (or `out/research/<slug>/index.html`
+   for the embedded paper view) opens correctly via `npm run preview`.
 7. Walk the audit checklist above. Then commit
-   (`paper.pdf` + `assets-manifest.json` are the only LaTeX-related files
-   that ever get committed).
+   (`paper.pdf` + `assets-manifest.json` + the new binary assets are
+   what get committed; binaries still go via LFS in phase 1).
 
 ## When the user asks you to update something
 
