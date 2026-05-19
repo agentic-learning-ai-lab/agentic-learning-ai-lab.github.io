@@ -36,6 +36,11 @@ const FILES = [
   'research.js',
   'site.webmanifest',
   'favicon.ico',
+  // CF Pages / Netlify-style redirects file. Picked up by Cloudflare
+  // Pages at deploy time to serve 301/302 redirects without a
+  // function. Used to preserve legacy /<slug>/ URLs that were
+  // renamed during migration.
+  '_redirects',
 ];
 
 // Top-level directories copied into out/ recursively. Each is the

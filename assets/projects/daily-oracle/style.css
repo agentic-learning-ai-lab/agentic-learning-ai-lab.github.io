@@ -1,0 +1,69 @@
+/* Per-project styles for daily-oracle.
+
+   Two interactive widgets ride along with this page:
+   - a Plotly trend plot over CSV (eval accuracy over time, with
+     date-range + model-checkbox controls)
+   - a date-picker / category-filter table browser over the QA CSVs
+   Both rely on Bulma's form-control + table classes (.input,
+   .select, .field, .label, .columns, .table, .box, .subtitle).
+   Pulling in Bulma from CDN so the widgets render with the styling
+   the legacy page had. Loaded per-project so it doesn't bleed into
+   other project pages. */
+@import url('https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css');
+
+/* Tweaks to keep Bulma's globals from fighting our existing layout. */
+.do-widget {
+    /* Localized scope for the legacy widget HTML. */
+    margin: 1.5rem 0;
+}
+.do-widget table.table {
+    font-size: 0.9rem;
+}
+.do-widget .scrollable-table {
+    max-height: 400px;
+    overflow-y: auto;
+}
+.do-widget .subtitle {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Side-by-side dataset figures: question_size narrow, pie_category wide. */
+.do-dataset-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+}
+.do-dataset-row > div:first-child { flex: 2.5; min-width: 200px; }
+.do-dataset-row > div:last-child  { flex: 7.5; min-width: 300px; }
+.do-dataset-row img { width: 100%; height: auto; }
+
+/* Poster iframe sizing. */
+.do-poster {
+    width: 100%;
+    max-width: 900px;
+    margin: 1.5rem auto;
+    aspect-ratio: 3 / 4;
+    border: 1px solid #d1d5db;
+}
+
+/* Carousel slide content for daily-oracle's RAG plots. */
+.do-carousel img {
+    display: block;
+    max-width: 100%;
+    width: 800px;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 0.25rem;
+}
+.do-carousel .item h2,
+.do-carousel .item .caption {
+    margin-top: 0.5rem;
+    font-size: 0.95em;
+    color: #4b5563;
+    font-style: italic;
+    text-align: center;
+}

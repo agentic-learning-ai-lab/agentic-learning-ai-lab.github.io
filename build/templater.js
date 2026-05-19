@@ -472,15 +472,18 @@ function registerHelpers(handlebars) {
         return new handlebars.SafeString(result);
     });
 
-    // {{formatAffiliationsForProjectPage authors affiliations}}
+    // {{formatAffiliationsForProjectPage authors affiliations equalLabel}}
     //
     // Emits a numbered, deduplicated affiliations line that pairs with
     // the superscripts on the authors line. Format:
     //   <sup>1</sup>NYU, <sup>2</sup>CU Boulder, <sup>3</sup>Google DeepMind
     //
     // If any affiliation entry has `equal: true`, also emits an
-    // "* Equal contribution" footnote on a second line.
-    handlebars.registerHelper('formatAffiliationsForProjectPage', function (authors, affiliations) {
+    // "* <equalLabel>" footnote on a second line. Default label is
+    // "Equal contribution"; pass a custom value for cases like
+    // "Equal advising" (when * marks senior-author equal advising,
+    // not first-author equal contribution).
+    handlebars.registerHelper('formatAffiliationsForProjectPage', function (authors, affiliations, equalLabel) {
         if (!authors || authors.length === 0) return "";
         const { orderedAffs, singleAff } = buildProjectAffMap(authors, affiliations);
         const affs = Array.isArray(affiliations) ? affiliations : [];
@@ -491,7 +494,11 @@ function registerHelpers(handlebars) {
         const affLine = singleAff
             ? orderedAffs[0]
             : orderedAffs.map((a, i) => `<sup class="tw-text-xs">${i + 1}</sup>${a}`).join(', ');
-        const eqLine = hasEqual ? `<br><sup class="tw-text-xs">*</sup>Equal contribution` : '';
+        // Handlebars passes the helper options object as the last
+        // arg when the template invocation has fewer positional
+        // args; treat anything non-string as "use default".
+        const label = (typeof equalLabel === 'string' && equalLabel.length > 0) ? equalLabel : 'Equal contribution';
+        const eqLine = hasEqual ? `<br><sup class="tw-text-xs">*</sup>${label}` : '';
         return new handlebars.SafeString(affLine + eqLine);
     });
 }

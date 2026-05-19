@@ -1,0 +1,12 @@
+# CF Pages redirects. Format: <from> <to> [status]
+# Picked up at deploy time by Cloudflare Pages.
+
+# Permalink renames during project-page migration. The legacy URLs
+# (right-hand side) are already in arXiv abstracts, social posts,
+# slide decks etc. — preserving them is a hard constraint.
+/are-llms-prescient                  /daily-oracle                  301
+/are-llms-prescient/                 /daily-oracle/                 301
+/are-llms-prescient/*                /daily-oracle/:splat           301
+/research/are-llms-prescient         /research/daily-oracle         301
+/research/are-llms-prescient/        /research/daily-oracle/        301
+/research/are-llms-prescient/*       /research/daily-oracle/:splat  301
