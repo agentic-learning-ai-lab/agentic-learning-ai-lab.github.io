@@ -2,7 +2,7 @@
 affiliations:
   - { name: 'Alex N. Wang', aff: 'New York University' }
   - { name: 'Chris Hoang',  aff: 'New York University' }
-  - { name: 'Yuwen Xiong' }
+  - { name: 'Yuwen Xiong', url: 'https://www.cs.toronto.edu/~yuwen/' }
   - { name: 'Yann LeCun',   aff: 'New York University', url: 'http://yann.lecun.com/' }
   - { name: 'Mengye Ren',   aff: 'New York University' }
 links:
