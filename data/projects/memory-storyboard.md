@@ -4,7 +4,7 @@ affiliations:
   - { name: 'Mengye Ren',  aff: 'New York University' }
 links:
   code: https://github.com/agentic-learning-ai-lab/memory-storyboard
-  poster: https://drive.google.com/file/d/17WREoF-EDRXEI5BrZf51MfCyh6q1vi1e/view?usp=sharing
+  poster: /assets/projects/memory-storyboard/poster.pdf
 bibtex: |
   @inproceedings{yang2025memorystoryboard,
     title     = {Memory Storyboard: Leveraging Temporal Segmentation for Streaming Self-Supervised Learning from Egocentric Videos},
@@ -18,11 +18,11 @@ bibtex: |
 
 ![Our proposed Memory Storyboard framework for streaming SSL from egocentric videos. Similar frames are clustered into temporal segments and their labels (text information for illustration purpose only) are updated in the long-term memory buffer for replay. SSL involves contrastive learning at both the frame and temporal segment levels.](main_v2.png){width=800}
 
-## Two-tier Memory Structure {data-toc=Memory}
+## Two-tier Memory Structure {data-toc="Two-Tier Memory"}
 
 Long-term memory is updated with reservoir sampling, and short-term memory with first-in-first-out (FIFO). Temporal segmentation is applied on the short-term memory, which then updates the labels of corresponding images in the long-term memory.
 
-![](detail_v2.png){width=600}
+![](detail_v2.png){width=800}
 
 ## Temporal Segmentation Algorithm {data-toc=Segmentation}
 

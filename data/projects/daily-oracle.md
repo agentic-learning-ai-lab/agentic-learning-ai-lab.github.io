@@ -6,6 +6,8 @@ affiliations:
   - { name: 'Mengye Ren',       aff: 'New York University' }
 links:
   code: https://github.com/agentic-learning-ai-lab/daily-oracle
+  huggingface: https://huggingface.co/datasets/agentic-learning-ai-lab/daily-oracle
+  poster: /assets/projects/daily-oracle/icml_poster_daily_oracle.pdf
 bibtex: |
   @inproceedings{dai2025dailyoracle,
     title     = {Are LLMs Prescient? A Continuous Evaluation using Daily News as the Oracle},
@@ -16,7 +18,12 @@ bibtex: |
 ---
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<!-- Plotly 1.58.5 (last v1 release) is pinned to match the legacy
+     daily-oracle widget's look: per-curve individual tooltips at
+     hovered x, top-anchored modebar layout, and the denser default
+     legend item spacing. v2's modebar styling and legend metrics
+     differ enough that swapping versions visibly changes the page. -->
+<script src="https://cdn.plot.ly/plotly-1.58.5.min.js"></script>
 
 ## Model Performance Over Time (Closed-Book) {data-toc="Live Trends"}
 
@@ -53,7 +60,7 @@ bibtex: |
   </div>
 </div>
 
-## Browse Daily QA Pairs {data-toc=Browse}
+## Browse Daily QA Pairs {data-toc="QA Browser"}
 
 <div class="do-widget">
   <div class="box">
@@ -175,16 +182,14 @@ For each day, we collect news articles from the daily-updated Common Crawl News 
 
 ![](gold_plot.png){width=900}
 
-## Poster {data-toc=Poster}
-
-<iframe class="do-poster" src="/assets/projects/daily-oracle/icml_poster_daily_oracle.pdf"></iframe>
-
 <script>
-  // Daily Oracle interactive analysis. Ported verbatim from the
-  // legacy per-project page; only the CSV paths are rewritten to
-  // point at the new asset location. d3 + Plotly are loaded inline
-  // above. Bulma form-control styles come from the per-project
-  // style.css (@import of Bulma CDN).
+  // Daily Oracle interactive analysis. Ported from the legacy
+  // per-project page; CSV paths rewritten to the new asset location.
+  // hovermode: 'x' gives one tooltip per curve at the hovered x
+  // (matches legacy). d3 + Plotly load inline above; Plotly is
+  // pinned to v1 so tooltips, modebar position, and legend density
+  // match the legacy widget. Widget chrome (inputs, tables, columns)
+  // is styled by the per-project style.css — no Bulma dependency.
   const dailyOracleModels = [
     { name: 'Claude-3.5-Sonnet', id: 'claude-3-5-sonnet', color: 'green',   knowledge_cutoff: '2024-04' },
     { name: 'GPT-4',             id: 'gpt-4',             color: 'olive',   knowledge_cutoff: '2023-04' },
@@ -256,12 +261,33 @@ For each day, we collect news articles from the daily-updated Common Crawl News 
       });
       const cutoffTrace = { x: [from, to], y: [0, 0], mode: 'lines', name: 'Knowledge cutoff',
                             line: { color: 'gray', dash: 'dot' }, showlegend: true, hoverinfo: 'none', visible: 'legendonly' };
+      // Smaller legend font + the narrow .column flex track let the
+      // 9 model items wrap to 2 rows in practice. (Plotly v1 has no
+      // legend.width attribute; wrap is column-width-driven.)
+      // Modebar layout — Plotly v1 has no `modebar.orientation` attr;
+      // CSS in style.css forces the modebar to a single row above the
+      // plot. margin.t kept at 20 since the modebar lives in negative-
+      // top space outside the plot area.
+      const trendLayout = (yTitle) => ({
+        margin: { t: 20, b: 40, l: 50, r: 20 },
+        xaxis: { title: 'Date' }, yaxis: { title: yTitle },
+        legend: { orientation: 'h', x: 0, y: -0.2, font: { size: 11 } },
+        hovermode: 'x', shapes
+      });
+      const trendConfig = {
+        responsive: true,
+        displayModeBar: true,
+        displaylogo: false,
+        modeBarButtonsToRemove: [
+          'lasso2d', 'select2d', 'autoScale2d',
+          'hoverClosestCartesian', 'hoverCompareCartesian',
+          'toggleSpikelines'
+        ]
+      };
       Plotly.newPlot('trendPlotTF', [cutoffTrace].concat(buildTraces(dataTF)),
-        { margin: { t: 40, b: 40, l: 50, r: 20 }, xaxis: { title: 'Date' }, yaxis: { title: 'TF Accuracy' },
-          legend: { orientation: 'h', x: 0, y: -0.2 }, shapes }, { responsive: true });
+        trendLayout('TF Accuracy'), trendConfig);
       Plotly.newPlot('trendPlotMC', [cutoffTrace].concat(buildTraces(dataMC)),
-        { margin: { t: 40, b: 40, l: 50, r: 20 }, xaxis: { title: 'Date' }, yaxis: { title: 'MC Accuracy' },
-          legend: { orientation: 'h', x: 0, y: -0.2 }, shapes }, { responsive: true });
+        trendLayout('MC Accuracy'), trendConfig);
     }
     const tfData = rawTFqa.map(r => ({ date: r.date, question: r.question, answer: r.answer, title: r.title, url: r.url, category: r.category }));
     const mcData = rawMCqa.map(r => ({ date: r.date, question: r.question, a: r.choice_a, b: r.choice_b, c: r.choice_c, d: r.choice_d, answer: r.answer, title: r.title, url: r.url, category: r.category }));

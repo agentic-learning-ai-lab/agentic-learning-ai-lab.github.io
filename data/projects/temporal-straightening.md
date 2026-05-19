@@ -13,11 +13,11 @@ affiliations:
 links:
   code: https://github.com/agentic-learning-ai-lab/temporal-straightening
 bibtex: |
-  @article{wang2026temporal,
-    title   = {Temporal Straightening for Latent Planning},
-    author  = {Wang, Ying and Bounou, Oumayma and Zhou, Gaoyue and Balestriero, Randall and Rudner, Tim G. J. and LeCun, Yann and Ren, Mengye},
-    journal = {arXiv preprint arXiv:2603.12231},
-    year    = {2026}
+  @inproceedings{wang2026temporal,
+    title     = {Temporal Straightening for Latent Planning},
+    author    = {Wang, Ying and Bounou, Oumayma and Zhou, Gaoyue and Balestriero, Randall and Rudner, Tim G. J. and LeCun, Yann and Ren, Mengye},
+    booktitle = {International Conference on Machine Learning (ICML)},
+    year      = {2026}
   }
 ---
 
@@ -39,7 +39,7 @@ Here, $\mathrm{sg}$ denotes stop-gradient and $\lambda$ controls the strength of
 
 ![Training and planning architecture.](architecture.png){width=900}
 
-## How Good Is the Embedding Space? {data-toc=Embedding}
+## How Good Is the Embedding Space? {data-toc="Embedding Space"}
 
 We inspect the learned embedding space by measuring latent trajectory curvatures, PCA projections of latent trajectories, and latent Euclidean distances to understand the impact of straightening.
 

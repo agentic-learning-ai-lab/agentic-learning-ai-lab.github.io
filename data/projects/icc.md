@@ -42,7 +42,7 @@ We also extend ICC to multimodal LLMs. By projecting image embeddings obtained f
 
 ![Figure 4: Left: Multimodal LLM architecture with average pooling for image features. Right: Qualitative comparison of models on image clustering — ICC outperforms k-means when the data has rich semantic information.](image_clustering.jpeg){width=800}
 
-## Text-Conditioned Clustering {data-toc="Conditional"}
+## Text-Conditioned Clustering {data-toc="Text-Conditioned"}
 
 Real-world data can have multiple plausible clusterings depending on the objective. For example, the same set of animal images can be clustered by visual properties like colors (orange vs. white) or semantic categories like species (dog vs. cat). When the clustering condition changes, classical methods typically require retraining or re-engineering features. In contrast, **LLMs can easily adapt to new conditions through prompting thanks to their powerful contextual understanding capability**.
 

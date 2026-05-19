@@ -58,7 +58,7 @@ Our verifier gain metric estimates the expected improvement in a solver's accura
 
 > Verifier gain reliably predicts rejection sampling gains and serves as a powerful comparative metric for evaluating solver–verifier pairs. Crucially, it can be estimated from a single verification round without costly rejection sampling experiments.
 
-![](results_empirical_gap_scatterplot-1.png){width=600}
+![](results_empirical_gap_scatterplot-1.png){width=800}
 
 ## Do Better Solvers Make Better Verifiers? {data-toc="Solver Skill"}
 
@@ -68,7 +68,7 @@ We first analyze whether a model's solver performance correlates with its perfor
 > - Verification accuracy alone is not a reliable predictor of how much a verifier can improve a solver at test time. Instead, computing verifier gain using solver accuracy and verifier precision provides a more reliable metric.
 > - While model families like <span class="model-llama3">Llama3</span> and <span class="model-qwen25">Qwen2.5</span> some ability to self-improve, stronger model families like <span class="model-deepseek">DeepSeek</span> and <span class="model-qwen3">Qwen3</span> do not, which we find is linked to the latter already spontaneously self-verifying during solving (73–96% vs. 1–2%).
 
-![](results_cross_dataset_verifier_scatterplots_solver_acc-1.png){width=600}
+![](results_cross_dataset_verifier_scatterplots_solver_acc-1.png){width=800}
 
 ## Are Verifiers Biased Toward Solutions That Resemble Their Own? {data-toc="Similarity Bias"}
 
@@ -76,7 +76,7 @@ From the last sections, we saw that reasoning models benefit less from self- and
 
 > Higher similarity between solver and verifier solution distributions increases the verifier's tendency to accept incorrect solver outputs, reducing verifier gain. Using a verifier with a meaningfully different solution distribution mitigates this bias.
 
-![](results_verifier_similarity_scatterplot-1.png){width=500}
+![](results_verifier_similarity_scatterplot-1.png){width=800}
 
 ## How Does Reasoning Post-Training Affect Solver and Verifier Performance? {data-toc=Post-Training}
 
@@ -84,7 +84,7 @@ Our analysis focuses on the <span class="model-qwen25">Qwen2.5-Base</span>/<span
 
 > Reasoning post-training significantly improves problem-solving but can reduce self- and intra-family verification gains, while boosting cross-family verification performance.
 
-![](results_posttraining_verifier_barplots_remove_llama-1.png){width=600}
+![](results_posttraining_verifier_barplots_remove_llama-1.png){width=800}
 
 ## How Does Task Type Affect Verifiability? {data-toc="Task Type"}
 

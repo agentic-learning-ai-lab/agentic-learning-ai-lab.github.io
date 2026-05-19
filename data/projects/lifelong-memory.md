@@ -112,9 +112,9 @@ We visualize the raw predictions of the LLM below. The LLM generates high-qualit
 
 Our approach achieves state-of-the-art performance on the EgoSchema benchmark for question answering and is highly competitive on the natural language query (NLQ) challenge of Ego4D.
 
-![](qa_results.png){width=600}
+![](qa_results.png){width=800}
 
-![](nlq_results.png){width=600}
+![](nlq_results.png){width=800}
 
 We also quantitatively evaluate our proposed framework with different captioning models, LLMs, pre-processing techniques, and prompts. Please read our paper for more details.
 

@@ -116,7 +116,7 @@
     "abstract": "Our new benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict \"future\" events based on pre-training data.",
     "image": "/assets/images/papers/are_llms_prescient.png",
     "thumbnail": "/assets/images/thumbnails/are_llms_prescient.png",
-    "url": "/research/are-llms-prescient/",
+    "url": "/research/daily-oracle/",
     "keywords": "are llms prescient? a continuous evaluation using daily news as oracle amelia (hui) dai ryan teehan mengye ren our new benchmark, daily oracle, automatically generates question-answer (qa) pairs from daily news, challenging llms to predict \"future\" events based on pre-training data. adaptive-agents-and-foundation-models"
   },
   {

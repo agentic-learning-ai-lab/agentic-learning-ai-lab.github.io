@@ -8,19 +8,17 @@ affiliations:
 links:
   code: https://github.com/Agentic-Learning-AI-Lab/context-tuning
 bibtex: |
-  @misc{lu2025contexttuning,
-    title         = {Context Tuning for In-Context Optimization},
-    author        = {Lu, Jack and Teehan, Ryan and Yang, Zhenbang and Ren, Mengye},
-    year          = {2025},
-    eprint        = {2507.04221},
-    archivePrefix = {arXiv},
-    primaryClass  = {cs.CL}
+  @inproceedings{lu2026contexttuning,
+    title     = {Context Tuning for In-Context Optimization},
+    author    = {Lu, Jack and Teehan, Ryan and Yang, Zhenbang and Ren, Mengye},
+    booktitle = {International Conference on Machine Learning (ICML)},
+    year      = {2026}
   }
 ---
 
 ## Overview
 
-![Comparison of training-free methods, prompt adaptation techniques, and methods from our proposed In-Context Optimization framework (Test-Time Training, CT-Prompt, CT-KV) on solving tasks from a split of UnifiedQA and CrossFit. Dots are baselines, stars are our methods, bolded methods attain the best performance-efficiency tradeoff.](scatter.png){width=500}
+![Comparison of training-free methods, prompt adaptation techniques, and methods from our proposed In-Context Optimization framework (Test-Time Training, CT-Prompt, CT-KV) on solving tasks from a split of UnifiedQA and CrossFit. Dots are baselines, stars are our methods, bolded methods attain the best performance-efficiency tradeoff.](scatter.png){width=800}
 
 ## Our Method {data-toc=Method}
 

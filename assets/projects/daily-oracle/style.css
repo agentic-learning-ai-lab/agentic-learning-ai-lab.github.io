@@ -4,28 +4,185 @@
    - a Plotly trend plot over CSV (eval accuracy over time, with
      date-range + model-checkbox controls)
    - a date-picker / category-filter table browser over the QA CSVs
-   Both rely on Bulma's form-control + table classes (.input,
-   .select, .field, .label, .columns, .table, .box, .subtitle).
-   Pulling in Bulma from CDN so the widgets render with the styling
-   the legacy page had. Loaded per-project so it doesn't bleed into
-   other project pages. */
-@import url('https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css');
+   The legacy page used Bulma's form-control / table / column classes
+   to dress these widgets. To avoid a site-wide Bulma dependency we
+   reproduce just the relevant rules here, scoped to .do-widget. The
+   underlying HTML keeps the legacy class names (.field, .input,
+   .table, .columns, .box, .subtitle, etc.) so the JS doesn't need
+   to know about the styling change. */
 
-/* Tweaks to keep Bulma's globals from fighting our existing layout. */
 .do-widget {
-    /* Localized scope for the legacy widget HTML. */
     margin: 1.5rem 0;
 }
-.do-widget table.table {
-    font-size: 0.9rem;
+
+/* --- Form controls (inputs, selects, labels) --- */
+
+.do-widget .field {
+    margin-bottom: 0.75rem;
+}
+.do-widget .field.is-grouped {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+}
+.do-widget .label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #363636;
+}
+.do-widget .input,
+.do-widget .select select {
+    width: 100%;
+    padding: 0.4em 0.6em;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    background: #fff;
+    color: #363636;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    box-sizing: border-box;
+}
+.do-widget .input:focus,
+.do-widget .select select:focus {
+    outline: none;
+    border-color: #3273dc;
+    box-shadow: 0 0 0 0.125em rgba(50, 115, 220, 0.25);
+}
+.do-widget .select.is-fullwidth {
+    display: block;
+    width: 100%;
+}
+.do-widget .checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: pointer;
+    user-select: none;
+}
+.do-widget .control {
+    display: block;
+}
+
+/* --- Columns: two-column flex layout for the controls + table cells --- */
+
+.do-widget .columns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 0;
+}
+.do-widget .column {
+    flex: 1 1 0;
+    min-width: 0;
+}
+.do-widget .column.is-half {
+    flex: 1 1 50%;
+    max-width: 50%;
+}
+
+/* --- Container box (legacy Bulma 0.9 values) --- */
+
+.do-widget .box {
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow:
+        0 .5em 1em -.125em rgba(10,10,10,.1),
+        0 0 0 1px rgba(10,10,10,.02);
+    color: #4a4a4a;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+/* --- Subtitle headings used between widget rows --- */
+
+.do-widget .subtitle {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #4a4a4a;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+/* --- Plotly chart chrome: lift the modebar fully ABOVE the plot
+       (default is top:0/right:0 INSIDE the plot container, which
+       overlays the top-right and blocks right-side hover tooltips).
+       The chart container reserves 24px of margin-top so the
+       modebar sits in that strip above the axes. The flex rules
+       below force the modebar to a single horizontal row — Plotly
+       v1 has no `modebar.orientation: 'h'` config (v2-only), so
+       CSS does all the layout work here. */
+.do-widget #trendPlotTF,
+.do-widget #trendPlotMC {
+    margin-top: 24px;
+}
+.do-widget .js-plotly-plot,
+.do-widget .js-plotly-plot .plot-container,
+.do-widget .js-plotly-plot .main-svg {
+    overflow: visible !important;
+}
+.do-widget .js-plotly-plot .modebar-container {
+    top: -22px !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: auto !important;
+    text-align: right;
+}
+.do-widget .js-plotly-plot .modebar {
+    /* Force horizontal single-row layout — Plotly's modebar.orientation
+       wraps each group onto its own line when the container is narrow.
+       Flex with nowrap keeps everything in the top strip. */
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    gap: 0.25rem;
+    opacity: 1 !important;
+}
+.do-widget .js-plotly-plot .modebar-group {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    float: none !important;
+    padding-bottom: 0 !important;
+    margin-left: 0.25rem !important;
+}
+
+/* --- Scrollable tables (TF and MC question lists) --- */
+
+.do-widget .table-container {
+    overflow-x: auto;
 }
 .do-widget .scrollable-table {
     max-height: 400px;
     overflow-y: auto;
 }
-.do-widget .subtitle {
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
+.do-widget table.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    color: #363636;
+}
+.do-widget table.table th,
+.do-widget table.table td {
+    padding: 0.5em 0.75em;
+    border-bottom: 1px solid #dbdbdb;
+    text-align: left;
+    vertical-align: top;
+}
+.do-widget table.table thead th {
+    background: #fafafa;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.do-widget table.table.is-striped tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+.do-widget table.table .has-text-centered {
+    text-align: center;
 }
 
 /* Side-by-side dataset figures: question_size narrow, pie_category wide. */
@@ -40,15 +197,6 @@
 .do-dataset-row > div:first-child { flex: 2.5; min-width: 200px; }
 .do-dataset-row > div:last-child  { flex: 7.5; min-width: 300px; }
 .do-dataset-row img { width: 100%; height: auto; }
-
-/* Poster iframe sizing. */
-.do-poster {
-    width: 100%;
-    max-width: 900px;
-    margin: 1.5rem auto;
-    aspect-ratio: 3 / 4;
-    border: 1px solid #d1d5db;
-}
 
 /* Carousel slide content for daily-oracle's RAG plots. */
 .do-carousel img {

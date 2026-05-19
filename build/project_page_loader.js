@@ -134,10 +134,15 @@ function makeRenderer(slug) {
         let html = `<figure class="tw-text-center tw-my-10">`;
         html += `<div class="tw-mx-auto"${widthStyle}>`;
         html += `<picture>${sourceTag}<img src="${pngUrl}" alt="${altEsc}" class="tw-w-full tw-h-auto tw-rounded" loading="lazy"></picture>`;
-        html += `</div>`;
         if (altText) {
-            html += `<figcaption class="tw-text-base tw-text-gray-600 tw-mt-4 tw-italic tw-max-w-2xl tw-mx-auto">${altEsc}</figcaption>`;
+            // Caption sits INSIDE the image wrapper so it inherits the
+            // same max-width (the {width=N} attribute on the MD image,
+            // or the section column width if none). inline-block +
+            // figure's text-center keeps short captions centered;
+            // long captions hit the wrapper width and wrap left-aligned.
+            html += `<figcaption class="tw-text-base tw-text-gray-600 tw-mt-4 tw-italic tw-inline-block tw-text-left">${altEsc}</figcaption>`;
         }
+        html += `</div>`;
         html += `</figure>`;
         return html;
     };

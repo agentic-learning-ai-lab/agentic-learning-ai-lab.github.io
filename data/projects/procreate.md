@@ -24,7 +24,7 @@ At each denoising step of a pre-trained diffusion model, ProCreate applies propu
 
 ![](main_v5.png){width=1000}
 
-## Application 1: Few-Shot Creative Generation {data-toc="Application 1"}
+## Application 1: Few-Shot Creative Generation {data-toc="Few-Shot Generation"}
 
 We collect dataset FSCG-8, fine-tune a Stable Diffusion checkpoint on each category of image-caption pairs, and compare the samples generated from [DDIM](https://arxiv.org/abs/2010.02502), [CADS](https://arxiv.org/abs/2310.17347), and ProCreate.
 
@@ -40,7 +40,7 @@ We show the qualitative comparison between [DDIM](https://arxiv.org/abs/2010.025
 
 ![](train10_qualitative_updated.png){width=1000}
 
-## Application 2: Training Data Replication Prevention {data-toc="Application 2"}
+## Application 2: Training Data Replication Prevention {data-toc="Replication Prevention"}
 
 [Recent studies](https://arxiv.org/abs/2212.03860) show that large-scale models like Stable Diffusion are prone to replicating their training data, raising privacy and copyright concerns. We sample from Stable Diffusion with [LAION](https://arxiv.org/abs/2210.08402) captions and show that using ProCreate to guide samples away from the [LAION](https://arxiv.org/abs/2210.08402) images significantly reduces replication.
 

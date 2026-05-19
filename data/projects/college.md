@@ -40,9 +40,9 @@ Training mimics pretraining, allowing transfer to diverse tasks zero-shot, with 
 
 We train by minimizing **cross entropy losses** on positive and negative examples as well as **distilling from the base LLM**.
 
-![We optimize using a combination of cross-entropy losses and distillation losses.](college_losses.png){width=600}
+![We optimize using a combination of cross-entropy losses and distillation losses.](college_losses.png){width=800}
 
-![Our dataset consists of few-shot support and query sequences adapted from the Books3, Books2, and Pile-CC subsets of The Pile.](college_data.png){width=600}
+![Our dataset consists of few-shot support and query sequences adapted from the Books3, Books2, and Pile-CC subsets of The Pile.](college_data.png){width=800}
 
 ## With CoLLEGe we can… {data-toc=Applications}
 

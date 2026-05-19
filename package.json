@@ -24,7 +24,8 @@
     "latex:fetch": "node ./build/latex_fetch.js",
     "latex:pack": "node ./build/latex_pack.js",
     "latex:update": "node ./build/latex_update.js",
-    "sync:r2": "node ./build/sync_to_r2.js"
+    "sync:r2": "node ./build/sync_to_r2.js",
+    "lint:bibtex": "node ./build/lint_bibtex.js"
   },
   "keywords": [],
   "author": "Paul, Mengye Ren",

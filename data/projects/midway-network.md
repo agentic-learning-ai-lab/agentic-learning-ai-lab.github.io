@@ -39,7 +39,7 @@ Midway Network is centered around a *midway* path that infers motion latents, $m
 
 In standard transformer blocks, the input token is always propagated forward in the same position due to the residual connection, biasing the computation towards the identity. However, we wish for the forward dynamics model to learn if an object at a token(s) has moved, i.e., if its features can be computed from tokens at *other* positions. Thus, we introduce learnable gating units (MLPs), $g$, on the residual connection that output vector-wise gating weights between 0 and 1 such that the output of the attention stage is $h = g(x) \odot x + \text{Attention}(x)$. We use gating units in all but the first transformer block.
 
-![](gating.png){width=300}
+![](gating.png){width=400}
 
 ## Evaluations: semantic segmentation and optical flow {data-toc=Evaluations}
 
