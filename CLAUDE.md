@@ -178,6 +178,11 @@ on disk (run `npm run pull:r2` on a fresh clone).
 7. **`sync:r2`** — upload any new files (PNGs, WebPs, PDFs, CSVs,
    per-project CSS, videos, etc.) to R2 and update `assets-manifest.json`.
    Must precede the next two steps so they see the fresh manifest.
+   Manifest entries for files NOT on local disk are PRESERVED (a missing
+   file usually means partial-hydrate from R2, not deletion) — the
+   summary reports them as orphans. To deliberately drop orphans:
+   `node build/sync_to_r2.js --prune` (after `npm run pull:r2` to make
+   sure you're not pruning something you forgot to hydrate).
 8. `build:rewrite-paper-content` — rewrite `./assets/X` in each
    `paper-content.json` to absolute CDN URLs via the manifest.
 9. `build:pages` — render every `*.hbs` via Handlebars. The `cdnUrl`
