@@ -36,19 +36,33 @@ async function generateThumbnails() {
             continue;
         }
 
-        const files = fs.readdirSync(dir);
+        // Sort so primary sources (.jpg/.jpeg/.png) come before their
+        // .webp companion, then dedupe by stem — at most one thumbnail
+        // per source image. Without this, foo.jpg AND foo.webp would
+        // each try to write the same foo.png thumbnail; build:webp
+        // refreshes the .webp's mtime every build, which kept beating
+        // the just-written thumbnail's mtime and re-encoding it through
+        // sharp on every run — producing byte-different thumbnails
+        // each build and a dirty manifest after sync:r2.
+        const EXT_PRIORITY = { '.jpg': 0, '.jpeg': 0, '.png': 0, '.webp': 1 };
+        const files = fs.readdirSync(dir)
+            .filter(f => /\.(jpg|jpeg|png|webp)$/i.test(f))
+            .sort((a, b) => {
+                const pa = EXT_PRIORITY[path.extname(a).toLowerCase()];
+                const pb = EXT_PRIORITY[path.extname(b).toLowerCase()];
+                if (pa !== pb) return pa - pb;
+                return a.localeCompare(b);
+            });
+        const stemsSeen = new Set();
 
         for (const file of files) {
-            const ext = path.extname(file).toLowerCase();
-
-            if (!['.jpg', '.jpeg', '.png', '.webp'].includes(ext)) {
-                continue;
-            }
+            const stem = file.replace(/\.[^.]+$/, '');
+            if (stemsSeen.has(stem)) continue;
+            stemsSeen.add(stem);
 
             const sourcePath = path.join(dir, file);
             // Output as PNG (sharp handles WebP input natively)
-            const thumbnailFile = file.replace(/\.[^.]+$/, '.png');
-            const thumbnailPath = path.join(thumbnailDir, thumbnailFile);
+            const thumbnailPath = path.join(thumbnailDir, `${stem}.png`);
 
             if (fs.existsSync(thumbnailPath)) {
                 const sourceStats = fs.statSync(sourcePath);
