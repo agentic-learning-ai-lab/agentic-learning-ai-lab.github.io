@@ -37,13 +37,13 @@ A multi-modal LLM (MLLM) produces captions from a list of short video clips. Con
 
 An LLM is instructed to take inputs from the list of condensed captions and retrieve the most relevant interval candidates.
 
-![](stagetwo.png){width=700}
+![](stagetwo.png)
 
 ### Stage 3: Output Refinement
 
 For video QA, ensemble the predictions of multiple runs using **vote by confidence**.
 
-![](votebyconfidence.png){width=700}
+![](votebyconfidence.png)
 
 For NLQ, feed candidate intervals predicted by our previous stage into a pretrained NLQ model to obtain a fine-grained prediction.
 
