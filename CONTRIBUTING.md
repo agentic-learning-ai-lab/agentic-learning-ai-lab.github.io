@@ -50,9 +50,17 @@ contribution needs:
 
 | Form | Where it shows up | What you need to provide |
 |---|---|---|
-| **Paper card** (default) | The `/research/` listing page | `data/papers.yaml` entry + hero image |
-| **+ embedded paper view** | A `/research/<slug>/` page rendering the arXiv HTML inline | Above + `enable_full_paper: true` + arXiv ID set, then run `npm run latex:update <slug>` to compile the PDF |
+| **Paper card** (default) | The `/research/` listing page | `data/papers.yaml` entry (hero image optional — can be added later, see below) |
+| **+ embedded paper view** | A `/research/<slug>/` page rendering the arXiv HTML inline | Above + `enable_full_paper: true` + `arxiv:` set, then `npm run latex:update <slug>` (auto-fetches arXiv source, cleans, uploads, compiles PDF — see below) |
 | **+ marketing project page** | A custom `/<slug>/` page with images, videos, custom CSS | Above + `project_page: true` + `data/projects/<slug>.md` |
+
+> **The hero image isn't required up front.** If you want to publish a
+> paper card or project page first and decide the card image
+> collaboratively later, leave the `image:` field out of papers.yaml
+> initially. The card renders with no image until you add it. When
+> you've picked one, drop it at `assets/images/papers/<slug>.png`,
+> add the `image: /assets/images/papers/<slug>.png` line, run
+> `npm run upload`, commit. No need to redo anything.
 
 ### Step 1 — Add the YAML entry
 
@@ -135,6 +143,52 @@ git push
 ```
 
 Open a PR to `main`. Done.
+
+### (Optional) Step 6 — Enable the embedded paper view
+
+If you set `enable_full_paper: true` in `papers.yaml`, the paper gets
+a `/research/<slug>/` page that renders the arXiv HTML version inline
+(figures, equations, references — everything in the published HTML).
+The build also compiles `paper.pdf` from the LaTeX source.
+
+To bootstrap:
+
+```bash
+npm run latex:update <slug>
+```
+
+What this does, in order:
+
+1. Downloads the LaTeX source tarball from `https://arxiv.org/e-print/<arxiv-id>`
+   (using the `arxiv:` field from your papers.yaml entry).
+2. Runs [`arxiv_latex_cleaner`](https://github.com/google-research/arxiv-latex-cleaner)
+   to strip author comments / TODOs / commented-out figures — this matters
+   because the cleaned tarball gets uploaded to a **public** R2 bucket.
+3. Tars + uploads to R2 (content-addressed, so re-runs are no-ops if
+   source unchanged).
+4. Writes the manifest entry `/research/<slug>/latex.tar.gz` → CDN URL.
+5. Invalidates any stale `research/<slug>/paper.pdf` so it rebuilds.
+
+Then:
+
+```bash
+npm run build:arxiv:pdf       # compiles paper.pdf from the R2 tarball
+                              # (cached in .cache/, so subsequent runs reuse)
+```
+
+When the paper is updated on arXiv (v2, v3, etc.), re-run
+`npm run latex:update <slug>` to pick up the new source. Manifest gets
+updated; PDF gets recompiled.
+
+**Not on arXiv?** Drop the LaTeX source at `research/<slug>/latex/`
+locally (gitignored), then run `npm run latex:pack <slug>` — same
+effect (clean, tar, upload, manifest), except the local `latex/` tree
+gets auto-deleted after upload (it lives transiently on disk and
+canonically on R2).
+
+You'll need a local LaTeX install (`tlmgr install latexmk` if you got a
+warning about missing latexmk on macOS). CI installs TeXLive
+automatically for the build:arxiv:pdf step.
 
 ## Adding a project page
 
@@ -379,17 +433,32 @@ hosting MP4 yourself:
 
 ### Embedded PDFs (posters etc.)
 
-Skip the inline `<iframe>` — put the PDF link in `links.poster:` in
-your MD frontmatter, and the project template renders it as a Poster
-button in the link bar. Less heavy on page load, better UX.
+**Prefer self-hosting the PDF over a Google Drive / Dropbox link.**
 
-```yaml
-links:
-  poster: /assets/projects/<slug>/icml_poster.pdf
+External-service links create dependencies — when someone reorganizes
+their Drive, the lab page silently 404s, and you find out from a
+visitor weeks later. R2 storage costs ~nothing for posters (a few MB
+each); the lab already owns the bucket. Drop it into the repo:
+
+```bash
+# 1. Drop the PDF locally
+cp ~/icml_poster.pdf assets/projects/<slug>/icml_poster.pdf
+
+# 2. Add to your project MD frontmatter:
+#    links:
+#      poster: /assets/projects/<slug>/icml_poster.pdf
+
+# 3. npm run upload (same flow as any other binary)
 ```
 
-The poster PDF gets uploaded to R2 like any other binary; the link
-gets rewritten to its CDN URL at render time.
+The project template renders this as a Poster button in the link bar;
+the `cdnUrl` helper rewrites the path to the R2-hosted CDN URL at
+render time. Visitors click → straight to a CDN-cached PDF download,
+no Drive auth required, no broken-link risk.
+
+If the lab member who made the poster has it on their personal site
+already and there's no clean way to get the file, an external URL
+works — but treat it as a fallback, not the default.
 
 ## Adding a new person
 
