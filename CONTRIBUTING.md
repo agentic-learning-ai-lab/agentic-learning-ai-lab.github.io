@@ -34,8 +34,8 @@ Work on a feature branch off `main`.
 ```bash
 git checkout main
 git pull
-git checkout -b add-poodle-paper          # name it after what you're doing
-git push -u origin add-poodle-paper       # push before npm run upload —
+git checkout -b add-<your-paper-slug>     # name it after what you're doing
+git push -u origin add-<your-paper-slug>  # push before npm run upload —
                                           # the register Action checks out
                                           # from origin to commit manifest back
 ```
@@ -197,7 +197,9 @@ Already covered above — add the flag to your paper's entry.
 
 ### Step 2 — Write `data/projects/<slug>.md`
 
-Use `data/projects/poodle.md` as a starter. The frontmatter:
+Use any existing `data/projects/<slug>.md` as a starter
+(e.g., poodle.md for a clean baseline, daily-oracle.md for one with
+interactive widgets). The frontmatter:
 
 ```yaml
 ---
@@ -503,11 +505,11 @@ faster page loads.
 If you're just editing text:
 
 ```bash
-git checkout -b fix-poodle-typo
-# edit data/projects/poodle.md (or wherever)
-git add data/projects/poodle.md
-git commit -m "Fix typo in PooDLe abstract"
-git push -u origin fix-poodle-typo
+git checkout -b fix-<short-description>
+# edit the file
+git add <files>
+git commit -m "Fix typo in ..."
+git push -u origin fix-<short-description>
 gh pr create --base main
 ```
 
