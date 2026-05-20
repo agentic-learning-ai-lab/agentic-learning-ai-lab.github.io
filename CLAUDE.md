@@ -146,10 +146,12 @@ so students don't need R2 creds to add binaries).
   areas. They're build output; the canonical list is
   `data/research_areas.yaml`.
 - Generated HTML files (`research/*/index.html`, `people/*/index.html`,
-  `areas/*/index.html`, root `index.html`, etc.) are committed alongside
-  their sources for now. They will be regenerated on every build — if your
-  diff includes one without a corresponding `.hbs` or YAML change,
-  something is off.
+  `areas/*/index.html`, root `index.html`, `contact/index.html`) are
+  **gitignored**. CF Pages rebuilds them via `npm run build:cf` on
+  every push. Fresh clones don't have them on disk; `npm run build` (or
+  `npm run build:cf`) regenerates everything from sources.
+  `css/tailwind-build.css` and `css/tailwind-runtime.css` are
+  gitignored too (Tailwind output).
 
 ## Build pipeline
 
@@ -414,9 +416,10 @@ Run through this list before opening a PR or merging `dev` → `main`:
    silently leaves unmatched names as plain text.
 8. **Date format.** `date: YYYY-MM-DDTHH:MM:SS.sssZ` (ISO). Bad dates
    render as `Invalid date`.
-9. **Generated files match sources.** If your diff includes a generated
-   HTML file without a corresponding source change, something built off
-   stale state. Rebuild and re-stage.
+9. **No generated HTML in the diff.** Build output (`research/*/index.html`,
+   `people/*/index.html`, etc., `css/tailwind-build.css`) is gitignored.
+   If any sneaks into your diff, something added it via `git add -f` —
+   undo with `git rm --cached <path>`.
 10. **Output spot-check.** Open one new/changed page in `out/` (via
     `npm run preview`) and look at it in a browser. CI catches build
     errors; it doesn't catch a broken layout.
