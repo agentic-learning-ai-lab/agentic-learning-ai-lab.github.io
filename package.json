@@ -27,6 +27,7 @@
     "latex:update": "node ./build/latex_update.js",
     "sync:r2": "node ./build/sync_to_r2.js",
     "pull:r2": "node ./build/pull_from_r2.js",
+    "fix:r2:mime": "node ./build/fix_r2_content_types.js",
     "lint:bibtex": "node ./build/lint_bibtex.js"
   },
   "keywords": [],

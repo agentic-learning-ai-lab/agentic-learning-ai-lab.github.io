@@ -4,6 +4,48 @@ out/
 staging/
 .venv/
 
+# Binary site assets — source-of-truth is local disk + R2 (manifest at
+# assets-manifest.json maps logical paths to cdn.agenticlearning.ai URLs).
+# Use `npm run pull:r2` to hydrate a fresh clone. See notes/lfs-migration.md.
+research/**/*.pdf
+research/**/assets/
+assets/images/papers/*.png
+assets/images/papers/*.jpg
+assets/images/papers/*.jpeg
+assets/images/papers/*.gif
+assets/images/papers/*.webp
+assets/images/people/*.png
+assets/images/people/*.jpg
+assets/images/people/*.jpeg
+assets/images/people/*.gif
+assets/images/people/*.webp
+assets/images/background/*.png
+assets/images/background/*.jpg
+assets/images/background/*.jpeg
+assets/images/background/*.gif
+assets/images/background/*.webp
+assets/images/home/*.png
+assets/images/home/*.jpg
+assets/images/home/*.jpeg
+assets/images/home/*.gif
+assets/images/home/*.webp
+assets/images/thumbnails/*.png
+assets/images/thumbnails/*.jpg
+assets/images/thumbnails/*.jpeg
+assets/images/thumbnails/*.gif
+assets/images/thumbnails/*.webp
+assets/projects/**/*.png
+assets/projects/**/*.jpg
+assets/projects/**/*.jpeg
+assets/projects/**/*.gif
+assets/projects/**/*.webp
+assets/projects/**/*.mp4
+assets/projects/**/*.pdf
+assets/projects/**/*.csv
+# NB: assets/images/favicons/* and assets/images/logos/* stay in git
+# (small same-origin paths used in HTML head). assets/projects/**/*.css
+# and *.svg stay in git too (small text, easier to edit in-place).
+
 # Local secrets — see scripts/setup_r2_secrets.sh
 .env
 .env.local
