@@ -12,7 +12,6 @@
   abstract: 'Learning good representations is essential for latent planning with world models. While pretrained visual encoders produce strong semantic visual features, they are not tailored to planning and contain information irrelevant -- or even detrimental -- to planning. Inspired by the perceptual straightening hypothesis in human visual processing, we introduce temporal straightening to improve representation learning for latent planning. Using a curvature regularizer that encourages locally straightened latent trajectories, we jointly learn an encoder and a predictor. We show that reducing curvature this way makes the Euclidean distance in latent space a better proxy for the geodesic distance and improves the conditioning of the planning objective. We demonstrate empirically that temporal straightening makes gradient-based planning more stable and yields significantly higher success rates across a suite of goal-reaching tasks.'
   arxiv: 'https://arxiv.org/abs/2603.12231'
   pdf: 'https://arxiv.org/pdf/2603.12231'
-  webpage: 'https://agenticlearning.ai/temporal-straightening/'
   permalink: temporal-straightening
   project_page: true
   enable_full_paper: true
@@ -35,7 +34,6 @@
   abstract: 'As embodied models become powerful, humans will collaborate with multiple embodied AI agents at their workplace or home in the future. To ensure better communication between human users and the multi-agent system, it is crucial to interpret incoming information from agents in parallel and refer to the appropriate context for each query. Existing challenges include effectively compressing and communicating high volumes of individual sensory inputs in the form of video and correctly aggregating multiple egocentric videos to construct system-level memory. In this work, we first formally define a novel problem of understanding multiple long-horizon egocentric videos simultaneously collected from embodied agents. To facilitate research in this direction, we introduce MultiAgent-EgoQA (MA-EgoQA), a benchmark designed to systemically evaluate existing models in our scenario. MA-EgoQA provides 1.7k questions unique to multiple egocentric streams, spanning five categories: social interaction, task coordination, theory-of-mind, temporal reasoning, and environmental interaction. We further propose a simple baseline model for MA-EgoQA named EgoMAS, which leverages shared memory across embodied agents and agent-wise dynamic retrieval. Through comprehensive evaluation across diverse baselines and EgoMAS on MA-EgoQA, we find that current approaches are unable to effectively handle multiple egocentric streams, highlighting the need for future advances in system-level understanding across the agents.'
   arxiv: 'https://arxiv.org/abs/2603.09827'
   pdf: 'https://arxiv.org/pdf/2603.09827'
-  webpage: 'https://agenticlearning.ai/ma-egoqa/'
   permalink: ma-egoqa
   enable_full_paper: true
   research_areas:
@@ -54,7 +52,6 @@
   abstract: 'Large language models (LLMs) can act as both problem solvers and solution verifiers, with verifiers improving solver performance by selecting high-quality answers from a pool of candidates. However, prior studies of solver-verifier interactions have been limited, focusing mainly on self-verification and rarely examining how verifiers judge outputs from models in their own or in another model family. Modern LLMs also undergo extensive post-training, but its effect on verification remains unclear. We present a systematic study across 37 models spanning multiple families, sizes, and base vs. post-trained variants, evaluated on 9 benchmarks covering logical reasoning, structured puzzles, symbolic computation, mathematics, commonsense, factual recall, and domain knowledge. We compare self-verification with verification within the same family and across different families. To support this, we introduce and empirically validate verifier gain, a metric that predicts the performance improvements from test-time verifier-based rejection sampling. We analyze how metrics like verifier gain and false positive rate scale with model size and post-training, and characterize differences in dataset verifiability. Our findings show that cross-family verification is especially effective; post-training reduces self-improvement but strengthens cross-family improvement; and mathematical and logical tasks exhibit the highest inherent verifiability.'
   arxiv: 'https://arxiv.org/abs/2512.02304'
   pdf: 'https://arxiv.org/pdf/2512.02304'
-  webpage: 'https://agenticlearning.ai/llm-verification/'
   permalink: llm-verification
   enable_full_paper: true
   project_page: true
@@ -73,7 +70,6 @@
   abstract: 'We propose In-Context Clustering (ICC), a flexible LLM-based procedure for clustering data from diverse distributions. Unlike traditional clustering algorithms constrained by predefined similarity measures, ICC flexibly captures complex relationships among inputs through an attention mechanism. We show that pretrained LLMs exhibit impressive zero-shot clustering capabilities on text-encoded numeric data, with attention matrices showing salient cluster patterns. Spectral clustering using attention matrices offers surprisingly competitive performance. We further enhance the clustering capabilities of LLMs on numeric and image data through fine-tuning using the Next Token Prediction (NTP) loss. Moreover, the flexibility of LLM prompting enables text-conditioned image clustering, a capability that classical clustering methods lack. Our work extends in-context learning to an unsupervised setting, showcasing the effectiveness and flexibility of LLMs for clustering.'
   arxiv: 'https://arxiv.org/abs/2510.08466'
   pdf: 'https://arxiv.org/pdf/2510.08466'
-  webpage: 'https://agenticlearning.ai/icc/'
   permalink: icc
   project_page: true
   enable_full_paper: true
@@ -91,7 +87,6 @@
   abstract: 'The Forward-Forward (FF) Algorithm is a recently proposed learning procedure for neural networks that employs two forward passes instead of the traditional forward and backward passes used in backpropagation. However, FF remains largely confined to supervised settings, leaving a gap at domains where learning signals can be yielded more naturally such as RL. In this work, inspired by FF''s goodness function using layer activity statistics, we introduce Action-conditioned Root mean squared Q-Functions (ARQ), a novel value estimation method that applies a goodness function and action conditioning for local RL using temporal difference learning. Despite its simplicity and biological grounding, our approach achieves superior performance compared to state-of-the-art local backprop-free RL methods in the MinAtar and the DeepMind Control Suite benchmarks, while also outperforming algorithms trained with backpropagation on most tasks.'
   arxiv: 'https://arxiv.org/abs/2510.06649'
   pdf: 'https://arxiv.org/pdf/2510.06649'
-  webpage: 'https://agenticlearning.ai/arq/'
   permalink: arq
   project_page: true
   enable_full_paper: true
@@ -109,7 +104,6 @@
   abstract: 'Object recognition and motion understanding are key components of perception that complement each other. While self-supervised learning methods have shown promise in their ability to learn from unlabeled data, they have primarily focused on obtaining rich representations for either recognition or motion rather than both in tandem. On the other hand, latent dynamics modeling has been used in decision making to learn latent representations of observations and their transformations over time for control and planning tasks. In this work, we present Midway Network, a new self-supervised learning architecture that is the first to learn strong visual representations for both object recognition and motion understanding solely from natural videos, by extending latent dynamics modeling to this domain. Midway Network leverages a midway top-down path to infer motion latents between video frames, as well as a dense forward prediction objective and hierarchical structure to tackle the complex, multi-object scenes of natural videos. We demonstrate that after pretraining on two large-scale natural video datasets, Midway Network achieves strong performance on both semantic segmentation and optical flow tasks relative to prior self-supervised learning methods. We also show that Midway Network''s learned dynamics can capture high-level correspondence via a novel analysis method based on forward feature perturbation.'
   arxiv: 'https://arxiv.org/abs/2510.05558'
   pdf: 'https://arxiv.org/pdf/2510.05558'
-  webpage: 'https://agenticlearning.ai/midway-network/'
   permalink: midway-network
   project_page: true
   research_areas:
@@ -152,7 +146,6 @@
   abstract: 'We introduce Context Tuning, a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters. While prompt-based adaptation techniques have demonstrated the effectiveness of lightweight adaptation methods for LLMs, they typically initialize a trainable prompt or prefix with irrelevant tokens for the task at hand. In contrast, Context Tuning initializes the trainable prompt or prefix with task-specific demonstration examples, leveraging the model''s inherent In-Context Learning (ICL) ability to extract relevant information for improved few-shot learning performance. Extensive evaluations on benchmarks such as CrossFit, UnifiedQA, MMLU, BIG-Bench Hard, and ARC demonstrate that Context Tuning outperforms traditional prompt-based adaptation methods and achieves competitive accuracy to Test-Time Training with significantly higher training efficiency.'
   arxiv: 'https://arxiv.org/abs/2507.04221'
   pdf: 'https://arxiv.org/pdf/2507.04221'
-  webpage: 'https://agenticlearning.ai/context-tuning/'
   permalink: context-tuning
   project_page: true
   research_areas:
@@ -212,7 +205,6 @@
   abstract: 'Self-supervised learning holds the promise to learn good representations from real-world continuous uncurated data streams. However, most existing works in visual self-supervised learning focus on static images or artificial data streams. Towards exploring a more realistic learning substrate, we investigate streaming self-supervised learning from long-form real-world egocentric video streams. Inspired by the event segmentation mechanism in human perception and memory, we propose "Memory Storyboard" that groups recent past frames into temporal segments for more effective summarization of the past visual streams for memory replay. To accommodate efficient temporal segmentation, we propose a two-tier memory hierarchy: the recent past is stored in a short-term memory, and the storyboard temporal segments are then transferred to a long-term memory. Experiments on real-world egocentric video datasets including SAYCam and KrishnaCam show that contrastive learning objectives on top of storyboard frames result in semantically meaningful representations which outperform those produced by state-of-the-art unsupervised continual learning methods.'
   arxiv: 'https://arxiv.org/abs/2501.12254'
   pdf: 'https://arxiv.org/pdf/2501.12254'
-  webpage: 'https://agenticlearning.ai/memory-storyboard/'
   permalink: memory-storyboard
   project_page: true
   research_areas:
@@ -231,7 +223,6 @@
   abstract: 'Existing evaluation benchmarks for Large Language Models (LLMs) quickly become outdated due to model updates and an evolving information landscape. Moreover, they often lack the ability to assess how model performance evolves over time, as they consist of static questions without a temporal dimension. To address these, we propose using future event prediction as a continuous evaluation method to assess LLMs'' temporal generalization and forecasting abilities. Our benchmark, Daily Oracle, automatically generates question-answer (QA) pairs from daily news, challenging LLMs to predict "future" events based on pre-training data. Our findings reveal that as pre-training data becomes outdated, LLM performance degrades over time. While Retrieval Augmented Generation (RAG) can enhance prediction accuracy, the degradation persists, highlighting the need for ongoing model updates.'
   arxiv: 'https://arxiv.org/abs/2411.08324'
   pdf: 'https://arxiv.org/pdf/2411.08324'
-  webpage: 'https://agenticlearning.ai/daily-oracle/'
   permalink: daily-oracle
   project_page: true
   research_areas:
@@ -252,7 +243,6 @@
   abstract: 'Self-supervised learning has driven significant progress in learning from single-subject, iconic images. However, there are still unanswered questions about the use of minimally-curated, naturalistic video data, which contain dense scenes with many independent objects, imbalanced class distributions, and varying object sizes. In this paper, we propose PooDLe, a self-supervised learning method that combines an invariance-based objective on pooled representations with a dense SSL objective that enforces equivariance to optical flow warping. Our results show that a unified objective applied at multiple feature scales is essential for learning effective image representations from naturalistic videos. We validate our method with experiments on the BDD100K driving video dataset and the Walking Tours first-person video dataset, demonstrating its ability to capture spatial understanding from a dense objective and semantic understanding via a pooled representation objective.'
   arxiv: 'https://arxiv.org/abs/2408.11208'
   pdf: 'https://arxiv.org/pdf/2408.11208'
-  webpage: 'https://agenticlearning.ai/poodle/'
   permalink: poodle
   project_page: true
   research_areas:
@@ -271,7 +261,6 @@
   abstract: 'In this paper, we propose ProCreate, a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction. ProCreate operates on a set of reference images and actively propels the generated image embedding away from the reference embeddings during the generation process. We propose FSCG-8 (Few-Shot Creative Generation 8), a few-shot creative generation dataset on eight different categories -- encompassing different concepts, styles, and settings -- in which ProCreate achieves the highest sample diversity and fidelity. Furthermore, we show that ProCreate is effective at preventing replicating training data in a large-scale evaluation using training text prompts.'
   arxiv: 'https://arxiv.org/abs/2408.02226'
   pdf: 'https://arxiv.org/pdf/2408.02226'
-  webpage: 'https://agenticlearning.ai/procreate/'
   permalink: procreate
   project_page: true
   research_areas:
@@ -309,7 +298,6 @@
   abstract: 'Current language models are unable to quickly learn new concepts on the fly, often requiring a more involved finetuning process to learn robustly. Prompting in-context is not robust to context distractions, and often fails to confer much information about the new concepts. Classic methods for few-shot word learning in NLP, relying on global word vectors, are less applicable to large language models. In this paper, we introduce a novel approach named CoLLEGe (Concept Learning with Language Embedding Generation) to modernize few-shot concept learning. CoLLEGe is a meta-learning framework capable of generating flexible embeddings for new concepts using a small number of example sentences or definitions. Our primary meta-learning objective is simply to facilitate a language model to make next word predictions in forthcoming sentences, making it compatible with language model pretraining. We design a series of tasks to test new concept learning in challenging real-world scenarios, including new word acquisition, definition inference, and verbal reasoning, and demonstrate that our method succeeds in each setting without task-specific training.'
   arxiv: 'https://arxiv.org/abs/2403.15362'
   pdf: 'https://arxiv.org/pdf/2403.15362'
-  webpage: 'https://agenticlearning.ai/college/'
   permalink: college
   project_page: true
   research_areas:
@@ -330,7 +318,6 @@
   abstract: 'We explore the training dynamics of neural networks in a structured non-IID setting where documents are presented cyclically in a fixed, repeated sequence. Typically, networks suffer from catastrophic interference when training on a sequence of documents; however, we discover a curious and remarkable property of LLMs fine-tuned sequentially in this setting: they exhibit anticipatory behavior, recovering from the forgetting on documents before encountering them again. The behavior emerges and becomes more robust as the architecture scales up its number of parameters. Through comprehensive experiments and visualizations, we uncover new insights into training over-parameterized networks in structured environments.'
   arxiv: 'https://arxiv.org/abs/2403.09613'
   pdf: 'https://arxiv.org/pdf/2403.09613'
-  webpage: 'https://agenticlearning.ai/anticipatory-recovery/'
   permalink: anticipatory-recovery
   research_areas:
     - adaptive-agents-and-foundation-models
@@ -389,7 +376,6 @@
   abstract: 'In this paper we introduce LifelongMemory, a new framework for accessing long-form egocentric videographic memory through natural language question answering and retrieval. LifelongMemory generates concise video activity descriptions of the camera wearer and leverages the zero-shot capabilities of pretrained large language models to perform reasoning over long-form video context. Furthermore, Lifelong Memory uses a confidence and explanation module to produce confident, high-quality, and interpretable answers. Our approach achieves state-of-the-art performance on the EgoSchema benchmark for question answering and is highly competitive on the natural language query (NLQ) challenge of Ego4D.'
   arxiv: 'https://arxiv.org/abs/2312.05269'
   pdf: 'https://arxiv.org/pdf/2312.05269'
-  webpage: 'https://agenticlearning.ai/lifelong-memory/'
   permalink: lifelong-memory
   project_page: true
   research_areas:
