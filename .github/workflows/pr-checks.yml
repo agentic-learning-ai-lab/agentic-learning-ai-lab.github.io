@@ -1,14 +1,11 @@
 name: PR checks
 
-# Lightweight per-PR sanity check that replaces the old "Deploy to
-# GitHub Pages" gate. Runs the same slim build that Cloudflare Pages
-# uses in production, plus the bibtex/venue lint. No LFS pull, no
-# Sharp/PDF compile, no R2 credentials required — finishes in ~1 min.
+# Per-PR sanity check: runs the same slim build that Cloudflare
+# Pages uses in production, plus the bibtex/venue lint. No LFS, no
+# Sharp/PDF compile, no R2 credentials — finishes in ~1 min.
 #
-# Required-status-check on main:
-#   Repo Settings → Branches → main → Edit rule → add
-#   "PR checks / build-and-lint" to required checks.
-#   (Remove the obsolete "Deploy to GitHub Pages / build" entry.)
+# Required-status-check on main: "build-and-lint" (the job below).
+# Configured in repo Settings → Branches → main rule.
 
 on:
   pull_request:

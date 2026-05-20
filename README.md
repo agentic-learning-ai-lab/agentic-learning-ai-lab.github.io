@@ -5,24 +5,23 @@ Source for [agenticlearning.ai](https://agenticlearning.ai).
 ## Branches
 
 - **`dev`** — development branch. Make changes here.
-- **`main`** — production branch. Push/merge to main triggers CI deployment to GitHub Pages.
+- **`main`** — production branch. Push/merge to main auto-deploys to Cloudflare Pages.
 
 ## Prerequisites
 
 - Node.js 20+
-- [Git LFS](https://git-lfs.com/) (PDFs and paper images are stored via LFS)
-- [Ghostscript](https://www.ghostscript.com/) for PDF compression (optional locally — CI handles it)
+- [Ghostscript](https://www.ghostscript.com/) for PDF compression (optional locally)
 
-Image processing uses [sharp](https://sharp.pixelplumbing.com/) (cross-platform, installed via npm).
+Image processing uses [sharp](https://sharp.pixelplumbing.com/) (cross-platform, installed via npm). Binary assets (paper PDFs, hero images, figures) live on Cloudflare R2 — not in git.
 
 ## Setup
 
 ```bash
-git lfs install
 git clone git@github.com:agentic-learning-ai-lab/agentic-learning-ai-lab.github.io.git
 cd agentic-learning-ai-lab.github.io
 npm install
 npm run setup:python   # one-time: creates .venv/ with arxiv_latex_cleaner
+npm run pull:r2        # hydrate binary assets from R2 (no creds needed)
 ```
 
 ## For agents and future contributors
@@ -74,26 +73,21 @@ npm run build:compress:force   # re-compress all images
 ## Adding a new paper
 
 1. Add the paper entry to `data/papers.yaml` with `arxiv`, `permalink`, and optionally `enable_full_paper: true`
-2. Add a paper image to `assets/images/papers/`
-3. Run `npm run build` — this downloads the HTML, images, generates thumbnails, and builds pages
+2. Drop a paper image at `assets/images/papers/<slug>.png` (locally; gitignored)
+3. Run `npm run build` — this generates thumbnails, syncs new assets to R2, and renders pages
 4. Optionally run `npm run build:arxiv:pdf` to compile a local PDF
 5. Commit and push to `dev`, then merge to `main` to deploy
 
-Large files (PDFs, paper images) are automatically tracked by Git LFS via `.gitattributes`.
+Binary assets are not committed to git — they live on R2 (mirror via `npm run sync:r2`, recorded in `assets-manifest.json`). Only the manifest entry is committed.
 
 ## Deployment
 
-Deployment is automated via GitHub Actions. Pushing to `main` triggers the workflow:
+Cloudflare Pages auto-deploys both `dev` (preview at `dev.agentic-learning-ai-lab-github-io.pages.dev`) and `main` (production at `agenticlearning.ai`). Build command: `npm run build:cf`. No CI workflow files in this repo; CF Pages reads the build settings from its dashboard.
 
-1. Checks out the repo with LFS
-2. Runs `npm run build`
-3. Deploys to GitHub Pages via `actions/deploy-pages`
-
-For manual deployment or local staging:
+For local preview:
 
 ```bash
-./deploy.sh staging    # build to staging/site/ for local testing
-cd staging/site && python3 -m http.server 8000
+npm run preview        # runs the full local build + serves out/ on :8000
 ```
 
 ## Project structure
@@ -102,13 +96,18 @@ cd staging/site && python3 -m http.server 8000
 build/                     # Build scripts
   build_arxiv_papers.js    #   Download arXiv HTML, compile PDFs, compress
   build_pages.js           #   Handlebars template renderer
-  compress_assets.js       #   Image compression (sips)
+  compress_assets.js       #   Image compression (sharp)
   generate_thumbnails.js   #   Thumbnail generation
   generate_search_index.js #   Search index builder
+  sync_to_r2.js            #   Upload new binary assets to R2
+  pull_from_r2.js          #   Hydrate local binaries from R2 (fresh clone)
 data/                      # YAML data files (papers, people, research areas)
-research/                  # Per-paper directories (HTML, assets, PDFs)
-assets/                    # Site-wide images, CSS, favicons
+  projects/                # Per-paper project page markdown
+research/                  # Per-paper directories (paper HTML + extracted content)
+assets/                    # Site-wide images, CSS, favicons (binaries gitignored)
+assets-manifest.json       # Logical-path → cdn.agenticlearning.ai URL map
 css/                       # Tailwind source and build output
-includes/                  # Handlebars templates
-.github/workflows/         # CI/CD (GitHub Actions)
+includes/                  # Handlebars partials
+.github/workflows/
+  pr-checks.yml            # Per-PR slim build + bibtex lint
 ```

@@ -19,10 +19,10 @@ preview within ~3-4 min:
 Use the branch alias for sharing iterative review links. Build logs
 live in Cloudflare dashboard → Workers & Pages → the project → Deployments.
 
-Production `agenticlearning.ai/` still flows through GH Pages (via DNS).
-CF Pages's main-branch build is a shadow deploy at the pages.dev URL.
-Flipping production entirely to CF Pages = Lever C in `cf-migration.md`,
-not currently motivated.
+Production `agenticlearning.ai/` flows through Cloudflare Pages
+(DNS cut over 2026-05-19; GH Pages retired in the same window).
+The `.pages.dev` URL still works as a debug fallback. Historical:
+Lever C in `cf-migration.md` is the design doc for this cutover.
 
 ## Queue
 

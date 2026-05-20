@@ -270,12 +270,11 @@ follow-up PR (option D scope).
 Existing LFS rules stay so existing pointers resolve correctly.
 New asset paths fall through to gitignore.
 
-### `.github/workflows/deploy.yml` — retire (option b)
-Either:
-- Delete the file entirely (CF becomes the only deploy path).
-- Keep a stripped version that just runs `npm run lint:bibtex` and
-  any other PR check, never deploys. (Safer for now — provides a
-  GH-side CI signal even after CF takes over deploy.)
+### `.github/workflows/deploy.yml` — retired 2026-05-19 (option b)
+
+Deleted entirely as part of the GH Pages retirement PR. CF Pages
+is now the only deploy path. PR-side CI gate moved to a separate
+`pr-checks.yml` workflow that runs `build:cf` + `lint:bibtex`.
 
 ### `out/` final shape
 ```

@@ -2,17 +2,17 @@
 
 Plan for moving the lab site from "pure GitHub Pages + LFS" to "Cloudflare-fronted GH Pages + R2 for binaries." Written 2026-05-16.
 
-## Status (2026-05-17)
+## Status (2026-05-19) — cutover complete
 
 | Lever | What | Status |
 |---|---|---|
-| A | Cloudflare in front of GH Pages | ✅ Live — DNS proxied, two Cache Rules active |
+| A | Cloudflare in front of GH Pages | ✅ Was live as a stepping stone; subsumed by C |
 | B | Site binaries (paper.pdf, hero images, headshots) on R2 | ✅ Done in PR #2 — `build/sync_to_r2.js` + `{{cdnUrl}}` helper |
 | B (LaTeX) | LaTeX source as tar.gz on R2 | ✅ Done in PR #4 — see [latex-tarball-storage.md](latex-tarball-storage.md) |
 | B (WebP, site images) | q98 lossy WebP siblings for hero/card/headshot images | ✅ Done in PR #5/#6 — `build/generate_webp.js` + `{{pictureCdn}}` helper |
 | B (WebP, arxiv figures) | Lossless WebP siblings for `research/**/assets/`; `rewrite_paper_content.js` prefers .webp over .png CDN URLs | ✅ Done in PR #8 |
-| C | Full Cloudflare Pages migration | ⏸ Deferred — not motivated unless GH Pages CI becomes painful |
-| D | HK/SG mirror for China latency | ❌ Dropped — A's edge is sufficient |
+| C | Full Cloudflare Pages migration (LFS removed, slim out/, CF Pages serves prod) | ✅ Done 2026-05-19 — see [lfs-migration.md](lfs-migration.md). DNS for `agenticlearning.ai` now points at CF Pages. `deploy.yml` deleted, GH Pages retired. |
+| D | HK/SG mirror for China latency | ❌ Dropped — CF's edge is sufficient |
 
 What remains: bulk port of the remaining 11 project pages (template + pilot landed in PR #9 — see [project-pages-migration.md](project-pages-migration.md)), LFS-free migration when LFS quota actually pinches, and orphan-R2-blob reaper when storage matters. See [next-up.md](next-up.md).
 

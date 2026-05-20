@@ -21,9 +21,8 @@
  * Used by:
  *   - npm run preview                 (local: build + serve out/)
  *   - npm run build:cf                (Cloudflare Pages cloud build —
- *                                      uses the slim flow, no LFS pull)
- *   - .github/workflows/deploy.yml    (legacy GH Pages — will be
- *                                      retired in favor of CF)
+ *                                      slim flow, no LFS pull, no
+ *                                      Sharp / PDF compile)
  *
  * Idempotent: removes copied dirs first to ensure a clean copy. Cheap
  * (sub-second) because there's so little to copy.
