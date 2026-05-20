@@ -6,7 +6,7 @@ affiliations:
   - { name: 'Mengye Ren',         aff: 'New York University' }
 links:
   code: https://github.com/agentic-learning-ai-lab/anticipatory-recovery
-  poster: /assets/projects/anticipatory-recovery/poster.png
+  poster: /assets/projects/anticipatory-recovery/neurips2024-poster-anticipatory-recovery.pdf
 bibtex: |
   @inproceedings{yang2024reawakening,
     title     = {Reawakening Knowledge: Anticipatory Recovery from Catastrophic Interference via Structured Training},

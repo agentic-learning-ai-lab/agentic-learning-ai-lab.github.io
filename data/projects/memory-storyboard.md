@@ -4,7 +4,7 @@ affiliations:
   - { name: 'Mengye Ren',  aff: 'New York University' }
 links:
   code: https://github.com/agentic-learning-ai-lab/memory-storyboard
-  poster: /assets/projects/memory-storyboard/poster.pdf
+  poster: /assets/projects/memory-storyboard/collas2025-poster-memory-storyboard.pdf
 bibtex: |
   @inproceedings{yang2025memorystoryboard,
     title     = {Memory Storyboard: Leveraging Temporal Segmentation for Streaming Self-Supervised Learning from Egocentric Videos},
