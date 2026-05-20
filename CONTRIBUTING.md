@@ -42,6 +42,39 @@ git push -u origin add-<your-paper-slug>  # push before npm run upload —
 
 Open a PR to `main` when done. Mengye reviews and merges.
 
+## Preview your changes
+
+Two ways to see the rendered site before merging:
+
+**Local** — fastest iteration loop:
+
+```bash
+npm run preview        # runs the full local build + serves out/ on
+                       # http://localhost:8000
+```
+
+This is the same `out/` bundle Cloudflare Pages serves in production,
+just rendered with local binaries instead of CDN URLs. Re-run after
+each round of edits.
+
+**Cloudflare Pages preview** — what reviewers actually see:
+
+Every push to a feature branch triggers a Cloudflare Pages preview
+build. The `cloudflare-workers-and-pages[bot]` drops a sticky comment
+on your PR with the build status and the Branch Preview URL — just
+click it. The preview goes live within ~30–60s of each push and the
+bot updates its own comment in place.
+
+If you ever need to construct the URL by hand, it follows the branch
+name:
+
+```
+https://<your-branch-name>.agentic-learning-ai-lab-github-io.pages.dev/
+```
+
+GitHub emails the PR author when the CF Pages status check transitions
+to green, so you don't have to refresh the PR.
+
 ## Adding a new paper
 
 A paper appears on the site in three possible forms — pick whichever the
