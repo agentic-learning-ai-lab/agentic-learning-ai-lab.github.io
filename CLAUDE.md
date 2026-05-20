@@ -159,8 +159,9 @@ ones can run without binary assets being present.
 
 ### `npm run build` — full (local)
 
-Used for local development and the GH `mirror-lfs-to-r2.yml` Action.
-Requires LFS objects to be hydrated and R2 credentials in env.
+Used for local development. Requires R2 credentials in `.env`
+(see `scripts/setup_r2_secrets.sh`) and the binary assets present
+on disk (run `npm run pull:r2` on a fresh clone).
 
 1. `build:tailwind` — compile + minify `css/tailwind.css` → `tailwind-build.css`.
 2. `generate_thumbnails.js` — 256×256 crops of paper/people images.
@@ -478,9 +479,10 @@ over it.
    include binary subtrees. See `notes/lfs-migration.md`.
 6. Check `out/<slug>/index.html` (or `out/research/<slug>/index.html`
    for the embedded paper view) opens correctly via `npm run preview`.
-7. Walk the audit checklist above. Then commit
-   (`paper.pdf` + `assets-manifest.json` + the new binary assets are
-   what get committed; binaries still go via LFS in phase 1).
+7. Walk the audit checklist above. Then commit ONLY the text
+   changes: `data/papers.yaml`, any new `data/projects/<slug>.md`,
+   and the updated `assets-manifest.json`. The new binaries are
+   gitignored — they live on local disk + R2 only.
 
 ## When the user asks you to update something
 

@@ -126,6 +126,35 @@ copying binaries into `out/` that no served HTML actually points at.
 - Pre-1a909e0 LFS files (the historical ~265 MB) — leave as-is for
   now (option D deferred).
 
+## Recovery path (if we ever need to revert)
+
+The migration landed as 3 sequential commits on `dev`:
+
+1. **`8b0bdf6`** — `git rm --cached` on 1315 binary file paths +
+   deletion of `.github/workflows/mirror-lfs-to-r2.yml`.
+2. **`2197dc0`** — `.gitattributes` cleared of LFS rules,
+   `.gitignore` extended to cover the binary paths, added
+   `fix_r2_content_types.js` + `npm run fix:r2:mime`.
+3. **`fe14028`** — CLAUDE.md text refresh for the post-LFS world.
+
+To FULLY revert (re-introduce Git LFS):
+
+```bash
+git revert fe14028 2197dc0 8b0bdf6
+```
+
+Order matters — `git revert` applies them in newest-first order
+which matches how the original commits were authored. Reverting
+`8b0bdf6` alone re-adds the file entries to the index, but
+`.gitattributes` would still be the no-LFS version from
+`2197dc0`, so the files would be tracked as plain blobs, not LFS
+pointers. All three need reverting together for a clean rollback.
+
+The LFS *objects* on GitHub's LFS server were never deleted by
+this migration — they're still recoverable as long as GitHub
+hasn't garbage-collected them (LFS retention is repo-lifetime by
+default).
+
 ---
 
 # Implementation walkthrough
