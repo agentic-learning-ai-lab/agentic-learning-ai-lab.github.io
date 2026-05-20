@@ -141,8 +141,12 @@ function shellQuoteJsonForGh(json) {
     return json;
 }
 
-function ghDispatch(workflow, fields) {
-    const args = ['workflow', 'run', workflow];
+function ghDispatch(workflow, fields, ref) {
+    // Run the workflow against the contributor's current branch so
+    // their branch's package-lock.json / workflow code / build scripts
+    // are what executes — not main's. Without `--ref`, gh defaults to
+    // the repo's default branch.
+    const args = ['workflow', 'run', workflow, '--ref', ref];
     for (const [k, v] of Object.entries(fields)) {
         args.push('-f', `${k}=${v}`);
     }
@@ -262,7 +266,7 @@ async function main() {
 
     // 1. Mint URLs
     console.log(`1/3 Minting presigned upload URLs (corr=${correlationId.slice(0,8)})...`);
-    ghDispatch('mint-upload-urls.yml', { spec: specJson, correlation_id: correlationId });
+    ghDispatch('mint-upload-urls.yml', { spec: specJson, correlation_id: correlationId }, branch);
     const mintRunId = pollRunByCorrelation('mint-upload-urls.yml', correlationId);
     waitForRun(mintRunId, 'mint-upload-urls');
 
@@ -281,7 +285,7 @@ async function main() {
 
     // 3. Register on the contributor's branch
     console.log('3/3 Triggering manifest register on origin/' + branch + ' ...');
-    ghDispatch('register-assets.yml', { spec: specJson, branch, correlation_id: correlationId });
+    ghDispatch('register-assets.yml', { spec: specJson, branch, correlation_id: correlationId }, branch);
     const regRunId = pollRunByCorrelation('register-assets.yml', correlationId);
     waitForRun(regRunId, 'register-assets');
 
