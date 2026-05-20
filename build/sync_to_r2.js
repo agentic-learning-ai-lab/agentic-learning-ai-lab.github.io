@@ -8,9 +8,18 @@
  * Idempotent: files whose content hash already exists on R2 are skipped.
  * A re-run with no local changes is a no-op (just HEADs).
  *
+ * Local-tree completeness is NOT required. Entries in the existing
+ * manifest whose logical path has no corresponding file on disk are
+ * preserved as-is — the local tree is one mirror of R2, not the source
+ * of truth. The manifest source of truth is what the rendered HTML
+ * references; dropping entries because a file isn't hydrated locally
+ * would produce 404s in production. Use `--prune` to deliberately
+ * remove entries that have no local counterpart.
+ *
  * Usage:
  *   npm run sync:r2          # uses .env / GitHub Actions secrets
  *   node build/sync_to_r2.js # same
+ *   node build/sync_to_r2.js --prune   # also drop orphan manifest entries
  *
  * Required env vars (in .env locally, GitHub Actions secrets in CI):
  *   R2_ACCESS_KEY_ID
@@ -171,7 +180,8 @@ function collectFiles() {
 
 async function main() {
   const verify = process.argv.includes('--verify');
-  console.log(`R2 sync → bucket=${BUCKET}  cdn=${CDN_BASE}${verify ? '  (verify mode: HEAD-check every file)' : ''}\n`);
+  const prune = process.argv.includes('--prune');
+  console.log(`R2 sync → bucket=${BUCKET}  cdn=${CDN_BASE}${verify ? '  (verify: HEAD every file)' : ''}${prune ? '  (prune: drop orphan entries)' : ''}\n`);
 
   const files = collectFiles();
   if (files.length === 0) {
@@ -204,8 +214,15 @@ async function main() {
     ? await fs.readJson(MANIFEST_PATH)
     : {};
 
-  const manifest = {};
+  // Pre-seed with existing entries. Locally-present files overwrite
+  // their own entry below (so content-hash changes propagate). Entries
+  // for files NOT present locally are preserved — R2 is the source of
+  // truth for what's uploaded; a missing local file doesn't mean the
+  // R2 object is gone (it usually means the local tree is a partial
+  // hydrate). --prune flips this and drops orphan entries instead.
+  const manifest = prune ? {} : { ...existingManifest };
   let uploaded = 0, cached = 0, failed = 0, bytesUp = 0;
+  const touched = new Set();
 
   for (const file of files) {
     try {
@@ -235,6 +252,7 @@ async function main() {
       }
 
       manifest[logicalPath] = cdnUrl;
+      touched.add(logicalPath);
     } catch (err) {
       console.error(`❌ ${file}: ${err.message}`);
       failed++;
@@ -248,9 +266,23 @@ async function main() {
   }
   await fs.writeJson(MANIFEST_PATH, sortedManifest, { spaces: 2 });
 
+  // Entries that exist in the manifest but have no local file. With
+  // default (no --prune) these are preserved; we just report them so
+  // long-term drift is visible.
+  const orphans = Object.keys(existingManifest).filter(k => !touched.has(k));
+  const droppedByPrune = prune ? orphans.length : 0;
+
   console.log(`\n📊 Sync summary`);
   console.log(`   ⬆️  Uploaded:    ${uploaded} (${(bytesUp / 1024 / 1024).toFixed(1)} MB)`);
   console.log(`   💾 Cache hits:  ${cached}${verify ? ' (HEAD-verified)' : ' (manifest-trusted)'}`);
+  if (orphans.length > 0) {
+    if (prune) {
+      console.log(`   🗑️  Pruned:      ${droppedByPrune} orphan entry/entries (no local file)`);
+    } else {
+      console.log(`   👻 Orphans:     ${orphans.length} manifest entry/entries with no local file — preserved`);
+      console.log(`                  (run with --prune to drop them, after hydrating local tree if needed)`);
+    }
+  }
   if (failed > 0) console.log(`   ❌ Failed:      ${failed}`);
   console.log(`   📋 Manifest written to ${path.relative(ROOT, MANIFEST_PATH)} (${Object.keys(sortedManifest).length} entries)\n`);
 
