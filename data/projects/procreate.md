@@ -48,9 +48,10 @@ We show the qualitative comparison between [DDIM](https://arxiv.org/abs/2010.025
 
 ## Video Presentation {data-toc=Video}
 
-<div style="position: relative; padding-bottom: 56.25%; max-width: 720px; height: 0; margin: 1.5rem auto;">
-  <iframe src="https://www.youtube.com/embed/vR2Lxhhjwpk" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</div>
+<video controls preload="metadata"
+       style="max-width: 720px; width: 100%; height: auto; display: block; margin: 1.5rem auto;">
+  <source src="/assets/projects/procreate/procreate.mp4" type="video/mp4">
+</video>
 
 ## Broader Impact {data-toc=Impact}
 

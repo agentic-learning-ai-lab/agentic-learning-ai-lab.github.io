@@ -7,7 +7,7 @@ affiliations:
 links:
   code: https://github.com/agentic-learning-ai-lab/daily-oracle
   huggingface: https://huggingface.co/datasets/agentic-learning-ai-lab/daily-oracle
-  poster: /assets/projects/daily-oracle/icml_poster_daily_oracle.pdf
+  poster: /assets/projects/daily-oracle/icml2025-poster-daily-oracle.pdf
 bibtex: |
   @inproceedings{dai2025dailyoracle,
     title     = {Are LLMs Prescient? A Continuous Evaluation using Daily News as the Oracle},

@@ -5,6 +5,7 @@ affiliations:
   - { name: 'Mengye Ren',        aff: 'New York University' }
 links:
   code: https://github.com/agentic-learning-ai-lab/arq
+  poster: /assets/projects/arq/iclr2026-poster-arq.pdf
 bibtex: |
   @inproceedings{wu2026local,
     title     = {Local Reinforcement Learning with Action-Conditioned Root Mean Squared Q-Functions},

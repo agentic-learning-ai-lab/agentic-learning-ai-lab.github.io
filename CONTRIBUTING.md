@@ -331,23 +331,13 @@ What happens at build time:
   image (long captions wrap left-aligned at the image's edge; short
   ones center).
 
-**Picking a width** (the `{width=N}` value, in pixels):
+**Width**: omit `{width=…}` to fill the column (capped at ~832px).
+Set a smaller value (e.g. `{width=400}`) only when you want the figure
+narrower than the column.
 
-| Content | Suggested width |
-|---|---|
-| Single hero / teaser, full prose column | omit `{width=…}` (defaults to column width) |
-| Single screenshot or simple diagram | 700–800 |
-| Two-up small details (paired side-by-side via custom CSS) | 400 |
-| Wide table or many-column results figure | 900–1000 (will cap at column max) |
-| Tiny illustration (single icon, etc.) | 300–400 |
-
-Column max is ~832px after page padding. Setting `{width=1000}` doesn't
-break anything, just gets capped at the column.
-
-**File size**: ideally < 500 KB per figure. `npm run build:compress`
-resizes arXiv-imported figures to ≤ 1400px automatically; your own
-contributions aren't compressed automatically — downsample large PNGs
-before dropping them in.
+**File size**: aim for < 500 KB per figure. Your own contributions
+aren't auto-compressed — downsample large PNGs before dropping them in.
+(arXiv-imported figures get capped at ≤ 1400px by `build:compress`.)
 
 ### Side-by-side / grid layouts
 
@@ -428,48 +418,55 @@ ffmpeg -i source.mp4 \
        output.mp4
 ```
 
-`-profile:v high -level 4.0 -pix_fmt yuv420p` is the iOS-safe combo;
-`+faststart` puts metadata at the front of the file so playback can
-begin before the whole file downloads.
+(`-profile:v high -level 4.0 -pix_fmt yuv420p` keeps it iOS-safe;
+`+faststart` moves metadata to the front so playback can start before
+the whole file downloads.)
 
-Drop `output.mp4` in `assets/projects/<slug>/` and reference:
+Filename convention:
+
+- **Inline animated figure** (short clip illustrating a result): name
+  after the content — `egg.mp4`, `bdd-semseg.mp4`, `wall.mp4`. Pattern
+  visible across `lifelong-memory/`, `temporal-straightening/`,
+  `midway-network/`.
+- **Presentation / talk video** (one per project): just `<slug>.mp4`
+  — e.g. `procreate.mp4` at `assets/projects/procreate/procreate.mp4`.
+  If a project ever ends up with more than one talk, fall back to
+  `<slug>-<venue><year>.mp4` to disambiguate.
+
+Drop the file in `assets/projects/<slug>/` and reference. For an
+animated figure:
 
 ```html
 <figure>
   <video autoplay muted loop playsinline preload="metadata"
          style="max-width: 800px; width: 100%; height: auto; margin: 0 auto;">
-    <source src="/assets/projects/<slug>/output.mp4" type="video/mp4">
+    <source src="/assets/projects/<slug>/<content-name>.mp4" type="video/mp4">
   </video>
   <figcaption>Caption goes here.</figcaption>
 </figure>
 ```
 
-`autoplay muted loop playsinline` is the standard "video as animated
-figure" pattern.
+`autoplay muted loop playsinline` is the "video as animated figure"
+pattern. For a presentation video, swap to `controls preload="metadata"`
+and drop the loop/autoplay (the viewer presses play once):
 
-**Common video gotchas** (the hard-earned lessons in
-`notes/project-page-migration-lessons.md`):
+```html
+<video controls preload="metadata"
+       style="max-width: 720px; width: 100%; height: auto; display: block; margin: 1.5rem auto;">
+  <source src="/assets/projects/<slug>/<slug>.mp4" type="video/mp4">
+</video>
+```
 
-- **VP9 / WebM don't play on iOS Safari.** H.264 only.
-- **Without `-movflags +faststart`** the video's metadata is at the
-  end of the file, so the browser can't begin playback until the
-  WHOLE file downloads. faststart moves metadata to the head.
-- **Don't wrap a video in a parent with `transform:` set and CSS
-  `aspect-ratio:` on the video** — Safari miscalculates dimensions
-  and renders a 0×0 video. Use fixed `style="max-width: ...; height: auto"`
-  on the video itself.
+One Safari gotcha worth flagging: don't wrap a video in a parent with
+`transform:` set and CSS `aspect-ratio:` on the video — Safari renders
+0×0. Use fixed `style="max-width: …; height: auto"` on the video
+itself. Other lessons in `notes/project-page-migration-lessons.md`.
 
 ### Self-hosting vs YouTube embed
 
-Default to self-hosting the video on R2. The reasons:
-
-- No ads, no tracking, no "up next" thumbnails for unrelated content.
-- No risk of YouTube taking the video down or changing the embed
-  terms.
-- One-time encoding cost; R2 storage is cheap at the lab's scale.
-
-The "video presentation" section of a project page is usually a short
-overview clip — re-encode it via the H.264 recipe above and drop in
+Default to self-hosting on R2: no ads, no tracking, no "up next"
+thumbnails, no risk of YouTube taking the video down or changing the
+embed terms. Re-encode via the H.264 recipe above and drop in
 `assets/projects/<slug>/`.
 
 YouTube iframes still work as a fallback — useful when the only
@@ -493,13 +490,19 @@ to re-upload, or when the video is much longer than a project overview
 Host posters on R2, not Drive / Dropbox. External links break when
 files move.
 
+Filename convention: **`<venue><year>-poster-<slug>.pdf`** —
+e.g. `iclr2026-poster-arq.pdf`, `neurips2024-poster-anticipatory-recovery.pdf`.
+The slug at the end keeps the filename self-describing if it's
+downloaded out of context; the venue + year disambiguates if a project
+ever has more than one poster (workshop + main, rebrand, etc.).
+
 ```bash
-# 1. Drop the PDF locally
-cp ~/icml_poster.pdf assets/projects/<slug>/icml_poster.pdf
+# 1. Drop the PDF locally — use the convention above
+cp ~/source.pdf assets/projects/<slug>/<venue><year>-poster-<slug>.pdf
 
 # 2. Add to your project MD frontmatter:
 #    links:
-#      poster: /assets/projects/<slug>/icml_poster.pdf
+#      poster: /assets/projects/<slug>/<venue><year>-poster-<slug>.pdf
 
 # 3. npm run upload (same flow as any other binary)
 ```
