@@ -48,17 +48,17 @@ We train by minimizing **cross entropy losses** on positive and negative example
 
 ### Solve GRE Problems
 
-![](few_shot_gre.png){width=700}
+![](few_shot_gre.png)
 
 ### Identify Twitter Slang
 
-![](twitter_college.png){width=700}
+![](twitter_college.png)
 
 ### Define New Concepts
 
-![](college_willies.png){width=700}
+![](college_willies.png)
 
-![](college_mushroom.png){width=700}
+![](college_mushroom.png)
 
 ## Conclusion & Future Work {data-toc=Conclusion}
 

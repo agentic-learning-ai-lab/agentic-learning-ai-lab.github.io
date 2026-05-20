@@ -61,11 +61,11 @@ How do we combine the pooled and dense objectives within a single architecture? 
 
 PooDLe outperforms all BDD-pretrained baselines by a significant margin on in-distribution BDD semantic segmentation and object detection and transfer to Cityscapes semantic segmentation. PooDLe also surpasses ImageNet (IN1K) supervised pretraining despite the latter's advantages in having a class-balanced dataset with iconic views of objects. In addition, we may pretrain PooDLe on BDD with weights initialized from the IN1K supervised checkpoint to further improve performance. In the video, the IN1K supervised baseline generates noisy segmentation boundaries and the FlowE baseline struggles with small objects such as traffic lights while PooDLe gives cleaner boundaries and picks up more small objects.
 
-![ADE20K semantic segmentation results using either linear readout or UperNet finetuning.](wt-results-table.png){width=700}
+![ADE20K semantic segmentation results using either linear readout or UperNet finetuning.](wt-results-table.png)
 
 We also experiment with pretraining on the recent [WalkingTours](https://huggingface.co/datasets/shawshankvkt/Walking_Tours) (WT) dataset, a first-person video dataset. PooDLe outperforms all WT-pretrained baselines and is competitive with IN1K-pretrained DINO when pretrained on WT<sub>all</sub>.
 
-![BDD100K semantic segmentation linear readout results with classes grouped by average pixel size (small vs. large) or occurrence frequency (rare vs. common).](grouping-results-table.png){width=700}
+![BDD100K semantic segmentation linear readout results with classes grouped by average pixel size (small vs. large) or occurrence frequency (rare vs. common).](grouping-results-table.png)
 
 PooDLe improves over FlowE, a dense SSL method, on small classes while maintaining strong performance on large classes, suggesting that PooDLe is able to learn better representations across object scales. Conversely, PooDLe improves over IN1K supervised pretraining on large and common classes. When initialized from IN1K supervised weights, PooDLe is able to retain the strong performance on small and rare classes that likely stems from the class balanced distribution of IN1K.
 

@@ -125,7 +125,7 @@ bibtex: |
 
 For each day, we collect news articles from the daily-updated Common Crawl News Dataset and scrape news using the Newspaper3k package. We use LLMs to generate QA pairs with the few-shot prompting technique.
 
-![](qa-gen-plot-v2.png){width=700}
+![](qa-gen-plot-v2.png)
 
 ## Evaluation {data-toc=Evaluation}
 

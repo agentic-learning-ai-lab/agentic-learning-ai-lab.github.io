@@ -51,7 +51,7 @@ We evaluate ARQ on two challenging benchmarks designed to test RL algorithms in 
 
 We ablate on the effect of conditioning on our method. Our results show that without input-level action conditioning, the network struggles to differentiate between action-specific Q-values, leading to significantly degraded performance. This demonstrates that early fusion of action information is essential for learning meaningful state-action representations in a local learning framework. Interestingly, the benefits of action conditioning is only mild for AD, while being rather significant for ARQ.
 
-![Action conditioning ablation.](cond.png){width=700}
+![Action conditioning ablation.](cond.png)
 
 ### Representation Analysis: Effect of Action Conditioning
 

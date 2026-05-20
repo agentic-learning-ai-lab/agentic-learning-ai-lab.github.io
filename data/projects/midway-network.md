@@ -43,7 +43,7 @@ In standard transformer blocks, the input token is always propagated forward in 
 
 ## Evaluations: semantic segmentation and optical flow {data-toc=Evaluations}
 
-![Semantic segmentation (frozen readout) and optical flow (finetuning) evaluations after BDD100K pretraining.](results.png){width=700}
+![Semantic segmentation (frozen readout) and optical flow (finetuning) evaluations after BDD100K pretraining.](results.png)
 
 Midway Network is the only model to achieve strong performance on both semantic segmentation and optical flow tasks overall. Midway Network (enc. only)'s weak performance on optical flow indicates that the pretrained midway inverse and forward dynamics model weights capture useful information for motion estimation. We also demonstrate that downstream performance scales with larger model sizes from ViT-S to ViT-B. Please see Section 4.2 of the [paper](https://arxiv.org/abs/2510.05558) for more results from WT-Venice pretraining.
 
@@ -54,15 +54,15 @@ Midway Network is the only model to achieve strong performance on both semantic 
   <figcaption class="tw-text-base tw-text-gray-600 tw-mt-4 tw-italic tw-max-w-2xl tw-mx-auto">Midway Network ViT-B UperNet readout on BDD100K semantic segmentation.</figcaption>
 </figure>
 
-![Midway Network ViT-S on FlyingThings and MPI-Sintel optical flow tasks after finetuning.](flow.png){width=700}
+![Midway Network ViT-S on FlyingThings and MPI-Sintel optical flow tasks after finetuning.](flow.png)
 
 ## Analysis: forwarded feature perturbation {data-toc=Analysis}
 
-![Heatmap shows similarity of forwarded propagation to original propagation. Features are perturbed at green squares in Source (shown in Target at same position for reference). Bottom right (red border) shows that Midway Network without gating units exhibits identity bias.](heatmap-perturbation.png){width=700}
+![Heatmap shows similarity of forwarded propagation to original propagation. Features are perturbed at green squares in Source (shown in Target at same position for reference). Bottom right (red border) shows that Midway Network without gating units exhibits identity bias.](heatmap-perturbation.png)
 
 We introduce a novel analysis method based on forwarded feature perturbation to analyze the learned the motion latents. Using a trained Midway Network, we compute the source and target features and motion latents as usual. We then randomly perturb a token in the source features and perform forward prediction with the precomputed motion latents to propagate the perturbation to the target features. The cosine similarity between the perturbed and perturbation-propagated target features represents the sensitivity of each token in the target frame to the perturbation. In the examples above, we observe that the highest similarity regions in the target frame correctly match the initial pertubed position in the source frame. We also see that Midway Network without gating units learns the incorrect identity mapping even though the car has moved from the initial green square position.
 
-![Token-level tracking by using forwarded feature propagation and/or feature similarity. Midway Network can track high-level regions such as the cyclist's foot (top row, pink square).](multi-perturbation.png){width=700}
+![Token-level tracking by using forwarded feature propagation and/or feature similarity. Midway Network can track high-level regions such as the cyclist's foot (top row, pink square).](multi-perturbation.png)
 
 We can also use forwarded feature perturbation to perform high-level tracking. Specifically, we iteratively propagate a selected token from a source frame to target frame and update the selected token to be the highest similarity token in the target frame. To reduce noise, we take the top-5 most similar tokens and select the token with highest feature similarity. Midway Network can roughly track high-level regions over time, whereas tracking with DINO-IN1K feature similarity quickly diverges.
 
