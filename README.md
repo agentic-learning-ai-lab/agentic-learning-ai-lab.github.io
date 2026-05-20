@@ -24,10 +24,15 @@ npm run setup:python   # one-time: creates .venv/ with arxiv_latex_cleaner
 npm run pull:r2        # hydrate binary assets from R2 (no creds needed)
 ```
 
-## For agents and future contributors
+## For contributors
 
-Agent-oriented guidance — pipeline details, code review checklist, public-repo
-secrets policy, paper-onboarding flow — lives in [`CLAUDE.md`](./CLAUDE.md).
+If you're a student or collaborator adding a paper, project page, or person,
+start with [`CONTRIBUTING.md`](./CONTRIBUTING.md) — it walks through the
+end-to-end workflow with copy-pasteable examples for figures, carousels,
+videos, and the `npm run upload` step that publishes binary assets.
+
+For agent-oriented detail (pipeline internals, code review checklist,
+public-repo secrets policy, paper-onboarding flow), see [`CLAUDE.md`](./CLAUDE.md).
 Internal planning docs live under `notes/`.
 
 ## Development
