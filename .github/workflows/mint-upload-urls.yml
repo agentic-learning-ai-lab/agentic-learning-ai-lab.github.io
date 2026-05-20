@@ -14,6 +14,14 @@ on:
         description: 'JSON array of {logical, sha, filename}'
         required: true
         type: string
+      correlation_id:
+        description: 'UUID from the local CLI for disambiguating concurrent dispatches'
+        required: true
+        type: string
+
+# Embed the correlation id in the run's display title so the local
+# CLI can find its own run via `gh run list --json displayTitle`.
+run-name: "Mint R2 upload URLs [${{ inputs.correlation_id }}]"
 
 permissions:
   contents: read

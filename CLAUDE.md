@@ -437,12 +437,13 @@ Husky (devDependency) sets `.husky/` as the git hooks dir on first
 which runs every check in `scripts/checks/*.js` in a single Node
 process (~100 ms per check, fast feedback before commit lands).
 
-Active checks:
+Active pre-commit checks (run as a single Node process from
+`.husky/pre-commit` → `scripts/precommit.js` → loads
+`scripts/checks/*.js`):
 
 | # | Check | What it blocks | Bypass |
 |---|---|---|---|
 | 01 | asset-manifest | New / changed binary asset files not yet on R2 (not in `assets-manifest.json`). Tells you to run `npm run upload`. | `--no-verify` |
-| 02 | no-skip-ci | Commit message body containing `[skip ci]` / `[ci skip]` / `[no ci]` / similar. Even in prose — squash-merge concatenation propagates these and silently kills production deploy. (Hit this on PR #11.) | `--no-verify` |
 | 03 | yaml-valid | `data/*.yaml` files that don't parse cleanly. | `--no-verify` |
 | 04 | permalink-unique | Duplicate `permalink:` within papers.yaml / people.yaml / research_areas.yaml. | `--no-verify` |
 | 05 | no-secrets | Staged diff lines matching credential patterns (R2 keys, GH PATs, OpenAI/Anthropic keys, AWS access keys). Repo is public — must rotate any leaked token immediately. | `--no-verify` |
@@ -450,9 +451,30 @@ Active checks:
 | 07 | bibtex-lint | papers.yaml `journal:` field's venue acronym not present in MD bibtex (`build/lint_bibtex.js`). | `--no-verify` |
 | 08 | required-fields | papers.yaml / people.yaml / research_areas.yaml entries missing required fields. | `--no-verify` |
 
-Adding a new check: drop a file in `scripts/checks/<NN>_<name>.js`
-that exports `{ name, run }`. `run()` returns truthy on pass, falsy
-on fail. Print errors to `stderr`.
+Adding a new pre-commit check: drop a file in
+`scripts/checks/<NN>_<name>.js` that exports `{ name, run }`.
+`run()` returns truthy on pass, falsy on fail. Print errors to
+`stderr`. The orchestrator auto-loads everything in `scripts/checks/`.
+
+## commit-msg hook
+
+Separate from pre-commit because git's pre-commit hook fires
+BEFORE the commit message is resolved — for `git commit -m "..."`
+the message text isn't available at pre-commit time. The
+commit-msg hook runs AFTER, with the message file path as `$1`.
+
+`.husky/commit-msg` → `scripts/check_commit_msg.js`:
+
+- Blocks commit messages containing `[skip ci]` / `[ci skip]` /
+  `[no ci]` / `[skip actions]` / `[actions skip]` / `***NO_CI***`.
+  These get parsed by GitHub Actions + CF Pages + most CI
+  providers as "suppress workflow runs for this commit". Even in
+  prose — squash-merge concatenates constituent commit bodies and
+  propagates them. We hit this on PR #11; the production deploy
+  silently didn't fire.
+- Bypass: `git commit --no-verify`.
+- To document the literal token without tripping the check, write
+  `skip-CI` (hyphen) or `[skip-ci]` (hyphen).
 
 ## CI checks
 

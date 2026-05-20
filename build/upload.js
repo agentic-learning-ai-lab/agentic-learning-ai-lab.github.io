@@ -152,20 +152,22 @@ function ghDispatch(workflow, fields) {
     }
 }
 
-function pollLatestRunId(workflow) {
-    // gh workflow run doesn't print the run ID. Poll `gh run list` for
-    // the most recent run on this workflow, started in the last 30 sec.
-    const cutoff = Date.now() - 30_000;
-    for (let attempt = 0; attempt < 15; attempt++) {
-        const out = execSync(`gh run list --workflow=${workflow} --limit=1 --json databaseId,createdAt,status`, { encoding: 'utf8' });
+function pollRunByCorrelation(workflow, correlationId) {
+    // gh workflow run doesn't print the run ID. Each workflow uses a
+    // dynamic `run-name` that embeds the correlation_id we passed in,
+    // so we can disambiguate our run from any other contributor's
+    // concurrent dispatch by filtering on displayTitle.
+    for (let attempt = 0; attempt < 30; attempt++) {
+        const out = execSync(
+            `gh run list --workflow=${workflow} --limit=10 --json databaseId,displayTitle,status`,
+            { encoding: 'utf8' }
+        );
         const runs = JSON.parse(out);
-        if (runs.length > 0) {
-            const t = new Date(runs[0].createdAt).getTime();
-            if (t >= cutoff - 5000) return runs[0].databaseId;
-        }
+        const hit = runs.find(r => r.displayTitle && r.displayTitle.includes(correlationId));
+        if (hit) return hit.databaseId;
         execSync('sleep 2');
     }
-    throw new Error(`Could not find recently-started run for ${workflow}`);
+    throw new Error(`Could not find run for ${workflow} with correlation=${correlationId}`);
 }
 
 function waitForRun(runId, label) {
@@ -198,22 +200,37 @@ function isBranchPushed(branch) {
     }
 }
 
-function curlPut(url, filepath) {
-    const r = spawnSync('curl', [
+function curlPut(url, filepath, contentType) {
+    // The pre-signed URL signs `Content-Type` into the canonical
+    // request. curl MUST send a matching header or R2 returns 403.
+    const args = [
         '-sS', '-X', 'PUT',
         '--upload-file', filepath,
+        '-H', `Content-Type: ${contentType || 'application/octet-stream'}`,
         url,
         '-w', '%{http_code}',
         '-o', '/dev/null',
-    ], { encoding: 'utf8' });
+    ];
+    const r = spawnSync('curl', args, { encoding: 'utf8' });
     if (r.status !== 0) throw new Error(`curl PUT failed: ${r.stderr}`);
     if (!r.stdout.startsWith('2')) throw new Error(`PUT got HTTP ${r.stdout}`);
+}
+
+function checkGhAuth() {
+    const r = spawnSync('gh', ['auth', 'status'], { stdio: 'ignore' });
+    if (r.status !== 0) {
+        console.error('✗ `gh` is not authenticated. Run `gh auth login` first.');
+        console.error('  (npm run upload uses `gh` to dispatch GH Actions for the R2 upload.)');
+        process.exit(1);
+    }
 }
 
 async function main() {
     const args = process.argv.slice(2);
     const dryRun = args.includes('--dry-run');
     const paths = args.filter(a => !a.startsWith('--'));
+
+    if (!dryRun) checkGhAuth();
 
     const specs = findUnregistered(paths);
     if (specs.length === 0) {
@@ -238,11 +255,15 @@ async function main() {
     }
 
     const specJson = JSON.stringify(specs);
+    // Unique per-invocation tag, embedded in the workflows' run-name
+    // so concurrent contributors can disambiguate their runs from each
+    // other (otherwise pollRunByCorrelation would race).
+    const correlationId = crypto.randomUUID();
 
     // 1. Mint URLs
-    console.log('1/3 Minting presigned upload URLs ...');
-    ghDispatch('mint-upload-urls.yml', { spec: specJson });
-    const mintRunId = pollLatestRunId('mint-upload-urls.yml');
+    console.log(`1/3 Minting presigned upload URLs (corr=${correlationId.slice(0,8)})...`);
+    ghDispatch('mint-upload-urls.yml', { spec: specJson, correlation_id: correlationId });
+    const mintRunId = pollRunByCorrelation('mint-upload-urls.yml', correlationId);
     waitForRun(mintRunId, 'mint-upload-urls');
 
     const tmpDir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'upload-'));
@@ -251,17 +272,17 @@ async function main() {
 
     // 2. Upload via curl
     console.log(`2/3 Uploading ${urls.length} file(s) to R2 ...`);
-    for (const { logical, url } of urls) {
+    for (const { logical, url, contentType } of urls) {
         const filepath = path.join(ROOT, logical.replace(/^\//, ''));
         process.stderr.write(`  ${logical} ...`);
-        curlPut(url, filepath);
+        curlPut(url, filepath, contentType);
         process.stderr.write(' ✓\n');
     }
 
     // 3. Register on the contributor's branch
     console.log('3/3 Triggering manifest register on origin/' + branch + ' ...');
-    ghDispatch('register-assets.yml', { spec: specJson, branch });
-    const regRunId = pollLatestRunId('register-assets.yml');
+    ghDispatch('register-assets.yml', { spec: specJson, branch, correlation_id: correlationId });
+    const regRunId = pollRunByCorrelation('register-assets.yml', correlationId);
     waitForRun(regRunId, 'register-assets');
 
     console.log('');

@@ -80,7 +80,10 @@ async function main() {
         const batch = list.slice(i, i + CONC);
         const results = await Promise.all(batch.map(async u => ({ u, code: await head(u) })));
         for (const { u, code } of results) {
-            if (code !== 200) failures.push({ u, code });
+            // Accept any 2xx or 3xx. R2 via CF doesn't redirect today
+            // but a future CDN host change shouldn't false-positive
+            // this lint.
+            if (code < 200 || code >= 400) failures.push({ u, code });
         }
         done += batch.length;
         if (done % 50 === 0 || done === list.length) {

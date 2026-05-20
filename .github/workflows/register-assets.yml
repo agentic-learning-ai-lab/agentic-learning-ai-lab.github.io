@@ -20,6 +20,12 @@ on:
         description: 'Branch to commit the manifest update to'
         required: true
         type: string
+      correlation_id:
+        description: 'UUID from the local CLI for disambiguating concurrent dispatches'
+        required: true
+        type: string
+
+run-name: "Register R2 assets on ${{ inputs.branch }} [${{ inputs.correlation_id }}]"
 
 permissions:
   contents: write
@@ -68,4 +74,18 @@ jobs:
           # tokens — we WANT downstream CF Pages preview/prod to rebuild
           # with the fresh manifest.
           git commit -m "Register R2 assets (auto)"
-          git push origin HEAD:${{ inputs.branch }}
+          # Race-safe push: if another contributor's run has already
+          # advanced the branch tip, rebase onto the new tip and retry.
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:${{ inputs.branch }}; then
+              exit 0
+            fi
+            echo "push rejected (attempt $attempt) — rebasing onto origin/${{ inputs.branch }}"
+            git fetch origin "${{ inputs.branch }}"
+            git rebase "origin/${{ inputs.branch }}" || {
+              echo "rebase conflict on assets-manifest.json — giving up; manual merge needed"
+              exit 1
+            }
+          done
+          echo "push failed after 5 attempts"
+          exit 1

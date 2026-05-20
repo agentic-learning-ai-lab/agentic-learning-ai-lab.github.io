@@ -70,13 +70,19 @@ async function main() {
             process.exit(1);
         }
         const r2Key = `${sha.slice(0, 16)}/${filename}`;
+        const ct = contentType(filename);
         const cmd = new PutObjectCommand({
             Bucket: BUCKET,
             Key: r2Key,
-            ContentType: contentType(filename),
+            ContentType: ct,
         });
         const url = await getSignedUrl(s3, cmd, { expiresIn: 600 });
-        out.push({ logical, url, r2Key });
+        // The pre-signed URL's SigV4 canonical request includes
+        // `Content-Type` when set on PutObjectCommand. The client MUST
+        // echo a matching `Content-Type` header on the PUT or R2
+        // returns 403 SignatureDoesNotMatch. We emit `contentType` so
+        // upload.js can pass `-H "Content-Type: ..."` on curl.
+        out.push({ logical, url, r2Key, contentType: ct });
     }
     process.stdout.write(JSON.stringify(out, null, 2));
 }
