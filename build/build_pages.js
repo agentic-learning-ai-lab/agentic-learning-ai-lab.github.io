@@ -8,6 +8,12 @@ const pages = [
     { template: 'paper.hbs', output: 'research/{{permalink}}/index.html' },
     { template: 'person.hbs', output: 'people/{{permalink}}/index.html' },
     { template: 'research_area.hbs', output: 'areas/{{permalink}}/index.html' },
+    // Marketing landing pages for papers with project_page.enabled: true.
+    // Emit directly to out/<slug>/ so they don't clutter the repo root.
+    // assemble_output.js copies the rest of the site into out/ alongside.
+    // The deployed URL is still agenticlearning.ai/<slug>/ — preserves the
+    // old per-project-repo URLs which were already in arXiv abstracts.
+    { template: 'project.hbs', output: 'out/{{permalink}}/index.html' },
 ];
 
 let failed = 0;

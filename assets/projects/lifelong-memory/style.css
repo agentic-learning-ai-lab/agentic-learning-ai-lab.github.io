@@ -1,0 +1,39 @@
+/* Per-project styles for lifelong-memory.
+
+   The Visualization section renders 8 video clips with LLM-query
+   captions in a small vanilla carousel. The carousel CHROME
+   (.project-carousel*, viewport, track, prev/next buttons,
+   pagination dots) lives in css/index.css — only the slide-content
+   styles (the actual <video> + caption inside each .item) are here.
+
+   The MD body wraps the 8 slides in `<div class="project-carousel
+   lm-carousel"><div class="item">…</div>…</div>`; the .lm-carousel
+   class scopes the rules below to this project only. */
+
+.lm-carousel video {
+    display: block;
+    max-width: 100%;
+    width: 600px;
+    height: auto;
+    margin: 0 auto;
+    /* min-width: 0 prevents the video's intrinsic dimensions (or
+       the width="600" attribute on the element) from forcing the
+       enclosing slide wider than the carousel on narrow viewports. */
+    min-width: 0;
+    border-radius: 0.25rem;
+    /* Notable: deliberately no `aspect-ratio` here. iOS Safari has
+       a compositing bug where <video> with a CSS-aspect-ratio
+       layout box, inside a transform: translateX ancestor (which
+       the carousel track uses), composites onto a separate GPU
+       layer that never receives the video texture — frame stays
+       black even though native controls work. Letting the video
+       size itself from intrinsic dimensions avoids the trigger. */
+}
+.lm-carousel p {
+    margin: 0.75rem auto 0;
+    max-width: 600px;
+    font-size: 0.95em;
+    color: #4b5563;
+    line-height: 1.5;
+    text-align: left;
+}

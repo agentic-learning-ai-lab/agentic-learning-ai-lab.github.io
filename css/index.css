@@ -748,3 +748,356 @@ section {
         max-width: 50px;
     }
 }
+/* Project page action buttons (project.hbs) — outlined rounded pills.
+   Lower-contrast than filled dark; reads as "supporting links" rather
+   than "primary CTAs". Soft fill on hover keeps them tactile. */
+.project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.1rem;
+    background: transparent;
+    color: #2c2c2c;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+.project-link:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+    color: #2c2c2c;
+}
+.project-link i {
+    font-size: 1rem;
+}
+
+/* Title-as-link: the H1 inside <a href="/research/<slug>/"> points
+   to the HTML render of the paper. Visually identical to a normal
+   H1 by default (no color shift, no underline); reveal underline on
+   hover so the affordance is discoverable without competing with
+   the action-button row below. */
+.project-title-link {
+    color: inherit;
+    text-decoration: none;
+}
+.project-title-link:hover {
+    text-decoration: none;
+}
+
+/* Table-of-contents pill bar, rendered between the Abstract block
+   and the body sections. Auto-populated from H2 headings in the MD
+   body (see project_page_loader.js). Outlined pills + a "Contents:"
+   label so the purpose of the row is unambiguous to a first-time
+   visitor — matches the visual language of the action buttons above
+   but at a slightly smaller scale (these are navigation, not CTAs). */
+.project-toc {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1.4;
+}
+.project-toc-label {
+    color: #6b7280;
+    font-size: 1rem;
+    margin-right: 0.25rem;
+}
+.project-toc a {
+    color: #2c2c2c;
+    text-decoration: none;
+    padding: 0.35rem 0.95rem;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    font-size: 1rem;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+.project-toc a:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+/* Subtle short-line divider between consecutive narrative sections.
+   Matches the .project-prose + .project-section case so BibTeX (which
+   sits as a sibling of the project-prose wrapper rather than inside it)
+   also gets a divider above. The 2rem padding-top + 2rem margin-bottom
+   on ::before keeps the gap symmetric around the line — the loader
+   intentionally emits sections without a tw-mb-* utility so this rule
+   is the single source of inter-section spacing. */
+.project-section + .project-section,
+.project-prose + .project-section {
+    padding-top: 3rem;
+}
+.project-section + .project-section::before,
+.project-prose + .project-section::before,
+.project-tldr::before {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 1px;
+    background: #9ca3af;
+    margin: 0 auto 3rem;
+}
+
+/* Project page body links — match the academic-template look */
+.project-section-body a {
+    color: #1a5490;
+    text-decoration: underline;
+}
+.project-section-body a:hover {
+    color: #0d3a6b;
+}
+.project-section-body p {
+    margin: 0;
+}
+
+/* Project pages use Libertinus — matches the lab's LaTeX papers.
+   Sans for chrome (title, authors, section headings, buttons), Serif
+   for body prose. Header/footer stay in Space Mono via the site-wide
+   body class, preserving the lab's identity in the frame. */
+.project-page-main {
+    font-family: 'Libertinus Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+.project-prose {
+    font-family: 'Libertinus Serif', "Iowan Old Style", Georgia, serif;
+    /* Libertinus has a lower x-height than the reader's Iowan, so it
+       reads visually smaller at identical em sizes. Bumped past the
+       1.0625rem html-root size to compensate. Line-height pulled
+       down proportionally so the absolute line gap (size × leading)
+       matches the reader exactly: 1.0625 × 1.75 = 1.1875 × 1.566. */
+    font-size: 1.1875rem;
+    line-height: 1.566;
+}
+
+/* Trim the last project-page section's bottom margin — the per-section
+   mb-40 (160px) is for between-section gaps; doubling it above the
+   footer creates excess whitespace. */
+.project-page-main > section:last-of-type {
+    margin-bottom: 4rem;
+}
+
+/* BibTeX code block — use a clean system monospace, not Space Mono
+   inherited from the body. Space Mono's character-by-character emphasis
+   is great for nav/UI but stylized for citation entries. */
+.project-bibtex,
+.project-bibtex code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* === Project-carousel widget — shared chrome ============================
+   Vanilla carousel for any project page that opts in via
+   `carousel: true` in MD frontmatter (see project.hbs init JS at
+   the body end). Markup: <div class="project-carousel">…<div
+   class="item">…</div></div>; the init script wraps the items in a
+   .project-carousel-viewport > .project-carousel-track flex row and
+   injects prev/next buttons + pagination dots after the items.
+   Per-project slide-content styling (videos, captions) lives in
+   assets/projects/<slug>/style.css under that project's own class
+   (e.g. .lm-carousel). ====================================== */
+.project-carousel {
+    position: relative;
+    /* Wider than a typical 600px video so the chevron buttons get
+       breathing room outside the content without forcing it to
+       shrink. */
+    margin: 1.5rem auto;
+    padding: 0 6rem 3rem;
+    /* Defensive horizontal clip + cap at parent's width so the
+       carousel never pushes its section wider on narrow viewports. */
+    overflow-x: clip;
+    max-width: min(840px, 100%);
+}
+/* Viewport: clip box for the sliding track. Lives inside the
+   carousel's content area (after the padding), so the buttons sit
+   *outside* the viewport in the padding gutters — and adjacent
+   slides are clipped at the viewport edge instead of peeking into
+   the padding area. */
+.project-carousel-viewport {
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+/* Track wrapper injected by the init JS — holds all .item slides in
+   a flex row and slides them horizontally via translateX. */
+.project-carousel-track {
+    display: flex;
+    /* Pin to viewport width — items overflow inside via flex-basis
+       100%, but the track box itself must equal the viewport so
+       translateX percentages resolve correctly. */
+    width: 100%;
+    transition: transform 0.3s ease;
+    will-change: transform;
+}
+.project-carousel-track > .item {
+    flex: 0 0 100%;
+    min-width: 0;
+    /* Explicit width so each slide is exactly one viewport of the
+       track regardless of flex-basis intrinsic-sizing quirks. */
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+}
+/* Pre-init fallback: while the JS is still wrapping items in the
+   track, hide all but the first so the carousel doesn't briefly
+   render as a vertical stack. */
+.project-carousel > .item:not(:first-child) {
+    display: none;
+}
+.project-carousel-prev,
+.project-carousel-next {
+    position: absolute;
+    /* Static optical-center compensation: the slide's below-video
+       content (~0.75rem margin + ~3rem caption + 3rem pagination
+       padding ≈ 6.75rem, half ≈ 3.4rem) pulls the container's
+       geometric midpoint south of the video's true midpoint.
+       Approximate compromise — drifts ~10px for slides with a
+       2-line caption when others are 1 line. Per-slide JS
+       positioning was tried earlier and removed for simplicity. */
+    top: calc(50% - 3.4rem);
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    background: #fff;
+    color: #2c2c2c;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+.project-carousel-prev:hover,
+.project-carousel-next:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+    color: #3b82f6;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.project-carousel-prev svg,
+.project-carousel-next svg {
+    display: block;
+}
+/* Chevron glyph: optical-center down 1px (BS-Icons-style chevron
+   reads slightly high to the eye) + nudge each toward its outer
+   edge as a subtle directional cue. */
+.project-carousel-prev svg { transform: translate(-1px, 1px); }
+.project-carousel-next svg { transform: translate( 1px, 1px); }
+.project-carousel-prev { left: 0.5rem; }
+.project-carousel-next { right: 0.5rem; }
+.project-carousel-pagination {
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+.project-carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d1d5db;
+    border: none;
+    margin: 0 4px;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.15s;
+}
+.project-carousel-dot.is-active { background: #3b82f6; }
+.project-carousel-dot:hover { background: #9ca3af; }
+
+/* Narrow viewports: hide the chevron buttons (touch swipe replaces
+   them) and drop the side padding so content has the full width.
+   Pagination dots still show as a progress indicator. */
+@media (max-width: 768px) {
+    .project-carousel {
+        padding: 0 0 3rem;
+    }
+    .project-carousel-prev,
+    .project-carousel-next {
+        display: none;
+    }
+}
+
+/* H2 headings inside markdown-rendered project sections.
+   The MD loader emits plain <h2> tags (markdown-it doesn't know
+   our Tailwind classes); match the styling that the Abstract/BibTeX
+   H2s use in project.hbs. */
+.project-section > h2 {
+    font-family: 'Libertinus Sans', system-ui, sans-serif;
+    font-size: 1.875rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.5rem;
+}
+@media (max-width: 768px) {
+    .project-section > h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Sub-section H3 headings inside a markdown-rendered .project-section.
+   markdown-it emits plain <h3> tags for `### Title` — match the
+   Libertinus Sans heading family so they don't inherit serif body
+   font from the .project-prose wrapper. */
+.project-section h3 {
+    font-family: 'Libertinus Sans', system-ui, sans-serif;
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+/* "Takeaway" callout boxes. Authors write a blockquote in MD
+   (`> ...`) and the CSS dresses it as a gray-bg card with a blue
+   left accent — matches the academic-page-template look used by
+   the legacy per-project repos. */
+.project-prose blockquote {
+    background: #f5f5f5;
+    /* Lab blue (--lab-link-color in lab-theme.css, also used by
+       arxiv-paper.css blockquotes). The Bulma default #3273dc from
+       the legacy academic template was a slightly different blue. */
+    border-left: 4px solid #3b82f6;
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    margin: 1.5rem 0;
+    color: #2c2c2c;
+}
+/* Defensive font inheritance: ensure blockquote text reads at the same
+   size/family/leading as the surrounding body. The `<p>` rule above
+   already forces font-family: inherit, but lists and bare blockquote
+   text need the same treatment so the callout doesn't visually
+   "outweigh" the surrounding prose. */
+.project-prose blockquote,
+.project-prose blockquote p,
+.project-prose blockquote li,
+.project-prose blockquote ul {
+    font-family: inherit;
+    font-size: 1em;
+    line-height: 1.75;
+}
+.project-prose blockquote p:last-child,
+.project-prose blockquote ul:last-child {
+    margin-bottom: 0;
+}
+
+/* Paragraph spacing + font inheritance inside project-prose.
+   Tailwind's preflight applies `p { font-family: Space Mono,...; }`
+   at element specificity, which wins over inherited font-family
+   from the .project-prose wrapper. markdown-it emits <p> tags with
+   no class — so without this rule, body paragraphs silently render
+   in Space Mono while the abstract (whose <p> wears .project-prose
+   directly) stays in Libertinus Serif. font-family: inherit forces
+   them to match. */
+.project-prose p {
+    font-family: inherit;
+    margin: 0 0 1rem;
+}
+.project-prose p:last-child {
+    margin-bottom: 0;
+}

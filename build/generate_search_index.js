@@ -13,6 +13,25 @@ try {
     process.exit(1);
 }
 
+// Load the asset manifest so we can emit CDN URLs for the thumbnails
+// instead of same-origin /assets/images/thumbnails/... paths. The slim
+// out/ bundle on Cloudflare Pages doesn't ship the thumbnails subtree;
+// they're served from R2 alongside every other binary asset.
+const MANIFEST_PATH = path.resolve(__dirname, '../assets-manifest.json');
+let manifest = {};
+if (fs.existsSync(MANIFEST_PATH)) {
+    try {
+        manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
+    } catch (err) {
+        console.warn('search-index: failed to parse assets-manifest.json:', err.message);
+    }
+}
+
+function cdnUrlFor(logical) {
+    if (!logical) return '';
+    return manifest[logical] || logical;
+}
+
 // Build search index
 const searchIndex = [];
 
@@ -39,7 +58,7 @@ papers.forEach(paper => {
         if (imageName.endsWith('.webp')) {
             imageName = imageName.replace('.webp', '.png');
         }
-        thumbnail = `/assets/images/thumbnails/${imageName}`;
+        thumbnail = cdnUrlFor(`/assets/images/thumbnails/${imageName}`);
     }
 
     searchIndex.push({
@@ -69,7 +88,7 @@ people.forEach(person => {
         if (imageName.endsWith('.webp')) {
             imageName = imageName.replace('.webp', '.png');
         }
-        thumbnail = `/assets/images/thumbnails/${imageName}`;
+        thumbnail = cdnUrlFor(`/assets/images/thumbnails/${imageName}`);
     }
 
     searchIndex.push({
@@ -98,7 +117,7 @@ researchAreas.forEach(area => {
         if (imageName.endsWith('.webp')) {
             imageName = imageName.replace('.webp', '.png');
         }
-        thumbnail = `/assets/images/thumbnails/${imageName}`;
+        thumbnail = cdnUrlFor(`/assets/images/thumbnails/${imageName}`);
     }
 
     searchIndex.push({

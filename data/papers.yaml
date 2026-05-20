@@ -14,6 +14,7 @@
   pdf: 'https://arxiv.org/pdf/2603.12231'
   webpage: 'https://agenticlearning.ai/temporal-straightening/'
   permalink: temporal-straightening
+  project_page: true
   enable_full_paper: true
   research_areas:
     - learning-from-visual-experience
@@ -56,6 +57,7 @@
   webpage: 'https://agenticlearning.ai/llm-verification/'
   permalink: llm-verification
   enable_full_paper: true
+  project_page: true
   research_areas:
     - adaptive-agents-and-foundation-models
   date: 2025-12-2T00:00:00.000Z
@@ -73,6 +75,7 @@
   pdf: 'https://arxiv.org/pdf/2510.08466'
   webpage: 'https://agenticlearning.ai/icc/'
   permalink: icc
+  project_page: true
   enable_full_paper: true
   research_areas:
     - concept-learning-and-abstraction
@@ -90,6 +93,7 @@
   pdf: 'https://arxiv.org/pdf/2510.06649'
   webpage: 'https://agenticlearning.ai/arq/'
   permalink: arq
+  project_page: true
   enable_full_paper: true
   research_areas:
     - adaptive-agents-and-foundation-models
@@ -107,6 +111,7 @@
   pdf: 'https://arxiv.org/pdf/2510.05558'
   webpage: 'https://agenticlearning.ai/midway-network/'
   permalink: midway-network
+  project_page: true
   research_areas:
     - learning-from-visual-experience
   date: 2025-10-07T00:00:00.000Z
@@ -149,6 +154,7 @@
   pdf: 'https://arxiv.org/pdf/2507.04221'
   webpage: 'https://agenticlearning.ai/context-tuning/'
   permalink: context-tuning
+  project_page: true
   research_areas:
     - adaptive-agents-and-foundation-models
     - concept-learning-and-abstraction
@@ -208,6 +214,7 @@
   pdf: 'https://arxiv.org/pdf/2501.12254'
   webpage: 'https://agenticlearning.ai/memory-storyboard/'
   permalink: memory-storyboard
+  project_page: true
   research_areas:
     - learning-from-visual-experience
   date: 2025-01-21T00:00:00.000Z
@@ -225,7 +232,8 @@
   arxiv: 'https://arxiv.org/abs/2411.08324'
   pdf: 'https://arxiv.org/pdf/2411.08324'
   webpage: 'https://agenticlearning.ai/daily-oracle/'
-  permalink: are-llms-prescient
+  permalink: daily-oracle
+  project_page: true
   research_areas:
     - adaptive-agents-and-foundation-models
   date: 2024-11-13T00:00:00.000Z
@@ -246,6 +254,7 @@
   pdf: 'https://arxiv.org/pdf/2408.11208'
   webpage: 'https://agenticlearning.ai/poodle/'
   permalink: poodle
+  project_page: true
   research_areas:
     - learning-from-visual-experience
   date: 2024-08-20T00:00:00.000Z
@@ -262,8 +271,9 @@
   abstract: 'In this paper, we propose ProCreate, a simple and easy-to-implement method to improve sample diversity and creativity of diffusion-based image generative models and to prevent training data reproduction. ProCreate operates on a set of reference images and actively propels the generated image embedding away from the reference embeddings during the generation process. We propose FSCG-8 (Few-Shot Creative Generation 8), a few-shot creative generation dataset on eight different categories -- encompassing different concepts, styles, and settings -- in which ProCreate achieves the highest sample diversity and fidelity. Furthermore, we show that ProCreate is effective at preventing replicating training data in a large-scale evaluation using training text prompts.'
   arxiv: 'https://arxiv.org/abs/2408.02226'
   pdf: 'https://arxiv.org/pdf/2408.02226'
-  webpage: 'https://agenticlearning.ai/procreate-diffusion/'
+  webpage: 'https://agenticlearning.ai/procreate/'
   permalink: procreate
+  project_page: true
   research_areas:
     - concept-learning-and-abstraction
   date: 2024-08-05T00:00:00.000Z
@@ -301,6 +311,7 @@
   pdf: 'https://arxiv.org/pdf/2403.15362'
   webpage: 'https://agenticlearning.ai/college/'
   permalink: college
+  project_page: true
   research_areas:
     - adaptive-agents-and-foundation-models
     - concept-learning-and-abstraction
@@ -327,6 +338,7 @@
   journal: Advances in Neural Information Processing Systems 37 (NeurIPS 2024)
   is_recent: false
   enable_full_paper: true
+  project_page: true
 - title: Self-Supervised Learning of Video Representations from a Child's Perspective
   image: /assets/images/papers/ssl_childs_perspective.webp
   authors:
@@ -379,6 +391,7 @@
   pdf: 'https://arxiv.org/pdf/2312.05269'
   webpage: 'https://agenticlearning.ai/lifelong-memory/'
   permalink: lifelong-memory
+  project_page: true
   research_areas:
     - learning-from-visual-experience
     - adaptive-agents-and-foundation-models

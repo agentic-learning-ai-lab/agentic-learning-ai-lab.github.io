@@ -1,21 +1,17 @@
 #!/bin/bash
-set -e # exit with nonzero exit code if anything fails
+# Build wrapper used by ./deploy.sh staging. Delegates to `npm run build`,
+# which now includes build:assemble as its final step — so out/ contains
+# the deployable bundle after this exits.
+#
+# Kept as a separate script (rather than calling npm run build from
+# deploy.sh directly) for the .DS_Store cleanup, which is convenient on
+# macOS authors' working copies.
 
-# npm run build-in-place
+set -e
+
 npm run build
 
 find . -name ".DS_Store" -depth -exec rm {} \;
-# rm -rf out
-mkdir -p out
-cp index.html index.js search.js person.js paper-view.js out/
-cp site.webmanifest favicon.ico out/
-cp -R people out/
-cp -R research research.js out/
-cp -R contact out/
-cp -R assets out/
-cp -R css out/
-cp -R areas out/
-cp -R includes out/
 
 echo ""
 find out/ -print

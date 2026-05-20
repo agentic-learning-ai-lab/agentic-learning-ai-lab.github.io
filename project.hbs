@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta property="og:title" content="{{{title}}} | Agentic Learning AI Lab" />
+    <meta property="og:description" content="{{{short_abstract}}}" />
+    <meta property="og:url" content="https://agenticlearning.ai/{{{permalink}}}/" />
+    {{#if project_page.hero}}
+    <meta property="og:image" content="{{cdnUrl project_page.hero.src}}" />
+    {{else}}
+    <meta property="og:image" content="{{cdnUrl image}}" />
+    {{/if}}
+    {{> head}}
+    <!-- Libertinus (Sans + Serif) for project page body — matches the
+         lab's LaTeX papers' typography. Self-hosted via jsDelivr's
+         fontsource bundle. Header/footer remain in Space Mono via the
+         site-wide body font, preserving the lab's identity in chrome. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/libertinus-sans@5.2.2/400.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/libertinus-sans@5.2.2/700.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/libertinus-serif@5.2.1/400.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/libertinus-serif@5.2.1/400-italic.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/libertinus-serif@5.2.1/700.css" />
+    <!-- Academicons provides the proper arXiv glyph (`ai ai-arxiv`),
+         which reads more clearly than a generic "file" icon in a row
+         of action buttons. Same font as the legacy Bulma project
+         pages, so the new project pages stay visually consistent
+         with the old ones during the migration window. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" />
+    {{#if project_page.custom_css_href}}
+    <!-- Per-project CSS: assets/projects/<slug>/style.css. Auto-linked
+         when present so project-specific rules (e.g., color-coded
+         inline badges) don't bloat the site-wide stylesheet. -->
+    <link rel="stylesheet" href="{{project_page.custom_css_href}}" />
+    {{/if}}
+    {{#if project_page.mathjax}}
+    <!-- MathJax 3 needs no polyfill on modern browsers (ES6 native
+         since ~2017). The old polyfill.io reference from the Bulma
+         template was a security risk — that CDN was compromised in
+         a 2024 supply-chain attack.
+         Enable $-delimiters alongside the default \( \) / \[ \]
+         because markdown-it consumes `\(` as a backslash-escape for
+         `(` before MathJax ever sees it — authors writing math in
+         data/projects/<slug>.md should use $V$ for inline and $$ ... $$
+         for display. -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        options: {
+          skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    {{/if}}
+</head>
+<!-- Mono on body matches the rest of the site (header/footer/cards all
+     render in Space Mono). Long prose paragraphs override to serif on
+     the .project-prose class below — mono is great for the lab's
+     structural chrome but punishing to read in paragraph form. -->
+<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono tw-text-gray-800">
+    {{> header}}
+
+    <main class="project-page-main tw-w-full tw-mt-[120px]">
+        <!-- Separator at the top of main mirrors the one at the top of
+             the footer. Lives right at the header bottom; generous
+             margin below to push the title down. -->
+        <hr class="tw-mb-20" />
+
+        <!-- Title + author block + action buttons (centered). -->
+        <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-text-center tw-mb-12">
+            <h1 class="tw-text-4xl tw-font-bold tw-leading-tight tw-tracking-tight max-md:tw-text-2xl"><a class="project-title-link" href="/research/{{{permalink}}}/">{{{title}}}</a></h1>
+            <p class="tw-text-lg max-md:tw-text-base tw-mt-8">{{{formatAuthorsForProjectPage authors project_page.affiliations}}}</p>
+            <p class="tw-text-base tw-mt-2 tw-text-gray-600">{{{formatAffiliationsForProjectPage authors project_page.affiliations project_page.equal_label}}}</p>
+            <p class="tw-text-base tw-mt-2 tw-text-gray-500">{{journal}}</p>
+
+            <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-3 tw-mt-8">
+                {{#with project_page.links}}
+                    {{#if arxiv}}<a class="project-link" href="{{arxiv}}" target="_blank"><i class="ai ai-arxiv"></i> arXiv</a>{{/if}}
+                    {{#if pdf}}<a class="project-link" href="{{pdf}}" target="_blank"><i class="bi bi-file-pdf"></i> PDF</a>{{/if}}
+                    {{#if poster}}<a class="project-link" href="{{cdnUrl poster}}" target="_blank"><i class="bi bi-easel"></i> Poster</a>{{/if}}
+                    {{#if code}}<a class="project-link" href="{{code}}" target="_blank"><i class="bi bi-github"></i> Code</a>{{/if}}
+                    {{#if video}}<a class="project-link" href="{{video}}" target="_blank"><i class="bi bi-play-btn"></i> Video</a>{{/if}}
+                    {{#if huggingface}}<a class="project-link" href="{{huggingface}}" target="_blank">🤗 Dataset</a>{{/if}}
+                    {{#if slides}}<a class="project-link" href="{{slides}}" target="_blank"><i class="bi bi-file-slides"></i> Slides</a>{{/if}}
+                {{/with}}
+            </div>
+        </section>
+
+        <!-- Optional hero image. Only renders when project_page.hero is explicitly
+             set in papers.yaml — most academic project pages don't have a hero
+             between the title and the abstract. -->
+        {{#with project_page.hero}}
+        <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-12">
+            <figure class="tw-text-center">
+                {{{pictureCdn src alt=../title class="tw-w-full tw-rounded-lg tw-shadow-sm" eager=true}}}
+                {{#if caption}}<figcaption class="tw-text-sm tw-text-gray-600 tw-mt-3 tw-italic">{{{caption}}}</figcaption>{{/if}}
+            </figure>
+        </section>
+        {{/with}}
+
+        <!-- Abstract: full-width light-tint background row, content
+             constrained + centered within. Body text overrides body's
+             mono → serif for readability. -->
+        {{#if short_abstract}}
+        <!-- TL;DR lede above the full Abstract — a one-sentence digest
+             pulled from papers.yaml's `short_abstract` field, which we
+             already maintain for cards, search index, and OG tags.
+             Sits between the action-button row and the Abstract block. -->
+        <section class="project-tldr tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-12">
+            <p class="project-prose"><strong>TL;DR:</strong> {{{short_abstract}}}</p>
+        </section>
+        {{/if}}
+
+        <section class="tw-bg-gray-50 tw-py-16">
+            <div class="tw-max-w-4xl tw-mx-auto tw-px-6">
+                <h2 class="tw-text-3xl max-md:tw-text-2xl tw-font-semibold tw-tracking-tight tw-mb-6 tw-text-center">Abstract</h2>
+                <p class="project-prose">{{{abstract}}}</p>
+            </div>
+        </section>
+
+        {{#if project_page.toc}}
+        <!-- Section table-of-contents pill bar. Auto-populated from
+             H2 headings in the MD body (project_page_loader.js extracts
+             slug+text into project_page.toc). Sits between the Abstract
+             block and the first body section. -->
+        <nav class="project-toc tw-max-w-4xl tw-mx-auto tw-px-6 tw-pt-8 tw-pb-12" aria-label="Table of contents">
+            <span class="project-toc-label">Contents:</span>
+            {{#each project_page.toc}}
+            <a href="#{{slug}}">{{{text}}}</a>
+            {{/each}}
+        </nav>
+        {{/if}}
+
+        <!-- Body content rendered from data/projects/<slug>.md.
+             The MD loader (build/project_page_loader.js) splits the
+             markdown by H2 headers into <section class="project-section">
+             wrappers, renders images as <figure>+<picture> with CDN URLs,
+             and inserts H2 titles + paragraphs + lists + links. The
+             .project-prose class applies serif body styling. -->
+        <div class="project-prose">
+            {{{project_page.body_html}}}
+        </div>
+
+        <!-- Per-paper custom HTML escape hatch (interactive demos, etc). -->
+        {{#if project_page.custom_html_inline}}
+        <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-20">
+            {{{project_page.custom_html_inline}}}
+        </section>
+        {{/if}}
+
+        <!-- BibTeX. Compact heading + clean system-mono inside the
+             code block (Space Mono is great for the site's chrome but
+             stylized for code). -->
+        {{#if project_page.bibtex}}
+        <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-12 project-section">
+            <h2 class="tw-text-3xl max-md:tw-text-2xl tw-font-semibold tw-tracking-tight tw-mb-6">BibTeX</h2>
+            <pre class="project-bibtex tw-bg-gray-100 tw-p-4 tw-rounded tw-text-sm tw-leading-snug tw-overflow-x-auto"><code>{{project_page.bibtex}}</code></pre>
+        </section>
+        {{/if}}
+
+    </main>
+
+    {{> footer}}
+
+    {{#if project_page.carousel}}
+    <!-- Vanilla carousel for any .project-carousel block in the MD
+         body. No dependencies — Swiper / Swiper-element / bulma-
+         carousel all silently failed in our Tailwind-preflight setup
+         during the lifelong-memory pilot. Supports: prev/next chevron
+         buttons + pagination dots (auto-injected), touch swipe on
+         mobile, IntersectionObserver-driven autoplay of the active
+         slide's video, user-paused state preserved across scroll-in/
+         out, slide animation via translateX on a flex-row track. -->
+    <script>
+      (function () {
+        var SVG_PREV = '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/></svg>';
+        var SVG_NEXT = '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>';
+        var carousels = document.querySelectorAll('.project-carousel');
+        carousels.forEach(function (root) {
+          var items = root.querySelectorAll(':scope > .item');
+          if (items.length === 0) return;
+          var idx = 0;
+          var inView = false;
+          // Wrap the slides in a flex-row track inside a "viewport"
+          // wrapper. The viewport carries overflow: hidden and sits
+          // inside the carousel's content box (after padding), so
+          // adjacent slides are clipped at the visible edge — not
+          // peeking into the padding gutters reserved for the
+          // prev/next buttons (which are position:absolute siblings
+          // of the viewport, sitting in the padding area).
+          var viewport = document.createElement('div');
+          viewport.className = 'project-carousel-viewport';
+          var track = document.createElement('div');
+          track.className = 'project-carousel-track';
+          items.forEach(function (item) { track.appendChild(item); });
+          viewport.appendChild(track);
+          root.insertBefore(viewport, root.firstChild);
+          function playActive() {
+            var v = items[idx].querySelector('video');
+            // Respect a user-initiated pause — if they clicked-pause
+            // the active video, don't restart it when the
+            // IntersectionObserver fires on scroll-in.
+            if (!v || v.dataset.userPaused) return;
+            // Bump preload to auto and call load() so iOS Safari
+            // actually fetches metadata for the active slide
+            // (preload="metadata" alone gets deferred on mobile
+            // when there are many <video> elements on the page —
+            // the 8 carousel clips otherwise sit at 0:00 forever).
+            if (v.preload !== 'auto') {
+              v.preload = 'auto';
+              v.load();
+            }
+            v.play().catch(function () {});
+          }
+          function pauseAll() {
+            root.querySelectorAll('video').forEach(function (v) {
+              v.dataset.programmaticPause = '1';
+              v.pause();
+              delete v.dataset.programmaticPause;
+            });
+          }
+          function go(i) {
+            idx = (i + items.length) % items.length;
+            // Slide the track. Each slide is 100% wide so the
+            // active one shifts into view at -idx * 100%.
+            track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+            items.forEach(function (it, j) {
+              it.classList.toggle('is-active', j === idx);
+            });
+            dots.forEach(function (d, j) {
+              d.classList.toggle('is-active', j === idx);
+            });
+            pauseAll();
+            // Navigating to a slide is a fresh interaction — clear
+            // its user-paused flag so the carousel auto-plays it.
+            var nv = items[idx].querySelector('video');
+            if (nv) delete nv.dataset.userPaused;
+            if (inView) playActive();
+          }
+          var prev = document.createElement('button');
+          prev.className = 'project-carousel-prev';
+          prev.setAttribute('aria-label', 'Previous slide');
+          prev.innerHTML = SVG_PREV;
+          prev.addEventListener('click', function () { go(idx - 1); });
+          var next = document.createElement('button');
+          next.className = 'project-carousel-next';
+          next.setAttribute('aria-label', 'Next slide');
+          next.innerHTML = SVG_NEXT;
+          next.addEventListener('click', function () { go(idx + 1); });
+          var pagination = document.createElement('div');
+          pagination.className = 'project-carousel-pagination';
+          var dots = [];
+          items.forEach(function (_, i) {
+            var d = document.createElement('button');
+            d.className = 'project-carousel-dot';
+            d.setAttribute('aria-label', 'Slide ' + (i + 1));
+            d.addEventListener('click', function () { go(i); });
+            pagination.appendChild(d);
+            dots.push(d);
+          });
+          root.appendChild(prev);
+          root.appendChild(next);
+          root.appendChild(pagination);
+          go(0);
+          // The gallery videos carry the native controls attribute,
+          // so the play/pause button is the browser's own — no need
+          // for a custom click handler. We still need to listen for
+          // user-initiated pause/play via the native controls so
+          // the IntersectionObserver doesn't override their intent
+          // when the carousel scrolls back into view.
+          root.querySelectorAll('video').forEach(function (v) {
+            v.addEventListener('pause', function () {
+              // Distinguish a programmatic pause (our pauseAll on
+              // slide change / scroll-out) from the user clicking
+              // the controls pause button. The carousel sets
+              // data-programmatic-pause right before calling
+              // pauseAll, and clears it after.
+              if (!v.dataset.programmaticPause) {
+                v.dataset.userPaused = '1';
+              }
+            });
+            v.addEventListener('play', function () {
+              delete v.dataset.userPaused;
+            });
+          });
+          // Touch swipe support — primary navigation on mobile where
+          // the chevron buttons are hidden. Horizontal threshold
+          // 40px; vertical-dominant gestures fall through to scroll.
+          var touchStartX = null;
+          var touchStartY = null;
+          root.addEventListener('touchstart', function (e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+          }, { passive: true });
+          root.addEventListener('touchend', function (e) {
+            if (touchStartX === null) return;
+            var dx = e.changedTouches[0].clientX - touchStartX;
+            var dy = e.changedTouches[0].clientY - touchStartY;
+            touchStartX = null;
+            if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+              go(idx + (dx < 0 ? 1 : -1));
+            }
+          }, { passive: true });
+          // IntersectionObserver: only play the active video while
+          // the carousel is on screen. Threshold 0.25 = start
+          // playing when ~quarter visible.
+          if (typeof IntersectionObserver !== 'undefined') {
+            var io = new IntersectionObserver(function (entries) {
+              entries.forEach(function (entry) {
+                inView = entry.isIntersecting;
+                if (inView) {
+                  playActive();
+                } else {
+                  pauseAll();
+                }
+              });
+            }, { threshold: 0.25 });
+            io.observe(root);
+          } else {
+            // No IntersectionObserver — just play on init.
+            inView = true;
+            playActive();
+          }
+        });
+      })();
+    </script>
+    {{/if}}
+</body>
+<!-- /index.js provides toggleHeader() (mobile hamburger menu) and
+     openSearch(). Both are referenced by the shared header partial. -->
+<script src="/index.js"></script>
+</html>

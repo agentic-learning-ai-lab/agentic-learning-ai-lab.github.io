@@ -1,0 +1,48 @@
+name: PR checks
+
+# Lightweight per-PR sanity check that replaces the old "Deploy to
+# GitHub Pages" gate. Runs the same slim build that Cloudflare Pages
+# uses in production, plus the bibtex/venue lint. No LFS pull, no
+# Sharp/PDF compile, no R2 credentials required — finishes in ~1 min.
+#
+# Required-status-check on main:
+#   Repo Settings → Branches → main → Edit rule → add
+#   "PR checks / build-and-lint" to required checks.
+#   (Remove the obsolete "Deploy to GitHub Pages / build" entry.)
+
+on:
+  pull_request:
+    branches: [main, dev]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (no LFS)
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Same command Cloudflare Pages uses for its production build.
+      # Renders templates against the committed assets-manifest.json
+      # and assembles a slim out/ bundle. No binary assets needed.
+      - name: Build (slim CF path)
+        run: npm run build:cf
+
+      # Catches the failure mode where papers.yaml's `journal:` field
+      # is updated to a new venue but the MD bibtex still says
+      # "arXiv preprint". See build/lint_bibtex.js.
+      - name: Lint bibtex / papers.yaml alignment
+        run: npm run lint:bibtex

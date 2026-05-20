@@ -2,9 +2,21 @@
 
 Plan for consolidating the per-project marketing landing pages (the
 `agenticlearning.ai/<slug>/` URLs, currently one GitHub repo each) into
-this monorepo. **Design only — no code yet.** Original draft 2026-05-14;
-refined 2026-05-16 with concrete schema, template sketch, and build
-patch.
+this monorepo. Original draft 2026-05-14; refined 2026-05-16 with
+concrete schema, template sketch, and build patch.
+
+> **2026-05-17 — partially superseded.** The pilot (`anticipatory-recovery`)
+> shipped, but the schema below evolved during implementation. The
+> `project_page:` YAML block was replaced with a `project_page: true`
+> boolean in `data/papers.yaml`, and the per-project narrative content
+> (sections, figures, bibtex, affiliations, links) moved into a
+> markdown file at `data/projects/<slug>.md` with YAML frontmatter —
+> see `data/projects/anticipatory-recovery.md` for the live shape,
+> `build/project_page_loader.js` for the renderer, and the "Adding a
+> new paper" section of `CLAUDE.md` for the workflow. The "Today's
+> state", "Pain points", "Two-page model", and "Migration plan" steps
+> 3–6 sections below are still accurate; the YAML schema / template
+> sketch / build-wiring sketches are historical.
 
 ## Today's state
 
