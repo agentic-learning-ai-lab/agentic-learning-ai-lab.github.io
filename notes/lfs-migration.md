@@ -434,7 +434,28 @@ Three options:
 - **Cons**: requires students to use a non-git interface for asset
   uploads. Cognitive friction.
 
-### Revised Phase 2 plan (per user feedback 2026-05-19)
+### Phase 2 status: BUILT (2026-05-19)
+
+Implemented as designed in the next section. Components landed:
+
+- `.husky/pre-commit` → `scripts/precommit.js` orchestrator with 8 checks
+  in `scripts/checks/` (asset-manifest, no-skip-ci, yaml-valid,
+  permalink-unique, no-secrets, large-files, bibtex-lint,
+  required-fields).
+- `build/upload.js` (`npm run upload`) — the local CLI.
+- `.github/workflows/mint-upload-urls.yml` — pre-signed PUT URL minter.
+- `.github/workflows/register-assets.yml` — manifest writer + auto-commit.
+- `build/mint_upload_urls.js`, `build/register_assets.js` — Action workers.
+- `build/check_manifest_consistency.js` — CI gate (HEADs every CDN URL
+  baked into rendered HTML; fails on 404).
+- `build/purge_cdn_cache.js` (`npm run purge:cdn`) — defensive
+  MIME-drift purger.
+
+The workflows live on every branch that branched off `main` after this
+PR lands. The auto-commit from `register-assets.yml` intentionally
+re-triggers CF Pages (preview/prod rebuilds with the fresh manifest).
+
+### Original Phase 2 design (per user feedback 2026-05-19)
 
 Students know CLI + git. So instead of mediating or building a
 Worker, lean on a pre-commit hook + pre-signed R2 upload URLs:

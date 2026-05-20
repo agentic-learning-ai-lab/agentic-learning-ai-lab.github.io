@@ -430,6 +430,42 @@ Run through this list before opening a PR or merging `dev` → `main`:
 If you skipped any, say so in the PR description rather than glossing
 over it.
 
+## Pre-commit hooks
+
+Husky (devDependency) sets `.husky/` as the git hooks dir on first
+`npm install`. `.husky/pre-commit` invokes `scripts/precommit.js`,
+which runs every check in `scripts/checks/*.js` in a single Node
+process (~100 ms per check, fast feedback before commit lands).
+
+Active checks:
+
+| # | Check | What it blocks | Bypass |
+|---|---|---|---|
+| 01 | asset-manifest | New / changed binary asset files not yet on R2 (not in `assets-manifest.json`). Tells you to run `npm run upload`. | `--no-verify` |
+| 02 | no-skip-ci | Commit message body containing `[skip ci]` / `[ci skip]` / `[no ci]` / similar. Even in prose — squash-merge concatenation propagates these and silently kills production deploy. (Hit this on PR #11.) | `--no-verify` |
+| 03 | yaml-valid | `data/*.yaml` files that don't parse cleanly. | `--no-verify` |
+| 04 | permalink-unique | Duplicate `permalink:` within papers.yaml / people.yaml / research_areas.yaml. | `--no-verify` |
+| 05 | no-secrets | Staged diff lines matching credential patterns (R2 keys, GH PATs, OpenAI/Anthropic keys, AWS access keys). Repo is public — must rotate any leaked token immediately. | `--no-verify` |
+| 06 | large-files | **Warns** (not blocks) when adding > 1 MB files to git. Binaries belong on R2. | n/a |
+| 07 | bibtex-lint | papers.yaml `journal:` field's venue acronym not present in MD bibtex (`build/lint_bibtex.js`). | `--no-verify` |
+| 08 | required-fields | papers.yaml / people.yaml / research_areas.yaml entries missing required fields. | `--no-verify` |
+
+Adding a new check: drop a file in `scripts/checks/<NN>_<name>.js`
+that exports `{ name, run }`. `run()` returns truthy on pass, falsy
+on fail. Print errors to `stderr`.
+
+## CI checks
+
+PRs to `main` (or `dev`) run `.github/workflows/pr-checks.yml`:
+
+1. `npm run build:cf` (slim render — same path CF Pages uses)
+2. `npm run lint:bibtex` (also runs as pre-commit hook 07)
+3. `node build/check_manifest_consistency.js` (HEADs every
+   `cdn.agenticlearning.ai/...` URL baked into rendered HTML; fails
+   if any 404 — catches sync:r2 misses + stale manifest entries)
+
+These are the only required checks on `main`'s branch protection.
+
 ## Things to never do
 
 - **Don't push to `main` directly.** Open a PR from `dev`.
@@ -455,11 +491,28 @@ over it.
 
 ## When the user asks you to add a new paper
 
+There are two parallel paths depending on whether the contributor
+has R2 credentials in their local `.env`:
+
+**With R2 creds** (you / admin):
+- Run `npm run build` — the full pipeline auto-syncs new binaries via
+  `sync:r2` and writes the manifest entry. Commit text + manifest.
+
+**Without R2 creds** (students):
+- `npm run upload` after dropping local binaries. It dispatches a GH
+  Action that mints pre-signed PUT URLs, the local CLI curls files up
+  to R2, then dispatches a register Action that commits the manifest
+  back to the contributor's branch.
+
+Either way, the YAML/MD steps are the same:
+
 1. Add the entry to `data/papers.yaml`. Use an existing entry as a
-   template. Required: `title`, `authors`, `permalink`, `image`, `date`,
-   `journal`, `research_areas`, `abstract`, `short_abstract`. Optional:
-   `arxiv`, `pdf`, `webpage`, `enable_full_paper`, `is_recent`.
-2. Drop the hero image at `assets/images/papers/<snake_case>.png`.
+   template. Required (enforced by pre-commit check 08): `title`,
+   `authors`, `permalink`, `date`, `journal`, `research_areas`,
+   `abstract`, `short_abstract`. Optional: `arxiv`, `pdf`, `webpage`,
+   `enable_full_paper`, `project_page`, `is_recent`, `image`.
+2. Drop the hero image at `assets/images/papers/<snake_case>.png`
+   (gitignored; lives on local disk + R2).
 3. Get the LaTeX source onto R2:
    - On arXiv: `npm run latex:update <slug>` fetches from
      `https://arxiv.org/e-print/<id>`, cleans, tars, uploads to R2,

@@ -43,3 +43,9 @@ jobs:
       # "arXiv preprint". See build/lint_bibtex.js.
       - name: Lint bibtex / papers.yaml alignment
         run: npm run lint:bibtex
+
+      # Verifies every cdn.agenticlearning.ai URL baked into the
+      # rendered HTML actually resolves. Catches sync:r2 skipping a
+      # file, or stale/typo'd manifest entries that would 404 in prod.
+      - name: Check manifest consistency
+        run: node build/check_manifest_consistency.js

@@ -28,7 +28,10 @@
     "sync:r2": "node ./build/sync_to_r2.js",
     "pull:r2": "node ./build/pull_from_r2.js",
     "fix:r2:mime": "node ./build/fix_r2_content_types.js",
-    "lint:bibtex": "node ./build/lint_bibtex.js"
+    "lint:bibtex": "node ./build/lint_bibtex.js",
+    "prepare": "husky",
+    "upload": "node ./build/upload.js",
+    "purge:cdn": "node ./build/purge_cdn_cache.js"
   },
   "keywords": [],
   "author": "Paul, Mengye Ren",
@@ -39,6 +42,7 @@
     "glob": "^7.1.2",
     "gsap": "^3.12.5",
     "handlebars": "^4.7.7",
+    "husky": "^9.1.7",
     "js-yaml": "^3.14.1",
     "moment": "^2.9.0",
     "prettier": "^3.3.3",
