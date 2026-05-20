@@ -67,7 +67,7 @@ entry as a template.
 ```yaml
 - title: 'Your Paper Title Here'
   authors:
-    - Alex N. Wang
+    - First Author
     - Mengye Ren
   short_abstract: One-sentence pitch shown on the card.
   abstract: 'Full abstract paragraph, single-line for YAML cleanliness.'
