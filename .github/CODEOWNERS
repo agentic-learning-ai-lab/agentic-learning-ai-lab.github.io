@@ -1,0 +1,10 @@
+# Code owners — auto-requested as reviewer on every PR.
+#
+# Combined with "Require review from Code Owners" in the main branch
+# protection rule, this ensures every student PR is reviewed by
+# @renmengye before merge. Admin bypass (Mengye merging his own PRs
+# without review) is available via the "Do not allow bypassing the
+# above settings" toggle being OFF in branch protection — admins can
+# then admin-merge.
+
+*  @renmengye
