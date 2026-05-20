@@ -58,6 +58,13 @@ image and add it later — drop the file at
 `assets/images/papers/<slug>.png`, add the `image:` line in
 papers.yaml, `npm run upload`, commit.
 
+For collaborative image selection: open the PR with `image:` left out,
+and Mengye (or whoever you'd like input from) can push their preferred
+hero image directly to your feature branch. GitHub allows repo
+collaborators to push to a same-repo PR's branch by default, so no
+extra setup needed — you keep iterating on the branch, the image
+commit just lands alongside your text changes.
+
 ### Step 1 — Add the YAML entry
 
 Open `data/papers.yaml` and add an entry. The pre-commit hook enforces a
@@ -67,7 +74,7 @@ entry as a template.
 ```yaml
 - title: 'Your Paper Title Here'
   authors:
-    - Alex N. Wang
+    - First Author
     - Mengye Ren
   short_abstract: One-sentence pitch shown on the card.
   abstract: 'Full abstract paragraph, single-line for YAML cleanliness.'
@@ -419,11 +426,23 @@ figure" pattern.
   and renders a 0×0 video. Use fixed `style="max-width: ...; height: auto"`
   on the video itself.
 
-### YouTube embed (vs hosting your own video)
+### Self-hosting vs YouTube embed
 
-If your "video presentation" is on YouTube and you don't need
-auto-play-as-figure semantics, use an iframe — much cheaper than
-hosting MP4 yourself:
+Default to self-hosting the video on R2. The reasons:
+
+- No ads, no tracking, no "up next" thumbnails for unrelated content.
+- No risk of YouTube taking the video down or changing the embed
+  terms.
+- One-time encoding cost; R2 storage is cheap at the lab's scale.
+
+The "video presentation" section of a project page is usually a short
+overview clip — re-encode it via the H.264 recipe above and drop in
+`assets/projects/<slug>/`.
+
+YouTube iframes still work as a fallback — useful when the only
+available copy lives on a coauthor's channel and there's no clean way
+to re-upload, or when the video is much longer than a project overview
+(full conference talks, for example):
 
 ```html
 <div style="position: relative; padding-bottom: 56.25%; max-width: 720px; height: 0; margin: 1.5rem auto;">
