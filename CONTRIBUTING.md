@@ -3,8 +3,7 @@
 You're reading this because you have a paper to add, a project page to
 publish, or a typo to fix. This guide walks through each case.
 
-If anything here gets confusing, ping Mengye on Slack — better to ask
-than to spend an hour debugging YAML.
+Questions: ping Mengye on Slack.
 
 ## One-time setup
 
@@ -30,15 +29,15 @@ Fresh clones don't have binaries on disk. `npm run pull:r2` hydrates them.
 
 ## Branch workflow
 
-Always work on a feature branch off `main`, never directly on `main`.
+Work on a feature branch off `main`.
 
 ```bash
 git checkout main
 git pull
 git checkout -b add-poodle-paper          # name it after what you're doing
-git push -u origin add-poodle-paper       # IMPORTANT: push before uploading
-                                          # (the upload flow needs the branch
-                                          # to exist on origin)
+git push -u origin add-poodle-paper       # push before npm run upload —
+                                          # the register Action checks out
+                                          # from origin to commit manifest back
 ```
 
 Open a PR to `main` when done. Mengye reviews and merges.
@@ -54,13 +53,10 @@ contribution needs:
 | **+ embedded paper view** | A `/research/<slug>/` page rendering the arXiv HTML inline | Above + `enable_full_paper: true` + `arxiv:` set, then `npm run latex:update <slug>` (auto-fetches arXiv source, cleans, uploads, compiles PDF — see below) |
 | **+ marketing project page** | A custom `/<slug>/` page with images, videos, custom CSS | Above + `project_page: true` + `data/projects/<slug>.md` |
 
-> **The hero image isn't required up front.** If you want to publish a
-> paper card or project page first and decide the card image
-> collaboratively later, leave the `image:` field out of papers.yaml
-> initially. The card renders with no image until you add it. When
-> you've picked one, drop it at `assets/images/papers/<slug>.png`,
-> add the `image: /assets/images/papers/<slug>.png` line, run
-> `npm run upload`, commit. No need to redo anything.
+The `image:` field is optional. Omit it to publish without a card
+image and add it later — drop the file at
+`assets/images/papers/<slug>.png`, add the `image:` line in
+papers.yaml, `npm run upload`, commit.
 
 ### Step 1 — Add the YAML entry
 
@@ -88,8 +84,8 @@ entry as a template.
   project_page: true                    # optional: enables /<slug>/ project page
 ```
 
-**Permalink rules**: kebab-case, unique across all papers, **forever**. Changing
-it later breaks every inbound link (arXiv abstracts, tweets, slide decks).
+**Permalink rules**: kebab-case, unique across all papers, permanent.
+Changing it breaks every inbound link (arXiv abstracts, tweets, slide decks).
 
 ### Step 2 — Drop the hero image
 
@@ -98,7 +94,7 @@ PNG or JPG; ideally < 2 MB.
 
 The file is gitignored — it lives on local disk + R2, not in git.
 
-### Step 3 — Try to commit (it WILL be blocked)
+### Step 3 — Commit (the hook will block you)
 
 ```bash
 git add data/papers.yaml
@@ -113,8 +109,8 @@ The pre-commit hook stops you:
    → run `npm run upload` to mirror to R2 + update manifest
 ```
 
-This is on purpose. R2 is the source of truth for binaries; the hook
-catches "forgot to upload before committing".
+R2 is the source of truth for binaries; the hook catches "forgot to
+upload before committing".
 
 ### Step 4 — Upload the binary to R2
 
@@ -131,7 +127,7 @@ Behind the scenes:
 4. Triggers a second Action to write the `assets-manifest.json` entry and
    commit it back to your branch.
 
-Takes about 90 seconds end-to-end (most of it is GitHub Actions startup).
+Takes 1-2 minutes end-to-end (most of it is GitHub Actions startup).
 
 ### Step 5 — Pull, commit, push
 
@@ -162,8 +158,8 @@ What this does, in order:
 1. Downloads the LaTeX source tarball from `https://arxiv.org/e-print/<arxiv-id>`
    (using the `arxiv:` field from your papers.yaml entry).
 2. Runs [`arxiv_latex_cleaner`](https://github.com/google-research/arxiv-latex-cleaner)
-   to strip author comments / TODOs / commented-out figures — this matters
-   because the cleaned tarball gets uploaded to a **public** R2 bucket.
+   to strip author comments / TODOs / commented-out figures. The cleaned
+   tarball goes to a public R2 bucket.
 3. Tars + uploads to R2 (content-addressed, so re-runs are no-ops if
    source unchanged).
 4. Writes the manifest entry `/research/<slug>/latex.tar.gz` → CDN URL.
@@ -306,11 +302,10 @@ What happens at build time:
 Column max is ~832px after page padding. Setting `{width=1000}` doesn't
 break anything, just gets capped at the column.
 
-**File size**: ideally < 500 KB per figure. Bigger files slow page
-load. If you have a 5 MB PNG, downsample it (it doesn't need 4K
-resolution to render at 800px wide). `npm run build:compress` resizes
-arXiv-imported figures to ≤ 1400px automatically; your own contributions
-are on you.
+**File size**: ideally < 500 KB per figure. `npm run build:compress`
+resizes arXiv-imported figures to ≤ 1400px automatically; your own
+contributions aren't compressed automatically — downsample large PNGs
+before dropping them in.
 
 ### Side-by-side / grid layouts
 
@@ -373,20 +368,29 @@ The widget is vanilla JS — no framework. Nav arrows + dots auto-generated.
 
 ### Videos
 
-Inline `<video>` tag in the MD body. **Encoding matters** — videos
-must be H.264 + faststart-encoded MP4 for iOS Safari to play them
-inline:
+Inline `<video>` in the MD body. Encoding matters — iOS Safari only
+plays H.264 + faststart-encoded MP4 inline. The canonical recipe (full
+detail in `notes/project-page-migration-lessons.md`):
 
 ```bash
-# from any source format → site-ready
-ffmpeg -i source.mov \
-  -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p \
-  -movflags +faststart \
-  -an \                                # strip audio (usually we don't want it)
-  output.mp4
+# Check the source codec first
+ffprobe -v error -select_streams v -show_entries stream=codec_name \
+        -of csv=p=0 source.mp4
+
+# If output is anything other than h264, re-encode:
+ffmpeg -i source.mp4 \
+       -c:v libx264 -preset medium -crf 23 \
+       -profile:v high -level 4.0 -pix_fmt yuv420p \
+       -movflags +faststart \
+       -c:a aac -b:a 128k -ac 2 \
+       output.mp4
 ```
 
-Then drop `output.mp4` in `assets/projects/<slug>/` and reference:
+`-profile:v high -level 4.0 -pix_fmt yuv420p` is the iOS-safe combo;
+`+faststart` puts metadata at the front of the file so playback can
+begin before the whole file downloads.
+
+Drop `output.mp4` in `assets/projects/<slug>/` and reference:
 
 ```html
 <figure>
@@ -398,9 +402,8 @@ Then drop `output.mp4` in `assets/projects/<slug>/` and reference:
 </figure>
 ```
 
-The `autoplay muted loop playsinline` combo is the standard "video as
-animated figure" pattern (no audio, no user click needed, doesn't go
-fullscreen on iOS).
+`autoplay muted loop playsinline` is the standard "video as animated
+figure" pattern.
 
 **Common video gotchas** (the hard-earned lessons in
 `notes/project-page-migration-lessons.md`):
@@ -433,12 +436,8 @@ hosting MP4 yourself:
 
 ### Embedded PDFs (posters etc.)
 
-**Prefer self-hosting the PDF over a Google Drive / Dropbox link.**
-
-External-service links create dependencies — when someone reorganizes
-their Drive, the lab page silently 404s, and you find out from a
-visitor weeks later. R2 storage costs ~nothing for posters (a few MB
-each); the lab already owns the bucket. Drop it into the repo:
+Host posters on R2, not Drive / Dropbox. External links break when
+files move.
 
 ```bash
 # 1. Drop the PDF locally
@@ -452,13 +451,11 @@ cp ~/icml_poster.pdf assets/projects/<slug>/icml_poster.pdf
 ```
 
 The project template renders this as a Poster button in the link bar;
-the `cdnUrl` helper rewrites the path to the R2-hosted CDN URL at
-render time. Visitors click → straight to a CDN-cached PDF download,
-no Drive auth required, no broken-link risk.
+the `cdnUrl` helper rewrites the path to the R2 URL at render time.
 
-If the lab member who made the poster has it on their personal site
-already and there's no clean way to get the file, an external URL
-works — but treat it as a fallback, not the default.
+External URLs work too — use them when the only available copy of the
+poster lives on a coauthor's personal site and there's no clean way to
+re-upload.
 
 ## Adding a new person
 
@@ -533,10 +530,12 @@ commit aborts with a specific error message and how to fix it.
 | required-fields | Blocks if a papers.yaml / people.yaml entry is missing a required field. |
 | commit-msg | Blocks commit messages containing `[skip ci]` / `[ci skip]` (any spelling). These silently kill production deploys when squash-merged. Use `skip-CI` (hyphen) if you need to reference the concept in prose. |
 
-**Bypass once** (only if you really know what you're doing):
+**Bypass:**
 ```bash
 git commit --no-verify -m "..."
 ```
+CI re-runs the equivalent checks on PR, so a bypass that papers over a
+real problem will fail there anyway.
 
 ## Troubleshooting
 
@@ -552,10 +551,10 @@ dispatch GitHub Actions.
 sets up the hooks). Verify with `cat .husky/pre-commit`.
 
 **`npm run upload` fails partway through**
-→ Read the error. If the GitHub Action failed, the message will say
+→ Read the error. If the GitHub Action failed, the message says
 "mint-upload-urls run failed" or similar. Open the Actions tab on GitHub,
-find the run, read the log. Usually a missing dep or a typo in a recent
-commit. If you can't figure it out: ping Mengye.
+find the run, read the log — usually a missing dep or a typo in a recent
+commit.
 
 **Build works locally but Cloudflare Pages preview is broken**
 → Cloudflare Pages runs `npm run build:cf` (a slim build, no LFS or Sharp).
