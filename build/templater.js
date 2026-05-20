@@ -203,6 +203,12 @@ function doTemplating(input, output) {
             fs.writeFileSync(output_new, template(paper));
         }
     } else {
+        // ensure the parent dir exists. After PR #18 the committed
+        // build output (`contact/index.html`, `people/index.html`,
+        // `areas/index.html`, etc.) is gitignored — fresh clones have
+        // no `contact/`, `people/`, `areas/` directories at all,
+        // so the write fails without mkdir.
+        fs.mkdirSync(path.dirname(output) || '.', { recursive: true });
         fs.writeFileSync(output, template(documents));
     }
 }
