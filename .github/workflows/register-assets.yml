@@ -1,0 +1,91 @@
+name: Register R2 assets in manifest
+
+# Workflow_dispatch only. Called by `build/upload.js` AFTER pre-signed
+# uploads complete. Verifies each R2 object exists, then writes
+# assets-manifest.json entries and commits the diff to the target branch.
+#
+# The target branch must already exist on origin (the contributor's
+# local branch needs to be pushed before invoking this workflow).
+#
+# See notes/lfs-migration.md "Phase 2" for the full design.
+
+on:
+  workflow_dispatch:
+    inputs:
+      spec:
+        description: 'JSON array of {logical, sha, filename}'
+        required: true
+        type: string
+      branch:
+        description: 'Branch to commit the manifest update to'
+        required: true
+        type: string
+      correlation_id:
+        description: 'UUID from the local CLI for disambiguating concurrent dispatches'
+        required: true
+        type: string
+
+run-name: "Register R2 assets on ${{ inputs.branch }} [${{ inputs.correlation_id }}]"
+
+permissions:
+  contents: write
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          lfs: false
+          persist-credentials: true
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Register assets in manifest
+        env:
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: agenticlearning-assets
+          R2_CDN_BASE_URL: https://cdn.agenticlearning.ai
+          SPEC: ${{ inputs.spec }}
+        run: node build/register_assets.js
+
+      - name: Commit + push manifest update
+        run: |
+          if git diff --quiet assets-manifest.json; then
+            echo "manifest unchanged — nothing to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets-manifest.json
+          # Commit message is intentionally short and free of CI-skip
+          # tokens — we WANT downstream CF Pages preview/prod to rebuild
+          # with the fresh manifest.
+          git commit -m "Register R2 assets (auto)"
+          # Race-safe push: if another contributor's run has already
+          # advanced the branch tip, rebase onto the new tip and retry.
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:${{ inputs.branch }}; then
+              exit 0
+            fi
+            echo "push rejected (attempt $attempt) — rebasing onto origin/${{ inputs.branch }}"
+            git fetch origin "${{ inputs.branch }}"
+            git rebase "origin/${{ inputs.branch }}" || {
+              echo "rebase conflict on assets-manifest.json — giving up; manual merge needed"
+              exit 1
+            }
+          done
+          echo "push failed after 5 attempts"
+          exit 1

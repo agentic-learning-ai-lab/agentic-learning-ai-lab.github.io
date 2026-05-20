@@ -1,0 +1,61 @@
+name: Mint R2 upload URLs
+
+# Workflow_dispatch only. Called by `build/upload.js` (the local CLI)
+# to mint pre-signed PUT URLs for contributors who don't have R2 creds
+# locally. Returns the URLs as an `presigned-urls` artifact, which the
+# CLI downloads via `gh run download`.
+#
+# See notes/lfs-migration.md "Phase 2" for the full design.
+
+on:
+  workflow_dispatch:
+    inputs:
+      spec:
+        description: 'JSON array of {logical, sha, filename}'
+        required: true
+        type: string
+      correlation_id:
+        description: 'UUID from the local CLI for disambiguating concurrent dispatches'
+        required: true
+        type: string
+
+# Embed the correlation id in the run's display title so the local
+# CLI can find its own run via `gh run list --json displayTitle`.
+run-name: "Mint R2 upload URLs [${{ inputs.correlation_id }}]"
+
+permissions:
+  contents: read
+
+jobs:
+  mint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (no LFS — no binaries needed)
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Mint presigned URLs
+        env:
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: agenticlearning-assets
+          SPEC: ${{ inputs.spec }}
+        run: node build/mint_upload_urls.js > urls.json
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: presigned-urls
+          path: urls.json
+          retention-days: 1
