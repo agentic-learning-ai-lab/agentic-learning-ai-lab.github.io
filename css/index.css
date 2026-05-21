@@ -395,16 +395,27 @@ section {
     box-sizing: border-box;
 }
 
-.bi-bluesky::before {
+/* Higher specificity (.bi.bi-bluesky) + !important font-family to win
+   against Bootstrap Icons' [class*=" bi-"]::before rule, which sets
+   font-family: bootstrap-icons !important. Bootstrap Icons doesn't
+   ship a bluesky glyph (v1.11.3), but the parent class rule still
+   applies the font + font-display:block, which would hide our
+   masked ::before during the font's block period. */
+.bi.bi-bluesky::before {
     content: "";
-    /*    background-image: url("../assets/images/icons/bluesky.svg") no-repeat*/
+    display: inline-block;
+    font-family: initial !important;
     background-color: currentColor;
     -webkit-mask: url("../assets/images/icons/bluesky.svg") no-repeat 50% 50%;
     mask: url("../assets/images/icons/bluesky.svg") no-repeat 50% 50%;
     -webkit-mask-size: contain;
     mask-size: contain;
-    height: 32px;
-    width: 24px;
+    /* The Bluesky SVG has internal padding inside its viewBox, so
+       at 1em the visible bird is shorter than neighboring glyphs.
+       Bump to 1.25em (width scales by SVG aspect 568:501 ≈ 1.134) so
+       the rendered icon's visual height matches the X glyph. */
+    height: 1em;
+    width: 1.134em;
 }
 
 /* Search functionality styles */
