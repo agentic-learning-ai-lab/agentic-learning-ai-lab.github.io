@@ -414,8 +414,8 @@ section {
        at 1em the visible bird is shorter than neighboring glyphs.
        Bump to 1.25em (width scales by SVG aspect 568:501 ≈ 1.134) so
        the rendered icon's visual height matches the X glyph. */
-    height: 1.134em;
-    width: 1.286em;
+    height: 1em;
+    width: 1.134em;
 }
 
 /* Search functionality styles */
