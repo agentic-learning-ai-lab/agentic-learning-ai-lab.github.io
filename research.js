@@ -5,17 +5,26 @@ const items = document.querySelectorAll('.page-item');
 const totalPages = Math.ceil(items.length / itemsPerPage);
 const maxVisiblePages = 5; // Number of pages to show at once
 
-function showPage(page, timeout) {
+// Read ?page=N from the URL. Clamp to [1, totalPages]; bad/missing → 1.
+function getPageFromUrl() {
+    const p = parseInt(new URLSearchParams(window.location.search).get('page'), 10);
+    return Number.isFinite(p) && p >= 1 && p <= totalPages ? p : 1;
+}
+
+// Mirror currentPage into the URL so refresh / share / back lands on
+// the same page. Drop the param on page 1 to keep /research/ canonical.
+function syncUrl(page, { push } = { push: true }) {
+    const url = new URL(window.location);
+    if (page === 1) url.searchParams.delete('page');
+    else url.searchParams.set('page', page);
+    const fn = push ? 'pushState' : 'replaceState';
+    history[fn]({ page }, '', url);
+}
+
+function showPage(page, timeout, { skipUrl = false } = {}) {
     const flexContainer = document.getElementById('flexContainer');
     flexContainer.style.visibility = 'hidden';
 
-    // items.forEach((item, index) => {
-    //     item.style.display = (index >= (page - 1) * itemsPerPage && index < page * itemsPerPage) ? 'block' : 'none';
-    // });
-    // currentPage = page;
-    // updateButtons();
-    // displayPageNumbers();
-    // // Scroll to the top of the page when switching pages
     window.scrollTo({ top: 0, behavior: 'auto' });
 
     // After scrolling, show the content with a short delay
@@ -27,6 +36,7 @@ function showPage(page, timeout) {
         currentPage = page;
         updateButtons();
         displayPageNumbers();
+        if (!skipUrl) syncUrl(page);
     }, timeout); // Adjust delay as needed for scroll duration
 }
 
@@ -60,22 +70,33 @@ function displayPageNumbers() {
     const pageNumbers = document.getElementById('pageNumbers');
     pageNumbers.innerHTML = ''; // Clear previous page numbers
 
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-    // Adjust startPage if we're close to the end
-    if (endPage - startPage < maxVisiblePages - 1) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    // Ellipsis-style: always show first + last + current ± neighbors,
+    // with "…" filling any gaps. With neighbors=1 and totalPages=10:
+    //   current=1  -> [1, 2, …, 10]
+    //   current=5  -> [1, …, 4, 5, 6, …, 10]
+    //   current=10 -> [1, …, 9, 10]
+    const neighbors = 1;
+    const pagesToShow = new Set([1, totalPages]);
+    for (let i = currentPage - neighbors; i <= currentPage + neighbors; i++) {
+        if (i >= 1 && i <= totalPages) pagesToShow.add(i);
     }
+    const sorted = [...pagesToShow].sort((a, b) => a - b);
 
-    // Render the page buttons
-    for (let i = startPage; i <= endPage; i++) {
+    let prev = 0;
+    for (const i of sorted) {
+        if (i > prev + 1) {
+            const ellipsis = document.createElement('span');
+            ellipsis.innerText = '…';
+            ellipsis.className = 'tw-px-2 tw-py-1 tw-text-gray-500';
+            pageNumbers.appendChild(ellipsis);
+        }
         const pageButton = document.createElement('button');
         pageButton.innerText = i;
         pageButton.className = `tw-px-2 tw-py-1 ${i === currentPage ? 'tw-bg-black tw-text-white' : 'tw-bg-gray-200 tw-text-black'}`;
-        pageButton.disabled = (i === currentPage); // Disable the current page button
+        pageButton.disabled = (i === currentPage);
         pageButton.onclick = () => showPage(i, 300);
         pageNumbers.appendChild(pageButton);
+        prev = i;
     }
 
     // // If we're not at the last page, show the last page button separately to avoid duplication
@@ -94,5 +115,9 @@ function displayPageNumbers() {
     // }
 }
 
-// Initialize the pagination display on load
-document.addEventListener('DOMContentLoaded', () => showPage(currentPage, 0));
+// Initialize the pagination display on load — read ?page= from the URL
+// and don't add a history entry for the initial sync.
+document.addEventListener('DOMContentLoaded', () => showPage(getPageFromUrl(), 0, { skipUrl: true }));
+
+// Browser back / forward should move between pagination pages.
+window.addEventListener('popstate', () => showPage(getPageFromUrl(), 0, { skipUrl: true }));

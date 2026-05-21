@@ -5,6 +5,21 @@ let items = [];
 let totalPages = 0;
 const maxVisiblePages = 5; // Number of pages to show at once
 
+// Read ?page=N from the URL. Clamp to [1, totalPages]; bad/missing → 1.
+function getPageFromUrl() {
+    const p = parseInt(new URLSearchParams(window.location.search).get('page'), 10);
+    return Number.isFinite(p) && p >= 1 && p <= totalPages ? p : 1;
+}
+
+// Mirror currentPage into the URL so refresh / share / back lands on
+// the same page. Drop the param on page 1 to keep the URL canonical.
+function syncUrl(page) {
+    const url = new URL(window.location);
+    if (page === 1) url.searchParams.delete('page');
+    else url.searchParams.set('page', page);
+    history.pushState({ page }, '', url);
+}
+
 function initPagination() {
     items = document.querySelectorAll('.person-paper-item');
     totalPages = Math.ceil(items.length / itemsPerPage);
@@ -20,19 +35,21 @@ function initPagination() {
     }
 
     if (items.length > 0) {
-        showPage(currentPage, 0);
+        showPage(getPageFromUrl(), 0, { skipUrl: true });
     }
 }
 
-function showPage(page, timeout) {
+function showPage(page, timeout, { skipUrl = false } = {}) {
     const flexContainer = document.getElementById('flexContainer');
     if (!flexContainer) return;
 
     flexContainer.style.visibility = 'hidden';
 
-    // Scroll to the papers section instead of top of page
+    // Scroll to the papers section on user-driven navigation. Skip on
+    // initial load / popstate so direct ?page= links don't jerk the
+    // viewport on arrival.
     const papersSection = flexContainer.parentElement;
-    if (papersSection && page !== 1) {
+    if (papersSection && page !== 1 && !skipUrl) {
         papersSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -45,6 +62,7 @@ function showPage(page, timeout) {
         currentPage = page;
         updateButtons();
         displayPageNumbers();
+        if (!skipUrl) syncUrl(page);
     }, timeout); // Adjust delay as needed for scroll duration
 }
 
@@ -74,24 +92,37 @@ function displayPageNumbers() {
 
     pageNumbers.innerHTML = ''; // Clear previous page numbers
 
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-    // Adjust startPage if we're close to the end
-    if (endPage - startPage < maxVisiblePages - 1) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    // Ellipsis-style: always show first + last + current ± neighbors,
+    // with "…" filling any gaps.
+    const neighbors = 1;
+    const pagesToShow = new Set([1, totalPages]);
+    for (let i = currentPage - neighbors; i <= currentPage + neighbors; i++) {
+        if (i >= 1 && i <= totalPages) pagesToShow.add(i);
     }
+    const sorted = [...pagesToShow].sort((a, b) => a - b);
 
-    // Render the page buttons
-    for (let i = startPage; i <= endPage; i++) {
+    let prev = 0;
+    for (const i of sorted) {
+        if (i > prev + 1) {
+            const ellipsis = document.createElement('span');
+            ellipsis.innerText = '…';
+            ellipsis.className = 'tw-px-2 tw-py-1 tw-text-gray-500';
+            pageNumbers.appendChild(ellipsis);
+        }
         const pageButton = document.createElement('button');
         pageButton.innerText = i;
         pageButton.className = `tw-px-2 tw-py-1 ${i === currentPage ? 'tw-bg-black tw-text-white' : 'tw-bg-gray-200 tw-text-black'}`;
-        pageButton.disabled = (i === currentPage); // Disable the current page button
+        pageButton.disabled = (i === currentPage);
         pageButton.onclick = () => showPage(i, 300);
         pageNumbers.appendChild(pageButton);
+        prev = i;
     }
 }
 
 // Initialize the pagination display on load
 document.addEventListener('DOMContentLoaded', initPagination);
+
+// Browser back / forward should move between pagination pages.
+window.addEventListener('popstate', () => {
+    if (items.length > 0) showPage(getPageFromUrl(), 0, { skipUrl: true });
+});

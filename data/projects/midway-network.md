@@ -6,6 +6,7 @@ affiliations:
 links:
   code: https://github.com/agentic-learning-ai-lab/midway-network
   huggingface: https://huggingface.co/agentic-learning-ai-lab/Midway-Network
+  poster: /assets/projects/midway-network/iclr2026-poster-midway-network.pdf
 bibtex: |
   @inproceedings{hoang:2026:midway-network,
     title     = {Midway Network: Learning Representations for Recognition and Motion from Latent Dynamics},
