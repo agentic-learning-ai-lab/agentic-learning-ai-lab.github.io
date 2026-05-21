@@ -252,8 +252,8 @@ affiliations:
   - { name: 'Mengye Ren',  aff: 'New York University', equal: true }
 equal_label: 'Equal advising'      # optional: footnote label when authors have equal:true
 links:
-  code: https://github.com/your/repo
-  poster: https://drive.google.com/...  # optional
+  code: https://github.com/agentic-learning-ai-lab/your-repo
+  poster: /assets/projects/<slug>/<venue><year>-poster-<slug>.pdf  # optional, see Embedded PDFs
 bibtex: |
   @inproceedings{...
     ...

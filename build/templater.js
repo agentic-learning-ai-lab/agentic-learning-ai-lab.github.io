@@ -51,10 +51,15 @@ function doTemplating(input, output) {
 
             paper.has_full_paper = !!paper.enable_full_paper;
 
-            const localPdfPath = path.join(__dirname, '..', 'research', paper.permalink, 'paper.pdf');
-            if (fs.existsSync(localPdfPath)) {
+            // Check the manifest, not the filesystem: paper.pdf is
+            // gitignored and CF Pages cloud builds don't run pull:r2,
+            // so fs.existsSync was false on prod even when the PDF
+            // was on R2. Falling through to {{pdf}} (= arxiv URL) was
+            // the symptom on agenticlearning.ai.
+            const localPdfLogical = `/research/${paper.permalink}/paper.pdf`;
+            if (loadAssetsManifest()[localPdfLogical]) {
                 paper.has_local_pdf = true;
-                paper.local_pdf = `/research/${paper.permalink}/paper.pdf`;
+                paper.local_pdf = localPdfLogical;
             }
             paper.has_pdf_link = paper.has_local_pdf || !!paper.pdf;
 
