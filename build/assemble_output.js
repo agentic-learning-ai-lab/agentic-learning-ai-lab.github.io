@@ -98,7 +98,10 @@ async function copyResearchHtmlOnly() {
   if (await fs.pathExists(topIndex)) {
     await fs.copy(topIndex, path.join(dst, 'index.html'));
   }
-  // Per-paper subdirs: copy only index.html.
+  // Per-paper subdirs: copy index.html + paper-content.json (the
+  // arXiv extraction the embedded paper view fetches via
+  // ./paper-content.json in paper-view.js). Asset references inside
+  // were rewritten to CDN URLs by build:rewrite-paper-content.
   const entries = await fs.readdir(src, { withFileTypes: true });
   let copied = 0;
   for (const e of entries) {
@@ -110,6 +113,10 @@ async function copyResearchHtmlOnly() {
       await fs.ensureDir(subDst);
       await fs.copy(subIndex, path.join(subDst, 'index.html'));
       copied++;
+      const subContent = path.join(subSrc, 'paper-content.json');
+      if (await fs.pathExists(subContent)) {
+        await fs.copy(subContent, path.join(subDst, 'paper-content.json'));
+      }
     }
   }
   return copied;
