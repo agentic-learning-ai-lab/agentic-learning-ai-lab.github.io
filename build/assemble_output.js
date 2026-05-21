@@ -68,7 +68,6 @@ const DIRS = [
 const ASSET_SUBDIRS = [
   'images/favicons',
   'images/logos',
-  'images/icons',  // mask-image SVGs (bluesky.svg used by .bi-bluesky)
 ];
 
 // Single same-origin files under assets/ that templates / scripts
