@@ -14,7 +14,7 @@
 <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
     {{> header}}
 
-    <section class="tw-flex tw-w-full tw-flex-col tw-p-[5%] tw-mt-[150px] max-lg:tw-p-4">
+    <section class="tw-flex tw-w-full tw-max-w-6xl tw-mx-auto tw-flex-col tw-px-6 tw-mt-[150px] max-lg:tw-px-4">
         <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
             People
         </h3>
@@ -24,14 +24,14 @@
             Current Members
         </h4>
 
-        <div class="tw-mt-8 tw-flex tw-flex-wrap tw-place-content-center tw-gap-y-8 tw-gap-x-4 tw-justify-around">
+        <div class="tw-mt-8 tw-flex tw-flex-wrap tw-justify-start tw-gap-y-8 tw-gap-x-4">
             {{> people_tab people_current }}
         </div>
 
         <h4 class="tw-mt-4 text-left tw-text-2xl tw-font-medium max-md:tw-text-xl">
             Alumni
         </h4>
-        <div class="tw-mt-8 tw-flex tw-flex-wrap tw-place-content-center tw-gap-y-8 tw-gap-x-4 tw-justify-around">
+        <div class="tw-mt-8 tw-flex tw-flex-wrap tw-justify-start tw-gap-y-8 tw-gap-x-4">
             {{> people_tab people_alumni }}
         </div>
 
