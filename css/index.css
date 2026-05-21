@@ -395,9 +395,16 @@ section {
     box-sizing: border-box;
 }
 
-.bi-bluesky::before {
+/* Higher specificity (.bi.bi-bluesky) + !important font-family to win
+   against Bootstrap Icons' [class*=" bi-"]::before rule, which sets
+   font-family: bootstrap-icons !important. Bootstrap Icons doesn't
+   ship a bluesky glyph (v1.11.3), but the parent class rule still
+   applies the font + font-display:block, which would hide our
+   masked ::before during the font's block period. */
+.bi.bi-bluesky::before {
     content: "";
-    /*    background-image: url("../assets/images/icons/bluesky.svg") no-repeat*/
+    display: inline-block;
+    font-family: initial !important;
     background-color: currentColor;
     -webkit-mask: url("../assets/images/icons/bluesky.svg") no-repeat 50% 50%;
     mask: url("../assets/images/icons/bluesky.svg") no-repeat 50% 50%;
