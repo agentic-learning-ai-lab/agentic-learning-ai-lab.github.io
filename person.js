@@ -5,6 +5,21 @@ let items = [];
 let totalPages = 0;
 const maxVisiblePages = 5; // Number of pages to show at once
 
+// Read ?page=N from the URL. Clamp to [1, totalPages]; bad/missing → 1.
+function getPageFromUrl() {
+    const p = parseInt(new URLSearchParams(window.location.search).get('page'), 10);
+    return Number.isFinite(p) && p >= 1 && p <= totalPages ? p : 1;
+}
+
+// Mirror currentPage into the URL so refresh / share / back lands on
+// the same page. Drop the param on page 1 to keep the URL canonical.
+function syncUrl(page) {
+    const url = new URL(window.location);
+    if (page === 1) url.searchParams.delete('page');
+    else url.searchParams.set('page', page);
+    history.pushState({ page }, '', url);
+}
+
 function initPagination() {
     items = document.querySelectorAll('.person-paper-item');
     totalPages = Math.ceil(items.length / itemsPerPage);
@@ -20,19 +35,21 @@ function initPagination() {
     }
 
     if (items.length > 0) {
-        showPage(currentPage, 0);
+        showPage(getPageFromUrl(), 0, { skipUrl: true });
     }
 }
 
-function showPage(page, timeout) {
+function showPage(page, timeout, { skipUrl = false } = {}) {
     const flexContainer = document.getElementById('flexContainer');
     if (!flexContainer) return;
 
     flexContainer.style.visibility = 'hidden';
 
-    // Scroll to the papers section instead of top of page
+    // Scroll to the papers section on user-driven navigation. Skip on
+    // initial load / popstate so direct ?page= links don't jerk the
+    // viewport on arrival.
     const papersSection = flexContainer.parentElement;
-    if (papersSection && page !== 1) {
+    if (papersSection && page !== 1 && !skipUrl) {
         papersSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -45,6 +62,7 @@ function showPage(page, timeout) {
         currentPage = page;
         updateButtons();
         displayPageNumbers();
+        if (!skipUrl) syncUrl(page);
     }, timeout); // Adjust delay as needed for scroll duration
 }
 
@@ -95,3 +113,8 @@ function displayPageNumbers() {
 
 // Initialize the pagination display on load
 document.addEventListener('DOMContentLoaded', initPagination);
+
+// Browser back / forward should move between pagination pages.
+window.addEventListener('popstate', () => {
+    if (items.length > 0) showPage(getPageFromUrl(), 0, { skipUrl: true });
+});
