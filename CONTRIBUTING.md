@@ -253,7 +253,7 @@ affiliations:
 equal_label: 'Equal advising'      # optional: footnote label when authors have equal:true
 links:
   code: https://github.com/your/repo
-  poster: https://drive.google.com/...  # optional
+  poster: /assets/projects/<slug>/<venue><year>-poster-<slug>.pdf  # optional, see Embedded PDFs
 bibtex: |
   @inproceedings{...
     ...
