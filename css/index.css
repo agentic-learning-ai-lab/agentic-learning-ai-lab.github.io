@@ -254,6 +254,7 @@ header>.collapsible-header {
         padding: 8px;
         padding-top: 70px;
         padding-bottom: 20px;
+        padding-right: 20px;
         place-items: end;
         background-color: #ffffff;
         color: #000000;
