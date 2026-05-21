@@ -295,7 +295,8 @@ header>.collapsible-header {
     /* Ensures the image fits the container */
     height: 100%;
     object-fit: cover;
-    object-position: left;
+    /* object-position defaults to center, matching the listing card's
+       crop behavior so the image stays centered as the browser resizes. */
 }
 
 .text-overlay {
