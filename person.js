@@ -92,22 +92,30 @@ function displayPageNumbers() {
 
     pageNumbers.innerHTML = ''; // Clear previous page numbers
 
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-    // Adjust startPage if we're close to the end
-    if (endPage - startPage < maxVisiblePages - 1) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    // Ellipsis-style: always show first + last + current ± neighbors,
+    // with "…" filling any gaps.
+    const neighbors = 1;
+    const pagesToShow = new Set([1, totalPages]);
+    for (let i = currentPage - neighbors; i <= currentPage + neighbors; i++) {
+        if (i >= 1 && i <= totalPages) pagesToShow.add(i);
     }
+    const sorted = [...pagesToShow].sort((a, b) => a - b);
 
-    // Render the page buttons
-    for (let i = startPage; i <= endPage; i++) {
+    let prev = 0;
+    for (const i of sorted) {
+        if (i > prev + 1) {
+            const ellipsis = document.createElement('span');
+            ellipsis.innerText = '…';
+            ellipsis.className = 'tw-px-2 tw-py-1 tw-text-gray-500';
+            pageNumbers.appendChild(ellipsis);
+        }
         const pageButton = document.createElement('button');
         pageButton.innerText = i;
         pageButton.className = `tw-px-2 tw-py-1 ${i === currentPage ? 'tw-bg-black tw-text-white' : 'tw-bg-gray-200 tw-text-black'}`;
-        pageButton.disabled = (i === currentPage); // Disable the current page button
+        pageButton.disabled = (i === currentPage);
         pageButton.onclick = () => showPage(i, 300);
         pageNumbers.appendChild(pageButton);
+        prev = i;
     }
 }
 
