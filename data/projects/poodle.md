@@ -1,12 +1,13 @@
 ---
 affiliations:
-  - { name: 'Alex N. Wang', aff: 'New York University' }
-  - { name: 'Chris Hoang',  aff: 'New York University' }
+  - { name: 'Alex N. Wang', aff: 'New York University', equal: true }
+  - { name: 'Chris Hoang',  aff: 'New York University', equal: true }
   - { name: 'Yuwen Xiong', url: 'https://www.cs.toronto.edu/~yuwen/' }
   - { name: 'Yann LeCun',   aff: 'New York University', url: 'http://yann.lecun.com/' }
   - { name: 'Mengye Ren',   aff: 'New York University' }
 links:
   code: https://github.com/Agentic-Learning-AI-Lab/poodle
+  poster: /assets/projects/poodle/iclr2025-poster-poodle.pdf
 bibtex: |
   @inproceedings{wang2025poodle,
     title     = {PooDLe: Pooled and Dense Self-Supervised Learning from Naturalistic Videos},
