@@ -22,7 +22,7 @@ function toggleHeader() {
     if (isHeaderCollapsed) {
         // collapseHeaderItems.classList.remove("max-md:tw-opacity-0")
         collapseHeaderItems.classList.add("opacity-100",)
-        collapseHeaderItems.style.width = "200px"
+        collapseHeaderItems.style.width = "160px"
         collapseBtn.classList.remove("bi-list")
         collapseBtn.classList.add("bi-x", "max-lg:tw-fixed")
         isHeaderCollapsed = false
