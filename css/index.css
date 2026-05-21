@@ -410,8 +410,11 @@ section {
     mask: url("../assets/images/icons/bluesky.svg") no-repeat 50% 50%;
     -webkit-mask-size: contain;
     mask-size: contain;
-    height: 32px;
-    width: 24px;
+    /* Match neighboring Bootstrap icon glyphs (which render at 1em
+       height). SVG aspect ratio 568:501 ≈ 1.134, so width is set
+       proportionally so the icon is height-bound, not width-bound. */
+    height: 1em;
+    width: 1.135em;
 }
 
 /* Search functionality styles */
