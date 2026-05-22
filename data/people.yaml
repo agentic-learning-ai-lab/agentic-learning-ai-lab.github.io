@@ -188,6 +188,15 @@
   google_scholar: ""
   current: true
 -
+  name: "Canyu Zhang"
+  image: "/assets/images/people/canyu_zhang.jpg"
+  position: "Undergraduate Student"
+  webpage: "https://canyu-zhang.github.io/"
+  permalink: "canyu-zhang"
+  description: "Canyu Zhang is a junior-year undergraduate majoring in computer science and minoring in mathematics at NYU Shanghai. She is conducting research under Mengye Ren, focusing on continual learning and long-term memory in AI systems. Outside of research, she enjoys playing the cello, singing, and board games."
+  google_scholar: "https://scholar.google.com/citations?user=_4Ho0CIAAAAJ"
+  current: true
+-
   name: "Frank (Zequan) Wu"
   image: "/assets/images/people/frank_wu.jpg"
   position: "Visiting Researcher"
