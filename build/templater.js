@@ -226,8 +226,25 @@ function parseDocuments() {
     const research_areas = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/research_areas.yaml')));
     const papers = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/papers.yaml')));
     const people = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/people.yaml')));
-    const people_current = people.filter(x => x.current);
-    const people_alumni = people.filter(x => !x.current);
+    // Sort within each section (current / alumni) by position group, then
+    // last name within the group. Last name = final token after stripping
+    // any parenthesized middle names (e.g. "Amelia (Hui) Dai" → "Dai").
+    const positionPriority = {
+        'Assistant Professor': 0,
+        'PhD Student': 1,
+        'Master Student': 2,
+        'Visiting Researcher': 3,
+        'Undergraduate Student': 4,
+    };
+    const lastName = (n) => (n || '').replace(/\([^)]+\)/g, '').trim().split(/\s+/).pop().toLowerCase();
+    const sortPeople = (arr) => arr.sort((a, b) => {
+        const pa = positionPriority[a.position] ?? 99;
+        const pb = positionPriority[b.position] ?? 99;
+        if (pa !== pb) return pa - pb;
+        return lastName(a.name).localeCompare(lastName(b.name));
+    });
+    const people_current = sortPeople(people.filter(x => x.current));
+    const people_alumni = sortPeople(people.filter(x => !x.current));
 
     // Normalize the data — ensure required fields exist
     for (const ra of research_areas) {
