@@ -1,12 +1,14 @@
 <header
     class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[120px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-between">
     <a class="tw-h-[120px] tw-p-[4px] tw-flex tw-items-center tw-pt-[10px]" href="/">
-        <img src="/assets/images/logos/logo.svg" alt="Agentic Learning AI Lab"
+        <img class="lab-logo lab-logo-light" src="/assets/images/logos/logo.svg" alt="Agentic Learning AI Lab"
+            style="height: 80px; max-width: 200px; width: auto;">
+        <img class="lab-logo lab-logo-dark" src="/assets/images/logos/logo-dark.svg" alt="" aria-hidden="true"
             style="height: 80px; max-width: 200px; width: auto;">
     </a>
     <div class="collapsible-header animated-collapse max-lg:tw-shadow-md" id="collapsed-header-items">
         <div
-            class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-black max-lg:tw-mt-[10px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-2 lg:tw-place-items-center">
+            class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-[var(--fg)] max-lg:tw-mt-[10px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-2 lg:tw-place-items-center">
             <button onclick="openSearch()"
                 class="header-links tw-cursor-pointer tw-bg-transparent tw-border-none tw-flex tw-items-center tw-gap-2 max-lg:tw-w-full max-lg:tw-justify-end lg:tw-hidden"
                 aria-label="Search">
@@ -22,6 +24,6 @@
                 donate </a>
         </div>
     </div>
-    <button class="bi bi-list tw-absolute tw-right-5 tw-top-10 tw-z-50 tw-text-3xl tw-text-black lg:tw-hidden"
+    <button class="bi bi-list tw-absolute tw-right-5 tw-top-10 tw-z-50 tw-text-3xl tw-text-[var(--fg)] lg:tw-hidden"
         onclick="toggleHeader()" aria-label="menu" id="collapse-btn"></button>
 </header>

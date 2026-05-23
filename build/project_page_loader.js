@@ -140,7 +140,7 @@ function makeRenderer(slug) {
             // or the section column width if none). inline-block +
             // figure's text-center keeps short captions centered;
             // long captions hit the wrapper width and wrap left-aligned.
-            html += `<figcaption class="tw-text-base tw-text-gray-600 tw-mt-4 tw-italic tw-inline-block tw-text-left">${altEsc}</figcaption>`;
+            html += `<figcaption class="tw-text-base tw-text-[var(--fg-muted)] tw-mt-4 tw-italic tw-inline-block tw-text-left">${altEsc}</figcaption>`;
         }
         html += `</div>`;
         html += `</figure>`;

@@ -9,7 +9,7 @@
 <meta property="og:image" content="{{cdnUrl image}}" />
 {{> head}}
 </head>
-<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
+<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[var(--bg)] tw-font-mono">
     {{> header}}
 
     <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
@@ -45,7 +45,7 @@
             <div class="section-underline tw-my-4">
             </div> -->
             <div class="tw-gap-2 tw-max-w-100">
-                <p class="tw-text-gray-600 tw-mt-4">
+                <p class="tw-text-[var(--fg-muted)] tw-mt-4">
                 {{{description}}}
                 </p>
             </div>

@@ -9,7 +9,7 @@
 <meta property="og:image" content="{{cdnUrl '/assets/images/background/bg1.jpg'}}" />
 {{> head}}
 </head>
-    <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
+    <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[var(--bg)] tw-font-mono">
         {{> header}} 
 
         <section class="tw-flex tw-w-full tw-flex-col tw-p-[5%] tw-mt-[150px] max-lg:tw-p-4  sm:tw-w-[100%] md:tw-w-[80%] lg:tw-w-[60%] xl:tw-w-[50%]">
@@ -19,21 +19,21 @@
             <form id="contact-form" class="tw-space-y-4 tw-mt-[30px]">
                 <div>
                     <!-- tw-rounded-md tw-shadow-sm  -->
-                    <label for="name" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Name</label>
+                    <label for="name" class="tw-block tw-text-sm tw-font-medium tw-text-[var(--fg)]">Name</label>
                     <input type="text" id="name" name="name" required
-                           class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
+                           class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-[var(--border)] focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
                 </div>
                 <div>
-                    <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Email</label>
+                    <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-[var(--fg)]">Email</label>
                     <!-- tw-rounded-md tw-shadow-sm  -->
                     <input type="email" id="email" name="email" required
-                           class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
+                           class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-[var(--border)] focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
                 </div>
                 <div>
-                    <label for="message" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Message</label>
+                    <label for="message" class="tw-block tw-text-sm tw-font-medium tw-text-[var(--fg)]">Message</label>
                     <!-- tw-rounded-md tw-shadow-sm  -->
                     <textarea id="message" name="message" rows="5" required
-                              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 focus:tw-ring-blue-500 focus:tw-border-blue-500"></textarea>
+                              class="tw-mt-1 tw-block tw-w-full tw-px-4 tw-py-2 tw-border tw-border-[var(--border)] focus:tw-ring-blue-500 focus:tw-border-blue-500"></textarea>
                 </div>
             
                 <!-- reCAPTCHA widget -->
@@ -41,7 +41,7 @@
                 
                 <!-- tw-rounded-md  tw-text-white tw-font-semibold  -->
                 <button type="submit"
-                        class="tw-w-full tw-bg-black tw-py-2 tw-px-4 tw-bg-gray-200 tw-border-transparent tw-border-2 hover:tw-border-solid hover:tw-border-gray-600 tw-transition tw-duration-200">
+                        class="tw-w-full tw-py-2 tw-px-4 tw-bg-[var(--card-bg)] tw-text-[var(--fg)] tw-border-transparent tw-border-2 hover:tw-border-solid hover:tw-border-[var(--border)] tw-transition tw-duration-200">
                     send
                 </button>
                 <p class="tw-text-green-600 tw-text-center tw-mt-4" id="success-message" style="display: none;">Your message has been sent!</p>

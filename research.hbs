@@ -13,7 +13,7 @@
     {{> head}}
 </head>
 
-<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
+<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[var(--bg)] tw-font-mono">
     {{> header}}
 
     <section class="tw-flex tw-w-full tw-flex-col tw-p-[5%] tw-mt-[150px] max-lg:tw-p-4">
@@ -29,10 +29,10 @@
         </div>
 
         <div class="pagination-controls tw-mt-12 tw-flex tw-justify-center tw-items-center tw-gap-2">
-            <button id="prevButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300"
+            <button id="prevButton" class="tw-px-6 tw-py-1 tw-text-[var(--fg)] disabled:tw-opacity-30"
                 onclick="prevPage()">Prev</button>
             <span id="pageNumbers" class="tw-flex tw-gap-2"></span>
-            <button id="nextButton" class="tw-px-6 tw-py-1 tw-text-black disabled:tw-text-gray-300"
+            <button id="nextButton" class="tw-px-6 tw-py-1 tw-text-[var(--fg)] disabled:tw-opacity-30"
                 onclick="nextPage()">Next</button>
         </div>
 

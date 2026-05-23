@@ -59,7 +59,7 @@
      render in Space Mono). Long prose paragraphs override to serif on
      the .project-prose class below — mono is great for the lab's
      structural chrome but punishing to read in paragraph form. -->
-<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono tw-text-gray-800">
+<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[var(--bg)] tw-font-mono tw-text-[var(--fg)]">
     {{> header}}
 
     <main class="project-page-main tw-w-full tw-mt-[120px]">
@@ -72,8 +72,8 @@
         <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-text-center tw-mb-12">
             <h1 class="tw-text-4xl tw-font-bold tw-leading-tight tw-tracking-tight max-md:tw-text-2xl"><a class="project-title-link" href="/research/{{{permalink}}}/">{{{title}}}</a></h1>
             <p class="tw-text-lg max-md:tw-text-base tw-mt-8">{{{formatAuthorsForProjectPage authors project_page.affiliations}}}</p>
-            <p class="tw-text-base tw-mt-2 tw-text-gray-600">{{{formatAffiliationsForProjectPage authors project_page.affiliations project_page.equal_label}}}</p>
-            <p class="tw-text-base tw-mt-2 tw-text-gray-500">{{journal}}</p>
+            <p class="tw-text-base tw-mt-2 tw-text-[var(--fg-muted)]">{{{formatAffiliationsForProjectPage authors project_page.affiliations project_page.equal_label}}}</p>
+            <p class="tw-text-base tw-mt-2 tw-text-[var(--fg-muted)]">{{journal}}</p>
 
             <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-3 tw-mt-8">
                 {{#with project_page.links}}
@@ -95,7 +95,7 @@
         <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-12">
             <figure class="tw-text-center">
                 {{{pictureCdn src alt=../title class="tw-w-full tw-rounded-lg tw-shadow-sm" eager=true}}}
-                {{#if caption}}<figcaption class="tw-text-sm tw-text-gray-600 tw-mt-3 tw-italic">{{{caption}}}</figcaption>{{/if}}
+                {{#if caption}}<figcaption class="tw-text-sm tw-text-[var(--fg-muted)] tw-mt-3 tw-italic">{{{caption}}}</figcaption>{{/if}}
             </figure>
         </section>
         {{/with}}
@@ -113,7 +113,7 @@
         </section>
         {{/if}}
 
-        <section class="tw-bg-gray-50 tw-py-16">
+        <section class="tw-bg-[var(--card-bg)] tw-py-16">
             <div class="tw-max-w-4xl tw-mx-auto tw-px-6">
                 <h2 class="tw-text-3xl max-md:tw-text-2xl tw-font-semibold tw-tracking-tight tw-mb-6 tw-text-center">Abstract</h2>
                 <p class="project-prose">{{{abstract}}}</p>
@@ -156,7 +156,7 @@
         {{#if project_page.bibtex}}
         <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-12 project-section">
             <h2 class="tw-text-3xl max-md:tw-text-2xl tw-font-semibold tw-tracking-tight tw-mb-6">BibTeX</h2>
-            <pre class="project-bibtex tw-bg-gray-100 tw-p-4 tw-rounded tw-text-sm tw-leading-snug tw-overflow-x-auto"><code>{{project_page.bibtex}}</code></pre>
+            <pre class="project-bibtex tw-bg-[var(--card-bg)] tw-p-4 tw-rounded tw-text-sm tw-leading-snug tw-overflow-x-auto"><code>{{project_page.bibtex}}</code></pre>
         </section>
         {{/if}}
 

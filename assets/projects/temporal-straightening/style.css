@@ -29,7 +29,7 @@
 .ts-heatmap-grid img { max-width: 100%; height: auto; border-radius: 0.25rem; }
 .ts-heatmap-grid figcaption {
     font-size: 0.9em;
-    color: #4b5563;
+    color: var(--fg-muted);
     margin-top: 0.25rem;
     font-style: italic;
 }
@@ -60,7 +60,7 @@
 }
 .ts-quad-grid figcaption {
     font-size: 0.85em;
-    color: #4b5563;
+    color: var(--fg-muted);
     margin-top: 0.25rem;
     font-style: italic;
 }
@@ -79,7 +79,7 @@
 
 /* Takeaway numbered list in the embedding-space section. */
 .ts-takeaway {
-    background: #f5f5f5;
+    background: var(--card-bg);
     border-left: 4px solid #3b82f6;
     border-radius: 4px;
     padding: 0.75rem 1rem 0.75rem 2rem;

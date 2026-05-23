@@ -33,7 +33,7 @@
     margin: 0.75rem auto 0;
     max-width: 600px;
     font-size: 0.95em;
-    color: #4b5563;
+    color: var(--fg-muted);
     line-height: 1.5;
     text-align: left;
 }
