@@ -52,7 +52,7 @@ Midway Network is the only model to achieve strong performance on both semantic 
   <video autoplay muted loop controls playsinline style="max-width: 500px; width: 100%; height: auto; margin: 0 auto; border-radius: 0.25rem;">
     <source src="/assets/projects/midway-network/bdd-semseg.mp4" type="video/mp4">
   </video>
-  <figcaption class="tw-text-base tw-text-gray-600 tw-mt-4 tw-italic tw-max-w-2xl tw-mx-auto">Midway Network ViT-B UperNet readout on BDD100K semantic segmentation.</figcaption>
+  <figcaption class="tw-text-base tw-text-[var(--fg-muted)] tw-mt-4 tw-italic tw-max-w-2xl tw-mx-auto">Midway Network ViT-B UperNet readout on BDD100K semantic segmentation.</figcaption>
 </figure>
 
 ![Midway Network ViT-S on FlyingThings and MPI-Sintel optical flow tasks after finetuning.](flow.png)

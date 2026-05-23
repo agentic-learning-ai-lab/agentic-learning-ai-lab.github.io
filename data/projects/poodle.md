@@ -54,7 +54,7 @@ How do we combine the pooled and dense objectives within a single architecture? 
     <video autoplay muted loop playsinline preload="metadata" style="width: 100%; height: auto; border-radius: 0.25rem;">
       <source src="/assets/projects/poodle/semseg-comparison.mp4" type="video/mp4">
     </video>
-    <figcaption class="tw-text-base tw-text-gray-600 tw-mt-4 tw-italic tw-inline-block tw-text-left">Comparison of methods on semantic segmentation linear readout.</figcaption>
+    <figcaption class="tw-text-base tw-text-[var(--fg-muted)] tw-mt-4 tw-italic tw-inline-block tw-text-left">Comparison of methods on semantic segmentation linear readout.</figcaption>
   </div>
 </figure>
 

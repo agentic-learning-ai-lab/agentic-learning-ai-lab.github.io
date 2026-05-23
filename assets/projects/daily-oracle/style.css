@@ -31,16 +31,16 @@
     font-size: 0.95rem;
     font-weight: 600;
     margin-bottom: 0.25rem;
-    color: #363636;
+    color: var(--fg);
 }
 .do-widget .input,
 .do-widget .select select {
     width: 100%;
     padding: 0.4em 0.6em;
-    border: 1px solid #dbdbdb;
+    border: 1px solid var(--border);
     border-radius: 4px;
-    background: #fff;
-    color: #363636;
+    background: var(--bg);
+    color: var(--fg);
     font-size: 0.95rem;
     line-height: 1.4;
     box-sizing: border-box;
@@ -86,12 +86,12 @@
 /* --- Container box (legacy Bulma 0.9 values) --- */
 
 .do-widget .box {
-    background-color: #fff;
+    background-color: var(--bg);
     border-radius: 6px;
     box-shadow:
         0 .5em 1em -.125em rgba(10,10,10,.1),
         0 0 0 1px rgba(10,10,10,.02);
-    color: #4a4a4a;
+    color: var(--fg);
     padding: 1.25rem;
     margin-bottom: 1rem;
 }
@@ -101,7 +101,7 @@
 .do-widget .subtitle {
     font-size: 1.15rem;
     font-weight: 600;
-    color: #4a4a4a;
+    color: var(--fg);
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
 }
@@ -162,24 +162,24 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 0.9rem;
-    color: #363636;
+    color: var(--fg);
 }
 .do-widget table.table th,
 .do-widget table.table td {
     padding: 0.5em 0.75em;
-    border-bottom: 1px solid #dbdbdb;
+    border-bottom: 1px solid var(--border);
     text-align: left;
     vertical-align: top;
 }
 .do-widget table.table thead th {
-    background: #fafafa;
+    background: var(--card-bg);
     font-weight: 600;
     position: sticky;
     top: 0;
     z-index: 1;
 }
 .do-widget table.table.is-striped tbody tr:nth-child(even) {
-    background: #fafafa;
+    background: var(--card-bg);
 }
 .do-widget table.table .has-text-centered {
     text-align: center;
@@ -211,7 +211,7 @@
 .do-carousel .item .caption {
     margin-top: 0.5rem;
     font-size: 0.95em;
-    color: #4b5563;
+    color: var(--fg-muted);
     font-style: italic;
     text-align: center;
 }
