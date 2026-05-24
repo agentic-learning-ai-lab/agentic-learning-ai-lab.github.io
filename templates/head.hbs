@@ -11,18 +11,24 @@
 <link rel="manifest" href="/site.webmanifest" />
 
 <!-- Theme bootstrap. Runs synchronously before <body> renders to avoid a
-     flash of the wrong theme. Reads localStorage('theme') ∈ {light,dark};
-     anything else (including unset) leaves the document at the
-     light-default served by CSS. A user-facing toggle ships in a
-     follow-up PR; for now you can flip via devtools:
-       localStorage.setItem('theme','dark'); location.reload();
-     or use /theme-test.html (preview only, not deployed). -->
+     flash of the wrong theme. State is one of:
+       - 'light' / 'dark' — explicit user choice, written by the
+         in-header toggle (see initThemeToggle in /index.js)
+       - 'system' or unset — derive from prefers-color-scheme at load
+         time. Live OS theme changes are picked up by a matchMedia
+         listener in initThemeToggle.
+     Only 'dark' results in [data-theme="dark"] on <html>; light is
+     the CSS default with no attribute, so unsetting localStorage
+     gracefully returns the site to its system-or-light state. -->
 <script>
   (function () {
     try {
-      var t = localStorage.getItem('theme');
-      if (t === 'dark' || t === 'light') {
-        document.documentElement.dataset.theme = t;
+      var stored = localStorage.getItem('theme');
+      var resolved = (stored === 'dark' || stored === 'light')
+        ? stored
+        : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (resolved === 'dark') {
+        document.documentElement.dataset.theme = 'dark';
       }
     } catch (_) {}
   })();

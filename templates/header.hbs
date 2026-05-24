@@ -8,7 +8,7 @@
     </a>
     <div class="collapsible-header animated-collapse max-lg:tw-shadow-md" id="collapsed-header-items">
         <div
-            class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-[var(--fg)] max-lg:tw-mt-[10px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-2 lg:tw-place-items-center">
+            class="tw-flex tw-h-full tw-w-max tw-gap-2 tw-text-base tw-text-[var(--fg)] max-lg:tw-mt-[10px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-2 lg:tw-place-items-center">
             <button onclick="openSearch()"
                 class="header-links tw-cursor-pointer tw-bg-transparent tw-border-none tw-flex tw-items-center tw-gap-2 max-lg:tw-w-full max-lg:tw-justify-end lg:tw-hidden"
                 aria-label="Search">
@@ -22,6 +22,15 @@
             <a class="header-links"
                 href="https://www.givecampus.com/campaigns/25654/donations/new?designation=supportofprofmengyerensagenticlearningailabresearch&">
                 donate </a>
+            <!-- Theme cycle button — system → light → dark → system.
+                 Icon swaps to reflect the active state. Aria-label is
+                 updated by initThemeToggle in /index.js. -->
+            <button id="theme-toggle"
+                class="header-links theme-toggle tw-cursor-pointer tw-bg-transparent tw-flex tw-items-center tw-gap-2 max-lg:tw-w-full max-lg:tw-justify-end"
+                onclick="cycleTheme()" aria-label="Theme">
+                <i id="theme-toggle-icon" class="bi bi-circle-half"></i>
+                <span id="theme-toggle-label" class="lg:tw-hidden">system</span>
+            </button>
         </div>
     </div>
     <button class="bi bi-list tw-absolute tw-right-5 tw-top-10 tw-z-50 tw-text-3xl tw-text-[var(--fg)] lg:tw-hidden"
