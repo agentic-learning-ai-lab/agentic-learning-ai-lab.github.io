@@ -49,14 +49,7 @@ How do we combine the pooled and dense objectives within a single architecture? 
 
 ## Results: semantic segmentation and object detection {data-toc=Results}
 
-<figure class="tw-text-center tw-my-10">
-  <div class="tw-mx-auto" style="max-width: 800px;">
-    <video autoplay muted loop playsinline preload="metadata" style="width: 100%; height: auto; border-radius: 0.25rem;">
-      <source src="/assets/projects/poodle/semseg-comparison.mp4" type="video/mp4">
-    </video>
-    <figcaption class="tw-text-base tw-text-[var(--fg-muted)] tw-mt-4 tw-italic tw-inline-block tw-text-left">Comparison of methods on semantic segmentation linear readout.</figcaption>
-  </div>
-</figure>
+![Comparison of methods on semantic segmentation linear readout.](semseg-comparison.mp4){width=800}
 
 ![BDD100K semantic segmentation and object detection and Cityscapes semantic segmentation results using either lightweight or heavier readout headers. *Pretrained on BDD, initialized with supervised IN1K weights.](bdd-results-table.png){width=800}
 

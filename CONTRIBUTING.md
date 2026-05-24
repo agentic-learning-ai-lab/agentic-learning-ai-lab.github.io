@@ -266,14 +266,24 @@ Markdown body. Images go through the renderer that fetches them from R2:
 
 ![Caption text becomes the figcaption.](my_figure.png){width=800}
 
+Videos use the same syntax — the renderer detects .mp4/.webm/.mov/.m4v
+and emits a <video> figure instead of <img>. Default player flags are
+autoplay+muted+loop+playsinline (silent demo loop pattern); override
+via the optional title attr if you need user controls or no autoplay:
+
+![](my_demo.mp4){width=720}                                         # silent loop
+![Caption.](demo.mp4 "autoplay,muted,loop,controls,playsinline"){width=500}
+![](full.mp4 "controls"){width=720}                                 # user-driven
+
 Inline math: $f(x) = \int g(x) dx$. Display math:
 
 $$
 \mathcal{L} = \sum_i \log p(y_i | x_i)
 $$
 
-Bullet lists, **bold**, *italic*, [links](https://...), inline `<video>` and
-`<iframe>` tags — all work.
+Bullet lists, **bold**, *italic*, [links](https://...), inline `<iframe>`
+tags — all work. Raw `<video>` HTML still works if you need flexibility
+the renderer doesn't expose (e.g., carousel slides — see lifelong-memory.md).
 ```
 
 The author names you list under `affiliations:` get auto-linked to their
