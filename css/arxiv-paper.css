@@ -278,11 +278,11 @@
 }
 
 .arxiv-paper-content table thead {
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid var(--fg);
 }
 
 .arxiv-paper-content table tbody tr {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--border);
 }
 
 .arxiv-paper-content table th,
