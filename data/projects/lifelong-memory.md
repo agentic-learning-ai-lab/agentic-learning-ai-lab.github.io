@@ -27,11 +27,7 @@ LifelongMemory takes a long egocentric video and a natural-language query, then 
 
 A multi-modal LLM (MLLM) produces captions from a list of short video clips. Content and query similarity filters are then applied to remove redundant and irrelevant captions.
 
-<figure class="tw-text-center tw-my-10">
-  <video autoplay muted loop controls playsinline style="max-width: 700px; width: 100%; height: auto; margin: 0 auto; border-radius: 0.25rem;">
-    <source src="/assets/projects/lifelong-memory/stageone.mp4" type="video/mp4">
-  </video>
-</figure>
+![](stageone.mp4 "autoplay,muted,loop,controls,playsinline"){width=700}
 
 ### Stage 2: LLM Reasoning
 
@@ -47,11 +43,7 @@ For video QA, ensemble the predictions of multiple runs using **vote by confiden
 
 For NLQ, feed candidate intervals predicted by our previous stage into a pretrained NLQ model to obtain a fine-grained prediction.
 
-<figure class="tw-text-center tw-my-10">
-  <video autoplay muted loop controls playsinline style="max-width: 700px; width: 100%; height: auto; margin: 0 auto; border-radius: 0.25rem;">
-    <source src="/assets/projects/lifelong-memory/stagethree.mp4" type="video/mp4">
-  </video>
-</figure>
+![](stagethree.mp4 "autoplay,muted,loop,controls,playsinline"){width=700}
 
 ## Visualization
 

@@ -48,10 +48,7 @@ We show the qualitative comparison between [DDIM](https://arxiv.org/abs/2010.025
 
 ## Video Presentation {data-toc=Video}
 
-<video controls preload="metadata"
-       style="max-width: 720px; width: 100%; height: auto; display: block; margin: 1.5rem auto;">
-  <source src="/assets/projects/procreate/procreate.mp4" type="video/mp4">
-</video>
+![](procreate.mp4 "controls"){width=720}
 
 ## Broader Impact {data-toc=Impact}
 
