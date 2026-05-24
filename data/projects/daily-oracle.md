@@ -307,6 +307,12 @@ For each day, we collect news articles from the daily-updated Common Crawl News 
       Plotly.newPlot('trendPlotMC', [cutoffTrace].concat(buildTraces(dataMC)),
         trendLayout('MC Accuracy'), trendConfig);
     }
+    // Re-render charts when the site theme changes so axes / legend /
+    // backgrounds pick up the new --fg / --bg / --border values.
+    // The toggle in /index.js dispatches 'themechange' on <html>.
+    document.documentElement.addEventListener('themechange', () => {
+      if (typeof drawPlots === 'function') drawPlots();
+    });
     const tfData = rawTFqa.map(r => ({ date: r.date, question: r.question, answer: r.answer, title: r.title, url: r.url, category: r.category }));
     const mcData = rawMCqa.map(r => ({ date: r.date, question: r.question, a: r.choice_a, b: r.choice_b, c: r.choice_c, d: r.choice_d, answer: r.answer, title: r.title, url: r.url, category: r.category }));
     const categories = Array.from(new Set(tfData.map(r => r.category).concat(mcData.map(r => r.category)))).sort();

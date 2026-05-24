@@ -117,6 +117,26 @@ header {
 :root[data-theme="dark"] .lab-logo-light { display: none; }
 :root[data-theme="dark"] .lab-logo-dark { display: inline-block; }
 
+/* Dark-mode media-dimming. Bright pastel hero images, headshots, and
+   paper-card art "pop" too hard against a dark page bg — a small
+   brightness reduction softens the contrast without changing content.
+   Standard pattern (GitHub / Linear / Notion use ~0.85). Opt OUT for
+   figures inside content surfaces, which already sit on an explicit
+   white canvas — dimming those would gray out the canvas and look
+   worse. Logos are authored at #e8e8ea (already not pure white), so
+   exempt them too. */
+:root[data-theme="dark"] img {
+    filter: brightness(0.85);
+}
+:root[data-theme="dark"] .lab-logo,
+:root[data-theme="dark"] .arxiv-paper-content figure img,
+:root[data-theme="dark"] .project-page-main figure img,
+:root[data-theme="dark"] .project-prose figure img,
+:root[data-theme="dark"] .project-carousel .item img,
+:root[data-theme="dark"] .project-carousel .item picture > img {
+    filter: none;
+}
+
 
 header>.collapsible-header {
     display: flex;
@@ -144,7 +164,7 @@ header>.collapsible-header {
     align-items: center;
     min-width: fit-content;
     /*    border-radius: 25px;*/
-    padding: 5px 15px;
+    padding: 5px 12px;
     border-color: transparent;
     border-width: 2px;
     border-style: solid;
@@ -308,7 +328,10 @@ header>.collapsible-header {
         width: 0vw;
         justify-content: flex-start;
         padding: 8px;
-        padding-top: 70px;
+        /* padding-top needs to clear the X close button at top: 40px;
+           bumped to keep the first menu item (search button) from
+           sitting under or hugging the X */
+        padding-top: 95px;
         padding-bottom: 20px;
         padding-right: 20px;
         place-items: end;
@@ -316,7 +339,11 @@ header>.collapsible-header {
         color: var(--fg);
         overflow-y: auto;
         overflow-x: hidden;
-        box-shadow: 2px 0px 3px #000;
+        /* Left edge: a thin themed border. The original hard black
+           box-shadow read on light bg but disappeared on dark and was
+           harsh on both — the border gives a clean visible edge in
+           both themes without needing a shadow. */
+        border-left: 1px solid var(--border);
         pointer-events: none;
     }
 
@@ -360,24 +387,22 @@ header>.collapsible-header {
     top: 50%;
     left: 40px;
     transform: translate(0%, -50%);
-    /*    display: flex;
-    align-items: center;
-    height: 100vh;
-    */
-    /*    position: absolute;*/
     color: white;
-    /* Text color */
-    /*    top: 100px;*/
-    /*    left: 40px;*/
-    width: 60%;
-    /* Ensures the image fits the container */
-    /*    font-size: 24px; Adjust font size */
-    /*    font-weight: bold;*/
-    /*    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); Optional text shadow for readability */
+    width: 75%;
 }
 
-/* Responsive adjustments for text overlay on small screens */
-@media (max-width: 767px) {
+/* In dark mode the hero image itself is dimmed via the universal
+   img brightness rule, so pure-white overlay text reads "too loud"
+   against the now-darker photo. Drop one notch from pure white. */
+:root[data-theme="dark"] .text-overlay {
+    color: #f4f4f5;
+}
+
+/* Responsive adjustments for text overlay on tablet + mobile (anything
+   below desktop's lg breakpoint = 1024px). The default 60% width left
+   a narrow column on tablets; here the overlay spans the full image
+   width minus 5% gutters on each side. */
+@media (max-width: 1023px) {
     .text-overlay {
         left: 5%;
         right: 5%;
@@ -516,7 +541,7 @@ section {
 .search-input-container {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 18px;
 }
 
 .search-input-container i.bi-search {
