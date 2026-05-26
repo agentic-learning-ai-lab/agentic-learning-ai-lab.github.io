@@ -48,12 +48,7 @@ In standard transformer blocks, the input token is always propagated forward in 
 
 Midway Network is the only model to achieve strong performance on both semantic segmentation and optical flow tasks overall. Midway Network (enc. only)'s weak performance on optical flow indicates that the pretrained midway inverse and forward dynamics model weights capture useful information for motion estimation. We also demonstrate that downstream performance scales with larger model sizes from ViT-S to ViT-B. Please see Section 4.2 of the [paper](https://arxiv.org/abs/2510.05558) for more results from WT-Venice pretraining.
 
-<figure class="tw-text-center tw-my-10">
-  <video autoplay muted loop controls playsinline style="max-width: 500px; width: 100%; height: auto; margin: 0 auto; border-radius: 0.25rem;">
-    <source src="/assets/projects/midway-network/bdd-semseg.mp4" type="video/mp4">
-  </video>
-  <figcaption class="tw-text-base tw-text-gray-600 tw-mt-4 tw-italic tw-max-w-2xl tw-mx-auto">Midway Network ViT-B UperNet readout on BDD100K semantic segmentation.</figcaption>
-</figure>
+![Midway Network ViT-B UperNet readout on BDD100K semantic segmentation.](bdd-semseg.mp4 "autoplay,muted,loop,controls,playsinline"){width=500}
 
 ![Midway Network ViT-S on FlyingThings and MPI-Sintel optical flow tasks after finetuning.](flow.png)
 

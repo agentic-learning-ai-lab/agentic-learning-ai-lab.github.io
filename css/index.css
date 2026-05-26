@@ -1,6 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 :root {
+    /* Semantic theme tokens (light defaults). Dark overrides below
+       under [data-theme="dark"]. Auto-activation via OS preference is
+       deferred — for now, dark mode is opt-in: set
+       document.documentElement.dataset.theme = "dark" to test in
+       devtools, or wait for the toggle UI shipping in a follow-up PR. */
+    --bg: #ffffff;
+    --fg: #2c2c2c;
+    --fg-muted: #6b7280;
+    --link: #0d0d0d;
+    --border: rgb(75 85 99);
+    /* card-bg etc. defined here so dark overrides can pre-stage values
+       even though chrome PR doesn't yet wire content surfaces to them.
+       Cards / project pages / arxiv view get themed in a follow-up PR. */
+    --card-bg: #f3f3f3b4;
 
     --btn-color: #fdfdfd;
     /* button color*/
@@ -13,16 +27,51 @@
     --input-focus-bd-color: #0d0d0d;
 }
 
+:root[data-theme="dark"] {
+    /* Softer-than-pitch-black background (zinc-900). Pure #000 reads as
+       harsh against the serif body type; a slight warm-gray tint is
+       easier to look at and matches conventional dark-mode palettes
+       (GitHub, Linear, Notion all sit in this neighborhood). */
+    --bg: #18181b;
+    --fg: #e8e8ea;
+    /* Muted gray — used for captions, subtitles, affiliations, and
+       similar "secondary" text. Was a1a1aa (zinc-400) but reads dim
+       on the page; bumped one step lighter for better readability
+       while still visually distinct from --fg. */
+    --fg-muted: #c4c4c8;
+    --link: #e8e8ea;
+    --border: rgb(156 163 175);
+    --card-bg: #27272a;
+}
+
 
 html {
     scroll-behavior: smooth;
     font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     line-height: 1.75;
     font-size: 1.0625rem;
-    color: #2c2c2c;
+    color: var(--fg);
+    background-color: var(--bg);
     overflow-x: hidden;
     max-width: 100vw;
     scroll-padding-top: 150px;
+}
+
+/* Browser default <hr> renders as a ~1px solid neutral border that looks
+   harsh on a dark background (and slightly too contrasty on light too).
+   Drop intensity to roughly --border at low opacity. */
+hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    opacity: 0.4;
+}
+
+/* Form inputs default to UA white-bg + black-text. Inherit theme. */
+input[type="text"],
+input[type="email"],
+textarea {
+    background-color: var(--bg);
+    color: var(--fg);
 }
 
 body {
@@ -61,6 +110,33 @@ header {
     color: #000; */
 }
 
+/* Logo swap. Two <img>s are emitted side-by-side in templates/header.hbs;
+   exactly one is shown based on the active theme. The dark variant is
+   pre-fetched but display:none, so the swap during a toggle is instant. */
+.lab-logo-dark { display: none; }
+:root[data-theme="dark"] .lab-logo-light { display: none; }
+:root[data-theme="dark"] .lab-logo-dark { display: inline-block; }
+
+/* Dark-mode media-dimming. Bright pastel hero images, headshots, and
+   paper-card art "pop" too hard against a dark page bg — a small
+   brightness reduction softens the contrast without changing content.
+   Standard pattern (GitHub / Linear / Notion use ~0.85). Opt OUT for
+   figures inside content surfaces, which already sit on an explicit
+   white canvas — dimming those would gray out the canvas and look
+   worse. Logos are authored at #e8e8ea (already not pure white), so
+   exempt them too. */
+:root[data-theme="dark"] img {
+    filter: brightness(0.85);
+}
+:root[data-theme="dark"] .lab-logo,
+:root[data-theme="dark"] .arxiv-paper-content figure img,
+:root[data-theme="dark"] .project-page-main figure img,
+:root[data-theme="dark"] .project-prose figure img,
+:root[data-theme="dark"] .project-carousel .item img,
+:root[data-theme="dark"] .project-carousel .item picture > img {
+    filter: none;
+}
+
 
 header>.collapsible-header {
     display: flex;
@@ -88,7 +164,7 @@ header>.collapsible-header {
     align-items: center;
     min-width: fit-content;
     /*    border-radius: 25px;*/
-    padding: 5px 15px;
+    padding: 5px 12px;
     border-color: transparent;
     border-width: 2px;
     border-style: solid;
@@ -97,26 +173,26 @@ header>.collapsible-header {
 
 .header-links:hover {
     /*    background-color: var(--header-link-hover);*/
-    background-color: #f3f3f3b4;
-    border-color: rgb(75 85 99);
+    background-color: var(--card-bg);
+    border-color: var(--border);
     /* gray 600 */
 }
 
 .person-page-links {
     display: inline-block;
-    color: black;
+    color: var(--fg);
     padding: 6px 8px;
-    border: 1px solid rgb(209 213 219);
-    /* gray 300 */
+    border: 1px solid var(--border);
+    /* base border is muted; brighten on hover */
+    opacity: 1;
     transition: all 0.2s;
     cursor: pointer;
     font-size: 0.9rem;
 }
 
 .person-page-links:hover {
-    border-color: rgb(75 85 99);
-    /* gray 600 */
-    background-color: #f3f3f3b4;
+    border-color: var(--border);
+    background-color: var(--card-bg);
 }
 
 .material-icons.md-40 {
@@ -185,7 +261,7 @@ header>.collapsible-header {
 }
 
 .footer-link {
-    color: #0d0d0d;
+    color: var(--link);
     transition: color 0.3s;
 }
 
@@ -252,20 +328,27 @@ header>.collapsible-header {
         width: 0vw;
         justify-content: flex-start;
         padding: 8px;
-        padding-top: 70px;
+        /* padding-top needs to clear the X close button at top: 40px;
+           bumped to keep the first menu item (search button) from
+           sitting under or hugging the X */
+        padding-top: 95px;
         padding-bottom: 20px;
         padding-right: 20px;
         place-items: end;
-        background-color: #ffffff;
-        color: #000000;
+        background-color: var(--bg);
+        color: var(--fg);
         overflow-y: auto;
         overflow-x: hidden;
-        box-shadow: 2px 0px 3px #000;
+        /* Left edge: a thin themed border. The original hard black
+           box-shadow read on light bg but disappeared on dark and was
+           harsh on both — the border gives a clean visible edge in
+           both themes without needing a shadow. */
+        border-left: 1px solid var(--border);
         pointer-events: none;
     }
 
     .header-links {
-        color: black;
+        color: var(--fg);
         padding: 6px 10px;
         font-size: 15px;
     }
@@ -304,24 +387,22 @@ header>.collapsible-header {
     top: 50%;
     left: 40px;
     transform: translate(0%, -50%);
-    /*    display: flex;
-    align-items: center;
-    height: 100vh;
-    */
-    /*    position: absolute;*/
     color: white;
-    /* Text color */
-    /*    top: 100px;*/
-    /*    left: 40px;*/
-    width: 60%;
-    /* Ensures the image fits the container */
-    /*    font-size: 24px; Adjust font size */
-    /*    font-weight: bold;*/
-    /*    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); Optional text shadow for readability */
+    width: 75%;
 }
 
-/* Responsive adjustments for text overlay on small screens */
-@media (max-width: 767px) {
+/* In dark mode the hero image itself is dimmed via the universal
+   img brightness rule, so pure-white overlay text reads "too loud"
+   against the now-darker photo. Drop one notch from pure white. */
+:root[data-theme="dark"] .text-overlay {
+    color: #f4f4f5;
+}
+
+/* Responsive adjustments for text overlay on tablet + mobile (anything
+   below desktop's lg breakpoint = 1024px). The default 60% width left
+   a narrow column on tablets; here the overlay spans the full image
+   width minus 5% gutters on each side. */
+@media (max-width: 1023px) {
     .text-overlay {
         left: 5%;
         right: 5%;
@@ -435,7 +516,7 @@ section {
 
 /* Search Modal Content */
 .search-modal-content {
-    background: white;
+    background: var(--bg);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     width: 100%;
     max-width: 700px;
@@ -444,7 +525,7 @@ section {
     flex-direction: column;
     transform: translateY(0);
     transition: transform 0.2s ease-in-out;
-    border: 2px solid #d1d5db;
+    border: 2px solid var(--border);
 }
 
 .search-hidden .search-modal-content {
@@ -454,17 +535,17 @@ section {
 /* Search Header */
 .search-header {
     padding: 12px 16px;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border);
 }
 
 .search-input-container {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 18px;
 }
 
 .search-input-container i.bi-search {
-    color: #9ca3af;
+    color: var(--fg-muted);
     font-size: 18px;
     flex-shrink: 0;
 }
@@ -474,18 +555,18 @@ section {
     border: none;
     outline: none;
     font-size: 16px;
-    color: #111827;
+    color: var(--fg);
     background: transparent;
 }
 
 .search-input-container input::placeholder {
-    color: #9ca3af;
+    color: var(--fg-muted);
 }
 
 .search-close-btn {
     background: transparent;
     border: none;
-    color: #9ca3af;
+    color: var(--fg-muted);
     cursor: pointer;
     padding: 8px;
     display: flex;
@@ -497,8 +578,8 @@ section {
 }
 
 .search-close-btn:hover {
-    background-color: #f3f4f6;
-    color: #4b5563;
+    background-color: var(--card-bg);
+    color: var(--fg);
 }
 
 /* Search Results Container */
@@ -511,7 +592,7 @@ section {
 
 /* Empty State */
 .search-empty-state {
-    color: #9ca3af;
+    color: var(--fg-muted);
     text-align: center;
     padding: 60px 20px;
     font-size: 16px;
@@ -521,7 +602,7 @@ section {
 .search-result-item {
     display: block;
     padding: 12px;
-    background-color: #f3f3f3b4;
+    background-color: var(--card-bg);
     border: 2px solid transparent;
     margin-bottom: 10px;
     transition: border-color 0.15s;
@@ -530,13 +611,13 @@ section {
 }
 
 .search-result-item:hover {
-    border-color: #4b5563;
+    border-color: var(--border);
 }
 
 .search-result-content {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 18px;
 }
 
 /* Search Result Thumbnail */
@@ -546,6 +627,10 @@ section {
     flex-shrink: 0;
     overflow: hidden;
     position: relative;
+    /* Nudge down so the thumbnail's top edge aligns with the title text's
+       visual top. The title uses line-height: 1.4 which leaves ~5px of
+       leading above the cap-height of the glyph. */
+    margin-top: 5px;
 }
 
 .search-result-thumbnail img {
@@ -603,14 +688,14 @@ section {
 
 .search-result-title {
     font-weight: 500;
-    color: #111827;
+    color: var(--fg);
     margin-bottom: 4px;
     line-height: 1.4;
 }
 
 .search-result-subtitle {
     font-size: 14px;
-    color: #6b7280;
+    color: var(--fg-muted);
     line-height: 1.4;
     margin-top: 4px;
     font-family: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif;
@@ -618,7 +703,7 @@ section {
 
 /* Search Result Arrow */
 .search-result-arrow {
-    color: #9ca3af;
+    color: var(--fg-muted);
     font-size: 16px;
     flex-shrink: 0;
     align-self: center;
@@ -747,17 +832,17 @@ section {
     gap: 0.5rem;
     padding: 0.5rem 1.1rem;
     background: transparent;
-    color: #2c2c2c;
-    border: 1px solid #d1d5db;
+    color: var(--fg);
+    border: 1px solid var(--border);
     border-radius: 999px;
     font-size: 1rem;
     text-decoration: none;
     transition: background-color 0.15s, border-color 0.15s;
 }
 .project-link:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
-    color: #2c2c2c;
+    background: var(--card-bg);
+    border-color: var(--border);
+    color: var(--fg);
 }
 .project-link i {
     font-size: 1rem;
@@ -790,22 +875,22 @@ section {
     line-height: 1.4;
 }
 .project-toc-label {
-    color: #6b7280;
+    color: var(--fg-muted);
     font-size: 1rem;
     margin-right: 0.25rem;
 }
 .project-toc a {
-    color: #2c2c2c;
+    color: var(--fg);
     text-decoration: none;
     padding: 0.35rem 0.95rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--border);
     border-radius: 999px;
     font-size: 1rem;
     transition: background-color 0.15s, border-color 0.15s;
 }
 .project-toc a:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
+    background: var(--card-bg);
+    border-color: var(--border);
 }
 
 /* Subtle short-line divider between consecutive narrative sections.
@@ -826,17 +911,17 @@ section {
     display: block;
     width: 120px;
     height: 1px;
-    background: #9ca3af;
+    background: var(--border);
     margin: 0 auto 3rem;
 }
 
-/* Project page body links — match the academic-template look */
+/* Project page body links — blue that reads on both light and dark. */
 .project-section-body a {
-    color: #1a5490;
+    color: #3b82f6;
     text-decoration: underline;
 }
 .project-section-body a:hover {
-    color: #0d3a6b;
+    color: #60a5fa;
 }
 .project-section-body p {
     margin: 0;
@@ -848,6 +933,19 @@ section {
    body class, preserving the lab's identity in the frame. */
 .project-page-main {
     font-family: 'Libertinus Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Project-page figures are usually transparent-PNG plots from papers
+   (black axes/text on transparent). Give them a white canvas — same
+   treatment we apply to the arXiv embedded view. Invisible on light
+   theme, essential on dark. Covers <figure> bodies AND project
+   carousel slides (each slide is a .project-carousel .item containing
+   <img>/<picture>/<video>). */
+.project-page-main figure img,
+.project-prose figure img,
+.project-carousel .item img,
+.project-carousel .item picture > img {
+    background-color: #ffffff;
 }
 .project-prose {
     font-family: 'Libertinus Serif', "Iowan Old Style", Georgia, serif;
@@ -947,10 +1045,10 @@ section {
     transform: translateY(-50%);
     width: 42px;
     height: 42px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--border);
     border-radius: 999px;
-    background: #fff;
-    color: #2c2c2c;
+    background: var(--bg);
+    color: var(--fg);
     cursor: pointer;
     font-size: 1.1rem;
     line-height: 1;
@@ -963,8 +1061,8 @@ section {
 }
 .project-carousel-prev:hover,
 .project-carousel-next:hover {
-    background: #f9fafb;
-    border-color: #9ca3af;
+    background: var(--card-bg);
+    border-color: var(--border);
     color: #3b82f6;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
@@ -990,7 +1088,7 @@ section {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #d1d5db;
+    background: var(--border);
     border: none;
     margin: 0 4px;
     cursor: pointer;
@@ -998,7 +1096,7 @@ section {
     transition: background-color 0.15s;
 }
 .project-carousel-dot.is-active { background: #3b82f6; }
-.project-carousel-dot:hover { background: #9ca3af; }
+.project-carousel-dot:hover { background: var(--fg-muted); }
 
 /* Narrow viewports: hide the chevron buttons (touch swipe replaces
    them) and drop the side padding so content has the full width.
@@ -1048,7 +1146,7 @@ section {
    left accent — matches the academic-page-template look used by
    the legacy per-project repos. */
 .project-prose blockquote {
-    background: #f5f5f5;
+    background: var(--card-bg);
     /* Lab blue (--lab-link-color in lab-theme.css, also used by
        arxiv-paper.css blockquotes). The Bulma default #3273dc from
        the legacy academic template was a slightly different blue. */
@@ -1056,7 +1154,7 @@ section {
     border-radius: 4px;
     padding: 0.75rem 1rem;
     margin: 1.5rem 0;
-    color: #2c2c2c;
+    color: var(--fg);
 }
 /* Defensive font inheritance: ensure blockquote text reads at the same
    size/family/leading as the surrounding body. The `<p>` rule above

@@ -268,12 +268,30 @@ For each day, we collect news articles from the daily-updated Common Crawl News 
       // CSS in style.css forces the modebar to a single row above the
       // plot. margin.t kept at 20 since the modebar lives in negative-
       // top space outside the plot area.
-      const trendLayout = (yTitle) => ({
-        margin: { t: 20, b: 40, l: 50, r: 20 },
-        xaxis: { title: 'Date' }, yaxis: { title: yTitle },
-        legend: { orientation: 'h', x: 0, y: -0.2, font: { size: 11 } },
-        hovermode: 'x', shapes
-      });
+      // Read theme tokens from the host page's CSS vars so the chart
+      // honors light/dark mode. Re-evaluated on each newPlot call so a
+      // theme change between renders picks up the new palette.
+      const themed = () => {
+        const cs = getComputedStyle(document.documentElement);
+        return {
+          fg: cs.getPropertyValue('--fg').trim() || '#2c2c2c',
+          bg: cs.getPropertyValue('--bg').trim() || '#ffffff',
+          grid: cs.getPropertyValue('--border').trim() || '#e5e7eb',
+        };
+      };
+      const trendLayout = (yTitle) => {
+        const t = themed();
+        return {
+          margin: { t: 20, b: 40, l: 50, r: 20 },
+          paper_bgcolor: t.bg,
+          plot_bgcolor: t.bg,
+          font: { color: t.fg },
+          xaxis: { title: 'Date', gridcolor: t.grid, linecolor: t.grid, zerolinecolor: t.grid },
+          yaxis: { title: yTitle, gridcolor: t.grid, linecolor: t.grid, zerolinecolor: t.grid },
+          legend: { orientation: 'h', x: 0, y: -0.2, font: { size: 11, color: t.fg } },
+          hovermode: 'x', shapes
+        };
+      };
       const trendConfig = {
         responsive: true,
         displayModeBar: true,
@@ -289,6 +307,12 @@ For each day, we collect news articles from the daily-updated Common Crawl News 
       Plotly.newPlot('trendPlotMC', [cutoffTrace].concat(buildTraces(dataMC)),
         trendLayout('MC Accuracy'), trendConfig);
     }
+    // Re-render charts when the site theme changes so axes / legend /
+    // backgrounds pick up the new --fg / --bg / --border values.
+    // The toggle in /index.js dispatches 'themechange' on <html>.
+    document.documentElement.addEventListener('themechange', () => {
+      if (typeof drawPlots === 'function') drawPlots();
+    });
     const tfData = rawTFqa.map(r => ({ date: r.date, question: r.question, answer: r.answer, title: r.title, url: r.url, category: r.category }));
     const mcData = rawMCqa.map(r => ({ date: r.date, question: r.question, a: r.choice_a, b: r.choice_b, c: r.choice_c, d: r.choice_d, answer: r.answer, title: r.title, url: r.url, category: r.category }));
     const categories = Array.from(new Set(tfData.map(r => r.category).concat(mcData.map(r => r.category)))).sort();

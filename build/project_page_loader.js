@@ -66,6 +66,48 @@ function htmlEscape(s) {
  * Returns { pngUrl, webpUrl }. Either can be the original relative
  * path if no manifest entry exists (graceful degradation).
  */
+/**
+ * Video shortcut helpers — used by the custom image renderer to emit a
+ * <video> figure when the src has a video extension. Mirrors
+ * resolveImagePaths() but skips the WebP sibling lookup (videos don't
+ * have one) and skips the width-fallback (videos size off the wrapper).
+ */
+const VIDEO_EXT = /\.(mp4|webm|mov|m4v)$/i;
+const VIDEO_MIME = {
+    mp4: 'video/mp4',
+    webm: 'video/webm',
+    mov: 'video/quicktime',
+    m4v: 'video/x-m4v',
+};
+function mimeFor(src) {
+    const m = src.match(VIDEO_EXT);
+    return m ? VIDEO_MIME[m[1].toLowerCase()] : 'video/mp4';
+}
+function resolveVideoUrl(src, slug) {
+    if (/^https?:/.test(src)) return src;
+    const cleanSrc = src.replace(/^\.\//, '');
+    const logical = `/assets/projects/${slug}/${cleanSrc}`;
+    return loadManifest()[logical] || logical;
+}
+// MD `title` attr ("…") on an image carries a comma-separated list of
+// allowed <video> attributes. Without a title we emit the standard
+// muted-autoplay-loop pattern that the existing raw-HTML videos use
+// across project pages — matches the previous in-place behavior, so
+// migrating from raw HTML to `![cap](foo.mp4)` is a behavior-preserving
+// rewrite.
+const VIDEO_FLAG_ALLOWLIST = new Set([
+    'autoplay', 'controls', 'loop', 'muted', 'playsinline',
+]);
+function parseVideoFlags(title) {
+    if (!title) return 'autoplay muted loop playsinline preload="metadata"';
+    const flags = title.split(',')
+        .map(s => s.trim().toLowerCase())
+        .filter(s => VIDEO_FLAG_ALLOWLIST.has(s));
+    // Always include preload="metadata" — bandwidth-friendly default
+    // that still lets iOS Safari pull the first frame for the poster.
+    return [...flags, 'preload="metadata"'].join(' ');
+}
+
 function resolveImagePaths(src, slug) {
     if (/^https?:/.test(src)) {
         // Author wrote an absolute URL — pass through.
@@ -116,17 +158,43 @@ function makeRenderer(slug) {
     // The alt text is used as the caption (academic convention — the
     // alt IS the caption description). markdown-it parses the alt out
     // of inline children of the image token.
+    //
+    // VIDEO SHORTCUT: when src ends in .mp4 / .webm / .mov / .m4v we
+    // emit a <video> figure instead, so authors can write
+    //     ![Caption](demo.mp4)
+    // instead of the 6-line raw <figure><video><source>…</figure> HTML
+    // that was previously needed (see data/projects/poodle.md and
+    // midway-network.md's pre-cleanup state). Optional MD title attr
+    // overrides the default player flags:
+    //     ![Caption](demo.mp4 "autoplay,muted,loop,playsinline")
+    //     ![Caption](demo.mp4 "controls")            // no autoplay
     md.renderer.rules.image = function (tokens, idx) {
         const token = tokens[idx];
         const src = token.attrGet('src') || '';
         const widthAttr = token.attrGet('width');
         const altText = token.content || '';
-
-        const { pngUrl, webpUrl } = resolveImagePaths(src, slug);
+        const titleAttr = token.attrGet('title');
 
         const widthStyle = widthAttr ? ` style="max-width: ${parseInt(widthAttr, 10)}px;"` : '';
         const altEsc = htmlEscape(altText);
+        const captionHtml = altText
+            ? `<figcaption class="tw-text-base tw-text-[var(--fg-muted)] tw-mt-4 tw-italic tw-inline-block tw-text-left">${altEsc}</figcaption>`
+            : '';
 
+        if (VIDEO_EXT.test(src)) {
+            const videoUrl = resolveVideoUrl(src, slug);
+            const flags = parseVideoFlags(titleAttr);
+            let html = `<figure class="tw-text-center tw-my-10">`;
+            html += `<div class="tw-mx-auto"${widthStyle}>`;
+            html += `<video ${flags} style="width: 100%; height: auto; border-radius: 0.25rem;">`;
+            html += `<source src="${videoUrl}" type="${mimeFor(src)}">`;
+            html += `</video>`;
+            html += captionHtml;
+            html += `</div></figure>`;
+            return html;
+        }
+
+        const { pngUrl, webpUrl } = resolveImagePaths(src, slug);
         const sourceTag = webpUrl
             ? `<source srcset="${webpUrl}" type="image/webp">`
             : '';
@@ -134,14 +202,12 @@ function makeRenderer(slug) {
         let html = `<figure class="tw-text-center tw-my-10">`;
         html += `<div class="tw-mx-auto"${widthStyle}>`;
         html += `<picture>${sourceTag}<img src="${pngUrl}" alt="${altEsc}" class="tw-w-full tw-h-auto tw-rounded" loading="lazy"></picture>`;
-        if (altText) {
-            // Caption sits INSIDE the image wrapper so it inherits the
-            // same max-width (the {width=N} attribute on the MD image,
-            // or the section column width if none). inline-block +
-            // figure's text-center keeps short captions centered;
-            // long captions hit the wrapper width and wrap left-aligned.
-            html += `<figcaption class="tw-text-base tw-text-gray-600 tw-mt-4 tw-italic tw-inline-block tw-text-left">${altEsc}</figcaption>`;
-        }
+        // Caption sits INSIDE the image wrapper so it inherits the
+        // same max-width (the {width=N} attribute on the MD image,
+        // or the section column width if none). inline-block +
+        // figure's text-center keeps short captions centered;
+        // long captions hit the wrapper width and wrap left-aligned.
+        html += captionHtml;
         html += `</div>`;
         html += `</figure>`;
         return html;

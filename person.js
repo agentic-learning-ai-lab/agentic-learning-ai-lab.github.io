@@ -106,12 +106,12 @@ function displayPageNumbers() {
         if (i > prev + 1) {
             const ellipsis = document.createElement('span');
             ellipsis.innerText = '…';
-            ellipsis.className = 'tw-px-2 tw-py-1 tw-text-gray-500';
+            ellipsis.className = 'tw-px-2 tw-py-1 tw-text-[var(--fg-muted)]';
             pageNumbers.appendChild(ellipsis);
         }
         const pageButton = document.createElement('button');
         pageButton.innerText = i;
-        pageButton.className = `tw-px-2 tw-py-1 ${i === currentPage ? 'tw-bg-black tw-text-white' : 'tw-bg-gray-200 tw-text-black'}`;
+        pageButton.className = `tw-px-2 tw-py-1 ${i === currentPage ? 'tw-bg-[var(--fg)] tw-text-[var(--bg)]' : 'tw-bg-[var(--card-bg)] tw-text-[var(--fg)]'}`;
         pageButton.disabled = (i === currentPage);
         pageButton.onclick = () => showPage(i, 300);
         pageNumbers.appendChild(pageButton);

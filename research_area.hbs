@@ -9,7 +9,7 @@
 <meta property="og:image" content="{{cdnUrl image}}" />
 {{> head}}
 </head>
-<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[#fff] tw-font-mono">
+<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[var(--bg)] tw-font-mono">
     {{> header}}
 
     <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-overflow-hidden tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4 lg:tw-justify-around xl:tw-justify-around">
@@ -17,7 +17,7 @@
         <div class="image-container">
             {{{pictureCdn image alt="app" class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain" eager=true}}}
             <div class="text-overlay">
-            <div class="tw-flex tw-flex-wrap tw-text-7xl tw-font-semibold tw-leading-[85px] max-md:tw-text-4xl max-md:tw-leading-snug" style="position: relative">
+            <div class="tw-flex tw-flex-wrap tw-text-7xl tw-leading-[85px] max-lg:tw-text-5xl max-lg:tw-leading-snug max-md:tw-text-4xl" style="position: relative">
                 <span class="reveal-hero-text">
                     {{title}}
                 </span>
@@ -45,7 +45,7 @@
             <div class="section-underline tw-my-4">
             </div> -->
             <div class="tw-gap-2 tw-max-w-100">
-                <p class="tw-text-gray-600 tw-mt-4">
+                <p class="tw-text-[var(--fg-muted)] tw-mt-4">
                 {{{description}}}
                 </p>
             </div>
