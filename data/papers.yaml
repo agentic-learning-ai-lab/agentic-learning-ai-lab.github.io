@@ -1,3 +1,22 @@
+- title: 'Aligning LLMs with Human Uncertainty: A Beta-Bernoulli Calibrator for LLM Forecasting'
+  image: /assets/images/papers/beta_bernoulli_calibrator.png #TODO
+  authors:
+    - Amelia (Hui) Dai
+    - Ryan Teehan
+    - Parsa Torabian
+    - Mengye Ren
+  short_abstract: A simple post-hoc calibrator that maps an LLM's verbalized point forecast to a Beta distribution over event probability, trained on binary outcomes and human forecasts.
+  abstract: 'Probabilistic forecasting estimates the likelihood of uncertain future events. To improve LLM forecasting, existing methods typically learn from binary outcomes to output verbalized forecasts. However, while aggregated human forecasts contain rich information in both the crowd probability estimate and the degree of agreement among forecasters, how to utilize these signals remains underexplored. To address this, we propose the Beta-Bernoulli Calibrator (BBC), which converts an initial point estimate forecast from any model into a distribution over event likelihood, using supervision from both binary outcomes and human forecasts. BBC models event likelihood p ~ Beta(α, β) and outcome y ~ Bernoulli(p), with the mean as the calibrated point forecast and the variance as the epistemic uncertainty. Our results show that BBC generally provides better calibrated and more accurate forecasts than both traditional post-hoc calibration methods and models fine-tuned specifically for forecasting, while remaining lightweight and having good generalization. We also show that the epistemic uncertainty captured by BBC is a more reliable predictor of forecasting error than verbalized confidence.'
+  arxiv: 'https://arxiv.org/abs/2605.27668'
+  pdf: 'https://arxiv.org/pdf/2605.27668'
+  permalink: beta-bernoulli-calibrator
+  project_page: true
+  enable_full_paper: true
+  research_areas:
+    - adaptive-agents-and-foundation-models
+  date: 2026-05-26T00:00:00.000Z
+  journal: 'CoRR'
+  is_recent: true
 - title: Temporal Straightening for Latent Planning
   image: /assets/images/papers/temporal_straightening.png
   authors:
