@@ -82,8 +82,13 @@ async function main() {
         registered++;
     }
 
-    // Sort manifest keys to keep diffs stable
-    const sorted = Object.fromEntries(Object.entries(manifest).sort((a, b) => a[0].localeCompare(b[0])));
+    // Sort manifest keys to keep diffs stable. Use the same default
+    // Array.sort() (Unicode code-unit order) as sync_to_r2.js and
+    // r2_lib.js — using localeCompare here would re-shuffle entries
+    // those two writers set, producing no-op diffs whenever the
+    // upload flow and the local sync flow alternate.
+    const sortedKeys = Object.keys(manifest).sort();
+    const sorted = Object.fromEntries(sortedKeys.map(k => [k, manifest[k]]));
     fs.writeFileSync(MANIFEST_PATH, JSON.stringify(sorted, null, 2) + '\n');
     console.log(`\nRegistered ${registered}/${spec.length} entries (${missing} missing on R2)`);
     if (missing > 0) process.exit(1);
