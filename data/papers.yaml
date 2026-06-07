@@ -17,6 +17,37 @@
   date: 2026-05-26T00:00:00.000Z
   journal: 'CoRR'
   is_recent: true
+- title: 'Seeking the Unfamiliar but Memorable: Conceptual Creativity as Meta-Learning'
+  image: /assets/images/papers/conceptual_creativity_meta_learning.png
+  authors:
+    - Mengye Ren
+  short_abstract: Creativity is producing stimuli that are unfamiliar at first sight but quickly learnable from a few exposures. A Creator-Appraiser meta-learning loop lets a frozen diffusion model generate novel concepts the base model would not.
+  abstract: 'What does it mean to create a new concept, rather than retrieve a familiar one? Repeatedly sampling a generative model at the same prompt produces variations with similar styles and typical content. We propose that creativity is the production of stimuli that are unfamiliar to an adaptive observer at first sight, but quickly learnable from a few exposures. We formalize this as a Creator-Appraiser pair: a Creator generates a candidate, an Appraiser adapts to it for a few inner-loop learning steps, and the Appraiser''s improvement becomes the reward the Creator optimizes through. We instantiate the framework with diffusion as the Creator, an autoencoder Appraiser on MNIST, and a CLIP Appraiser with a low-rank adapter for natural images. The diffusion model remains frozen with no additional language conditioning; the meta-learning gradient is enough to produce both stylistic variations and concept compositions that the base model does not generate on its own.'
+  arxiv: 'https://arxiv.org/abs/2605.16477'
+  pdf: 'https://arxiv.org/pdf/2605.16477'
+  permalink: conceptual-creativity-meta-learning
+  enable_full_paper: true
+  research_areas:
+    - concept-learning-and-abstraction
+  date: 2026-05-15T00:00:00.000Z
+  journal: 'CoRR'
+  is_recent: true
+- title: The Self Requires Learning
+  image: /assets/images/papers/the_self_requires_learning.png
+  authors:
+    - Mengye Ren
+  short_abstract: We argue self-consciousness requires a learned self — bounded integration of experience produces a perspective that, under continuous order-sensitive learning, becomes a temporally extended identity that current AI systems lack.
+  abstract: 'Self-consciousness requires a self, and a self must be built through learning. The empirical markers of self-consciousness, from mirror self-recognition to self-other distinction, are developmental achievements, not innate endowments. We argue that the relevant form of learning is what we call bounded integration: lossy compression of experience that reshapes the processing substrate, producing a perspective particular to the system''s history. When this learning is order-sensitive and continuous, the perspective becomes a temporally extended identity. Self-representation emerges when a system must model the objective world from its subjective experience, implicitly representing its own perspective as the complement of its world model. We distinguish three learning regimes—always-training, always-accumulating, and train-then-freeze—and argue that current AI systems, though they undergo massive substrate-level learning during training, lack the order-sensitive, ongoing bounded integration that produces identity and the temporally extended self that autobiographical self-consciousness requires.'
+  # Canonical record URL on PhilPapers. Stored for future use (citation
+  # export, link-back from related papers); no template renders it yet.
+  philpapers: 'https://philpapers.org/rec/RENTSR'
+  permalink: the-self-requires-learning
+  enable_full_paper: true
+  research_areas:
+    - adaptive-agents-and-foundation-models
+  date: 2026-04-08T00:00:00.000Z
+  journal: 'PhilPapers preprint'
+  is_recent: true
 - title: Temporal Straightening for Latent Planning
   image: /assets/images/papers/temporal_straightening.png
   authors:
@@ -59,7 +90,7 @@
     - adaptive-agents-and-foundation-models
   date: 2026-3-10T00:00:00.000Z
   journal: CoRR
-  is_recent: true
+  is_recent: false
 - title: When Does Verification Pay Off? A Closer Look at LLMs as Solution Verifiers
   image: /assets/images/papers/llm_verification.png
   authors:
@@ -192,7 +223,7 @@
     - concept-learning-and-abstraction
   date: 2025-06-22T00:00:00.000Z
   journal: CoRR
-  is_recent: true
+  is_recent: false
   enable_full_paper: true
 - title: Replay Can Provably Increase Forgetting
   image: /assets/images/papers/replay_can_provably_increase_forgetting.png
@@ -268,7 +299,7 @@
     - learning-from-visual-experience
   date: 2024-08-20T00:00:00.000Z
   journal: The 13th International Conference on Learning Representations (ICLR 2025)
-  is_recent: true
+  is_recent: false
   enable_full_paper: true
 - title: 'ProCreate, Don''t Reproduce! Propulsive Energy Diffusion for Creative Generation'
   image: /assets/images/papers/procreate.png
