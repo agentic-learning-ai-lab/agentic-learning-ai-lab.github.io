@@ -182,48 +182,57 @@ Open a PR to `main`. Done.
 
 ### (Optional) Step 6 — Enable the embedded paper view
 
-If you set `enable_full_paper: true` in `papers.yaml`, the paper gets
-a `/research/<slug>/` page that renders the arXiv HTML version inline
-(figures, equations, references — everything in the published HTML).
-The build also compiles `paper.pdf` from the LaTeX source.
+Setting `enable_full_paper: true` in `papers.yaml` gives the paper a
+`/research/<slug>/` page that renders the arXiv HTML inline (figures,
+equations, references — everything from the published HTML) plus
+a compiled `paper.pdf` hosted on our CDN. Three artifacts get
+produced:
 
-To bootstrap:
+1. `research/<slug>/paper-content.json` — extracted arXiv HTML
+   (committed to git; ~hundreds of KB per paper)
+2. `latex.tar.gz` on R2 — cleaned LaTeX source archive (manifest
+   entry `/research/<slug>/latex.tar.gz`)
+3. `paper.pdf` on R2 — compiled PDF (manifest entry
+   `/research/<slug>/paper.pdf`)
 
-```bash
-npm run latex:update <slug>
-```
-
-What this does, in order:
-
-1. Downloads the LaTeX source tarball from `https://arxiv.org/e-print/<arxiv-id>`
-   (using the `arxiv:` field from your papers.yaml entry).
-2. Runs [`arxiv_latex_cleaner`](https://github.com/google-research/arxiv-latex-cleaner)
-   to strip author comments / TODOs / commented-out figures. The cleaned
-   tarball goes to a public R2 bucket.
-3. Tars + uploads to R2 (content-addressed, so re-runs are no-ops if
-   source unchanged).
-4. Writes the manifest entry `/research/<slug>/latex.tar.gz` → CDN URL.
-5. Invalidates any stale `research/<slug>/paper.pdf` so it rebuilds.
-
-Then:
+**Steps 2 and 3 require R2 credentials**, which student contributors
+don't have. The pattern: a student sets `enable_full_paper: true` in
+the YAML and opens the PR; Mengye (or another admin with R2 creds)
+runs the three commands below before merging, then pushes the
+resulting `paper-content.json` + manifest updates onto the same PR
+branch:
 
 ```bash
-npm run build:arxiv:pdf       # compiles paper.pdf from the R2 tarball
-                              # (cached in .cache/, so subsequent runs reuse)
+npm run build:arxiv     <slug>     # fetch arXiv HTML → paper-content.json
+                                   # + upload extracted figures to R2
+npm run latex:update    <slug>     # download arXiv LaTeX → clean → upload tarball to R2
+npm run build:arxiv:pdf            # compile paper.pdf → upload to R2
 ```
 
-When the paper is updated on arXiv (v2, v3, etc.), re-run
-`npm run latex:update <slug>` to pick up the new source. Manifest gets
-updated; PDF gets recompiled.
+(Or, equivalently, `npm run build` — runs all three plus the rest of
+the pipeline.)
+
+A protective guard in `build/templater.js` keeps the HTML toggle
+hidden when `paper-content.json` is missing — so a student's PR with
+`enable_full_paper: true` but no admin bootstrap won't ship a broken
+'Loading paper…' spinner to production. The paper just renders
+card-only until the bootstrap lands.
+
+When a paper is updated on arXiv (v2, v3…), an admin re-runs
+`npm run latex:update <slug>` (refetches source, invalidates the
+cached `paper.pdf`) and `npm run build:arxiv:force` (re-downloads
+the HTML).
 
 **Not on arXiv?** Drop the LaTeX source at `research/<slug>/latex/`
 locally (gitignored), then run `npm run latex:pack <slug>` — same
-effect (clean, tar, upload, manifest), except the local `latex/` tree
-gets auto-deleted after upload (it lives transiently on disk and
-canonically on R2).
+effect as `latex:update` (clean, tar, upload, manifest), except the
+local `latex/` tree gets auto-deleted after upload (it lives
+transiently on disk and canonically on R2). No `paper-content.json`
+is produced for non-arXiv papers (the HTML extraction comes from
+arXiv); the page renders PDF-only via the guard above.
 
-You'll need a local LaTeX install (`tlmgr install latexmk` if you got a
-warning about missing latexmk on macOS). CI installs TeXLive
+You'll need a local LaTeX install (`tlmgr install latexmk` if you got
+a warning about missing latexmk on macOS). CI installs TeXLive
 automatically for the build:arxiv:pdf step.
 
 ## Adding a project page
