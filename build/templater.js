@@ -49,7 +49,17 @@ function doTemplating(input, output) {
             const output_new = output.replace("{{permalink}}", paper.permalink);
             fs.mkdirSync(path.dirname(output_new), { recursive: true });
 
-            paper.has_full_paper = !!paper.enable_full_paper;
+            // `has_full_paper` gates the embedded arXiv-HTML viewer
+            // (toggle button, sidebar, paper-view.js). It needs both
+            // the opt-in flag AND the cached arXiv HTML extraction at
+            // research/<slug>/paper-content.json — without that file
+            // the toggle would fetch a 404'd resource and hang on
+            // 'Loading paper...'. The file exists only for papers an
+            // admin has bootstrapped (npm run build:arxiv); non-arXiv
+            // papers (custom LaTeX, e.g. PhilPapers) skip the HTML
+            // view entirely and just expose paper.pdf via has_pdf_link.
+            const paperContentPath = path.join(__dirname, '..', 'research', paper.permalink, 'paper-content.json');
+            paper.has_full_paper = !!paper.enable_full_paper && fs.existsSync(paperContentPath);
 
             // Check the manifest, not the filesystem: paper.pdf is
             // gitignored and CF Pages cloud builds don't run pull:r2,
