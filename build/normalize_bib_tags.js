@@ -111,40 +111,96 @@ function parseTag(tagText) {
   // "Authors, YYYY" unbracketed (apalike .bbl [label] form).
   const m2 = trimmed.match(/^(.+?),\s*(\d{4}[a-z]?)\s*\.?$/);
   if (m2) return { authors: m2[1].trim(), year: m2[2] };
+  // Year missing — observed on some arXiv-extracted papers where the
+  // original BibTeX had no year field. Still want to shorten the
+  // author list; just emit "Last et al." with no trailing parens.
+  const m3 = trimmed.match(/^(.+?\bet\s*al\.?)\s*$/i);
+  if (m3) return { authors: m3[1].trim(), year: '' };
   return null;
 }
 
 /**
- * Normalize all bibitem tags in one paper-content.json's html. Returns
- * { changed: number, total: number } so the CLI can print a summary.
- * Does NOT touch the body — bibblocks already carry the full author
- * list (either inserted by inject_bbl.js or present in plain-style
- * native extractions).
+ * Normalize bibitem tags AND preserve the full author list as a
+ * leading body block so every paper renders the same References
+ * format regardless of how arXiv extracted the source:
+ *
+ *   <li class="ltx_bibitem">
+ *     <span class="ltx_tag ...">Last et al. (YYYY)</span>           ← short
+ *     <span class="ltx_bibblock">F. Last, M. Other ... (YYYY).</span> ← full (NEW for many natives)
+ *     <span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">…</span>.</span>
+ *     <span class="ltx_bibblock">Venue.</span>
+ *   </li>
+ *
+ * For each bibitem:
+ *   1. Parse the tag content into {authors, year}.
+ *   2. Compute the canonical short form.
+ *   3. If the body's first bibblock doesn't already contain the full
+ *      author list, prepend one ("authors (year)."). Detected via
+ *      first-author-lastname presence — covers idempotent re-runs and
+ *      already-plain-style natives (anticipatory-recovery, arq).
+ *   4. Replace the tag's inner text with the short form.
  */
 function normalizeHtml(html) {
   let changed = 0;
   let total = 0;
-  // Match each bibitem's tag span and capture its inner text.
   const out = html.replace(
-    /(<span\s+class="ltx_tag[^"]*ltx_tag_bibitem[^"]*"[^>]*>)([\s\S]*?)(<\/span>)/g,
-    (full, open, inner, close) => {
+    /(<li[^>]*\bltx_bibitem\b[^>]*>)([\s\S]*?)(<\/li>)/g,
+    (full, openLi, body, closeLi) => {
+      // Find this bibitem's tag span.
+      const tagRe = /(<span\s+class="ltx_tag[^"]*ltx_tag_bibitem[^"]*"[^>]*>)([\s\S]*?)(<\/span>)/;
+      const tagMatch = body.match(tagRe);
+      if (!tagMatch) return full;
       total++;
-      // Strip tags inside the tag inner — should be plain text in
-      // every observed case, but defensive.
-      const text = inner.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-      const parsed = parseTag(text);
+      const [tagFull, tagOpen, tagInner, tagClose] = tagMatch;
+      const tagText = tagInner.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+      const parsed = parseTag(tagText);
       if (!parsed) return full;
       const short = shortenTag(parsed.authors, parsed.year);
-      // Idempotent skip: already in the canonical short form.
-      if (short === text) return full;
+
+      // Check if body's first bibblock already carries the author list.
+      // First-author lastname presence is a robust signal — apalike
+      // .bbl outputs always start the first line with the lead author's
+      // surname, and plain-style natives do the same.
+      let lastNames = parsed.authors
+        .replace(/[,\s]*(?:and\s+)?et\s*al\.?\s*,?\s*$/i, '')
+        .replace(/\s+and\s+/gi, ', ')
+        .split(/,\s*/).map(lastName).filter(Boolean);
+      const firstLast = lastNames[0] || '';
+      const firstBlockMatch = body.match(/<span\s+class="[^"]*\bltx_bibblock\b[^"]*"[^>]*>([\s\S]*?)<\/span>/);
+      const firstBlockText = firstBlockMatch
+        ? firstBlockMatch[1].replace(/<[^>]+>/g, '').trim()
+        : '';
+      const hasAuthorsInBody = firstLast && firstBlockText.includes(firstLast);
+
+      const tagChanged = short !== tagText;
+      const willInsertAuthors = !hasAuthorsInBody && parsed.authors !== short;
+      if (!tagChanged && !willInsertAuthors) return full;
+
       changed++;
-      // Preserve the original opening/closing tags; just swap the inner.
-      // No HTML escaping needed — shortenTag produces plain ASCII names
-      // + parens + digits.
-      return `${open}${short}${close}`;
+      // Rewrite the tag's inner text to the short form.
+      let newBody = body.replace(tagFull, `${tagOpen}${short}${tagClose}`);
+
+      // Prepend a full-author bibblock if needed. Position it right
+      // after the tag's `</span>` (and any whitespace), before the
+      // first existing bibblock — matching the apalike-injected layout.
+      if (willInsertAuthors) {
+        // Year may be empty for arXiv-extracted tags missing a year
+        // field — emit just "authors." in that case.
+        const yearSuffix = parsed.year ? ` (${escapeHtml(parsed.year)})` : '';
+        const authorsHtml = `<span class="ltx_bibblock">${escapeHtml(parsed.authors)}${yearSuffix}.</span>`;
+        const newTag = `${tagOpen}${short}${tagClose}`;
+        newBody = newBody.replace(newTag, `${newTag}\n${authorsHtml}`);
+      }
+      return `${openLi}${newBody}${closeLi}`;
     }
   );
   return { html: out, changed, total };
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
 }
 
 async function normalizeOne(slug) {
