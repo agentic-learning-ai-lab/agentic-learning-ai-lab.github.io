@@ -193,11 +193,29 @@ function enhanceCitations() {
             }
         }
 
-        // Get the paper title (usually in the second ltx_bibblock)
+        // Paper title resolution. arXiv's HTML extraction puts titles
+        // in different bibblock positions depending on the source
+        // bibstyle:
+        //   plain / apalike (anticipatory, arq, .bbl-injected papers):
+        //     bibblocks[0] = authors, bibblocks[1] = title, [2] = venue
+        //   arxiv-native (temporal-straightening etc.):
+        //     bibblocks[0] = title (with <span class="ltx_bib_title">),
+        //     bibblocks[1] = venue, [2] = "Cited by"
+        // Prefer the semantic class when present — covers temporal-
+        // straightening and any other native paper that emits .ltx_bib_title,
+        // and matches what inject_bbl.js writes for plain/apalike entries.
+        // Fall back to bibblocks[1] which covers the remaining
+        // native papers whose title sits in the second block without
+        // the semantic class.
         const bibblocks = bibItem.querySelectorAll('.ltx_bibblock');
         let title = '';
-        if (bibblocks.length >= 2) {
-            title = bibblocks[1].textContent.trim();
+        const semanticTitle = bibItem.querySelector('.ltx_bib_title');
+        if (semanticTitle) {
+            title = semanticTitle.textContent.trim().replace(/\.$/, '');
+        } else if (bibblocks.length >= 2) {
+            title = bibblocks[1].textContent.trim().replace(/\.$/, '');
+        } else if (bibblocks.length >= 1) {
+            title = bibblocks[0].textContent.trim().replace(/\.$/, '');
         }
 
         // Store the formatted reference
@@ -219,11 +237,14 @@ function enhanceCitations() {
 
         if (links.length === 0) return;
 
-        // Check if this citation is already in author-year format BEFORE any modifications
-        // (e.g., contains text like "Brown et al.," before the link)
+        // Check if this citation is already in author-year format BEFORE any modifications.
+        // Matches:
+        //   "Brown et al."          (multi-author)
+        //   "Smith and Jones"       (two-author)
+        //   "Anthropic, 2025"       (single-author, .bbl-injected — comma + 4-digit year)
         const citeText = cite.textContent;
         // Note: textContent converts &amp; to & automatically, so we can match & directly
-        const hasAuthors = /[A-Z][a-z]+\s+et al\.|[A-Z][a-z]+\s+(and|&|&amp;)\s+[A-Z][a-z]+/.test(citeText);
+        const hasAuthors = /[A-Z][a-z]+\s+et al\.|[A-Z][a-z]+\s+(and|&|&amp;)\s+[A-Z][a-z]+|[A-Z][a-zA-Z]+,\s+\d{4}/.test(citeText);
 
         // Debug: log citations that don't match
         if (!hasAuthors && links.length > 1) {
