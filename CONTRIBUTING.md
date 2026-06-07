@@ -49,13 +49,16 @@ Two ways to see the rendered site before merging:
 **Local** — fastest iteration loop:
 
 ```bash
-npm run preview        # runs the full local build + serves out/ on
-                       # http://localhost:8000
+npm run preview        # builds + serves out/ on http://localhost:8000
 ```
 
-This is the same `out/` bundle Cloudflare Pages serves in production,
-just rendered with local binaries instead of CDN URLs. Re-run after
-each round of edits.
+Same `out/` bundle CF Pages serves. Binaries load from
+`cdn.agenticlearning.ai` via `assets-manifest.json`, so you see
+production assets.
+
+**No R2 creds needed.** The R2-sync step skips when `.env` is empty.
+To push new binaries, use `npm run upload` (Step 4) — it dispatches
+a GH Action that owns the creds server-side.
 
 **Cloudflare Pages preview** — what reviewers actually see:
 
