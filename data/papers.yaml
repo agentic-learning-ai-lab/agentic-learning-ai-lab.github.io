@@ -1,5 +1,5 @@
 - title: 'Aligning LLMs with Human Uncertainty: A Beta-Bernoulli Calibrator for LLM Forecasting'
-  image: /assets/images/papers/beta_bernoulli_calibrator.png #TODO
+  image: /assets/images/papers/beta_bernoulli_calibrator.png
   authors:
     - Amelia (Hui) Dai
     - Ryan Teehan
