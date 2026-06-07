@@ -768,6 +768,19 @@ async function buildPapers(options = {}) {
           await downloadArxivHtml(paper.arxiv, htmlOutputPath);
           console.log(`✅ [HTML] ${paper.permalink} - complete`);
           htmlDownloaded++;
+
+          // Normalize bibitem tags to short "Lastname et al. (YYYY)"
+          // form. arXiv's HTML extraction emits the full author list
+          // verbatim in the `<span class="ltx_tag>`, which produces
+          // multi-line wrapping for papers with many authors and is
+          // visually inconsistent with .bbl-injected entries from
+          // inject_bbl.js. See build/normalize_bib_tags.js.
+          try {
+            const { normalizeOne } = require('./normalize_bib_tags');
+            await normalizeOne(paper.permalink);
+          } catch (normErr) {
+            console.warn(`  normalize: ${paper.permalink} skipped — ${normErr.message}`);
+          }
         }
       } catch (error) {
         console.error(`❌ [HTML] ${paper.permalink} - failed: ${error.message}`);
@@ -811,6 +824,21 @@ async function buildPapers(options = {}) {
         await compileLatex(sourceDir, pdfOutputPath);
         console.log(`✅ [PDF] ${paper.permalink} - complete`);
         pdfCompiled++;
+
+        // After the LaTeX compile finishes, the build/.cache/latex-build/
+        // <slug>/ workdir holds a populated main.bbl from bibtex. arXiv's
+        // HTML extractor often drops the bibliography (when a paper's
+        // source tarball lacks the .bbl that arXiv strips on upload),
+        // leaving paper-content.json with an empty <ul class="ltx_biblist">
+        // and `ltx_missing_citation` spans. injectOne reuses that
+        // bbl, pipes it through pandoc, and populates both — runs only
+        // when bibliography is empty (idempotent + skipped otherwise).
+        try {
+          const { injectOne } = require('./inject_bbl');
+          await injectOne(paper.permalink);
+        } catch (bblErr) {
+          console.warn(`  bbl-inject: ${paper.permalink} skipped — ${bblErr.message}`);
+        }
       } catch (error) {
         console.error(`❌ [PDF] ${paper.permalink} - failed: ${error.message}`);
         failed++;
