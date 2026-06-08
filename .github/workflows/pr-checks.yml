@@ -49,3 +49,12 @@ jobs:
       # file, or stale/typo'd manifest entries that would 404 in prod.
       - name: Check manifest consistency
         run: node build/check_manifest_consistency.js
+
+      # Audits paper-content.json across every paper for the
+      # bibliography regressions we hit during the inject_bbl /
+      # normalize_bib_tags rollout: empty <ul class="ltx_biblist">
+      # on enable_full_paper papers, long author lists in tags,
+      # and leftover ltx_missing_citation spans. See
+      # build/check_bibliography.js.
+      - name: Check bibliography integrity
+        run: node build/check_bibliography.js
