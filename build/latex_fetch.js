@@ -117,6 +117,12 @@ async function tarballEpochSeconds(cachedPath) {
     if (Number.isFinite(parsed)) {
       return Math.floor(parsed / 1000);
     }
+    // Sidecar exists but is unparseable (corrupt / truncated). Surface
+    // it — silent fallback to local mtime would lose cross-machine
+    // determinism without anyone noticing.
+    console.warn(
+      `tarballEpochSeconds: ignoring unparseable ${sidecar}: "${raw.slice(0, 80)}"`
+    );
   }
   const st = await fs.stat(cachedPath);
   return Math.floor(st.mtimeMs / 1000);

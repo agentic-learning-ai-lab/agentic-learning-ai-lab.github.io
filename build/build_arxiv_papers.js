@@ -457,14 +457,27 @@ async function resolveLatexSourceForCompile(slug) {
   if (await fs.pathExists(persistentDir)) {
     const mainTexFile = await findMainTexFile(persistentDir);
     if (mainTexFile) {
-      // No tarball involved → reproducibility falls back to the main
-      // .tex's mtime. Using the directory mtime here would drift
+      // No tarball involved → reproducibility falls back to the latest
+      // .tex mtime in the dir. Using the directory mtime would drift
       // every compile because latexmk writes .aux/.bbl/.fdb_latexmk
       // back into the dir, bumping its mtime on each run and breaking
-      // determinism. The .tex itself only changes when the author
-      // actually edits it, which is what should invalidate the output.
-      const st = await fs.stat(path.join(persistentDir, mainTexFile));
-      return { dir: persistentDir, epoch: Math.floor(st.mtimeMs / 1000) };
+      // determinism. Walking all .tex files (not just main.tex) covers
+      // multi-file papers — editing chapters/sections bumps the epoch
+      // and the PDF's embedded /CreationDate, which is what an author
+      // would expect.
+      //
+      // Note: this fallback is NOT cross-machine reproducible — `mtimeMs`
+      // reflects when the local filesystem last touched the file, which
+      // is install/edit-history-dependent. The tarball-driven path is the
+      // one we treat as the source of truth for byte-stable releases.
+      const entries = await fs.readdir(persistentDir);
+      const texMtimes = await Promise.all(
+        entries.filter(f => f.endsWith('.tex')).map(async f =>
+          (await fs.stat(path.join(persistentDir, f))).mtimeMs
+        )
+      );
+      const epoch = Math.floor(Math.max(...texMtimes) / 1000);
+      return { dir: persistentDir, epoch };
     }
     throw new Error(
       `research/${slug}/latex/ exists but has no .tex with \\documentclass. ` +
@@ -673,11 +686,14 @@ async function compressPdf(pdfPath) {
     const originalSize = (await fs.stat(pdfPath)).size;
     const compressedSize = (await fs.stat(tempOutput)).size;
 
-    // Only replace if compression actually helped. Threshold is 1%
-    // (not 10% like the gs path used) because qpdf's gains are
-    // primarily from object streams + deterministic ID, not aggressive
-    // image re-encoding — a 1–2% size win is still worth keeping for
-    // the determinism that comes with it.
+    // Replace whenever qpdf produced anything smaller — even a single
+    // byte. Unlike the gs path's old 10% threshold, qpdf's primary value
+    // here is the deterministic-id finalize, not aggressive compression;
+    // keeping the qpdf output on a tiny win preserves byte-stability
+    // across re-compiles. On the (rare) no-win path we fall back to the
+    // raw pdflatex output, which is already deterministic via
+    // SOURCE_DATE_EPOCH but lacks qpdf's content-hash /ID — still safe
+    // for the pre-commit hash check, just unfinalized.
     if (compressedSize < originalSize) {
       await fs.move(tempOutput, pdfPath, { overwrite: true });
       return { originalSize, compressedSize, skipped: false };
