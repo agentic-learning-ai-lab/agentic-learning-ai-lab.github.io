@@ -10,7 +10,7 @@ Source for [agenticlearning.ai](https://agenticlearning.ai).
 ## Prerequisites
 
 - Node.js 20+
-- [Ghostscript](https://www.ghostscript.com/) for PDF compression (optional locally)
+- [qpdf](https://qpdf.sourceforge.io/) for PDF compression + deterministic finalization (optional locally; `brew install qpdf` on macOS)
 
 Image processing uses [sharp](https://sharp.pixelplumbing.com/) (cross-platform, installed via npm). Binary assets (paper PDFs, hero images, figures) live on Cloudflare R2 — not in git.
 
@@ -65,7 +65,7 @@ This runs the following steps in order:
 ### Build PDFs from LaTeX source
 
 ```bash
-npm run build:arxiv:pdf        # compile PDFs + compress via Ghostscript
+npm run build:arxiv:pdf        # compile PDFs (reproducible) + compress via qpdf
 ```
 
 ### Force rebuild

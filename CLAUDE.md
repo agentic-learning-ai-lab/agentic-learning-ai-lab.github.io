@@ -172,7 +172,9 @@ on disk (run `npm run pull:r2` on a fresh clone).
 4. `generate_search_index.js` — emit `assets/search-index.json`.
 5. `build:arxiv:pdf` — for each paper: download arXiv HTML if
    `enable_full_paper: true`, ensure `research/<slug>/latex/` exists,
-   compile `paper.pdf`, Ghostscript-compress.
+   compile `paper.pdf` (reproducibly — `SOURCE_DATE_EPOCH` is pinned to
+   the R2 tarball's Last-Modified so re-compiles produce byte-identical
+   PDFs), then qpdf-compress + finalize with `--deterministic-id`.
    See [LaTeX source and PDFs](#latex-source-and-pdfs).
 6. `build:compress` — resize arXiv-downloaded images to ≤1400px wide.
 7. **`sync:r2`** — upload any new files (PNGs, WebPs, PDFs, CSVs,
@@ -267,7 +269,7 @@ R2 (cdn.agenticlearning.ai):
 
 local (gitignored):
   research/<slug>/paper.pdf          (compiled artifact, on disk)
-  research/<slug>/paper.pdf.gs-compressed  (Ghostscript marker)
+  research/<slug>/paper.pdf.qpdf-compressed  (qpdf finalize marker)
 
 local (gitignored):
   research/<slug>/latex/             (transient extract, present only during editing)

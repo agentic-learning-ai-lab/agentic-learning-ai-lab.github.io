@@ -30,13 +30,14 @@
  *
  * Requirements for PDF compilation:
  *   - latexmk (with pdflatex / xelatex / lualatex backends) installed
- *   - Ghostscript for post-compile PDF compression
+ *   - qpdf for post-compile PDF compression + deterministic finalization
  */
 
 const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
 const https = require('https');
+const crypto = require('crypto');
 const { promisify } = require('util');
 
 const execAsync = promisify(require('child_process').exec);
@@ -426,6 +427,53 @@ async function ensureLatexSource(arxivUrl, latexDir, _opts = {}) {
   return latexDir;
 }
 
+// Plain-text source extensions (hashed at any depth). Intermediates
+// from latexmk (.aux/.bbl/.fdb_latexmk/...) are deliberately excluded
+// so hashing is stable across compiles.
+const SOURCE_TEXT_EXT = /\.(tex|bib|sty|cls|bst|bbx|cbx|tikz)$/i;
+// Figure binary extensions (hashed only OUTSIDE the top-level dir).
+// Authors typically keep figures under fig/, figures/, img/, etc.;
+// excluding the top-level avoids picking up latexmk's `main.pdf`
+// intermediate (which would otherwise re-bump the epoch every compile).
+// Papers that put a figure at top-level miss out on this signal — that
+// case is rare, and the determinism story still holds (just the
+// metadata /CreationDate stays pinned to the .tex hash).
+const SOURCE_FIGURE_EXT = /\.(pdf|png|jpg|jpeg|eps|svg)$/i;
+
+/**
+ * Walk a LaTeX source tree and return a deterministic Unix epoch
+ * derived from a SHA-256 over the source-file contents. Used as
+ * SOURCE_DATE_EPOCH for the mid-edit (persistent-tree) compile path
+ * so a given source state yields a byte-identical PDF across re-compiles
+ * and across machines — same guarantee as the tarball-driven release path.
+ *
+ * The 4-byte projection collapses the hash into a uint32 (epoch range
+ * 1970-01-01 through 2106-02-07), which is plenty for SOURCE_DATE_EPOCH;
+ * the value carries no semantic meaning, just stability.
+ */
+async function sourceContentEpoch(rootDir) {
+  const files = [];
+  async function walk(dir, atRoot) {
+    for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) await walk(full, false);
+      else if (entry.isFile()) {
+        if (SOURCE_TEXT_EXT.test(entry.name)) files.push(full);
+        else if (!atRoot && SOURCE_FIGURE_EXT.test(entry.name)) files.push(full);
+      }
+    }
+  }
+  await walk(rootDir, true);
+  files.sort();
+  const hasher = crypto.createHash('sha256');
+  for (const f of files) {
+    hasher.update(path.relative(rootDir, f));
+    hasher.update('\0');
+    hasher.update(await fs.readFile(f));
+  }
+  return hasher.digest().readUInt32BE(0);
+}
+
 /**
  * Resolve LaTeX source for a paper into a compile-ready directory.
  *
@@ -451,12 +499,22 @@ async function resolveLatexSourceForCompile(slug) {
   // Lazy-require latex_fetch because the build is the only caller of
   // this function — defers loading dotenv / S3 init until actually needed.
   const { loadManifest } = require('./r2_lib');
-  const { ensureTarballCached } = require('./latex_fetch');
+  const { ensureTarballCached, tarballEpochSeconds } = require('./latex_fetch');
 
   const persistentDir = path.join(OUTPUT_DIR, slug, 'latex');
   if (await fs.pathExists(persistentDir)) {
-    if (await findMainTexFile(persistentDir)) {
-      return persistentDir;
+    const mainTexFile = await findMainTexFile(persistentDir);
+    if (mainTexFile) {
+      // No tarball involved → derive a stable epoch from a content hash
+      // of the source files. Using mtime here would either drift every
+      // compile (dir mtime, bumped by latexmk writing .aux/.bbl/.fdb)
+      // or only be stable on one machine (file mtime depends on local
+      // install/edit history). Content-hash gives byte-identical output
+      // across machines for identical source — same property as the
+      // tarball path. Editing any source file changes the hash → new
+      // epoch → new PDF, which is exactly the author's expectation.
+      const epoch = await sourceContentEpoch(persistentDir);
+      return { dir: persistentDir, epoch };
     }
     throw new Error(
       `research/${slug}/latex/ exists but has no .tex with \\documentclass. ` +
@@ -480,6 +538,10 @@ async function resolveLatexSourceForCompile(slug) {
   // a domain-specific TarballNotFoundError if the manifest references a
   // tarball that's missing from R2.
   const tarPath = await ensureTarballCached(slug, cdnUrl);
+  // Drives SOURCE_DATE_EPOCH for the compile — R2 Last-Modified, captured
+  // at first download into a .r2-mtime sidecar. Identical across machines
+  // for the same tarball version; bumps whenever latex:pack re-uploads.
+  const epoch = await tarballEpochSeconds(tarPath);
 
   const workDir = path.join(COMPILE_CACHE, slug);
   // Wipe stale workdir; tarball extract should produce a fresh tree.
@@ -493,7 +555,7 @@ async function resolveLatexSourceForCompile(slug) {
   if (!await fs.pathExists(innerLatexDir) || !await findMainTexFile(innerLatexDir)) {
     throw new Error(`Extracted tarball for ${slug} does not contain a latex/ tree with .tex`);
   }
-  return innerLatexDir;
+  return { dir: innerLatexDir, epoch };
 }
 
 /**
@@ -549,7 +611,7 @@ async function detectLatexEngine(latexDir, mainTexFile) {
   return 'pdflatex';
 }
 
-async function compileLatex(latexDir, outputPath) {
+async function compileLatex(latexDir, outputPath, { epoch } = {}) {
   const mainTexFile = await findMainTexFile(latexDir);
   if (!mainTexFile) {
     throw new Error(`No .tex with \\documentclass found in ${latexDir}`);
@@ -568,9 +630,18 @@ async function compileLatex(latexDir, outputPath) {
     console.log(`    using ${engine} (detected from source)`);
   }
 
+  // SOURCE_DATE_EPOCH pins /CreationDate, /ModDate and trailer /ID
+  // inside pdfTeX (≥1.40.17) so re-compiling the same source produces a
+  // byte-identical PDF. Fallback constant for the mid-edit case where
+  // resolveLatexSourceForCompile didn't supply one (still deterministic
+  // per re-run, just not tied to a source version).
+  const sourceDateEpoch = String(epoch != null ? epoch : 1);
+  const subprocEnv = { ...process.env, SOURCE_DATE_EPOCH: sourceDateEpoch };
+  const execOpts = { cwd: latexDir, env: subprocEnv };
+
   let latexmkErr = null;
   try {
-    await execAsync(`latexmk ${latexmkFlag} -interaction=nonstopmode "${mainTexFile}"`, { cwd: latexDir });
+    await execAsync(`latexmk ${latexmkFlag} -interaction=nonstopmode "${mainTexFile}"`, execOpts);
   } catch (err) {
     latexmkErr = err;
     try {
@@ -578,17 +649,17 @@ async function compileLatex(latexDir, outputPath) {
       // bibtex by whether biblatex emitted a .bcf control file (biber) vs. an
       // .aux with \bibdata (bibtex). latexmk normally chooses correctly; we
       // only land here when latexmk failed or isn't installed.
-      await execAsync(compileCmd, { cwd: latexDir });
+      await execAsync(compileCmd, execOpts);
       const files = await fs.readdir(latexDir);
       const hasBcf = files.includes(`${jobname}.bcf`);
       const hasBib = files.some(f => f.endsWith('.bib'));
       if (hasBcf) {
-        await execAsync(biberCmd, { cwd: latexDir }).catch(() => {});
+        await execAsync(biberCmd, execOpts).catch(() => {});
       } else if (hasBib) {
-        await execAsync(bibtexCmd, { cwd: latexDir }).catch(() => {});
+        await execAsync(bibtexCmd, execOpts).catch(() => {});
       }
-      await execAsync(compileCmd, { cwd: latexDir });
-      await execAsync(compileCmd, { cwd: latexDir });
+      await execAsync(compileCmd, execOpts);
+      await execAsync(compileCmd, execOpts);
     } catch (compileErr) {
       const latexmkDetail = (latexmkErr.stderr || latexmkErr.message || '').slice(0, 300);
       const fallbackDetail = (compileErr.stderr || compileErr.message || '').slice(0, 300);
@@ -617,11 +688,11 @@ async function compileLatex(latexDir, outputPath) {
 }
 
 /**
- * Check if Ghostscript is available
+ * Check if qpdf is available
  */
-async function isGhostscriptAvailable() {
+async function isQpdfAvailable() {
   try {
-    await execAsync('gs --version');
+    await execAsync('qpdf --version');
     return true;
   } catch {
     return false;
@@ -629,7 +700,15 @@ async function isGhostscriptAvailable() {
 }
 
 /**
- * Compress a PDF using Ghostscript
+ * Compress a PDF using qpdf.
+ *
+ * qpdf is reproducible by default (`--deterministic-id` hashes content,
+ * no embedded timestamps), so the SOURCE_DATE_EPOCH dance from the
+ * pdflatex step doesn't apply here — passing `epoch` is unnecessary.
+ * Compression comes from object-stream conversion + flate recompression.
+ * On the test sample qpdf alone matched or beat Ghostscript while
+ * giving us a byte-stable output across re-runs and across machines.
+ *
  * @param {string} pdfPath - Path to the PDF to compress
  * @returns {object} { originalSize, compressedSize, skipped }
  */
@@ -637,14 +716,22 @@ async function compressPdf(pdfPath) {
   const tempOutput = pdfPath + '.tmp-compressed';
   try {
     await execAsync(
-      `gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/prepress ` +
-      `-dNOPAUSE -dQUIET -dBATCH -sOutputFile="${tempOutput}" "${pdfPath}"`
+      `qpdf --object-streams=generate --compression-level=9 ` +
+      `--recompress-flate --deterministic-id ` +
+      `"${pdfPath}" "${tempOutput}"`
     );
     const originalSize = (await fs.stat(pdfPath)).size;
     const compressedSize = (await fs.stat(tempOutput)).size;
 
-    // Only replace if compression actually helped (>10% reduction)
-    if (compressedSize < originalSize * 0.9) {
+    // Replace whenever qpdf produced anything smaller — even a single
+    // byte. Unlike the gs path's old 10% threshold, qpdf's primary value
+    // here is the deterministic-id finalize, not aggressive compression;
+    // keeping the qpdf output on a tiny win preserves byte-stability
+    // across re-compiles. On the (rare) no-win path we fall back to the
+    // raw pdflatex output, which is already deterministic via
+    // SOURCE_DATE_EPOCH but lacks qpdf's content-hash /ID — still safe
+    // for the pre-commit hash check, just unfinalized.
+    if (compressedSize < originalSize) {
       await fs.move(tempOutput, pdfPath, { overwrite: true });
       return { originalSize, compressedSize, skipped: false };
     } else {
@@ -658,16 +745,18 @@ async function compressPdf(pdfPath) {
 }
 
 /**
- * Compress all PDFs in the research directory
+ * Compress all PDFs in the research directory.
+ *
+ * @param {boolean} force - ignore the .qpdf-compressed marker and recompress.
  */
 async function compressAllPdfs(force = false) {
-  const gsAvailable = await isGhostscriptAvailable();
-  if (!gsAvailable) {
-    console.log('\n⚠️  Ghostscript not found, skipping PDF compression');
+  const qpdfAvailable = await isQpdfAvailable();
+  if (!qpdfAvailable) {
+    console.log('\n⚠️  qpdf not found, skipping PDF compression');
     return;
   }
 
-  console.log('\n🗜️  Compressing PDFs with Ghostscript...\n');
+  console.log('\n🗜️  Compressing PDFs with qpdf...\n');
   let compressed = 0;
   let skipped = 0;
 
@@ -677,7 +766,7 @@ async function compressAllPdfs(force = false) {
     if (!await fs.pathExists(pdfPath)) continue;
 
     // Check marker file for caching
-    const markerPath = pdfPath + '.gs-compressed';
+    const markerPath = pdfPath + '.qpdf-compressed';
     if (!force && await fs.pathExists(markerPath)) {
       const pdfStat = await fs.stat(pdfPath);
       const markerStat = await fs.stat(markerPath);
@@ -807,9 +896,9 @@ async function buildPapers(options = {}) {
         }
 
         console.log(`⬇️  [PDF] ${paper.permalink} - compiling...`);
-        let sourceDir;
+        let source;
         try {
-          sourceDir = await resolveLatexSourceForCompile(paper.permalink);
+          source = await resolveLatexSourceForCompile(paper.permalink);
         } catch (resolveErr) {
           // "No source available" is expected when authoring a new paper
           // locally (manifest entry not yet written). In CI it indicates
@@ -821,7 +910,7 @@ async function buildPapers(options = {}) {
           pdfSkipped++;
           continue;
         }
-        await compileLatex(sourceDir, pdfOutputPath);
+        await compileLatex(source.dir, pdfOutputPath, { epoch: source.epoch });
         console.log(`✅ [PDF] ${paper.permalink} - complete`);
         pdfCompiled++;
 

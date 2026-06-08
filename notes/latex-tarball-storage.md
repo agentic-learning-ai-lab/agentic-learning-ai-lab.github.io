@@ -51,8 +51,10 @@ local (gitignored):
      and silent uploads from a `build` invocation are surprising.
    - Else → self-hosted draft with no source yet. Author drops a tree and
      runs `npm run latex:pack <slug>`.
-3. **Compile.** As today (latexmk → bibtex → ghostscript compress).
-   Output: `research/<slug>/paper.pdf`.
+3. **Compile.** latexmk (under `SOURCE_DATE_EPOCH` from the tarball's
+   R2 `Last-Modified`) → bibtex → qpdf `--deterministic-id` finalize.
+   Output: `research/<slug>/paper.pdf` — byte-identical across re-compiles
+   for the same tarball.
 
 ## Author workflows
 
