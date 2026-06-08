@@ -88,6 +88,7 @@ research/*/latex_arXiv/
 
 # Compression markers
 research/*/assets/.compressed/
+research/*/*.qpdf-compressed
 research/*/*.gs-compressed
 
 # Legacy LaTeX path — kept until any leftover papers-latex/ trees are migrated

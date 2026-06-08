@@ -64,6 +64,11 @@ function downloadViaHttps(url, outputPath) {
       const tmpPath = `${outputPath}.tmp`;
       const out = fs.createWriteStream(tmpPath);
       let settled = false;
+      // Capture R2's Last-Modified header so we can persist it next to the
+      // cached file. Reproducible PDF builds use this as SOURCE_DATE_EPOCH
+      // — see build_arxiv_papers.js compileLatex(). Falling back on `date`
+      // (always present) keeps the sidecar non-empty if R2 ever omits L-M.
+      const r2LastModified = res.headers['last-modified'] || res.headers['date'] || null;
       const fail = async (err) => {
         if (settled) return;
         settled = true;
@@ -79,6 +84,9 @@ function downloadViaHttps(url, outputPath) {
         settled = true;
         try {
           await fs.move(tmpPath, outputPath, { overwrite: true });
+          if (r2LastModified) {
+            await fs.writeFile(`${outputPath}.r2-mtime`, r2LastModified, 'utf8');
+          }
           resolve();
         } catch (err) {
           await fs.remove(tmpPath).catch(() => {});
@@ -87,6 +95,31 @@ function downloadViaHttps(url, outputPath) {
       });
     }).on('error', reject);
   });
+}
+
+/**
+ * Return a stable Unix epoch (seconds) for a cached tarball. Drives
+ * SOURCE_DATE_EPOCH for reproducible PDF compiles — identical input
+ * tarball produces a byte-identical paper.pdf across re-compiles and
+ * across machines (the R2 Last-Modified is server-side, not local).
+ *
+ * Order of preference:
+ *   1. `<cachedPath>.r2-mtime` sidecar (written at download time)
+ *   2. local file mtime (fallback for caches downloaded before the
+ *      sidecar existed — degrades to "stable across re-compiles on
+ *      this machine" only)
+ */
+async function tarballEpochSeconds(cachedPath) {
+  const sidecar = `${cachedPath}.r2-mtime`;
+  if (await fs.pathExists(sidecar)) {
+    const raw = (await fs.readFile(sidecar, 'utf8')).trim();
+    const parsed = Date.parse(raw);
+    if (Number.isFinite(parsed)) {
+      return Math.floor(parsed / 1000);
+    }
+  }
+  const st = await fs.stat(cachedPath);
+  return Math.floor(st.mtimeMs / 1000);
 }
 
 /**
@@ -173,4 +206,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { fetchOne, ensureTarballCached, CACHE_DIR };
+module.exports = { fetchOne, ensureTarballCached, tarballEpochSeconds, CACHE_DIR };

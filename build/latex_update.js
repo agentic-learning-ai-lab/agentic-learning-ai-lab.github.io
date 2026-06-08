@@ -64,7 +64,10 @@ async function updateOne(slug) {
     await fs.remove(pdfPath);
     console.log(`   🗑️  ${slug}: removed research/${slug}/paper.pdf (next build will recompile)`);
   }
-  // Also drop the gs-compressed marker so compress runs again post-recompile.
+  // Also drop the qpdf-compressed marker so compress runs again post-recompile.
+  // Best-effort remove the legacy .gs-compressed marker too — left over from
+  // the pre-qpdf era; harmless if absent.
+  await fs.remove(pdfPath + '.qpdf-compressed').catch(() => {});
   await fs.remove(pdfPath + '.gs-compressed').catch(() => {});
 }
 
