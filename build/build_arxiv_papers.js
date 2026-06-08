@@ -427,10 +427,18 @@ async function ensureLatexSource(arxivUrl, latexDir, _opts = {}) {
   return latexDir;
 }
 
-// Source-file extensions that affect the compiled PDF. Intermediates
+// Plain-text source extensions (hashed at any depth). Intermediates
 // from latexmk (.aux/.bbl/.fdb_latexmk/...) are deliberately excluded
 // so hashing is stable across compiles.
-const SOURCE_FILE_EXT = /\.(tex|bib|sty|cls|bst|bbx|cbx|tikz)$/i;
+const SOURCE_TEXT_EXT = /\.(tex|bib|sty|cls|bst|bbx|cbx|tikz)$/i;
+// Figure binary extensions (hashed only OUTSIDE the top-level dir).
+// Authors typically keep figures under fig/, figures/, img/, etc.;
+// excluding the top-level avoids picking up latexmk's `main.pdf`
+// intermediate (which would otherwise re-bump the epoch every compile).
+// Papers that put a figure at top-level miss out on this signal — that
+// case is rare, and the determinism story still holds (just the
+// metadata /CreationDate stays pinned to the .tex hash).
+const SOURCE_FIGURE_EXT = /\.(pdf|png|jpg|jpeg|eps|svg)$/i;
 
 /**
  * Walk a LaTeX source tree and return a deterministic Unix epoch
@@ -445,14 +453,17 @@ const SOURCE_FILE_EXT = /\.(tex|bib|sty|cls|bst|bbx|cbx|tikz)$/i;
  */
 async function sourceContentEpoch(rootDir) {
   const files = [];
-  async function walk(dir) {
+  async function walk(dir, atRoot) {
     for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
       const full = path.join(dir, entry.name);
-      if (entry.isDirectory()) await walk(full);
-      else if (entry.isFile() && SOURCE_FILE_EXT.test(entry.name)) files.push(full);
+      if (entry.isDirectory()) await walk(full, false);
+      else if (entry.isFile()) {
+        if (SOURCE_TEXT_EXT.test(entry.name)) files.push(full);
+        else if (!atRoot && SOURCE_FIGURE_EXT.test(entry.name)) files.push(full);
+      }
     }
   }
-  await walk(rootDir);
+  await walk(rootDir, true);
   files.sort();
   const hasher = crypto.createHash('sha256');
   for (const f of files) {
