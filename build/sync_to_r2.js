@@ -75,6 +75,12 @@ const BUCKET = process.env.R2_BUCKET || 'agenticlearning-assets';
 const CDN_BASE = (process.env.R2_CDN_BASE_URL || 'https://cdn.agenticlearning.ai').replace(/\/$/, '');
 const HASH_LEN = 16; // first N hex chars of SHA-256, ~2^64 collision space — fine at our scale
 
+const R2_REQUIRED_ENV = ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY'];
+
+function hasR2Creds() {
+  return R2_REQUIRED_ENV.every(name => !!process.env[name]);
+}
+
 function requireEnv(name) {
   if (!process.env[name]) {
     console.error(`Missing required env var: ${name}`);
@@ -84,14 +90,24 @@ function requireEnv(name) {
   return process.env[name];
 }
 
-const s3 = new S3Client({
-  region: 'auto',
-  endpoint: `https://${requireEnv('R2_ACCOUNT_ID')}.r2.cloudflarestorage.com`,
-  credentials: {
-    accessKeyId: requireEnv('R2_ACCESS_KEY_ID'),
-    secretAccessKey: requireEnv('R2_SECRET_ACCESS_KEY'),
-  },
-});
+// Lazy: the S3 client is only used when creds are present. Building it
+// lazily lets `main()` skip-and-exit cleanly when a non-admin runs
+// `npm run preview` (which chains through sync:r2) without R2 creds in
+// .env — see the cred-check at the top of main().
+let _s3;
+function getS3Client() {
+  if (!_s3) {
+    _s3 = new S3Client({
+      region: 'auto',
+      endpoint: `https://${requireEnv('R2_ACCOUNT_ID')}.r2.cloudflarestorage.com`,
+      credentials: {
+        accessKeyId: requireEnv('R2_ACCESS_KEY_ID'),
+        secretAccessKey: requireEnv('R2_SECRET_ACCESS_KEY'),
+      },
+    });
+  }
+  return _s3;
+}
 
 /**
  * SHA-256 hash of a file's contents, hex-encoded, truncated to HASH_LEN.
@@ -142,7 +158,7 @@ function contentType(filePath) {
 
 async function r2ObjectExists(key) {
   try {
-    await s3.send(new HeadObjectCommand({ Bucket: BUCKET, Key: key }));
+    await getS3Client().send(new HeadObjectCommand({ Bucket: BUCKET, Key: key }));
     return true;
   } catch (err) {
     if (err.$metadata?.httpStatusCode === 404 || err.name === 'NotFound') {
@@ -154,7 +170,7 @@ async function r2ObjectExists(key) {
 
 async function uploadToR2(key, filePath) {
   const body = await fs.readFile(filePath);
-  await s3.send(new PutObjectCommand({
+  await getS3Client().send(new PutObjectCommand({
     Bucket: BUCKET,
     Key: key,
     Body: body,
@@ -179,6 +195,22 @@ function collectFiles() {
 }
 
 async function main() {
+  // Skip-and-exit when R2 creds aren't configured. The committed
+  // assets-manifest.json is the source of truth for CDN URLs; without
+  // creds we can't upload, but the existing manifest + a (`npm run
+  // build:pages`) is still enough to render every page. Lets students
+  // run `npm run preview` (which chains through sync:r2) without a
+  // .env stocked with R2 secrets — they only need creds when uploading
+  // brand-new binaries, which they do via `npm run upload`.
+  if (!hasR2Creds()) {
+    const missing = R2_REQUIRED_ENV.filter(n => !process.env[n]);
+    console.log(`R2 sync: skipping — missing env vars (${missing.join(', ')}). Build continues.`);
+    console.log('  Existing assets-manifest.json entries are preserved; new local binaries (if any) will not be uploaded.');
+    console.log('  Students adding new binaries: run `npm run upload` to push them to R2 via GH Action.');
+    console.log('  Admins: stock .env (see build/sync_to_r2.js docstring) to enable the upload step.\n');
+    return;
+  }
+
   const verify = process.argv.includes('--verify');
   const prune = process.argv.includes('--prune');
   console.log(`R2 sync → bucket=${BUCKET}  cdn=${CDN_BASE}${verify ? '  (verify: HEAD every file)' : ''}${prune ? '  (prune: drop orphan entries)' : ''}\n`);
