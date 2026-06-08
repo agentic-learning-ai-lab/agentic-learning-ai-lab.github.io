@@ -37,6 +37,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
 const https = require('https');
+const crypto = require('crypto');
 const { promisify } = require('util');
 
 const execAsync = promisify(require('child_process').exec);
@@ -426,6 +427,42 @@ async function ensureLatexSource(arxivUrl, latexDir, _opts = {}) {
   return latexDir;
 }
 
+// Source-file extensions that affect the compiled PDF. Intermediates
+// from latexmk (.aux/.bbl/.fdb_latexmk/...) are deliberately excluded
+// so hashing is stable across compiles.
+const SOURCE_FILE_EXT = /\.(tex|bib|sty|cls|bst|bbx|cbx|tikz)$/i;
+
+/**
+ * Walk a LaTeX source tree and return a deterministic Unix epoch
+ * derived from a SHA-256 over the source-file contents. Used as
+ * SOURCE_DATE_EPOCH for the mid-edit (persistent-tree) compile path
+ * so a given source state yields a byte-identical PDF across re-compiles
+ * and across machines — same guarantee as the tarball-driven release path.
+ *
+ * The 4-byte projection collapses the hash into a uint32 (epoch range
+ * 1970-01-01 through 2106-02-07), which is plenty for SOURCE_DATE_EPOCH;
+ * the value carries no semantic meaning, just stability.
+ */
+async function sourceContentEpoch(rootDir) {
+  const files = [];
+  async function walk(dir) {
+    for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) await walk(full);
+      else if (entry.isFile() && SOURCE_FILE_EXT.test(entry.name)) files.push(full);
+    }
+  }
+  await walk(rootDir);
+  files.sort();
+  const hasher = crypto.createHash('sha256');
+  for (const f of files) {
+    hasher.update(path.relative(rootDir, f));
+    hasher.update('\0');
+    hasher.update(await fs.readFile(f));
+  }
+  return hasher.digest().readUInt32BE(0);
+}
+
 /**
  * Resolve LaTeX source for a paper into a compile-ready directory.
  *
@@ -457,26 +494,15 @@ async function resolveLatexSourceForCompile(slug) {
   if (await fs.pathExists(persistentDir)) {
     const mainTexFile = await findMainTexFile(persistentDir);
     if (mainTexFile) {
-      // No tarball involved → reproducibility falls back to the latest
-      // .tex mtime in the dir. Using the directory mtime would drift
-      // every compile because latexmk writes .aux/.bbl/.fdb_latexmk
-      // back into the dir, bumping its mtime on each run and breaking
-      // determinism. Walking all .tex files (not just main.tex) covers
-      // multi-file papers — editing chapters/sections bumps the epoch
-      // and the PDF's embedded /CreationDate, which is what an author
-      // would expect.
-      //
-      // Note: this fallback is NOT cross-machine reproducible — `mtimeMs`
-      // reflects when the local filesystem last touched the file, which
-      // is install/edit-history-dependent. The tarball-driven path is the
-      // one we treat as the source of truth for byte-stable releases.
-      const entries = await fs.readdir(persistentDir);
-      const texMtimes = await Promise.all(
-        entries.filter(f => f.endsWith('.tex')).map(async f =>
-          (await fs.stat(path.join(persistentDir, f))).mtimeMs
-        )
-      );
-      const epoch = Math.floor(Math.max(...texMtimes) / 1000);
+      // No tarball involved → derive a stable epoch from a content hash
+      // of the source files. Using mtime here would either drift every
+      // compile (dir mtime, bumped by latexmk writing .aux/.bbl/.fdb)
+      // or only be stable on one machine (file mtime depends on local
+      // install/edit history). Content-hash gives byte-identical output
+      // across machines for identical source — same property as the
+      // tarball path. Editing any source file changes the hash → new
+      // epoch → new PDF, which is exactly the author's expectation.
+      const epoch = await sourceContentEpoch(persistentDir);
       return { dir: persistentDir, epoch };
     }
     throw new Error(
