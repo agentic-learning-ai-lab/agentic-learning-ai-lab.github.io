@@ -58,34 +58,95 @@ add the same paths to `.gitignore` so `git add` doesn't auto-stage
 binaries. Author workflow becomes: drop locally → `sync:r2` → commit
 only the manifest entry. Note already documented in `cf-migration.md`.
 
-### 3. Bulk port remaining project pages
+### 3. Granular paper tagging system
 
-Template + pilot landed in PR #9 (anticipatory-recovery). The other 11
-project pages live as per-paper repos with a `website` branch — they
-all follow the same Bulma "academic project page" template, so porting
-each is mostly:
-1. `gh repo clone agentic-learning-ai-lab/<slug>` (or grab `website`
-   branch via git archive).
-2. Add a `project_page:` block under that paper's entry in
-   `data/papers.yaml` — affiliations, links, sections (title + body
-   HTML + figures), bibtex.
-3. Copy figure assets to `assets/projects/<slug>/`.
-4. `npm run build:webp && npm run sync:r2 && npm run build` and spot-check
-   the rendered `/<slug>/` against the existing live page.
-5. PR per project (small, parallelizable).
+Replace (or augment) the current `research_areas:` single-bucket
+categorization with multi-label tags. Today each paper picks one of
+three macro areas (`adaptive-agents-and-foundation-models` /
+`learning-from-visual-experience` / `concept-learning-and-abstraction`).
+That's coarse — a paper like Beta-Bernoulli Calibrator straddles
+forecasting + calibration + LLM evaluation; a paper like Conceptual
+Creativity touches generative modeling + meta-learning + concept
+learning. One bucket per paper loses information.
 
-Schema, helpers, and CSS are stable. New papers can also add a
-`project_page:` block from day one.
+Sketch:
+- New `tags:` list field in `data/papers.yaml` (parallel to existing
+  `research_areas:`). Examples: `forecasting`, `calibration`,
+  `meta-learning`, `diffusion`, `world-models`, `continual-learning`,
+  `egocentric-video`.
+- Render tag chips on each paper card + paper detail page.
+- Tag-filtered listing: `/tags/<tag>/` index page (parallel to
+  `/areas/<area>/`).
+- Migration: leave `research_areas:` alone for now; tags are additive.
+  Eventually rethink whether areas + tags both make sense (see #6).
 
-Outstanding migration work covered in `notes/project-pages-migration.md`
-(see "Migration plan" Steps 3-6): bulk port, custom-widget outliers,
-cutover, and archiving the per-project repos after a quiet period.
+Effort: ~half a day (template + listing + auto-emit tag pages).
+
+### 4. In-house LaTeX → HTML renderer
+
+Today the embedded paper view depends on arXiv's HTML extraction
+(`paper-content.json` fetched from `ar5iv.labs.arxiv.org`). Two
+problems:
+- Quality. arXiv's HTML extraction has rough edges — bibliography
+  rendering looks bad for the conceptual-creativity paper (noticed
+  2026-06-07). We can't fix it; we just inherit whatever ar5iv does.
+- Coverage. Non-arXiv papers (PhilPapers, position papers with custom
+  LaTeX) have no HTML at all — only the compiled PDF. The Self
+  Requires Learning paper falls into this bucket.
+
+Sketch: build an in-house LaTeX → HTML pipeline.
+- Candidate engines: LaTeXML (the same thing arXiv uses, but we can
+  pin a version + post-process its output), or pandoc, or a hybrid.
+- Run as part of `latex:pack` / `latex:update` (or a new step like
+  `latex:html`), emit `paper-content.json` for any paper with LaTeX
+  source on R2, not just arXiv ones.
+- Style consistently with `arxiv-paper.css` (already themed via CSS
+  vars, so dark mode + our typography come for free).
+- Bibliography rendering is the hardest part — author lists, venues,
+  in-text cite hover tooltips, "References" section formatting.
+
+Effort: a multi-week project. Probably worth a notes/latex-html.md
+design doc before starting. Until then, non-arXiv papers (`the-self-
+requires-learning`) render PDF-only.
+
+### 5. Home page + research-area redesign
+
+The home page currently has: hero + "Key Areas" (3 research areas) +
+"Recent Works" carousel + footer. As the lab grows, this layout starts
+to feel constraining:
+- "Key Areas" maps to the `data/research_areas.yaml` 3-bucket model,
+  which item #3 wants to replace/augment with tags.
+- Recent works is just the latest N papers filtered by `is_recent`;
+  no story-telling, no grouping by theme.
+- Some lab content has no place to live: a "highlights" reel
+  (selected publications), team news (paper acceptances, awards),
+  blog-style notes, recruitment messaging.
+
+Sketch (open questions, not a plan yet):
+- What's the home page job? Lab identity, recruitment, what we
+  publish, or all of those?
+- Should "Key Areas" stay as the primary nav-via-content, or
+  promote tags to that role?
+- Does a `news/` feed make sense (paper acceptance, talks given)?
+- Is there a "selected publications" curation distinct from
+  `is_recent`?
+
+Pre-work: write `notes/home-redesign.md` with options + mockups
+before any code lands.
+
+## Known issues (not bugs we own, but worth tracking)
+
+- **arXiv HTML rendering** for the Conceptual Creativity paper has
+  rough References section formatting. Out of our hands until #4
+  (in-house LaTeX → HTML) is built.
 
 ## How to pick the next item
 
 Pick by impact / urgency. Today's ordering (most useful first):
 
-1. **Bulk port project pages** (3) — biggest user-facing impact remaining.
-   Mostly mechanical YAML editing now that the template is stable.
-2. **Orphan R2 reaper** (1) — write when free tier matters; not soon.
-3. **LFS-free** (2) — defer until quota pinches.
+1. **Granular tags** (3) — small, high-leverage; sets up #5.
+2. **In-house LaTeX → HTML** (4) — bigger project; unblocks any custom-
+   LaTeX paper that wants the embedded view (currently PDF-only).
+3. **Home redesign** (5) — write the design doc first; coupled with #3.
+4. **Orphan R2 reaper** (1) — write when free tier matters; not soon.
+5. **LFS-free** (2) — defer until quota pinches.

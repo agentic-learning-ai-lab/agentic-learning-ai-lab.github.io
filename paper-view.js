@@ -241,10 +241,11 @@ function enhanceCitations() {
         // Matches:
         //   "Brown et al."          (multi-author)
         //   "Smith and Jones"       (two-author)
-        //   "Anthropic, 2025"       (single-author, .bbl-injected — comma + 4-digit year)
+        //   "Anthropic, 2025"       (single-author citep, .bbl-injected — comma + 4-digit year)
+        //   "Schmidhuber (2010)"    (single-author citet, .bbl-injected — name + ( + 4-digit year)
         const citeText = cite.textContent;
         // Note: textContent converts &amp; to & automatically, so we can match & directly
-        const hasAuthors = /[A-Z][a-z]+\s+et al\.|[A-Z][a-z]+\s+(and|&|&amp;)\s+[A-Z][a-z]+|[A-Z][a-zA-Z]+,\s+\d{4}/.test(citeText);
+        const hasAuthors = /[A-Z][a-z]+\s+et al\.|[A-Z][a-z]+\s+(and|&|&amp;)\s+[A-Z][a-z]+|[A-Z][a-zA-Z]+,\s+\d{4}|[A-Z][a-zA-Z]+\s+\(\d{4}/.test(citeText);
 
         // Debug: log citations that don't match
         if (!hasAuthors && links.length > 1) {

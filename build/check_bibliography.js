@@ -63,7 +63,12 @@ function audit() {
 
   for (const paper of papers) {
     const slug = paper.permalink;
-    const wantsFullPaper = !!paper.enable_full_paper;
+    // The embedded HTML view requires BOTH enable_full_paper AND an
+    // arXiv source — non-arXiv papers (e.g., PhilPapers preprints) can
+    // still set enable_full_paper:true to opt into PDF compile via
+    // latex_pack, but never get a paper-content.json. The templater's
+    // has_full_paper gate handles that fine; audit follows suit.
+    const wantsFullPaper = !!paper.enable_full_paper && !!paper.arxiv;
     const pc = loadPaperContent(slug);
 
     // Missing paper-content.json — only matters for enable_full_paper

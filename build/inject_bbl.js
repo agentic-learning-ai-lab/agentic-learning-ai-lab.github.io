@@ -285,7 +285,7 @@ function rewriteCitations(html, entries) {
   // sets `data-ref-title` from the rendered bibitem and drives its
   // own positioned tooltip. Emitting `title=` would stack a browser-
   // default tooltip on top, producing the "double tooltip" effect.
-  return html.replace(
+  html = html.replace(
     /<span\s+class="ltx_ref ltx_missing_citation[^"]*"[^>]*>([^<]+)<\/span>/g,
     (full, keyText) => {
       const key = keyText.trim();
@@ -293,11 +293,13 @@ function rewriteCitations(html, entries) {
       if (idx === undefined) return full;
       const id = `bib.bib${idx + 1}`;
       const label = entries[idx].label || key;
-      // Native arXiv emits `(Author, <a>year</a>)` — only the year is
-      // the clickable link, the author prefix stays plain text inside
-      // the surrounding <cite>. Split the apalike label by its last
-      // ", " to recover the prefix; if there's no comma (rare style),
-      // fall back to linking the whole label.
+      // Native arXiv emits `(Author, <a>year</a>)` inside citep, and
+      // `Author (<a>year</a>)` inside citet. We render the citep form
+      // here; the citet reshape happens in the post-pass below
+      // (otherwise we'd need to know our parent <cite>'s class, which
+      // a span-local regex can't do). Split the apalike label by its
+      // last ", " to recover the author-prefix; if there's no comma
+      // (rare style), fall back to linking the whole label.
       const lastComma = label.lastIndexOf(', ');
       if (lastComma > -1) {
         const prefix = label.slice(0, lastComma + 2); // includes ", "
@@ -307,6 +309,27 @@ function rewriteCitations(html, entries) {
       return `<a class="ltx_ref" href="#${id}">${escapeHtml(label)}</a>`;
     }
   );
+
+  // Post-pass: reshape citet blocks from "Author, <a>year</a>" to
+  // "Author (<a>year</a>)" — matching native arXiv apalike rendering
+  // for \citet{}. Native paper-content.json already arrives in this
+  // form; this only fires on citet blocks that came out of our own
+  // span-rewrite above (which emits citep shape regardless of parent).
+  // Multi-key \citet{a,b} renders as
+  // "Author1 (year1); Author2 (year2)" — the per-cite regex applied
+  // to each ", <a>year</a>" handles that naturally.
+  html = html.replace(
+    /(<cite\s+class="[^"]*ltx_citemacro_citet[^"]*"[^>]*>)([\s\S]*?)(<\/cite>)/g,
+    (full, open, inner, close) => {
+      const reshaped = inner.replace(
+        /,\s+(<a\s+class="ltx_ref"[^>]*>[^<]+<\/a>)/g,
+        ' ($1)'
+      );
+      return open + reshaped + close;
+    }
+  );
+
+  return html;
 }
 
 async function injectOne(slug) {
