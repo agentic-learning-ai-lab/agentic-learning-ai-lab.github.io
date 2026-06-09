@@ -67,6 +67,14 @@ const SURNAME_PARTICLES = new Set([
   'ten', 'ter', 'zu', 'zum', 'zur', 'du',
 ]);
 
+// Generational / honorific suffixes that trail the surname but aren't
+// the surname itself. Stored without trailing period; matched
+// case-insensitively. "V" / "I" omitted — a bare single letter is
+// almost always an initial, not a Roman-numeral suffix.
+const SURNAME_SUFFIXES = new Set([
+  'jr', 'sr', 'ii', 'iii', 'iv', 'md', 'phd', 'esq',
+]);
+
 /**
  * Convert a given-name token to its initial form.
  *   "Jacob"      → "J."
@@ -110,7 +118,23 @@ function toInitial(token) {
 function parseAuthor(chunk) {
   const tokens = chunk.trim().split(/\s+/).filter(Boolean);
   if (tokens.length === 0) return { given: '', surname: '' };
-  if (tokens.length === 1) return { given: '', surname: tokens[0] };
+
+  // Peel off a trailing suffix (Jr., Sr., III, …) if present. It rides
+  // along with the surname in the output but doesn't participate in
+  // the surname-particle walk-back: a name like "Joe H. Ward Jr." has
+  // suffix="Jr.", then surname="Ward", then given="Joe H."
+  let suffix = '';
+  if (tokens.length > 1) {
+    const last = tokens[tokens.length - 1];
+    const normalized = last.toLowerCase().replace(/\.$/, '');
+    if (SURNAME_SUFFIXES.has(normalized)) {
+      suffix = tokens.pop();
+    }
+  }
+
+  if (tokens.length === 1) {
+    return { given: '', surname: suffix ? `${tokens[0]} ${suffix}` : tokens[0] };
+  }
 
   // Walk backwards from the last token: it's always part of the surname.
   // Extend the surname leftward across any contiguous particle tokens.
@@ -118,28 +142,63 @@ function parseAuthor(chunk) {
   while (surnameStart > 0 && SURNAME_PARTICLES.has(tokens[surnameStart - 1].toLowerCase())) {
     surnameStart--;
   }
-  const surname = tokens.slice(surnameStart).join(' ');
+  let surname = tokens.slice(surnameStart).join(' ');
+  if (suffix) surname += ` ${suffix}`;
   const given = tokens.slice(0, surnameStart).join(' ');
   return { given, surname };
 }
 
 /**
  * Detect if `authorList` (plain text, no HTML) is already apalike form.
- * Heuristic: the first author starts with "Lastname, X…" — a single
- * surname-word followed by a comma and an uppercase letter.
  *
- * Pattern is intentionally permissive about what follows the first
- * uppercase letter so hyphenated initials ("J.-B."), multi-initial
- * given names ("O. J."), and full first names ("Jacob") all qualify
- * as long as the *structure* is "surname, capital-letter-something".
+ * The discriminator is the surname chunk (before the first comma):
+ * apalike's surname chunk is zero or more lowercase particles followed
+ * by exactly ONE capital-led word ("Rosa", "O’Brien", "LeCun", "Achiam",
+ * "de la Rosa", "van der Wal"). A "First Last" entry has multiple
+ * capital-led words there ("Jacob Devlin"), which fails the check.
  *
- * Negative cases:
- *   "Jacob Devlin, ..."   — "Jacob" then space (no comma) → not apalike
- *   "A. Abdolmaleki, ..."  — "A" then "." (no immediate comma) → not apalike
- *   "OpenAI Josh, ..."    — "OpenAI" then space → not apalike
+ * We deliberately don't constrain what follows the comma — the given
+ * name can be anything the source bibtex chose: single capital word
+ * ("Javier"), multi-word ("A Emin"), initials ("O. J."), hyphenated
+ * initials ("J.-B."), etc. The surname check alone is enough.
+ *
+ * Idempotency: if `rewriteAuthorList` produces "S, G, …", the detector
+ * recognizes that output as apalike on re-runs because S satisfies
+ * the surname pattern.
+ *
+ * Negative cases (correctly NOT apalike):
+ *   "Jacob Devlin, ..."           — two capital words in surname chunk
+ *   "A. Abdolmaleki, ..."          — "A." has a period, not a letter run
+ *   "OpenAI Josh Achiam, ..."     — three capital words in surname chunk
  */
+const APOSTROPHE_CLASS = "'’";
+const SURNAME_WORD = `[A-ZÀ-Ɏ][\\wÀ-ÿ${APOSTROPHE_CLASS}\\-]*`;
+// Particle prefix accepts the known particle set in either lowercase
+// ("van der", "de la") or capitalized form ("Van", "De") — both are
+// common at the start of a sentence (or rendered by some bibstyles
+// that capitalize the first particle). `parseAuthor` already handles
+// either case via `.toLowerCase()`; the detector needs to match it.
+const PARTICLE_ALTS = [...SURNAME_PARTICLES].flatMap(
+  p => [p, p[0].toUpperCase() + p.slice(1)]
+).join('|');
+// Suffix matcher: each suffix as lowercase, Capitalized, and UPPERCASE
+// variants with optional trailing period (`Jr` / `Jr.` / `JR.` all
+// match). Allows the detector to recognize an apalike surname chunk
+// that ends with a generational suffix ("Ward Jr").
+const SUFFIX_ALTS = [...SURNAME_SUFFIXES]
+  .flatMap(s => [s, s[0].toUpperCase() + s.slice(1), s.toUpperCase()])
+  .filter((v, i, a) => a.indexOf(v) === i)
+  .join('|');
+const SURNAME_RE = new RegExp(
+  `^(?:(?:${PARTICLE_ALTS})\\s+)*${SURNAME_WORD}(?:\\s+(?:${SUFFIX_ALTS})\\.?)?$`
+);
+
 function isAlreadyApalike(authorList) {
-  return /^[A-ZÀ-Ɏ][a-zA-ZÀ-ɏ'\-]*,\s+[A-ZÀ-Ɏ]/.test(authorList.trim());
+  const trimmed = authorList.trim();
+  const firstComma = trimmed.indexOf(',');
+  if (firstComma < 0) return false;
+  const surnameChunk = trimmed.slice(0, firstComma).trim();
+  return SURNAME_RE.test(surnameChunk);
 }
 
 /**
@@ -157,8 +216,11 @@ function splitAuthors(s) {
   // Normalize " and " (with or without preceding comma) to ", ".
   let normalized = s.replace(/\s+and\s+/gi, ', ');
   // Pull out trailing "et al." / "others" — they shouldn't be reformatted.
+  // Tolerant of missing comma before the sentinel (e.g. when an
+  // `<span class="ltx_bib_etal">et al.</span>` wrapper was stripped to
+  // a bare " et al." without a separator).
   let trailer = '';
-  const trailerMatch = normalized.match(/,\s*(et\s*al\.?|others)\s*$/i);
+  const trailerMatch = normalized.match(/(?:,\s*|\s+)(et\s*al\.?|others)\s*$/i);
   if (trailerMatch) {
     trailer = trailerMatch[1].trim();
     normalized = normalized.slice(0, trailerMatch.index);
@@ -352,9 +414,12 @@ function normalizeHtml(html) {
       const block = findFirstBibblock(body);
       if (!block) return full;
       total++;
-      // Plain text inside the block — strip any nested tags.
+      // Plain text inside the block — strip any nested tags. Replace
+      // tags with a space (not empty) so a stripped `<br/>` between two
+      // authors doesn't glue them ("LeCunand Pieter"); the subsequent
+      // \s+ collapse cleans up multiples.
       const plain = block.innerHtml
-        .replace(/<[^>]+>/g, '')
+        .replace(/<[^>]+>/g, ' ')
         .replace(/&amp;/g, '&')
         .replace(/&nbsp;/g, ' ')
         .replace(/\s+/g, ' ')
