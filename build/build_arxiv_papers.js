@@ -870,6 +870,19 @@ async function buildPapers(options = {}) {
           } catch (normErr) {
             console.warn(`  normalize: ${paper.permalink} skipped — ${normErr.message}`);
           }
+
+          // Normalize the AUTHOR LIST in each bibitem's first bibblock
+          // to surname-first ("Devlin, Jacob") so References reads
+          // consistently across papers regardless of the source
+          // bibtex's chosen style. Runs after normalize_bib_tags so the
+          // first bibblock structure is settled. See
+          // build/normalize_bib_authors.js.
+          try {
+            const { normalizeOne: normalizeAuthors } = require('./normalize_bib_authors');
+            await normalizeAuthors(paper.permalink);
+          } catch (authErr) {
+            console.warn(`  authors: ${paper.permalink} skipped — ${authErr.message}`);
+          }
         }
       } catch (error) {
         console.error(`❌ [HTML] ${paper.permalink} - failed: ${error.message}`);
@@ -924,7 +937,20 @@ async function buildPapers(options = {}) {
         // when bibliography is empty (idempotent + skipped otherwise).
         try {
           const { injectOne } = require('./inject_bbl');
-          await injectOne(paper.permalink);
+          const injected = await injectOne(paper.permalink);
+          // If we just injected fresh bibitems from a .bbl, re-run the
+          // tag + author normalizers so the injected entries pick up
+          // the same canonical formatting as native-arXiv entries.
+          if (injected) {
+            try {
+              const { normalizeOne } = require('./normalize_bib_tags');
+              await normalizeOne(paper.permalink);
+            } catch {}
+            try {
+              const { normalizeOne: normalizeAuthors } = require('./normalize_bib_authors');
+              await normalizeAuthors(paper.permalink);
+            } catch {}
+          }
         } catch (bblErr) {
           console.warn(`  bbl-inject: ${paper.permalink} skipped — ${bblErr.message}`);
         }
