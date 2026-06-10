@@ -8,6 +8,8 @@ const moment = require('moment');
 const TEMPLATES_DIR = path.resolve(__dirname, '../templates');
 const ASSETS_MANIFEST_PATH = path.resolve(__dirname, '../assets-manifest.json');
 
+const { paperJsonLd, personJsonLd, organizationJsonLd } = require('./jsonld');
+
 // Memoized once-per-process — build_pages.js spawns one templater
 // subprocess per template, so this loads ~7 times per build, ~negligible.
 let _manifest = null;
@@ -25,6 +27,18 @@ function loadAssetsManifest() {
 // so authors notice when they've added an asset but forgotten to run
 // `npm run sync:r2`. Doesn't fail the build — fallback already works.
 const _cdnMisses = new Set();
+
+// Bare-function CDN resolver for callers outside Handlebars (e.g.,
+// jsonld.js). Mirrors the cdnUrl helper's behavior: manifest hit
+// returns the CDN URL; miss falls back to the logical path and is
+// tracked in _cdnMisses so the build summary still reports it.
+function resolveCdn(logicalPath) {
+    if (!logicalPath) return '';
+    const manifest = loadAssetsManifest();
+    if (manifest[logicalPath]) return manifest[logicalPath];
+    _cdnMisses.add(logicalPath);
+    return logicalPath;
+}
 
 doTemplating(process.argv[2], process.argv[3]);
 
@@ -73,6 +87,8 @@ function doTemplating(input, output) {
             }
             paper.has_pdf_link = paper.has_local_pdf || !!paper.pdf;
 
+            paper.jsonLd = paperJsonLd(paper, { cdnUrl: resolveCdn });
+
             fs.writeFileSync(output_new, template(paper));
         }
     }
@@ -91,6 +107,7 @@ function doTemplating(input, output) {
                 }
             }
             person.papers = papers;
+            person.jsonLd = personJsonLd(person, { cdnUrl: resolveCdn });
             fs.writeFileSync(output_new, template(person));
         }
     }
@@ -223,6 +240,12 @@ function doTemplating(input, output) {
         // `areas/index.html`, etc.) is gitignored — fresh clones have
         // no `contact/`, `people/`, `areas/` directories at all,
         // so the write fails without mkdir.
+        // Organization JSON-LD on the home page only. Crawlers expect
+        // it on a single canonical page; other pages link the lab via
+        // ScholarlyArticle.publisher / Person.affiliation already.
+        if (input === 'index.hbs') {
+            documents.organizationJsonLd = organizationJsonLd();
+        }
         fs.mkdirSync(path.dirname(output) || '.', { recursive: true });
         fs.writeFileSync(output, template(documents));
     }
