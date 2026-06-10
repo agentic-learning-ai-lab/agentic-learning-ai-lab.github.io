@@ -49,6 +49,10 @@ const FILES = [
   // function. Used to preserve legacy /<slug>/ URLs that were
   // renamed during migration.
   '_redirects',
+  // Crawler hints: robots.txt is a static file pointing at sitemap.xml.
+  // sitemap.xml and llms.txt are generated into out/ directly by the
+  // build:sitemap / build:llms-txt scripts and don't need a copy step.
+  'robots.txt',
 ];
 
 // Top-level directories copied into out/ recursively. These are all
