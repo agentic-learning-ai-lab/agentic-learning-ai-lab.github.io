@@ -224,6 +224,15 @@
   google_scholar: ""
   current: true
 -
+  name: "Edwin Liu"
+  image: "/assets/images/people/edwin_liu.jpg"
+  position: "Undergraduate Student"
+  webpage: "https://www.linkedin.com/in/edwin-e-liu/"
+  permalink: "edwin-liu"
+  description: "Edwin Liu is an undergraduate studying Math and Computer Science at New York University. He is currently working with Prof. Mengye Ren and Ryan Teehan, focusing on multi-agent LLM systems."
+  google_scholar: ""
+  current: true
+-
   name: "Frank (Zequan) Wu"
   image: "/assets/images/people/frank_wu.jpg"
   position: "Visiting Researcher"
