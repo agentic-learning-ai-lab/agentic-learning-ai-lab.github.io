@@ -236,6 +236,19 @@ async function main() {
 
     if (!dryRun) checkGhAuth();
 
+    // Compress any over-threshold arXiv figures BEFORE hashing for upload —
+    // otherwise an uncompressed file lands on R2 with its raw hash, then the
+    // next full build re-compresses it and drift cycles begin. See
+    // notes/binary-asset-drift.md.
+    //
+    // Skipped on --dry-run: compress overwrites source files in place, so
+    // a dry-run that mutates the working tree would be a surprising side
+    // effect for contributors trying to see "what would happen".
+    if (!dryRun) {
+        const { compressAllAssets } = require('./compress_assets');
+        await compressAllAssets(false);
+    }
+
     const specs = findUnregistered(paths);
     if (specs.length === 0) {
         console.log('✓ Everything already on R2. Nothing to upload.');
