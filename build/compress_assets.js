@@ -4,6 +4,12 @@
 // Resizes PNGs and JPGs in research assets to max 1400px width using sharp.
 // Uses a .compressed marker directory for caching.
 //
+// Also short-circuits via the assets manifest: if the local file's
+// content hash already matches what's recorded in assets-manifest.json
+// (i.e., R2 already has these exact bytes), we skip compression even
+// when no marker exists. Prevents drift on fresh checkouts where the
+// gitignored .compressed/ dir is missing — see notes/binary-asset-drift.md.
+//
 // Usage:
 //   node build/compress_assets.js           # Compress with caching
 //   node build/compress_assets.js --force   # Force re-compress all
@@ -11,10 +17,18 @@
 const fs = require('fs-extra');
 const path = require('path');
 const sharp = require('sharp');
+const { hashFile, loadManifest, ROOT } = require('./r2_lib');
 
 const MAX_WIDTH = 1400;
 const RESEARCH_DIR = path.resolve(__dirname, '../research');
 const MARKER_DIR_NAME = '.compressed';
+
+// Extract the 16-hex content hash from a manifest CDN URL. Mirrors the
+// HASH_LEN convention in r2_lib.js / sync_to_r2.js.
+function manifestHash(cdnUrl) {
+  const m = cdnUrl && cdnUrl.match(/\/([a-f0-9]{16})\//);
+  return m ? m[1] : null;
+}
 
 async function compressImage(imagePath) {
   const ext = path.extname(imagePath).toLowerCase();
@@ -51,9 +65,12 @@ async function compressAllAssets(force = false) {
     console.log('Force mode: re-compressing all images\n');
   }
 
+  const manifest = force ? {} : await loadManifest();
+
   const dirs = await fs.readdir(RESEARCH_DIR);
   let totalCompressed = 0;
   let totalSkipped = 0;
+  let totalSkippedManifest = 0;
   let totalSavedBytes = 0;
 
   for (const dir of dirs) {
@@ -102,6 +119,25 @@ async function compressAllAssets(force = false) {
         }
       }
 
+      // Manifest-hash short-circuit: if R2 already has these exact
+      // bytes (manifest's URL hash == local content hash), the file is
+      // canonically stable. Re-compressing would produce divergent
+      // local bytes → sync would re-upload → manifest churn for no
+      // reason. Skip and write the marker so future runs are fast.
+      if (!force) {
+        const logical = '/' + path.relative(ROOT, imagePath);
+        const expected = manifestHash(manifest[logical]);
+        if (expected) {
+          const actual = await hashFile(imagePath);
+          if (actual === expected) {
+            await fs.ensureDir(path.dirname(markerPath));
+            await fs.ensureFile(markerPath);
+            totalSkippedManifest++;
+            continue;
+          }
+        }
+      }
+
       try {
         const result = await compressImage(imagePath);
         await fs.ensureDir(path.dirname(markerPath));
@@ -127,7 +163,8 @@ async function compressAllAssets(force = false) {
 
   console.log(`\nCompression complete:`);
   console.log(`  Compressed: ${totalCompressed}`);
-  console.log(`  Skipped: ${totalSkipped}`);
+  console.log(`  Skipped (marker / already small): ${totalSkipped}`);
+  console.log(`  Skipped (manifest hash match): ${totalSkippedManifest}`);
   if (totalSavedBytes > 0) {
     console.log(`  Saved: ${(totalSavedBytes / 1024 / 1024).toFixed(1)}MB`);
   }

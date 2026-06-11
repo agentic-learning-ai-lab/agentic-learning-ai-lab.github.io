@@ -215,6 +215,15 @@ async function main() {
   const prune = process.argv.includes('--prune');
   console.log(`R2 sync → bucket=${BUCKET}  cdn=${CDN_BASE}${verify ? '  (verify: HEAD every file)' : ''}${prune ? '  (prune: drop orphan entries)' : ''}\n`);
 
+  // Compress over-threshold arXiv figures BEFORE collecting + hashing for
+  // upload. Otherwise an uncompressed figure (>1400 px wide) gets uploaded
+  // raw on first sync; the next full build re-encodes it; manifest churns.
+  // See notes/binary-asset-drift.md. No-op when run as part of `npm run
+  // build` (build:compress runs earlier) thanks to the marker dir + the
+  // manifest-hash short-circuit added in compress_assets.js.
+  const { compressAllAssets } = require('./compress_assets');
+  await compressAllAssets(false);
+
   const files = collectFiles();
   if (files.length === 0) {
     console.error('No files matched the configured patterns. Check SYNC_PATHS.');
