@@ -989,8 +989,10 @@ async function buildPapers(options = {}) {
     if (!await fs.pathExists(jsonPath)) continue;
     const doc = await fs.readJson(jsonPath);
     const html = doc && doc.html ? doc.html : '';
-    // Match the check in build/check_bibliography.js.
-    if (/<ul[^>]*class="[^"]*ltx_biblist[^"]*"[^>]*>\s*<\/ul>/.test(html)) {
+    // Match check_bibliography.js exactly — deliberately lax on attribute
+    // quoting (no class="..." requirement) so this can't false-negative
+    // relative to CI.
+    if (/<ul[^>]*ltx_biblist[^>]*>\s*<\/ul>/.test(html)) {
       emptyBibPapers.push(paper.permalink);
     }
   }
