@@ -11,6 +11,7 @@
   pdf: 'https://arxiv.org/pdf/2606.32026'
   permalink: adajepa
   project_page: true
+  enable_full_paper: true
   research_areas:
     - learning-from-visual-experience
     - adaptive-agents-and-foundation-models
