@@ -81,6 +81,62 @@ Data scaling improves both frozen and adaptive models, but test-time adaptation 
 
 </div>
 
+## Visualization
+
+These examples illustrate how adaptation leads to better prediction and planning. Blue denotes the frozen model and red denotes AdaJEPA. A star (★) marks an unseen test shape or configuration, where decoded rollouts can still reconstruct reasonably while retaining training-domain structure. Although the decoder is frozen after training on default data, it still produces meaningful rollouts after lightweight test-time adaptation. This suggests that AdaJEPA improves planning by exploiting shared latent structure and recalibrating predictions, while remaining close to the learned latent manifold.
+
+<div class="adajepa-video-row">
+  <figure>
+    <video autoplay muted loop playsinline preload="metadata"><source src="/assets/projects/adajepa/pushobj_plus_frozen.mp4" type="video/mp4"></video>
+    <figcaption>Ex. 1: PushObj +, frozen.</figcaption>
+  </figure>
+  <figure>
+    <video autoplay muted loop playsinline preload="metadata"><source src="/assets/projects/adajepa/pushobj_plus_adapt.mp4" type="video/mp4"></video>
+    <figcaption>Ex. 1: PushObj +, AdaJEPA.</figcaption>
+  </figure>
+  <figure>
+    <video autoplay muted loop playsinline preload="metadata"><source src="/assets/projects/adajepa/pushobj_i_frozen.mp4" type="video/mp4"></video>
+    <figcaption>Ex. 2: PushObj I★, frozen.</figcaption>
+  </figure>
+  <figure>
+    <video autoplay muted loop playsinline preload="metadata"><source src="/assets/projects/adajepa/pushobj_i_adapt.mp4" type="video/mp4"></video>
+    <figcaption>Ex. 2: PushObj I★, AdaJEPA.</figcaption>
+  </figure>
+</div>
+
+<div class="adajepa-video-row">
+  <figure>
+    <video autoplay muted loop playsinline preload="metadata"><source src="/assets/projects/adajepa/pusht_blur_frozen.mp4" type="video/mp4"></video>
+    <figcaption>Ex. 3: PushT blur★, frozen.</figcaption>
+  </figure>
+  <figure>
+    <video autoplay muted loop playsinline preload="metadata"><source src="/assets/projects/adajepa/pusht_blur_adapt.mp4" type="video/mp4"></video>
+    <figcaption>Ex. 3: PushT blur★, AdaJEPA.</figcaption>
+  </figure>
+  <figure>
+    <video autoplay muted loop playsinline preload="metadata"><source src="/assets/projects/adajepa/pusht_red_frozen.mp4" type="video/mp4"></video>
+    <figcaption>Ex. 4: PushT red★, frozen.</figcaption>
+  </figure>
+  <figure>
+    <video autoplay muted loop playsinline preload="metadata"><source src="/assets/projects/adajepa/pusht_adapt_frozen.mp4" type="video/mp4"></video>
+    <figcaption>Ex. 4: PushT red★, AdaJEPA.</figcaption>
+  </figure>
+</div>
+
+<div class="adajepa-example-grid">
+  <figure><img src="/assets/projects/adajepa/medium_density0.2_damping1_no_ttt_failure0_left.png" alt="Low mass frozen trajectory"><figcaption>Low mass★: frozen.</figcaption></figure>
+  <figure><img src="/assets/projects/adajepa/medium_density0.2_damping1_ttt_predlast_enclast_success0_left.png" alt="Low mass AdaJEPA trajectory"><figcaption>Low mass★: AdaJEPA.</figcaption></figure>
+  <figure><img src="/assets/projects/adajepa/medium_density1.0_damping20_no_ttt_failure2_left.png" alt="High damping frozen trajectory"><figcaption>High damping★: frozen.</figcaption></figure>
+  <figure><img src="/assets/projects/adajepa/medium_density1.0_damping20_ttt_predlast_enclast_success2_left.png" alt="High damping AdaJEPA trajectory"><figcaption>High damping★: AdaJEPA.</figcaption></figure>
+</div>
+
+<div class="adajepa-example-grid">
+  <figure><img src="/assets/projects/adajepa/diverse_maze_no_ttt_failure1_left.png" alt="Maze 1 frozen trajectory"><figcaption>Maze 1★: frozen.</figcaption></figure>
+  <figure><img src="/assets/projects/adajepa/diverse_maze_ttt_success1_left.png" alt="Maze 1 AdaJEPA trajectory"><figcaption>Maze 1★: AdaJEPA.</figcaption></figure>
+  <figure><img src="/assets/projects/adajepa/diverse_maze_no_ttt_failure2_left.png" alt="Maze 2 frozen trajectory"><figcaption>Maze 2★: frozen.</figcaption></figure>
+  <figure><img src="/assets/projects/adajepa/diverse_maze_ttt_success2_left.png" alt="Maze 2 AdaJEPA trajectory"><figcaption>Maze 2★: AdaJEPA.</figcaption></figure>
+</div>
+
 ## Takeaways
 
 AdaJEPA suggests that world models should continue learning during deployment rather than remain frozen after training. By improving predictions from the transitions encountered while planning and acting, adaptive world models can support more resilient perception and planning in a changing world.
