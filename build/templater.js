@@ -311,6 +311,18 @@ function registerPartials(handlebars) {
 }
 
 function registerHelpers(handlebars) {
+    // Apply page-scoped prose emphasis without adding HTML to canonical
+    // abstracts, metadata, search indexes, or JSON-LD.
+    handlebars.registerHelper('emphasizeTerms', function (text, terms) {
+        let output = handlebars.escapeExpression(String(text || ''));
+        for (const term of terms || []) {
+            const escapedTerm = handlebars.escapeExpression(String(term));
+            const pattern = escapedTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            output = output.replace(new RegExp(pattern, 'g'), `<em>${escapedTerm}</em>`);
+        }
+        return new handlebars.SafeString(output);
+    });
+
     // {{cdnUrl '/research/<slug>/paper.pdf'}} → 'https://cdn.agenticlearning.ai/<hash>/<slug>.pdf'
     //
     // Looks up `logicalPath` in assets-manifest.json (populated by

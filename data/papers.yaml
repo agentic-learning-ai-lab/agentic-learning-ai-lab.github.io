@@ -192,8 +192,8 @@
     - Ryan Teehan
     - Zhenbang Yang
     - Mengye Ren
-  short_abstract: Context Tuning is a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters.
-  abstract: 'We introduce Context Tuning, a simple and effective method to significantly enhance few-shot adaptation of LLMs without fine-tuning model parameters. While prompt-based adaptation techniques have demonstrated the effectiveness of lightweight adaptation methods for LLMs, they typically initialize a trainable prompt or prefix with irrelevant tokens for the task at hand. In contrast, Context Tuning initializes the trainable prompt or prefix with task-specific demonstration examples, leveraging the model''s inherent In-Context Learning (ICL) ability to extract relevant information for improved few-shot learning performance. Extensive evaluations on benchmarks such as CrossFit, UnifiedQA, MMLU, BIG-Bench Hard, and ARC demonstrate that Context Tuning outperforms traditional prompt-based adaptation methods and achieves competitive accuracy to Test-Time Training with significantly higher training efficiency.'
+  short_abstract: Context Tuning directly optimizes an LLM's memory representation for efficient adaptation without updating model weights.
+  abstract: 'We introduce Context Tuning, a simple and effective method to significantly enhance few-shot adaptation of large language models (LLMs) without weight updates. In-Context Learning (ICL) forms a memory representation of the demonstrations in a single forward pass but cannot refine it when insufficient. Prompt-based methods offer lightweight adaptation by optimizing a trainable prompt or prefix but initialize it independently of the demonstrations. In contrast, Context Tuning leverages the model''s inherent ICL ability to initialize a trainable memory representation from demonstrations, then refines it through gradient-based optimization. Extensive evaluations on benchmarks such as CrossFit, UnifiedQA, MMLU, BIG-Bench Hard, and ARC demonstrate that Context Tuning outperforms both ICL and traditional prompt-based adaptation methods while achieving competitive accuracy with Test-Time Training at significantly higher training efficiency.'
   arxiv: 'https://arxiv.org/abs/2507.04221'
   pdf: 'https://arxiv.org/pdf/2507.04221'
   permalink: context-tuning
@@ -201,7 +201,7 @@
   research_areas:
     - adaptive-agents-and-foundation-models
     - concept-learning-and-abstraction
-  date: 2025-07-06T00:00:00.000Z
+  date: 2026-07-03T00:00:00.000Z
   journal: The 43rd International Conference on Machine Learning (ICML 2026)
   is_recent: true
   enable_full_paper: true
