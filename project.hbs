@@ -109,14 +109,14 @@
              already maintain for cards, search index, and OG tags.
              Sits between the action-button row and the Abstract block. -->
         <section class="project-tldr tw-max-w-4xl tw-mx-auto tw-px-6 tw-mb-12">
-            <p class="project-prose"><strong>TL;DR:</strong> {{{short_abstract}}}</p>
+            <p class="project-prose"><strong>TL;DR:</strong> {{#if project_page.italic_terms}}{{{emphasizeTerms short_abstract project_page.italic_terms}}}{{else}}{{{short_abstract}}}{{/if}}</p>
         </section>
         {{/if}}
 
         <section class="tw-bg-[var(--card-bg)] tw-py-16">
             <div class="tw-max-w-4xl tw-mx-auto tw-px-6">
                 <h2 class="tw-text-3xl max-md:tw-text-2xl tw-font-semibold tw-tracking-tight tw-mb-6 tw-text-center">Abstract</h2>
-                <p class="project-prose">{{{abstract}}}</p>
+                <p class="project-prose">{{#if project_page.italic_terms}}{{{emphasizeTerms abstract project_page.italic_terms}}}{{else}}{{{abstract}}}{{/if}}</p>
             </div>
         </section>
 
