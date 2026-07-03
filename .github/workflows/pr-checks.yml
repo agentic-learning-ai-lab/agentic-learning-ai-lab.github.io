@@ -50,6 +50,13 @@ jobs:
       - name: Check manifest consistency
         run: node build/check_manifest_consistency.js
 
+      # Every PNG/JPG under a path where the site wraps images in
+      # <picture> must have a .webp sibling in the manifest, so the
+      # rendered <source type="image/webp"> is populated. Same check
+      # runs as scripts/checks/02_webp_companions.js at pre-commit.
+      - name: Check WebP companions
+        run: node build/check_webp_companions.js
+
       # Audits paper-content.json across every paper for the
       # bibliography regressions we hit during the inject_bbl /
       # normalize_bib_tags rollout: empty <ul class="ltx_biblist">

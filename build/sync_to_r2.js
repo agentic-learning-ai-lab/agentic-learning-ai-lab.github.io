@@ -224,6 +224,14 @@ async function main() {
   const { compressAllAssets } = require('./compress_assets');
   await compressAllAssets(false);
 
+  // Generate WebP companions for any new PNG/JPG source that lacks one.
+  // Keeps <picture> tags rendering with a webp <source> for the
+  // image/webp mime type. Same self-contained principle as compress:
+  // if `sync:r2` runs directly (not as part of `npm run build`), a
+  // contributor still gets webp coverage without a separate step.
+  const { generateAll: generateWebp } = require('./generate_webp');
+  await generateWebp();
+
   const files = collectFiles();
   if (files.length === 0) {
     console.error('No files matched the configured patterns. Check SYNC_PATHS.');

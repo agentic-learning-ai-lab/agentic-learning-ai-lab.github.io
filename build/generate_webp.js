@@ -112,7 +112,11 @@ async function main() {
   }
 }
 
-main().catch(err => {
-  console.error('WebP generation failed:', err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch(err => {
+    console.error('WebP generation failed:', err);
+    process.exit(1);
+  });
+}
+
+module.exports = { generateAll: main };

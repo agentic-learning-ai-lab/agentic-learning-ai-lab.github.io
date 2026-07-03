@@ -241,12 +241,20 @@ async function main() {
     // next full build re-compresses it and drift cycles begin. See
     // notes/binary-asset-drift.md.
     //
-    // Skipped on --dry-run: compress overwrites source files in place, so
-    // a dry-run that mutates the working tree would be a surprising side
-    // effect for contributors trying to see "what would happen".
+    // Then generate WebP companions for any new PNG/JPG so both get hashed
+    // + uploaded + registered in the manifest in one pass. Without this,
+    // a contributor adding new project-page figures via `npm run upload`
+    // ends up with PNG-only entries → rendered <picture> falls back to the
+    // <img> tag with no <source type="image/webp"> (misses the WebP
+    // optimization).
+    //
+    // Skipped on --dry-run: both mutate files in the working tree
+    // (compress overwrites sources; webp writes new .webp files).
     if (!dryRun) {
         const { compressAllAssets } = require('./compress_assets');
         await compressAllAssets(false);
+        const { generateAll: generateWebp } = require('./generate_webp');
+        await generateWebp();
     }
 
     const specs = findUnregistered(paths);
