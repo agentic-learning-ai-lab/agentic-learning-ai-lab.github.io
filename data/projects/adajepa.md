@@ -26,7 +26,7 @@ links:
 
 ![AdaJEPA performs a closed-loop plan-act-adapt-replan cycle. At each MPC step, the agent plans with the current world model, executes the first action, observes the next transition, updates the model using latent prediction error, and replans with the adapted model.](main_loop.png){width=900}
 
-Latent world models make planning from high-dimensional observations tractable by predicting future states in a compact representation space. However, standard world-model planners freeze the model after training. Inaccurate predictions, especially severe under test distribution shift, can make MPC optimize actions for the wrong imagined future, hindering planning.
+Latent world models make planning from high-dimensional observations tractable by predicting future states in a compact representation space. However, world models are usually kept frozen after training. Inaccurate predictions, especially severe under test distribution shift, can make MPC optimize actions for the wrong imagined future, hindering planning.
 
 AdaJEPA addresses this by adapting the world model during deployment. Each action executed by MPC produces a new transition $(o_t, a_t, o_{t+1})$, which becomes a self-supervised training signal before the next replan. This couples learning and planning in a simple loop: plan, act, adapt, and replan.
 
@@ -63,7 +63,7 @@ Our proposed adaptation is very lightweight: by default, we use one gradient ste
 
 <div class="adajepa-results-compact">
 
-AdaJEPA improves planning in both in-distribution and out-of-distribution settings. In-distribution, adaptation is safe to apply: it improves performance when the frozen model is suboptimal and preserves strong baselines when the frozen model is already near-optimal. Under distribution shift, AdaJEPA gives consistent gains because each observed transition helps recalibrate the model before the next replan.
+AdaJEPA improves planning in both in-distribution and out-of-distribution settings. For in-distribution environments, AdaJEPA improves performance when the frozen model is suboptimal and preserves strong baselines when the frozen model is already near-optimal. Under distribution shift, AdaJEPA gives consistent gains because each observed transition helps recalibrate the model before the next replan.
 
 ![Shape shifts change the shapes in PushObj; stars mark held-out object shapes.](all_shapes_gd_cem_ttt.png){width=900}
 
