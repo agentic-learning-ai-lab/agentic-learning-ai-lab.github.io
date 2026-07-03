@@ -42,7 +42,7 @@ a^*_{t:t+H-1}
 \alpha_k\, d(\hat z_{t+k}, z_g).
 $$
 
-After executing an action, AdaJEPA stores the observed transition in a small online buffer $\mathcal{B}$ and adapts the model by minimizing the same latent prediction objective used during pretraining:
+After executing the first action, AdaJEPA stores the observed transition in a small online buffer and adapts the model by minimizing the latent prediction objective:
 
 $$
 \mathcal{L}_{\rm ada}(\mathcal{B})
@@ -65,7 +65,7 @@ Our proposed adaptation is very lightweight: by default, we use one gradient ste
 
 AdaJEPA improves planning in both in-distribution and out-of-distribution settings. In-distribution, adaptation is safe to apply: it improves performance when the frozen model is suboptimal and preserves strong baselines when the frozen model is already near-optimal. Under distribution shift, AdaJEPA gives consistent gains because each observed transition helps recalibrate the model before the next replan.
 
-![Shape shifts change the PushT object geometry; stars mark held-out object shapes.](all_shapes_gd_cem_ttt.png){width=900}
+![Shape shifts change the shapes in PushObj; stars mark held-out object shapes.](all_shapes_gd_cem_ttt.png){width=900}
 
 ![Visual shifts corrupt PushT observations with blur, salt-and-pepper noise, dark lighting, and color changes.](pusht_visual_shifts_gd_cem_ttt.png){width=900}
 
