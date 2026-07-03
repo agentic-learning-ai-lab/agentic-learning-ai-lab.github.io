@@ -2,30 +2,35 @@
 mathjax: true
 equal_label: Equal advising
 affiliations:
-  - { name: 'Ying Wang',      aff: 'New York University' }
+  - { name: 'Ying Wang',      aff: ['New York University', 'AMI Labs'] }
   - { name: 'Oumayma Bounou', aff: 'New York University' }
-  - { name: 'Yann LeCun',     aff: 'New York University', url: 'http://yann.lecun.com/', equal: true }
+  - { name: 'Yann LeCun',     aff: ['New York University', 'AMI Labs'], url: 'http://yann.lecun.com/', equal: true }
   - { name: 'Mengye Ren',     aff: 'New York University', equal: true }
 bibtex: |
-  @article{wang2026adajepa,
-    title   = {AdaJEPA: An Adaptive Latent World Model},
-    author  = {Wang, Ying and Bounou, Oumayma and LeCun, Yann and Ren, Mengye},
-    journal = {CoRR},
-    year    = {2026}
+  @misc{wang2026adajepaadaptivelatentworld,
+        title={AdaJEPA: An Adaptive Latent World Model}, 
+        author={Ying Wang and Oumayma Bounou and Yann LeCun and Mengye Ren},
+        year={2026},
+        eprint={2606.32026},
+        archivePrefix={arXiv},
+        primaryClass={cs.LG},
+        url={https://arxiv.org/abs/2606.32026}, 
   }
+links:
+  arxiv: https://arxiv.org/abs/2606.32026
+  pdf: https://arxiv.org/pdf/2606.32026
+  code: https://github.com/agentic-learning-ai-lab/adajepa
 ---
 
 ## Overview
 
 ![AdaJEPA performs a closed-loop plan-act-adapt-replan cycle. At each MPC step, the agent plans with the current world model, executes the first action, observes the next transition, updates the model using latent prediction error, and replans with the adapted model.](main_loop.png){width=900}
 
-Latent world models make planning from high-dimensional observations tractable by predicting future states in a compact representation space. However, standard world-model planners freeze the model after training. When predictions become inaccurate under visual, shape, dynamics, or layout shifts, model predictive control can optimize actions for the wrong imagined future.
+Latent world models make planning from high-dimensional observations tractable by predicting future states in a compact representation space. However, standard world-model planners freeze the model after training. Inaccurate predictions, especially severe under test distribution shift, can make MPC optimize actions for the wrong imagined future, hindering planning.
 
 AdaJEPA addresses this by adapting the world model during deployment. Each action executed by MPC produces a new transition $(o_t, a_t, o_{t+1})$, which becomes a self-supervised training signal before the next replan. This couples learning and planning in a simple loop: plan, act, adapt, and replan.
 
 ## Method
-
-![AdaJEPA uses a JEPA-style latent world model for goal-conditioned planning. Observations and actions are encoded into latent representations, the predictor rolls out future latents, and MPC optimizes actions by minimizing distance to the goal latent.](main_plan.png){width=520}
 
 AdaJEPA starts from a pretrained JEPA world model with a sensory encoder $\mathcal{E}^s_\phi$, an action encoder $\mathcal{E}^a_\psi$, and a latent predictor $f_\theta$. Given a goal observation $o_g$, MPC plans in latent space by rolling out the predictor and minimizing the distance to the goal representation $z_g = \mathcal{E}^s_\phi(o_g)$:
 
@@ -50,24 +55,32 @@ f_\theta\!\left(z_i,\mathcal{E}^a_\psi(a_i)\right),
 \right).
 $$
 
-In experiments, adaptation is lightweight: one gradient step per MPC replan, a replay buffer of five recent transitions, and updates restricted to the final layers of the visual encoder and predictor.
+Our proposed adaptation is very lightweight: by default, we use one gradient step per MPC replan, a replay buffer of five recent transitions, and updates restricted to the final layers of the visual encoder and predictor. See the ablations in the paper for alternative adaptation targets, learning rates, update steps, and buffer choices.
+
+![AdaJEPA closed-loop plan-and-adapt algorithm.](algo.png){width=900}
 
 ## Results
 
-![AdaJEPA improves planning success on PushT shape shifts for both gradient-based and CEM planners. Stars denote held-out object shapes, where adaptation is especially helpful.](all_shapes_gd_cem_ttt.png){width=900}
+<div class="adajepa-results-compact">
 
-AdaJEPA improves planning success across seen and unseen PushT object geometries. The gains are strongest on held-out shapes, where the frozen model's latent rollouts are less reliable and online adaptation helps the planner recover.
+AdaJEPA improves planning in both in-distribution and out-of-distribution settings. In-distribution, adaptation is safe to apply: it improves performance when the frozen model is suboptimal and preserves strong baselines when the frozen model is already near-optimal. Under distribution shift, AdaJEPA gives consistent gains because each observed transition helps recalibrate the model before the next replan.
 
-![AdaJEPA improves planning success under visual shifts including blur, salt-and-pepper noise, dark lighting, and color changes.](pusht_visual_shifts_gd_cem_ttt.png){width=900}
+![Shape shifts change the PushT object geometry; stars mark held-out object shapes.](all_shapes_gd_cem_ttt.png){width=900}
 
-The same adaptation loop improves robustness to visual distribution shifts such as blur, noise, dark lighting, and color changes. Because the update uses only the transition observed during deployment, no expert demonstrations or target-domain labels are required.
+![Visual shifts corrupt PushT observations with blur, salt-and-pepper noise, dark lighting, and color changes.](pusht_visual_shifts_gd_cem_ttt.png){width=900}
 
-![Comparison of frozen and adaptive planning on a held-out square object. AdaJEPA reduces prediction error during MPC and reaches the goal where the frozen planner fails.](example_square_ttt.png){width=900}
+Across PushObj shape shifts and PushT visual shifts, adaptation improves planning by recalibrating the latent world model to the object or observation stream encountered at test time.
 
-![PushT visual shift examples used to evaluate robustness: original observations, blur, salt-and-pepper noise, dark lighting, and red color shifts.](pusht_visual_shifts_examples.png){width=900}
+![Dynamics shifts change PointMaze physics; layout shifts test held-out maze layouts.](dynamic_layout_tab.png){width=900}
+
+On PointMaze dynamics shifts, the frozen model is already strong, likely because the three-frame history gives it some in-context learning to the current dynamics. AdaJEPA still improves beyond this baseline by updating the world model from the observed transition. On unseen layouts, adaptation improves success and makes trajectories closer to shortest paths.
+
+![Training data scale varies PushObj shape diversity K and trajectories per shape N.](shapescale7_success_lines.png){width=585}
+
+Data scaling improves both frozen and adaptive models, but test-time adaptation is especially valuable when offline data is limited. On low-data seen shapes, AdaJEPA can more than double frozen-model success and even outperform frozen models trained with much more data.
+
+</div>
 
 ## Takeaways
 
-AdaJEPA shows that a latent world model does not have to remain fixed after offline training. Updating the model on the transitions encountered during planning can substantially improve closed-loop control, especially under test-time distribution shift.
-
-The approach is simple to add to JEPA-style planners: keep a small online buffer, reuse the latent prediction loss at test time, adapt a small subset of parameters, and immediately replan with the updated model.
+AdaJEPA suggests that world models should continue learning during deployment rather than remain frozen after training. By improving predictions from the transitions encountered while planning and acting, adaptive world models can support more resilient perception and planning in a changing world.

@@ -7,6 +7,8 @@
     - Mengye Ren
   short_abstract: AdaJEPA adapts a latent world model inside closed-loop MPC, using each observed transition as a self-supervised signal before the next replan.
   abstract: 'Latent world models enable planning from high-dimensional observations by predicting future states in a compact latent space. However, these models are typically kept frozen at test time: when their predictions become inaccurate, planning can fail, especially under test-time distribution shift. To address this, we propose AdaJEPA, an adaptive latent world model that performs test-time adaptation within the closed loop of model predictive control (MPC). After training, AdaJEPA plans and executes the first action chunk, uses the observed next-state transition as a self-supervised adaptation signal, and replans with the updated model. This closed-loop update continuously recalibrates the world model without additional expert demonstrations. Across a range of goal-reaching tasks, AdaJEPA substantially improves planning success with as few as one gradient step per MPC replanning step.'
+  arxiv: 'https://arxiv.org/abs/2606.32026'
+  pdf: 'https://arxiv.org/pdf/2606.32026'
   permalink: adajepa
   project_page: true
   research_areas:
