@@ -113,7 +113,10 @@ function downloadFile(url, outputPath, retries = 3, delay = 1000) {
     const attemptDownload = (attemptsLeft) => {
       https.get(url, (response) => {
         if (response.statusCode === 302 || response.statusCode === 301) {
-          downloadFile(response.headers.location, outputPath, retries, delay).then(resolve).catch(reject);
+          // arXiv now returns a relative-path Location (e.g., /src/2606.32026).
+          // Resolve against the request URL so https.get gets a full URL.
+          const nextUrl = new URL(response.headers.location, url).toString();
+          downloadFile(nextUrl, outputPath, retries, delay).then(resolve).catch(reject);
           return;
         }
 
