@@ -118,7 +118,7 @@ These examples illustrate how adaptation leads to better prediction and planning
     <figcaption>Ex. 4: PushT red★, frozen.</figcaption>
   </figure>
   <figure>
-    <video autoplay muted loop playsinline preload="metadata"><source src="/assets/projects/adajepa/pusht_adapt_frozen.mp4" type="video/mp4"></video>
+    <video autoplay muted loop playsinline preload="metadata"><source src="/assets/projects/adajepa/pusht_red_adapt.mp4" type="video/mp4"></video>
     <figcaption>Ex. 4: PushT red★, AdaJEPA.</figcaption>
   </figure>
 </div>
