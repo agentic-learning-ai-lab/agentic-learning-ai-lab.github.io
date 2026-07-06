@@ -975,6 +975,39 @@ async function buildPapers(options = {}) {
     process.exit(1);
   }
 
+  // Guard: any enable_full_paper paper whose paper-content.json exists but
+  // has an empty <ul class="ltx_biblist"> means the HTML download succeeded
+  // (arxiv's extractor drops the biblist for papers missing a .bbl in
+  // their tarball) but inject_bbl didn't backfill — usually because
+  // latex:update <slug> was never run so no tarball is on R2 to compile.
+  // Fail loud locally with a clear next step; without this the empty
+  // biblist ships to CI (which then fails via check_bibliography, but
+  // only after push). Same class of failure PR #53 hit.
+  const emptyBibPapers = [];
+  for (const paper of htmlPapers) {
+    const jsonPath = path.join(OUTPUT_DIR, paper.permalink, 'paper-content.json');
+    if (!await fs.pathExists(jsonPath)) continue;
+    const doc = await fs.readJson(jsonPath);
+    const html = doc && doc.html ? doc.html : '';
+    // Match check_bibliography.js exactly — deliberately lax on attribute
+    // quoting (no class="..." requirement) so this can't false-negative
+    // relative to CI.
+    if (/<ul[^>]*ltx_biblist[^>]*>\s*<\/ul>/.test(html)) {
+      emptyBibPapers.push(paper.permalink);
+    }
+  }
+  if (emptyBibPapers.length > 0) {
+    console.error(
+      `\n❌ ${emptyBibPapers.length} paper(s) have enable_full_paper: true ` +
+      `but an empty <ul class="ltx_biblist"> in paper-content.json:`
+    );
+    for (const slug of emptyBibPapers) {
+      console.error(`   - ${slug}`);
+      console.error(`     Fix: npm run latex:update ${slug} && rm research/${slug}/paper.pdf research/${slug}/paper-content.json && npm run build:arxiv:pdf`);
+    }
+    process.exit(1);
+  }
+
   // Compress PDFs
   if (buildPdf) {
     await compressAllPdfs(force);
