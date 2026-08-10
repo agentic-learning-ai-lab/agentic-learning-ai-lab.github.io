@@ -18,6 +18,21 @@ bibtex: |
   }
 ---
 
+<style>
+.project-prose ul {
+  list-style: disc;
+  margin: 0 0 1rem;
+  padding-left: 1.5rem;
+}
+.project-prose li + li { margin-top: 0.25rem; }
+.project-prose a {
+  color: #3b82f6;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+.project-prose a:hover { color: #60a5fa; }
+</style>
+
 ## Overview of Our Study {data-toc=Overview}
 
 We describe our experimental setup, the metrics we use to measure verification ability, and the verification settings we study.
