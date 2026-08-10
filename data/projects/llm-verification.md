@@ -99,7 +99,7 @@ Reasoning models have higher FPR under self- and intra-family verification than 
 >
 > Higher similarity between solver and verifier solution distributions is associated with a greater tendency to accept incorrect solver outputs and with lower verifier gain. Choosing a verifier with a meaningfully different solution distribution can mitigate this bias.
 
-![](results_verifier_similarity_scatterplot-1.png){width=800}
+![](results_verifier_similarity_scatterplot-1.png){width=533}
 
 ## How Does Reasoning Post-Training Affect Solver and Verifier Performance? {data-toc="Post-Training Effects"}
 
