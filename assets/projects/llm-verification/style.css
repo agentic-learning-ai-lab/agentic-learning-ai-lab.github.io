@@ -17,3 +17,20 @@
 .model-qwen25   { color: #d62728; }
 .model-qwen3    { color: #1f77b4; }
 .model-deepseek { color: #9467bd; }
+
+.project-prose a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+.project-prose a:hover { color: #60a5fa; }
+.project-prose ul {
+    list-style: disc;
+    margin: 0 0 1rem;
+    padding-left: 1.5rem;
+}
+.project-prose li + li { margin-top: 0.25rem; }
+.project-prose p.project-news {
+    max-width: 56rem;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+}

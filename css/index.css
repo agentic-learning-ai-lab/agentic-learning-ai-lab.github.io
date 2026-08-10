@@ -916,11 +916,11 @@ section {
 }
 
 /* Project page body links — blue that reads on both light and dark. */
-.project-prose a {
+.project-section-body a {
     color: #3b82f6;
-    text-decoration: none;
+    text-decoration: underline;
 }
-.project-prose a:hover {
+.project-section-body a:hover {
     color: #60a5fa;
 }
 .project-section-body p {
@@ -1164,28 +1164,13 @@ section {
 .project-prose blockquote,
 .project-prose blockquote p,
 .project-prose blockquote li,
-.project-prose blockquote ul,
-.project-prose blockquote ol {
+.project-prose blockquote ul {
     font-family: inherit;
     font-size: 1em;
     line-height: 1.75;
 }
-.project-prose ul {
-    list-style: disc;
-    margin: 0 0 1rem;
-    padding-left: 1.5rem;
-}
-.project-prose ol {
-    list-style: decimal;
-    margin: 0 0 1rem;
-    padding-left: 1.5rem;
-}
-.project-prose li + li {
-    margin-top: 0.25rem;
-}
 .project-prose blockquote p:last-child,
-.project-prose blockquote ul:last-child,
-.project-prose blockquote ol:last-child {
+.project-prose blockquote ul:last-child {
     margin-bottom: 0;
 }
 
@@ -1203,11 +1188,6 @@ section {
 }
 .project-prose p:last-child {
     margin-bottom: 0;
-}
-.project-prose p.project-news {
-    max-width: 56rem;
-    margin: 0 auto 3rem;
-    padding: 0 1.5rem;
 }
 
 .adajepa-results-compact figure {
