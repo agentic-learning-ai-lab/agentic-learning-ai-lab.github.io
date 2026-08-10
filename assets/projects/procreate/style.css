@@ -1,0 +1,5 @@
+.project-prose a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+.project-prose a:hover { color: #60a5fa; }

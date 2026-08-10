@@ -916,11 +916,11 @@ section {
 }
 
 /* Project page body links — blue that reads on both light and dark. */
-.project-prose a {
+.project-section-body a {
     color: #3b82f6;
-    text-decoration: none;
+    text-decoration: underline;
 }
-.project-prose a:hover {
+.project-section-body a:hover {
     color: #60a5fa;
 }
 .project-section-body p {
