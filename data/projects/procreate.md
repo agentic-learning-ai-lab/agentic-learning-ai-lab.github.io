@@ -14,6 +14,15 @@ bibtex: |
   }
 ---
 
+<style>
+.project-prose a {
+  color: #3b82f6;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+.project-prose a:hover { color: #60a5fa; }
+</style>
+
 ## Overview
 
 ![After fine-tuning diffusion models on categories of our few-shot dataset FSCG-8, ProCreate can significantly improve the diversity and creativity of generations while retaining high image quality and prompt fidelity.](teaser_figure.png){width=900}
