@@ -33,7 +33,7 @@ bibtex: |
 .project-prose a:hover { color: #60a5fa; }
 </style>
 
-**News!** [Logan Bolton's study of VLM judges](https://loganbolton.github.io/blog/vlm-verification/) extends these findings to vision-language models.
+<p class="tw-max-w-4xl tw-mx-auto tw-px-6" style="margin-bottom: 3rem;"><strong>News!</strong> <a href="https://loganbolton.github.io/blog/vlm-verification/">Logan Bolton's study of VLM judges</a> extends these findings to vision-language models.</p>
 
 ## Overview of Our Study {data-toc=Overview}
 
