@@ -33,7 +33,7 @@ bibtex: |
 .project-prose a:hover { color: #60a5fa; }
 </style>
 
-<p style="max-width: 56rem; margin: 0 auto 3rem; padding: 0 1.5rem;"><strong>News!</strong> <a href="https://loganbolton.github.io/blog/vlm-verification/">Logan Bolton's independent study</a> extends these findings to vision-language models as judges.</p>
+<p style="max-width: 56rem; margin: 0 auto 3rem; padding: 0 1.5rem;"><strong>Quick News:</strong> <a href="https://loganbolton.github.io/blog/vlm-verification/">Logan Bolton's independent study</a> extends these findings to vision-language models as judges.</p>
 
 ## Overview of Our Study {data-toc=Overview}
 
