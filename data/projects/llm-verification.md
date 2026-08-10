@@ -109,7 +109,7 @@ Our analysis focuses on the <span class="model-qwen25">Qwen2.5-Base</span>/<span
 >
 > Reasoning post-training significantly improves problem-solving but can reduce self- and intra-family verification gains, while boosting cross-family verification performance.
 
-![](results_posttraining_verifier_barplots_remove_llama-1.png){width=800}
+![](results_posttraining_verifier_barplots_remove_llama-1.png){width=600}
 
 ## How Does Task Type Affect Verifiability? {data-toc="Task Verifiability"}
 
