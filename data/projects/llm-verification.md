@@ -33,6 +33,8 @@ bibtex: |
 .project-prose a:hover { color: #60a5fa; }
 </style>
 
+**News!** [Logan Bolton's study of VLM judges](https://loganbolton.github.io/blog/vlm-verification/) extends these findings to vision-language models.
+
 ## Overview of Our Study {data-toc=Overview}
 
 We describe our experimental setup, the metrics we use to measure verification ability, and the verification settings we study.
@@ -132,5 +134,3 @@ Across 21 post-trained models, we average verifier accuracy and gain over solver
 > - **Check whether the task is easier to verify than to solve.** Our experiments find higher gains on logical and mathematical reasoning tasks than on knowledge-recall tasks.
 > - **Prefer verifiers that "think differently" from the solver.** Greater solution-distribution similarity is associated with more false positives and lower gains.
 > - **Avoid using strong reasoning models as their own verifiers.** In our experiments, <span class="model-qwen3">Qwen3</span> and <span class="model-deepseek">DeepSeek</span> show minimal self-improvement despite being strong solvers.
-
-For an independent extension of these findings to vision-language models, see [Logan Bolton's study of VLM judges and test-time compute](https://loganbolton.github.io/blog/vlm-verification/).
