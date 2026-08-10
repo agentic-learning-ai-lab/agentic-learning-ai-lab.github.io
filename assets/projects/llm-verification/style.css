@@ -17,3 +17,13 @@
 .model-qwen25   { color: #d62728; }
 .model-qwen3    { color: #1f77b4; }
 .model-deepseek { color: #9467bd; }
+
+/* Keep inline references visibly distinct from surrounding prose. */
+.project-prose a {
+    color: #3b82f6;
+    text-decoration: underline;
+    text-underline-offset: 0.12em;
+}
+.project-prose a:hover {
+    color: #60a5fa;
+}
