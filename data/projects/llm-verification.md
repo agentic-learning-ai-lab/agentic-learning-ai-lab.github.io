@@ -62,7 +62,7 @@ Our verifier gain metric estimates the expected improvement in a solver's accura
 
 ![](results_empirical_gap_scatterplot-1.png){width=800}
 
-## Do Better Solvers Make Better Verifiers? {data-toc="Solver Skill"}
+## Do Better Solvers Make Better Verifiers? {data-toc="Solver–Verifier Relationship"}
 
 We test whether a model's solver accuracy predicts its performance as a verifier. For each of 21 post-trained models, we average verifier accuracy, false positive rate (FPR), false negative rate (FNR), and gain over solvers and datasets within each verification setting. The relationship depends on the setting!
 
@@ -84,7 +84,7 @@ Reasoning models have higher FPR under self- and intra-family verification than 
 
 ![](results_verifier_similarity_scatterplot-1.png){width=800}
 
-## How Does Reasoning Post-Training Affect Solver and Verifier Performance? {data-toc=Post-Training}
+## How Does Reasoning Post-Training Affect Solver and Verifier Performance? {data-toc="Post-Training Effects"}
 
 Our analysis focuses on the <span class="model-qwen25">Qwen2.5-Base</span>/<span class="model-qwen25">Qwen2.5</span> and <span class="model-qwen3">Qwen3-Base</span>/<span class="model-qwen3">Qwen3</span> model pairs. For each model, we compute verifier metrics against all solvers and datasets, partition results by verification setting, and average within families.
 
@@ -94,7 +94,7 @@ Our analysis focuses on the <span class="model-qwen25">Qwen2.5-Base</span>/<span
 
 ![](results_posttraining_verifier_barplots_remove_llama-1.png){width=800}
 
-## How Does Task Type Affect Verifiability? {data-toc="Task Type"}
+## How Does Task Type Affect Verifiability? {data-toc="Task Verifiability"}
 
 We next ask two task-level questions:
 
@@ -111,9 +111,11 @@ Across 21 post-trained models, we average verifier accuracy and gain over solver
 
 ![](results_cross_dataset_task_scatterplots-1.png){width=900}
 
-## A Checklist for Designing Effective Solver–Verifier Systems {data-toc=Checklist}
+## A Checklist for Designing Effective Solver–Verifier Systems {data-toc="Design Checklist"}
 
 > - **Use verifier gain, not accuracy, to evaluate a solver–verifier pair.** Verification accuracy can be misleading, while verifier gain strongly predicts actual rejection sampling gains.
 > - **Check whether the task is easier to verify than to solve.** Our experiments find higher gains on logical and mathematical reasoning tasks than on knowledge-recall tasks.
 > - **Prefer verifiers that "think differently" from the solver.** Greater solution-distribution similarity is associated with more false positives and lower gains.
 > - **Avoid using strong reasoning models as their own verifiers.** In our experiments, <span class="model-qwen3">Qwen3</span> and <span class="model-deepseek">DeepSeek</span> show minimal self-improvement despite being strong solvers.
+
+For an independent extension of these findings to vision-language models, see [Logan Bolton's study of VLM judges and test-time compute](https://loganbolton.github.io/blog/vlm-verification/).
