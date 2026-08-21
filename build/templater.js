@@ -265,9 +265,10 @@ function parseDocuments() {
     const positionPriority = {
         'Assistant Professor': 0,
         'PhD Student': 1,
-        'Master Student': 2,
-        'Visiting Researcher': 3,
-        'Undergraduate Student': 4,
+        'Visiting PhD Student': 2,
+        'Master Student': 3,
+        'Visiting Researcher': 4,
+        'Undergraduate Student': 5,
     };
     const lastName = (n) => (n || '').replace(/\([^)]+\)/g, '').trim().split(/\s+/).pop().toLowerCase();
     const sortPeople = (arr) => arr.sort((a, b) => {
