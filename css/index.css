@@ -391,6 +391,16 @@ header>.collapsible-header {
     width: 75%;
 }
 
+/* On lg+ (≥1024px) the hero image is wide enough that the 75% cap on
+   the overlay compresses the slogan into 3 lines. Relax to 90% so the
+   two-line layout ("toward" / "always-learning agents") holds across
+   lg → xl → 2xl viewports. */
+@media (min-width: 1024px) {
+    .text-overlay {
+        width: 90%;
+    }
+}
+
 /* In dark mode the hero image itself is dimmed via the universal
    img brightness rule, so pure-white overlay text reads "too loud"
    against the now-darker photo. Drop one notch from pure white. */
@@ -440,6 +450,28 @@ header>.collapsible-header {
     .image-container {
         height: 450px;
     }
+}
+
+/* Masonry-style layout for the home page Recent Works grid.
+   Widths per breakpoint account for a 40px horizontal gutter (see the
+   Masonry init in index.hbs: `gutter: 40`). Vertical spacing between
+   cards comes from tw-mb-6 (24px) applied inside .grid-item. */
+.masonry-grid {
+    position: relative;
+    /* Hide until Masonry has laid out (JS flips opacity to 1). Prevents
+       the brief linear-stack flash while cards await positioning. */
+    opacity: 0;
+    transition: opacity 0.15s ease-in;
+}
+.masonry-grid .grid-item { width: calc(25% - 30px); }
+@media (max-width: 1279px) {
+    .masonry-grid .grid-item { width: calc(33.333% - 26.667px); }
+}
+@media (max-width: 1023px) {
+    .masonry-grid .grid-item { width: calc(50% - 20px); }
+}
+@media (max-width: 767px) {
+    .masonry-grid .grid-item { width: 100%; }
 }
 
 /* Section container styling */
