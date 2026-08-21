@@ -69,6 +69,10 @@ const SYNC_PATHS = [
   // .csv (daily-oracle inline d3 data) so the slim CF Pages bundle can
   // reference them via cdnUrl too.
   'assets/projects/**/*.{png,jpg,jpeg,gif,webp,svg,mp4,pdf,css,csv}',
+  // Brand assets — not linked from the site HTML, but sync'd to R2 so
+  // team members have stable CDN URLs to point social profile uploads
+  // at. See assets/brand/README.md if it exists.
+  'assets/brand/**/*.{png,jpg,jpeg,svg}',
 ];
 
 const BUCKET = process.env.R2_BUCKET || 'agenticlearning-assets';
