@@ -26,10 +26,10 @@
                 {{{pictureCdn '/assets/images/background/bg3.png' alt="app" class="reveal-hero-img tw-z-[1] tw-h-full tw-w-full tw-object-contain" eager=true}}}
 
                 <div class="text-overlay">
-                    <div class="tw-flex tw-flex-wrap tw-p-2 tw-leading-[85px] tw-text-7xl max-lg:tw-text-5xl max-lg:tw-leading-snug max-md:tw-text-4xl"
+                    <div class="tw-flex tw-flex-wrap tw-p-2 tw-leading-[85px] tw-text-7xl max-lg:tw-text-4xl max-lg:tw-leading-snug max-md:tw-text-3xl"
                         style="position: relative">
                         <span class="reveal-hero-text">
-                            agentic learning <br /> ai lab
+                            toward <br class="max-lg:tw-hidden" /> always-learning agents
                         </span>
                     </div>
                     {{!-- tw-text-justify --}}
@@ -72,9 +72,10 @@
             <!-- reveal-up -->
             <div class="section-underline tw-my-4">
             </div>
-            <!-- tw-shadow-lg  -->
-            <div
-                class="tw-mt-4 tw-gap-10 tw-space-y-reverse sm:tw-columns-1 md:tw-columns-2 lg:tw-columns-3 xl:tw-columns-4 tw-items-start">
+            <!-- Masonry-style grid. Items are absolutely positioned by
+                 masonry-layout after images load. Width per column set in
+                 CSS via .masonry-grid .grid-item, responsive to breakpoints. -->
+            <div class="masonry-grid tw-mt-4">
                 {{> recent_works recent_papers }}
             </div>
         </div>
@@ -83,5 +84,29 @@
     {{> footer}}
 </body>
 <script src="/index.js"></script>
+
+<!-- Masonry layout for Recent Works. imagesLoaded is unnecessary here
+     because the image container has a fixed `h-[300px]`, so hero images
+     don't change card height as they resolve. Init runs synchronously
+     right after the script downloads — no wait-for-images delay. -->
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js" defer></script>
+<script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+        const grid = document.querySelector('.masonry-grid');
+        if (!grid) return;
+        // Retry briefly in case masonry.pkgd hasn't finished loading yet
+        // (defer scripts run after DOMContentLoaded but before load).
+        const init = () => {
+            if (!window.Masonry) return setTimeout(init, 30);
+            new Masonry(grid, {
+                itemSelector: '.grid-item',
+                percentPosition: true,
+                gutter: 40,
+            });
+            grid.style.opacity = '1';
+        };
+        init();
+    });
+</script>
 
 </html>
