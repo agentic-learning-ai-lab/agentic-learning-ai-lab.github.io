@@ -62,11 +62,12 @@
 <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[var(--bg)] tw-font-mono tw-text-[var(--fg)]">
     {{> header}}
 
-    <main class="project-page-main tw-w-full tw-mt-[120px]">
-        <!-- Separator at the top of main mirrors the one at the top of
-             the footer. Lives right at the header bottom; generous
-             margin below to push the title down. -->
-        <hr class="tw-mb-20" />
+    <main class="project-page-main tw-w-full tw-mt-[120px] tw-pt-20">
+        <!-- Header separator retired — scroll-aware header now provides
+             the visual boundary between chrome and content: transparent
+             at top-of-page (blends into the hero background), gains a
+             card-bg tint + soft shadow once the user scrolls. See
+             .header-scrolled in css/index.css + init in index.js. -->
 
         <!-- Title + author block + action buttons (centered). -->
         <section class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-text-center tw-mb-12">
