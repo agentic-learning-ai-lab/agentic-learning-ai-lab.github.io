@@ -7,6 +7,28 @@ let isHeaderCollapsed = window.innerWidth < RESPONSIVE_WIDTH
 const collapseBtn = document.getElementById("collapse-btn")
 const collapseHeaderItems = document.getElementById("collapsed-header-items")
 
+// Scroll-aware header. The header is `position: fixed` so it stays
+// visible during scroll; when the user is not at the top of the page,
+// toggle .header-scrolled so the CSS can swap the bg from --bg to
+// --card-bg and round the bottom corners (elevation via colour, not
+// shadow — see the .header-scrolled block in css/index.css).
+// Passive listener — this is read-only work, doesn't block scroll.
+//
+// Leading `;` is the defensive-ASI guard: the preceding lines don't
+// end in semicolons, so without it the parser reads
+// `document.getElementById(...) (function ...) ()` as a call on the
+// getElementById result and everything downstream dies in TDZ.
+;(function initScrollAwareHeader() {
+    const headerEl = document.querySelector('header');
+    if (!headerEl) return;
+    const SCROLL_THRESHOLD = 20;
+    const onScroll = () => {
+        headerEl.classList.toggle('header-scrolled', window.scrollY > SCROLL_THRESHOLD);
+    };
+    onScroll();  // set initial state (in case page loads scrolled)
+    window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
 
 
 function onHeaderClickOutside(e) {

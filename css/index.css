@@ -25,6 +25,12 @@
     --header-link-hover: #dddcdccf;
     --footer-link-hover: #6dbb00;
     --input-focus-bd-color: #0d0d0d;
+
+    /* Corner-radius scale. Echoes the agent-mark's ~20% rounding.
+       Adjust these three tokens to tune the site-wide radius. */
+    --radius-sm: 8px;   /* buttons, form inputs */
+    --radius-md: 12px;  /* cards (papers / areas / headshots / thumbnails) */
+    --radius-lg: 20px;  /* hero image containers */
 }
 
 :root[data-theme="dark"] {
@@ -142,7 +148,12 @@ header>.collapsible-header {
     display: flex;
     gap: 1rem;
     width: 100%;
-    background-color: inherit;
+    /* Transparent on desktop — the header's own bg shows through, so
+       logo half and menu half read as one continuous surface. Painting
+       an inherited bg here creates a second paint layer that reveals
+       a subpixel seam at the flex-child boundary. Mobile drawer
+       overrides with --card-bg inside the media query below. */
+    background-color: transparent;
     place-content: flex-end;
     overflow: hidden;
     transition: width 0.3s ease;
@@ -159,40 +170,47 @@ header>.collapsible-header {
     transition: width 0.3s ease;
 }
 
-.header-links {
-    display: flex;
+/* Unified button DNA — same structural properties (padding, radius,
+   flex layout, transition) across every clickable surface. Two tiers:
+   - "ghost" (transparent default) → .header-links, pagination
+   - "filled" (card-bg default) → .person-page-links > a, .project-link
+   Both tiers surface a border on hover; filled tier keeps its bg. */
+.header-links,
+.person-page-links > a,
+.project-link {
+    display: inline-flex;
     align-items: center;
+    gap: 0.5rem;
     min-width: fit-content;
-    /*    border-radius: 25px;*/
     padding: 5px 12px;
-    border-color: transparent;
-    border-width: 2px;
-    border-style: solid;
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    color: var(--fg);
+    text-decoration: none;
     transition: all 0.2s;
 }
-
-.header-links:hover {
-    /*    background-color: var(--header-link-hover);*/
+.header-links:hover,
+.person-page-links > a:hover,
+.project-link:hover {
     background-color: var(--card-bg);
     border-color: var(--border);
-    /* gray 600 */
 }
 
+/* Filled tier — action buttons on paper detail, project landing, and
+   person bio pages. Persistent card-bg fill so the button reads as
+   a discoverable primary action even without hover. Hover just
+   surfaces the border (bg stays put since it's already filled). */
+.person-page-links > a,
+.project-link {
+    background-color: var(--card-bg);
+}
+
+/* .person-page-links is a wrapper div in paper.hbs; the actual pill
+   button is the anchor child, styled by the unified ghost/filled rules
+   above (lines 168–207). Wrapper stays minimal here. */
 .person-page-links {
     display: inline-block;
-    color: var(--fg);
-    padding: 6px 8px;
-    border: 1px solid var(--border);
-    /* base border is muted; brighten on hover */
-    opacity: 1;
-    transition: all 0.2s;
-    cursor: pointer;
-    font-size: 0.9rem;
-}
-
-.person-page-links:hover {
-    border-color: var(--border);
-    background-color: var(--card-bg);
 }
 
 .material-icons.md-40 {
@@ -320,31 +338,46 @@ header>.collapsible-header {
     header .collapsible-header {
         position: fixed;
         right: 0px;
+        top: 0;
         flex-direction: column;
         opacity: 0;
-        height: 100vh;
-        min-height: 100vh;
-        height: 100dvh;
+        /* Height sized to content — the drawer only holds ~7 nav items,
+           doesn't need to take over the whole viewport. Max caps it so
+           long menus on very short viewports don't overflow. */
+        height: auto;
+        max-height: calc(100vh - 20px);
         width: 0vw;
         justify-content: flex-start;
         padding: 8px;
-        /* padding-top needs to clear the X close button at top: 40px;
-           bumped to keep the first menu item (search button) from
-           sitting under or hugging the X */
-        padding-top: 95px;
-        padding-bottom: 20px;
+        /* Top clears the X close button (top:40, ~30px tall → needs
+           ~80px to avoid crowding). Bottom is a hair less since it
+           has no fixed element to clear — reads visually symmetric. */
+        padding-top: 90px;
+        padding-bottom: 60px;
         padding-right: 20px;
         place-items: end;
-        background-color: var(--bg);
+        /* Drawer uses --card-bg (footer / card language) plus a thin
+           left-edge border. The border is needed in BOTH themes:
+           in light mode --card-bg is semi-transparent (71% alpha) so
+           without a border the drawer bleeds into content; in dark
+           mode --card-bg is very close to --bg so an edge is what
+           demarcates the drawer at all. Right edge stays flat since
+           it touches the viewport edge. */
+        background-color: var(--card-bg);
         color: var(--fg);
         overflow-y: auto;
         overflow-x: hidden;
-        /* Left edge: a thin themed border. The original hard black
-           box-shadow read on light bg but disappeared on dark and was
-           harsh on both — the border gives a clean visible edge in
-           both themes without needing a shadow. */
-        border-left: 1px solid var(--border);
+        border-top-left-radius: var(--radius-lg);
+        border-bottom-left-radius: var(--radius-lg);
+        border-left: 1px solid color-mix(in srgb, var(--border) 35%, transparent);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
         pointer-events: none;
+    }
+    /* Dark mode drawer: solid card-bg reads cleaner; drop the blur. */
+    :root[data-theme="dark"] header .collapsible-header {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
     }
 
     .header-links {
@@ -472,6 +505,134 @@ header>.collapsible-header {
 }
 @media (max-width: 767px) {
     .masonry-grid .grid-item { width: 100%; }
+}
+
+/* ==================================================================
+   Rounded-corner language. Radius tokens declared in :root above.
+   Applied via existing Tailwind arbitrary-value class names (their
+   generated CSS class names are escape-encoded).
+   ================================================================== */
+
+/* Hero image containers (home banner, paper page hero, person headshot).
+   The .image-container block above already sets overflow: hidden, so
+   inner <picture>/<img> corners get clipped by the outer radius. */
+.image-container,
+.image-container > picture,
+.image-container > picture > img {
+    border-radius: var(--radius-lg);
+}
+
+/* Card backgrounds — papers, areas, person items. The Tailwind
+   arbitrary class `tw-bg-[var(--card-bg)]` compiles to an escaped
+   class name; both forms match here to be forgiving.
+   `:not(section)` excludes the full-bleed banded sections on project
+   pages that use this same class as a background color band, not as
+   a card. Corner cuts at viewport edges would look weird there. */
+.tw-bg-\[var\(--card-bg\)\]:not(section) {
+    border-radius: var(--radius-md);
+}
+
+/* Images INSIDE cards — use the smaller radius so the inner curve
+   appears concentric with the outer card's curve (nested-corner rule:
+   inner_radius should be smaller than outer_radius by roughly the
+   padding between them). */
+.tw-h-\[300px\].tw-w-full.tw-overflow-hidden,
+.tw-h-\[300px\].tw-w-full.tw-overflow-hidden > picture,
+.tw-h-\[300px\].tw-w-full.tw-overflow-hidden > picture > img,
+.tw-h-\[200px\].tw-w-full.tw-overflow-hidden,
+.tw-h-\[200px\].tw-w-full.tw-overflow-hidden > picture,
+.tw-h-\[200px\].tw-w-full.tw-overflow-hidden > picture > img {
+    border-radius: var(--radius-sm);
+}
+
+/* STANDALONE 200x200 hero images (person headshot on /people/<slug>/,
+   research-area hero on /areas/<slug>/) — no outer card, so keep the
+   medium radius that reads as a proper image treatment. */
+.tw-h-\[200px\].tw-w-\[200px\].tw-overflow-hidden,
+.tw-h-\[200px\].tw-w-\[200px\].tw-overflow-hidden > picture,
+.tw-h-\[200px\].tw-w-\[200px\].tw-overflow-hidden > picture > img,
+.tw-h-\[200px\].tw-w-\[200px\].tw-overflow-hidden > img {
+    border-radius: var(--radius-md);
+}
+
+/* Person card thumbnails on /people/ listing (100x100 / 120x120 on sm+).
+   These sit inside a card, so they use the smaller inner radius. */
+.tw-h-\[100px\].tw-w-\[100px\],
+.tw-h-\[100px\].tw-w-\[100px\] > picture,
+.tw-h-\[100px\].tw-w-\[100px\] > picture > img,
+.sm\:tw-h-\[120px\].sm\:tw-w-\[120px\],
+.sm\:tw-h-\[120px\].sm\:tw-w-\[120px\] > picture,
+.sm\:tw-h-\[120px\].sm\:tw-w-\[120px\] > picture > img {
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+/* (radius on paper/person page link buttons is now handled by the
+   shared pill treatment below — see .project-link, .person-page-links > a) */
+
+/* Contact form fields + submit. */
+#contact-form input[type="text"],
+#contact-form input[type="email"],
+#contact-form textarea,
+#contact-form button[type="submit"] {
+    border-radius: var(--radius-sm);
+}
+
+/* Scroll-aware header. Fixed at the top of the viewport with a solid
+   --bg background at rest — content scrolls behind it. Once the user
+   scrolls past ~20px, .header-scrolled swaps the bg to --card-bg,
+   adds bottom-corner radii, and (in light mode) a backdrop blur — a
+   direct mirror of the footer's rounded card language. That colour
+   shift IS the elevation cue; there is no box-shadow on purpose (a
+   greyed shadow on top of a light-grey card reads muddy at this
+   scale). Class .header-scrolled toggled by the scroll listener in
+   index.js. */
+header {
+    background-color: var(--bg);
+    transition: background-color 0.15s ease, border-radius 0.15s ease;
+}
+/* Once scrolled, the header becomes a `--card-bg` card attached to
+   the viewport top with rounded BOTTOM corners — a direct mirror of
+   the footer (grey card attached to viewport bottom with rounded top
+   corners). Backdrop-blur adds a frosted-glass effect through the
+   semi-transparent light-mode --card-bg; dark mode's --card-bg is
+   solid so the blur has nothing to see through — that's fine, it
+   remains solid there. */
+header.header-scrolled {
+    background-color: var(--card-bg);
+    border-bottom-left-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}
+/* Dark mode: --card-bg is solid so the blur has nothing to see
+   through. Disable it — solid grey reads cleaner. */
+:root[data-theme="dark"] header.header-scrolled {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+/* Footer restyle: grey card with top corners rounded. Sides insetted
+   5% (matches section padding) so the footer card's edges align with
+   the section content above; internal padding is tw-px-8 (32px) —
+   wider than paper cards' 16px so the footer feels appropriately
+   substantial as a bottom-of-page surface. Bottom stays flat and
+   sits flush with the viewport bottom. */
+footer {
+    background-color: var(--card-bg);
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    width: auto !important;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+@media (max-width: 1023px) {
+    footer {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
 }
 
 /* Section container styling */
@@ -762,6 +923,76 @@ section {
     margin-bottom: 0.75rem !important;
     min-height: 6px;
     content: '';
+    /* Pill endcaps — matches the site-wide rounded language. */
+    border-radius: 999px;
+}
+
+/* Person page paper cards + search result cards. Shared class since
+   the person-paper template reuses the search-result markup. Card back
+   gets the standard card radius; the small thumbnail inside gets the
+   smaller inner radius. */
+.search-result-item {
+    border-radius: var(--radius-md);
+}
+.search-result-thumbnail,
+.search-result-thumbnail > picture,
+.search-result-thumbnail > picture > img,
+.search-result-thumbnail > img {
+    border-radius: var(--radius-sm);
+}
+
+/* Search modal — the popup that opens from the header search icon.
+   Round the whole card at --radius-lg (feels like an app modal) and
+   the close button at --radius-sm so it echoes header nav buttons.
+   overflow: hidden clips inner corners so the .search-header bottom
+   stripe and the results list don't square-off past the outer radius. */
+.search-modal-content {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+.search-close-btn {
+    border-radius: var(--radius-sm);
+}
+
+/* Project-page bibtex code block — already had tw-rounded (~4px);
+   bump to the site radius language. */
+.project-bibtex {
+    border-radius: var(--radius-md) !important;
+}
+
+/* Pagination controls (research + person page listings). Style
+   matches .header-links (ghost button) — transparent border by default,
+   visible on hover + faint card-bg tint. Active current-page keeps its
+   inverted dark bg as the "you are here" indicator. */
+.pagination-controls #prevButton,
+.pagination-controls #nextButton,
+.pagination-controls #pageNumbers > button,
+.pagination-controls #pageNumbers > span {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px !important;   /* override the Tailwind tw-px-N / tw-py-N */
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    transition: all 0.2s;
+}
+.pagination-controls #prevButton:hover:not(:disabled),
+.pagination-controls #nextButton:hover:not(:disabled),
+.pagination-controls #pageNumbers > button:hover {
+    border-color: var(--border);
+    background-color: var(--card-bg);
+}
+/* Current page — the button also carries `tw-bg-[var(--fg)]`, which
+   we want to keep as the "you are here" indicator. Override the
+   transparent-bg above so it stays visually inverted. */
+.pagination-controls #pageNumbers > .tw-bg-\[var\(--fg\)\] {
+    background-color: var(--fg) !important;
+    color: var(--bg);
+}
+.pagination-controls #pageNumbers > .tw-bg-\[var\(--fg\)\]:hover {
+    /* Don't apply the hover-outline treatment to the active page —
+       it already has a strong solid background. */
+    border-color: transparent;
 }
 
 @media (max-width: 768px) {
@@ -855,27 +1086,9 @@ section {
         max-width: 50px;
     }
 }
-/* Project page action buttons (project.hbs) — outlined rounded pills.
-   Lower-contrast than filled dark; reads as "supporting links" rather
-   than "primary CTAs". Soft fill on hover keeps them tactile. */
-.project-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1.1rem;
-    background: transparent;
-    color: var(--fg);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    font-size: 1rem;
-    text-decoration: none;
-    transition: background-color 0.15s, border-color 0.15s;
-}
-.project-link:hover {
-    background: var(--card-bg);
-    border-color: var(--border);
-    color: var(--fg);
-}
+/* .project-link now inherits the unified ghost-button treatment
+   defined near the top of this file (grouped with .header-links,
+   .person-page-links > a). Only the icon sizing is kept here. */
 .project-link i {
     font-size: 1rem;
 }
@@ -911,17 +1124,22 @@ section {
     font-size: 1rem;
     margin-right: 0.25rem;
 }
+/* TOC pills — the section-nav buttons below the Abstract. Match the
+   filled action-button tier (see .person-page-links > a / .project-link
+   above): card-bg persistent, transparent border reserved as a slot,
+   surfaces on hover. Kept at pill radius since these read as inline
+   wayfinding chips rather than CTAs. */
 .project-toc a {
     color: var(--fg);
     text-decoration: none;
     padding: 0.35rem 0.95rem;
-    border: 1px solid var(--border);
+    background: var(--card-bg);
+    border: 2px solid transparent;
     border-radius: 999px;
     font-size: 1rem;
-    transition: background-color 0.15s, border-color 0.15s;
+    transition: all 0.2s;
 }
 .project-toc a:hover {
-    background: var(--card-bg);
     border-color: var(--border);
 }
 
