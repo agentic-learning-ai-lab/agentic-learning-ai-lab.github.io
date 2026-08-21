@@ -25,6 +25,12 @@
     --header-link-hover: #dddcdccf;
     --footer-link-hover: #6dbb00;
     --input-focus-bd-color: #0d0d0d;
+
+    /* Corner-radius scale. Echoes the agent-mark's ~20% rounding.
+       Adjust these three tokens to tune the site-wide radius. */
+    --radius-sm: 8px;   /* buttons, form inputs */
+    --radius-md: 12px;  /* cards (papers / areas / headshots / thumbnails) */
+    --radius-lg: 20px;  /* hero image containers */
 }
 
 :root[data-theme="dark"] {
@@ -163,7 +169,7 @@ header>.collapsible-header {
     display: flex;
     align-items: center;
     min-width: fit-content;
-    /*    border-radius: 25px;*/
+    border-radius: var(--radius-sm);
     padding: 5px 12px;
     border-color: transparent;
     border-width: 2px;
@@ -474,6 +480,102 @@ header>.collapsible-header {
     .masonry-grid .grid-item { width: 100%; }
 }
 
+/* ==================================================================
+   Rounded-corner language. Radius tokens declared in :root above.
+   Applied via existing Tailwind arbitrary-value class names (their
+   generated CSS class names are escape-encoded).
+   ================================================================== */
+
+/* Hero image containers (home banner, paper page hero, person headshot) */
+.image-container,
+.image-container > picture,
+.image-container > picture > img {
+    border-radius: var(--radius-lg);
+}
+.image-container { overflow: hidden; }
+
+/* Card backgrounds — papers, areas, person items. The Tailwind
+   arbitrary class `tw-bg-[var(--card-bg)]` compiles to an escaped
+   class name; both forms match here to be forgiving.
+   `:not(section)` excludes the full-bleed banded sections on project
+   pages that use this same class as a background color band, not as
+   a card. Corner cuts at viewport edges would look weird there. */
+.tw-bg-\[var\(--card-bg\)\]:not(section) {
+    border-radius: var(--radius-md);
+}
+
+/* Images INSIDE cards — use the smaller radius so the inner curve
+   appears concentric with the outer card's curve (nested-corner rule:
+   inner_radius should be smaller than outer_radius by roughly the
+   padding between them). */
+.tw-h-\[300px\].tw-w-full.tw-overflow-hidden,
+.tw-h-\[300px\].tw-w-full.tw-overflow-hidden > picture,
+.tw-h-\[300px\].tw-w-full.tw-overflow-hidden > picture > img,
+.tw-h-\[200px\].tw-w-full.tw-overflow-hidden,
+.tw-h-\[200px\].tw-w-full.tw-overflow-hidden > picture,
+.tw-h-\[200px\].tw-w-full.tw-overflow-hidden > picture > img {
+    border-radius: var(--radius-sm);
+}
+
+/* STANDALONE 200x200 hero images (person headshot on /people/<slug>/,
+   research-area hero on /areas/<slug>/) — no outer card, so keep the
+   medium radius that reads as a proper image treatment. */
+.tw-h-\[200px\].tw-w-\[200px\].tw-overflow-hidden,
+.tw-h-\[200px\].tw-w-\[200px\].tw-overflow-hidden > picture,
+.tw-h-\[200px\].tw-w-\[200px\].tw-overflow-hidden > picture > img,
+.tw-h-\[200px\].tw-w-\[200px\].tw-overflow-hidden > img {
+    border-radius: var(--radius-md);
+}
+
+/* Person card thumbnails on /people/ listing (100x100 / 120x120 on sm+).
+   These sit inside a card, so they use the smaller inner radius. */
+.tw-h-\[100px\].tw-w-\[100px\],
+.tw-h-\[100px\].tw-w-\[100px\] > picture,
+.tw-h-\[100px\].tw-w-\[100px\] > picture > img,
+.sm\:tw-h-\[120px\].sm\:tw-w-\[120px\],
+.sm\:tw-h-\[120px\].sm\:tw-w-\[120px\] > picture,
+.sm\:tw-h-\[120px\].sm\:tw-w-\[120px\] > picture > img {
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+/* Person page action-link buttons (Full Paper HTML/PDF, Project
+   Website, Personal Website, GScholar Profile). */
+.person-page-links {
+    border-radius: var(--radius-sm);
+}
+
+/* Contact form fields + submit. */
+#contact-form input[type="text"],
+#contact-form input[type="email"],
+#contact-form textarea,
+#contact-form button[type="submit"] {
+    border-radius: var(--radius-sm);
+}
+
+/* Footer restyle: grey card with top corners rounded. Sides insetted
+   5% (matches section padding) so the footer card's edges align with
+   the section content above; internal padding is tw-px-8 (32px) —
+   wider than paper cards' 16px so the footer feels appropriately
+   substantial as a bottom-of-page surface. Bottom stays flat and
+   sits flush with the viewport bottom. */
+footer {
+    background-color: var(--card-bg);
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    width: auto !important;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+@media (max-width: 1023px) {
+    footer {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+}
+
 /* Section container styling */
 section {
     display: flex;
@@ -762,6 +864,73 @@ section {
     margin-bottom: 0.75rem !important;
     min-height: 6px;
     content: '';
+    /* Pill endcaps — matches the site-wide rounded language. */
+    border-radius: 999px;
+}
+
+/* Person page paper cards + search result cards. Shared class since
+   the person-paper template reuses the search-result markup. Card back
+   gets the standard card radius; the small thumbnail inside gets the
+   smaller inner radius. */
+.search-result-item {
+    border-radius: var(--radius-md);
+}
+.search-result-thumbnail,
+.search-result-thumbnail > picture,
+.search-result-thumbnail > picture > img,
+.search-result-thumbnail > img {
+    border-radius: var(--radius-sm);
+}
+
+/* Search modal — the popup that opens from the header search icon.
+   Round the whole card at --radius-lg (feels like an app modal) and
+   the close button at --radius-sm so it echoes header nav buttons. */
+.search-modal-content {
+    border-radius: var(--radius-lg);
+}
+.search-close-btn {
+    border-radius: var(--radius-sm);
+}
+
+/* Project-page bibtex code block — already had tw-rounded (~4px);
+   bump to the site radius language. */
+.project-bibtex {
+    border-radius: var(--radius-md) !important;
+}
+
+/* Pagination controls (research + person page listings). Style
+   matches .header-links (ghost button) — transparent border by default,
+   visible on hover + faint card-bg tint. Active current-page keeps its
+   inverted dark bg as the "you are here" indicator. */
+.pagination-controls #prevButton,
+.pagination-controls #nextButton,
+.pagination-controls #pageNumbers > button,
+.pagination-controls #pageNumbers > span {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px !important;   /* override the Tailwind tw-px-N / tw-py-N */
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    transition: all 0.2s;
+}
+.pagination-controls #prevButton:hover:not(:disabled),
+.pagination-controls #nextButton:hover:not(:disabled),
+.pagination-controls #pageNumbers > button:hover {
+    border-color: var(--border);
+    background-color: var(--card-bg);
+}
+/* Current page — the button also carries `tw-bg-[var(--fg)]`, which
+   we want to keep as the "you are here" indicator. Override the
+   transparent-bg above so it stays visually inverted. */
+.pagination-controls #pageNumbers > .tw-bg-\[var\(--fg\)\] {
+    background-color: var(--fg) !important;
+    color: var(--bg);
+}
+.pagination-controls #pageNumbers > .tw-bg-\[var\(--fg\)\]:hover {
+    /* Don't apply the hover-outline treatment to the active page —
+       it already has a strong solid background. */
+    border-color: transparent;
 }
 
 @media (max-width: 768px) {
