@@ -60,15 +60,20 @@
   scroll-margin-top: 150px;
 }
 
+/* Section-title accent bar — same dimensions and blue as the site's
+   .section-underline pill (see css/index.css) so paper sections share
+   the endcap language of the paper title, area headings, etc. The
+   site pill shrinks on ≤768px viewports; this in-paper variant keeps
+   the desktop size at every width since the paper body has the room. */
 .arxiv-paper-content .ltx_title_section::after {
   content: '';
   display: block;
-  width: 40px;
-  height: 5px;
+  width: 45px;
+  height: 6px;
   background-color: #3b82f6;
   margin-top: 0.3rem;
   margin-bottom: 0.75rem;
-  /* border-radius: 2px; */
+  border-radius: 999px;
 }
 
 .arxiv-paper-content h3 {
@@ -471,7 +476,7 @@
 .arxiv-paper-content .ltx_bibliography {
   margin-top: 3rem;
   padding-top: 2rem;
-  border-top: 2px solid #e5e5e5;
+  border-top: 2px solid var(--border);
   margin-left: 0;
   margin-right: 0;
   padding-left: 0 !important;
@@ -666,13 +671,14 @@ section p.tw-text-gray-600 {
   scroll-padding-top: 150px;
 }
 
-/* Full paper view horizontal rule */
+/* Full paper view horizontal rule (arxiv-generated <hr>s inside the
+   paper body — separate from the section-underline pill at the top). */
 #full-paper-view hr {
   max-width: 1024px !important;
   margin-left: 0 !important;
   margin-right: auto !important;
   border: none !important;
-  border-top: 1px solid #e5e7eb !important;
+  border-top: 1px solid var(--border) !important;
   height: 1px !important;
   background-color: transparent !important;
   display: block !important;
@@ -716,17 +722,18 @@ section p.tw-text-gray-600 {
   opacity: 1;
 }
 
+/* Sidebar body as a rounded --card-bg card — matches the site's card
+   language (footer, drawer, .tw-bg-[var(--card-bg)] sections). No
+   hairline left border; the card fill is the affordance. */
 .paper-sidebar-sticky {
-  background-color: var(--bg);
-  border-left: 1px solid #e5e7eb;
+  background-color: var(--card-bg);
+  border-radius: var(--radius-md);
   padding: 1.5rem;
   height: 100%;
   overflow-y: scroll;
-  /* Always show scrollbar */
-  /* Show scrollbar - Firefox */
+  /* Firefox scrollbar */
   scrollbar-width: auto;
-  scrollbar-color: var(--fg-muted) #f3f4f6;
-  /* Ensure this element captures scroll events */
+  scrollbar-color: var(--fg-muted) var(--card-bg);
   pointer-events: auto;
 }
 
@@ -744,7 +751,7 @@ section p.tw-text-gray-600 {
 .paper-sidebar-sticky::-webkit-scrollbar-thumb {
   background-color: var(--fg-muted);
   border-radius: 5px;
-  border: 2px solid #f3f4f6;
+  border: 2px solid var(--card-bg);
 }
 
 .paper-sidebar-sticky::-webkit-scrollbar-thumb:hover {
@@ -777,6 +784,10 @@ section p.tw-text-gray-600 {
   margin-bottom: 0.5rem;
 }
 
+/* TOC link — filled-pill DNA matching the site's ghost/filled buttons.
+   No left-border indicator; hover reveals a soft grey pill, active
+   picks up the #3b82f6 accent (same blue as .section-underline and
+   .ltx_title_section::after) via a tinted pill fill + bold blue text. */
 .paper-toc-link {
   display: block;
   padding: 0.5rem 0.75rem;
@@ -784,27 +795,27 @@ section p.tw-text-gray-600 {
   line-height: 1.4;
   color: var(--fg-muted);
   text-decoration: none;
-  border-left: 2px solid transparent;
-  transition: all 0.2s ease;
+  border-radius: var(--radius-sm);
+  transition: color 0.2s ease, background-color 0.2s ease;
   font-family: "Iowan Old Style", "Apple Garamond", Baskerville, serif;
 }
 
 .paper-toc-link:hover {
   color: var(--fg);
-  border-left-color: var(--border);
-  background-color: var(--card-bg);
+  background-color: color-mix(in srgb, var(--fg) 6%, transparent);
 }
 
 .paper-toc-link.active {
   color: #3b82f6;
-  border-left-color: #3b82f6;
-  border-left-width: 3px;
-  background-color: var(--card-bg);
+  background-color: color-mix(in srgb, #3b82f6 12%, transparent);
   font-weight: 600;
-  padding-left: calc(0.75rem - 1px);
 }
 
-/* Mobile navigation toggle button - floating icon */
+/* Mobile navigation toggle — floating icon-only trigger for the TOC
+   drawer. Solid --bg fill (opaque; the button sits over page content
+   and needs visible presence), persistent 1px --border hairline, soft
+   shadow for elevation. Rounded square with --radius-md so it echoes
+   the drawer / sidebar radius language. */
 .paper-mobile-nav-toggle {
   position: fixed;
   top: 50px;
@@ -812,32 +823,27 @@ section p.tw-text-gray-600 {
   width: 48px;
   height: 48px;
   display: flex !important;
-  /* Force display, will be hidden by media query on desktop */
   align-items: center;
   justify-content: center;
   background-color: var(--bg);
-  border: 2px solid var(--border);
-  border-radius: 50%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  color: var(--fg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   z-index: 100;
 }
 
 .paper-mobile-nav-toggle:hover {
-  background-color: #3b82f6;
-  border-color: #3b82f6;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
 .paper-mobile-nav-toggle i {
   font-size: 1.25rem;
-  color: var(--fg-muted);
+  color: var(--fg);
   transition: color 0.2s ease;
-}
-
-.paper-mobile-nav-toggle:hover i {
-  color: white;
 }
 
 /* Hide text span on mobile button */
@@ -862,6 +868,10 @@ section p.tw-text-gray-600 {
   display: none !important;
 }
 
+/* Mobile TOC drawer — rounded card meeting the right viewport edge.
+   Uses solid --bg (not --card-bg) because it sits over a black 50%
+   scrim; a semi-transparent card-bg would double-alpha and read
+   muddy. Top-left + bottom-left corners rounded at --radius-lg. */
 .paper-mobile-nav-content {
   width: 85%;
   max-width: 400px;
@@ -869,7 +879,8 @@ section p.tw-text-gray-600 {
   height: 100%;
   display: flex;
   flex-direction: column;
-  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  border-top-left-radius: var(--radius-lg);
+  border-bottom-left-radius: var(--radius-lg);
   animation: slideInRight 0.3s ease-out;
 }
 
@@ -883,13 +894,16 @@ section p.tw-text-gray-600 {
   }
 }
 
+/* Drawer header — transparent so it inherits the drawer's --bg fill
+   (drawer itself is solid --bg, not --card-bg, to avoid double-alpha
+   over the scrim). Hairline uses --border to match the site. */
 .paper-mobile-nav-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  background-color: var(--bg);
-  border-bottom: 1px solid #e5e7eb;
+  background-color: transparent;
+  border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
 
@@ -917,7 +931,7 @@ section p.tw-text-gray-600 {
 }
 
 .paper-toc-mobile {
-  background-color: var(--bg);
+  background-color: transparent;
   padding: 1rem;
   flex: 1;
   overflow-y: auto;
