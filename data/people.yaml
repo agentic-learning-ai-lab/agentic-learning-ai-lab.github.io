@@ -169,13 +169,22 @@
   description: "Suliang Jin is a Master’s student at University of Michigan. He was also an undergraduate there. His prior research work has been leveraging LLM and CoT to automate the assessment on subjective tasks. At NYU, he is conducting research on assessment on LLM creativity."
   google_scholar: ""
   current: true
-- 
+-
   name: "Isabel Zhou"
   image: "/assets/images/people/isabel_zhou.jpg"
   position: "Visiting Researcher"
   webpage: ""
   permalink: "isabel-zhou"
   description: "Isabel Zhou is a machine learning researcher with a strong interest in memory systems and architectures. She has prior industry experience building graph neural networks and low rank subspace adaptation of transformers in large language models. Her current work centers on researching creativity in large language models using data attribution methods."
+  google_scholar: ""
+  current: true
+-
+  name: "Daozheng Xue"
+  image: "/assets/images/people/daozheng_xue.jpg"
+  position: "Visiting Researcher"
+  webpage: "https://daozhengxue.github.io/"
+  permalink: "daozheng-xue"
+  description: "Daozheng Xue is an undergraduate student in Computer Science at Shanghai Jiao Tong University. His research interests include world models, hierarchical architectures and representation learning. He is particularly interested in developing hierarchical latent world models that learn and leverage high-level abstractions for long-horizon planning."
   google_scholar: ""
   current: true
 -
