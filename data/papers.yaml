@@ -129,7 +129,7 @@
     - adaptive-agents-and-foundation-models
   date: 2025-12-2T00:00:00.000Z
   journal: CoRR
-  is_recent: true
+  is_recent: false
 - title: In-Context Clustering with Large Language Models
   image: /assets/images/papers/icc.png
   authors:
@@ -180,7 +180,7 @@
     - learning-from-visual-experience
   date: 2025-10-07T00:00:00.000Z
   journal: The 14th International Conference on Learning Representations (ICLR 2026)
-  is_recent: true
+  is_recent: false
   enable_full_paper: true
 - title: 'StreamMem: Query-Agnostic KV Cache Memory for Streaming Video Understanding'
   image: /assets/images/papers/stream_mem.png
@@ -204,7 +204,7 @@
     - adaptive-agents-and-foundation-models
   date: 2025-08-21T00:00:00.000Z
   journal: CoRR
-  is_recent: true
+  is_recent: false
 - title: Context Tuning for In-Context Optimization
   image: /assets/images/papers/context_tuning.png
   authors:
@@ -221,7 +221,7 @@
   research_areas:
     - adaptive-agents-and-foundation-models
     - concept-learning-and-abstraction
-  date: 2026-07-03T00:00:00.000Z
+  date: 2025-07-06T00:00:00.000Z
   journal: The 43rd International Conference on Machine Learning (ICML 2026)
   is_recent: true
   enable_full_paper: true
@@ -281,7 +281,7 @@
     - learning-from-visual-experience
   date: 2025-01-21T00:00:00.000Z
   journal: The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)
-  is_recent: true
+  is_recent: false
   enable_full_paper: true
 - title: Are LLMs Prescient? A Continuous Evaluation using Daily News as Oracle
   image: /assets/images/papers/are_llms_prescient.png
@@ -299,7 +299,7 @@
     - adaptive-agents-and-foundation-models
   date: 2024-11-13T00:00:00.000Z
   journal: The 42nd International Conference on Machine Learning (ICML 2025)
-  is_recent: true
+  is_recent: false
   enable_full_paper: true
 - title: 'PooDLe: Pooled and Dense Self-Supervised Learning from Naturalistic Videos'
   image: /assets/images/papers/poodle.webp
@@ -337,7 +337,7 @@
     - concept-learning-and-abstraction
   date: 2024-08-05T00:00:00.000Z
   journal: The 18th European Conference on Computer Vision (ECCV 2024)
-  is_recent: true
+  is_recent: false
   enable_full_paper: true
 - title: Integrating Present and Past in Unsupervised Continual Learning
   image: /assets/images/papers/osiris.webp
