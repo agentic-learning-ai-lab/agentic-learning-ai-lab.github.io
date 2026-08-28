@@ -1011,3 +1011,74 @@ section p.tw-text-gray-600 {
     right: 15px;
   }
 }
+
+/* -------------------------------------------------------------
+   Dark-mode overrides for arxiv-baked table/math backgrounds
+   -------------------------------------------------------------
+   Paper LaTeX sources use \rowcolor, \cellcolor, and \colorbox
+   (plus MathJax mathbackground for colored math atoms). latexml
+   emits these as literal hex values on either --ltx-bg-color inline
+   props or the mathbackground attribute. Light-mode: they render as
+   intended. Dark-mode: bright white / pastel patches on the dark
+   card. Neutralize the ones we've catalogued in the current corpus.
+
+   Whites and very-light pastels → transparent so the parent
+   card-bg shows through. Applies to both --ltx-bg-color inline
+   props (rows / cells) and mathbackground attrs (math atoms). */
+/* Opt into --ltx-bg-color / --ltx-fg-color from the paper source, in
+   both themes. latexml emits these on rows/cells/spans via \rowcolor,
+   \cellcolor, \color, but no default CSS reads them — so highlights
+   render as no-op unless we consume them here. Light mode gets the
+   author's intent; dark-mode blocks below override for readability. */
+.arxiv-paper-content [style*="--ltx-bg-color"] {
+    background-color: var(--ltx-bg-color);
+}
+.arxiv-paper-content [style*="--ltx-fg-color"] {
+    color: var(--ltx-fg-color);
+}
+
+:root[data-theme="dark"] .arxiv-paper-content [mathbackground="#FFFFFF"],
+:root[data-theme="dark"] .arxiv-paper-content [mathbackground="#F2F2FF"],
+:root[data-theme="dark"] .arxiv-paper-content [mathbackground="#E6E6E6"],
+:root[data-theme="dark"] .arxiv-paper-content [mathbackground="#CFF8FF"],
+:root[data-theme="dark"] .arxiv-paper-content [style*="--ltx-bg-color:#FFFFFF"],
+:root[data-theme="dark"] .arxiv-paper-content [style*="--ltx-bg-color:#F2F2FF"],
+:root[data-theme="dark"] .arxiv-paper-content [style*="--ltx-bg-color:#E6E6E6"] {
+    background-color: transparent !important;
+    color: var(--fg) !important;
+}
+
+/* MathJax translates the source-side `mathbackground="#FFFFFF"` (etc.)
+   into an INLINE `background-color: rgb(255, 255, 255)` on the rendered
+   mjx-* element, and does NOT preserve the mathbackground attribute.
+   That means the two selector families above miss these — target the
+   rendered form here. Scoped to `mjx-container` descendants so we don't
+   accidentally recolor arbitrary content with a white inline style. */
+:root[data-theme="dark"] .arxiv-paper-content mjx-container [style*="background-color: rgb(255, 255, 255)"],
+:root[data-theme="dark"] .arxiv-paper-content mjx-container [style*="background-color: rgb(242, 242, 255)"],
+:root[data-theme="dark"] .arxiv-paper-content mjx-container [style*="background-color: rgb(230, 230, 230)"],
+:root[data-theme="dark"] .arxiv-paper-content mjx-container [style*="background-color: rgb(207, 248, 255)"] {
+    background-color: transparent !important;
+    color: var(--fg) !important;
+}
+
+/* Blue highlight tints — re-tint to a dark-safe blue instead of
+   dropping the "row is highlighted" affordance. Force color too
+   for the same reason: implicit dark ink on a light row bg. */
+:root[data-theme="dark"] .arxiv-paper-content [mathbackground="#DBEAFE"],
+:root[data-theme="dark"] .arxiv-paper-content [mathbackground="#DAF2FF"],
+:root[data-theme="dark"] .arxiv-paper-content [style*="--ltx-bg-color:#DBEAFE"],
+:root[data-theme="dark"] .arxiv-paper-content [style*="--ltx-bg-color:#DAF2FF"],
+:root[data-theme="dark"] .arxiv-paper-content mjx-container [style*="background-color: rgb(219, 234, 254)"],
+:root[data-theme="dark"] .arxiv-paper-content mjx-container [style*="background-color: rgb(218, 242, 255)"] {
+    /* Solid (not alpha) so nested same-color highlights (LaTeX authors
+       often pair \rowcolor + \cellcolor) don't alpha-stack darker. */
+    background-color: color-mix(in srgb, #3B82F6 22%, var(--bg)) !important;
+    color: var(--fg) !important;
+}
+
+/* Dark foreground colors that vanish on the dark card — flip to
+   the theme foreground so text stays readable. */
+:root[data-theme="dark"] .arxiv-paper-content [style*="--ltx-fg-color:#2C2C2C"] {
+    color: var(--fg) !important;
+}
