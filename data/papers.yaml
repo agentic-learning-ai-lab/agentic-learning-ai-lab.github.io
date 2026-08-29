@@ -1,22 +1,3 @@
-- title: "Continual Visual and Verbal Learning Through a Child's Egocentric Input"
-  image: /assets/images/papers/baby_cl.png
-  authors:
-    - Xavier (Xiaoyang) Jiang
-    - Yanlai Yang
-    - Kenneth A. Norman
-    - Brenden Lake
-    - Mengye Ren
-  short_abstract: BabyCL is a continual multimodal learning framework that processes a child's SAYCam egocentric stream in a single chronological pass, jointly learning visual representations and word semantics.
-  abstract: "Children learn the meanings of words from a continuous, temporally structured stream of egocentric experience. Recent work shows that neural networks can also learn word-referent mappings from a child's egocentric video recordings, but they cycle through the shuffled data for hundreds of epochs, contrasting with how children actually encounter their environment. We introduce BabyCL, a continual multimodal learning framework that processes the SAYCam dataset in a single chronological pass, combining streaming visual representation learning with an image-text contrastive objective. BabyCL combines a multi-stage temporal segmentation of the stream with a dual replay buffer that independently manages visual and multimodal histories, and it is jointly trained with three contrastive losses on a shared backbone. Under a matched optimization budget, BabyCL outperforms streaming learning baselines on the SAYCam Labeled-S 4AFC benchmark, substantially narrowing the gap to an upper bound of offline training. Ablations show that the gains are robust to the length of the online temporal segmentation window and the eviction rule of the replay buffer. Together, these results show that meaningful word-referent mappings can emerge under training conditions much closer to a child's actual experience."
-  arxiv: 'https://arxiv.org/abs/2606.05115'
-  pdf: 'https://arxiv.org/pdf/2606.05115'
-  permalink: baby-cl
-  enable_full_paper: true
-  research_areas:
-    - learning-from-visual-experience
-  date: 2026-06-03T00:00:00.000Z
-  journal: CoRR
-  is_recent: true
 - title: 'AdaJEPA: An Adaptive Latent World Model'
   image: /assets/images/papers/adajepa.png
   authors:
@@ -35,6 +16,25 @@
     - learning-from-visual-experience
     - adaptive-agents-and-foundation-models
   date: 2026-07-02T00:00:00.000Z
+  journal: CoRR
+  is_recent: true
+- title: "Continual Visual and Verbal Learning Through a Child's Egocentric Input"
+  image: /assets/images/papers/baby_cl.png
+  authors:
+    - Xavier (Xiaoyang) Jiang
+    - Yanlai Yang
+    - Kenneth A. Norman
+    - Brenden Lake
+    - Mengye Ren
+  short_abstract: BabyCL is a continual multimodal learning framework that processes a child's SAYCam egocentric stream in a single chronological pass, jointly learning visual representations and word semantics.
+  abstract: "Children learn the meanings of words from a continuous, temporally structured stream of egocentric experience. Recent work shows that neural networks can also learn word-referent mappings from a child's egocentric video recordings, but they cycle through the shuffled data for hundreds of epochs, contrasting with how children actually encounter their environment. We introduce BabyCL, a continual multimodal learning framework that processes the SAYCam dataset in a single chronological pass, combining streaming visual representation learning with an image-text contrastive objective. BabyCL combines a multi-stage temporal segmentation of the stream with a dual replay buffer that independently manages visual and multimodal histories, and it is jointly trained with three contrastive losses on a shared backbone. Under a matched optimization budget, BabyCL outperforms streaming learning baselines on the SAYCam Labeled-S 4AFC benchmark, substantially narrowing the gap to an upper bound of offline training. Ablations show that the gains are robust to the length of the online temporal segmentation window and the eviction rule of the replay buffer. Together, these results show that meaningful word-referent mappings can emerge under training conditions much closer to a child's actual experience."
+  arxiv: 'https://arxiv.org/abs/2606.05115'
+  pdf: 'https://arxiv.org/pdf/2606.05115'
+  permalink: baby-cl
+  enable_full_paper: true
+  research_areas:
+    - learning-from-visual-experience
+  date: 2026-06-03T00:00:00.000Z
   journal: CoRR
   is_recent: true
 - title: 'Aligning LLMs with Human Uncertainty: A Beta-Bernoulli Calibrator for LLM Forecasting'
