@@ -143,6 +143,15 @@
   google_scholar: "L8ypl78AAAAJ"
   current: true
 -
+  name: "Hyunkyung Bae"
+  image: "/assets/images/people/hyunkyung_bae.jpg"
+  position: "Master Student"
+  webpage: "https://jennybae1024.github.io/"
+  permalink: "hyunkyung-bae"
+  description: "Hyunkyung Bae is an M.S. student in Computer Science at NYU Courant, advised by Prof. Mengye Ren. Her research focuses on efficient large-model inference and KV-cache compression. Prior to NYU, she was an NLP Researcher at LG AI Research, working on post-training and document-centric large language models. She received her M.S. from Seoul National University and B.S. from POSTECH."
+  google_scholar: "e-HtQI4AAAAJ"
+  current: true
+-
   name: "Weizhen Zhou"
   image: "/assets/images/people/weizhen_zhou.jpg"
   position: "Master Student"
