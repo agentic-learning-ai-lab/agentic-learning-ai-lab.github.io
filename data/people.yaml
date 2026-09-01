@@ -52,6 +52,15 @@
   description: "Yanlai Yang is a PhD student in Computer Science at NYU Courant, advised by Prof. Mengye Ren in the CILVR Lab. Starting Fall 2024, he also works as a Visiting Researcher at Meta. Prior to joining NYU, he got his Bachelor's degree in Computer Science and Applied Math at UC Berkeley. He was a recipient of the Mark D. Weiser Excellence in Computing Scholarship and the Outstanding Student Instructor Award at UC Berkeley."
   google_scholar: "QWd5d1oAAAAJ"
   current: true
+-
+  name: "Steven Luo"
+  image: "/assets/images/people/steven_luo.jpg"
+  position: "PhD Student"
+  webpage: "https://stevolopolis.github.io/"
+  permalink: "steven-luo"
+  description: "Steven Luo is a PhD student co-advised by Prof. Mengye Ren and Prof. Pratyusha Sharma. His current research focuses on pushing the frontiers of in-context learning to enable language models to learn at test-time, touching upon ideas like infinite-context learning and concept learning. He completed his undergraduate degree in Computer Science at the University of Toronto, where he worked on efficient algorithms for neural fields at DGP, UofT and NGai Lab, HKU."
+  google_scholar: "2ASNx9AAAAAJ"
+  current: true
 - 
   name: "Wun Ting Chan"
   image: "/assets/images/people/wun_ting_chan.jpg"
@@ -141,7 +150,7 @@
   permalink: "weizhen-zhou"
   description: "Weizhen is an M.S. student in Computer Engineering at NYU Tandon School of Engineering. He obtained his Bachelor's degree in Computer Science from ShanghaiTech University."
   google_scholar: ""
-  current: true
+  current: false
 -
   name: "Azwar Abdulsalam"
   image: "/assets/images/people/azwar_abdulsalam.jpg"
@@ -152,15 +161,6 @@
   google_scholar: "dnrJtSUAAAAJ"
   current: true
 -
-  name: "Steven Luo"
-  image: "/assets/images/people/steven_luo.jpg"
-  position: "Visiting Researcher"
-  webpage: "https://stevolopolis.github.io/"
-  permalink: "steven-luo"
-  description: "Steven is a visiting researcher and a CS undergraduate from University of Toronto. His current research focuses on pushing the frontiers of in-context learning to enable language models to learn at test-time, touching upon ideas like infinite-context learning and concept learning. Previously, Steven worked on efficient algorithms for neural fields at DGP, UofT and NGai Lab, HKU."
-  google_scholar: "2ASNx9AAAAAJ"
-  current: true
-- 
   name: "Suliang Jin"
   image: "/assets/images/people/suliang_jin.jpg"
   position: "Visiting Researcher"
@@ -247,9 +247,9 @@
   position: "Visiting Researcher"
   webpage: "https://www.linkedin.com/in/frank-wu-1636911ba/"
   permalink: "frank-wu"
-  description: "Frank (Zequan) Wu is a Master's student at CMU. He was a visiting researcher at NYU and an Algorithm Engineer. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning."
+  description: "Frank (Zequan) Wu is a Master's student at CMU and a visiting researcher at NYU. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning."
   google_scholar: ""
-  current: false
+  current: true
 -
   name: "Alex N. Wang"
   image: "/assets/images/people/alex_wang.jpg"
