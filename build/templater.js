@@ -394,6 +394,17 @@ function registerHelpers(handlebars) {
         return moment.utc(date).format(format);
     });
 
+    // Short venue: extract the acronym-in-parens for conference/journal
+    // strings like "The 43rd International Conference on Machine Learning
+    // (ICML 2026)" → "ICML 2026". Falls back to the full string when
+    // there's no parenthesized acronym (e.g. "CoRR", "PhilPapers preprint").
+    // Used on space-constrained cards; paper detail keeps the full name.
+    handlebars.registerHelper('shortVenue', function (journal) {
+        if (!journal) return '';
+        const m = String(journal).match(/\(([^)]+)\)\s*$/);
+        return m ? m[1] : journal;
+    });
+
     handlebars.registerHelper('formatAuthors', function (authors) {
         if (authors.length === 0) {
             return "";
