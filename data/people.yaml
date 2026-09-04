@@ -277,3 +277,12 @@
   description: "Alex Wang is a PhD student in CILVR at New York University. He did his MSc with Rich Zemel and BASc in Engineering Science at University of Toronto. He is supported by the NSERC PGS-D scholarship. He is interested in intelligent, large-scale generative vision models. Through generative modeling, he aims to define, build, and evaluate a notion of visual intelligence."
   google_scholar: "X0n8TX0AAAAJ"
   current: false
+-
+  name: "Donggyun Kim"
+  image: "/assets/images/people/donggyun_kim.jpg"
+  position: "Visiting PhD Student"
+  webpage: "https://gitgyun.github.io/"
+  permalink: "donggyun-kim"
+  description: "Donggyun Kim is a postdoctoral researcher at the KAIST Institute of Information Electronics, working with Prof. Seunghoon Hong in the Vision and Learning Lab. Previously, he was a visiting scholar at the Agentic Learning AI Lab at NYU. He received his Ph.D. in Computer Science from KAIST, advised by Prof. Seunghoon Hong. His current research interests include computationally efficient learning, meta-learning, and continual learning toward building lifelong and general-purpose AI."
+  google_scholar: "g_CtB50AAAAJ"
+  current: false
