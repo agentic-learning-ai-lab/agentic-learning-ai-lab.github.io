@@ -89,6 +89,15 @@
   google_scholar: "gZuDm8MAAAAJ"
   current: true
 -
+  name: "Joohyung Yun"
+  image: "/assets/images/people/joohyung_yun.jpg"
+  position: "Visiting PhD Student"
+  webpage: "https://joohyung00.github.io/"
+  permalink: "joohyung-yun"
+  description: "Joohyung Yun is a PhD student at POSTECH and a visiting researcher at NYU through the IITP Global AI Frontier Lab program. At POSTECH, he works with Prof. Wook-Shin Han in the Data Systems Lab. His research interests include natural language processing and information retrieval, with a focus on retrieval-augmented generation (RAG) over real-world documents that mix text, tables, and images. At NYU, he is working with Prof. Mengye Ren on agentic retrieval over tree-structured hierarchical documents, where an agent navigates a document tree using an explicit record of what each summary left behind, so that evidence buried under abstraction can still be found."
+  google_scholar: "y_7wqtIAAAAJ"
+  current: true
+-
   name: "Xavier (Xiaoyang) Jiang"
   image: "/assets/images/people/xavier_jiang.jpg"
   position: "Master Student"
