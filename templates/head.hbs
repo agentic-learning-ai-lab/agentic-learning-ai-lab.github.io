@@ -17,9 +17,10 @@
        - 'system' or unset — derive from prefers-color-scheme at load
          time. Live OS theme changes are picked up by a matchMedia
          listener in initThemeToggle.
-     Only 'dark' results in [data-theme="dark"] on <html>; light is
-     the CSS default with no attribute, so unsetting localStorage
-     gracefully returns the site to its system-or-light state. -->
+     'dark' stamps [data-theme="dark"]; an explicit 'light' stamps
+     [data-theme="light"] (the shared tokens follow the OS otherwise);
+     'system' leaves no attribute, so unsetting localStorage returns the
+     site to following the OS. -->
 <script>
   (function () {
     try {
@@ -29,6 +30,11 @@
         : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       if (resolved === 'dark') {
         document.documentElement.dataset.theme = 'dark';
+      } else if (stored === 'light') {
+        // An explicit light choice must beat an OS dark preference: the
+        // shared tokens (/css/lab-tokens.css) follow prefers-color-scheme
+        // unless <html> carries data-theme="light".
+        document.documentElement.dataset.theme = 'light';
       }
     } catch (_) {}
   })();
@@ -36,6 +42,11 @@
 
 <link rel="stylesheet" href="/css/tailwind-runtime.css" />
 <link rel="stylesheet" href="/css/tailwind-build.css" />
+<!-- The lab's shared design tokens (also consumed by forecast.agenticlearning.ai
+     and outerloop.science); index.css builds on them. lab-components.css is
+     adopted per component, not linked wholesale, because its element rules
+     (a:hover, h1-h3, table, pre) would restyle pages this site styles with Tailwind. -->
+<link rel="stylesheet" href="/css/lab-tokens.css" />
 <link rel="stylesheet" href="/css/index.css" />
 
 <link
