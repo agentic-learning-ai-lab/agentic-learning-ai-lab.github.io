@@ -55,9 +55,10 @@ nav.lab { display: flex; gap: 0.75rem; font-family: var(--mono); font-size: 1.05
 .menu-btn { display: none; background: transparent; border: 0; color: var(--fg); cursor: pointer; padding: 6px; border-radius: var(--radius-sm); }
 .menu-btn svg { width: 28px; height: 28px; fill: currentColor; display: block; }
 @media (max-width: 1023px) {
+  /* The header keeps the page's .wrap inset so the brand stays aligned with
+     the content below; only the button is pinned 20px from the edge, level
+     with the drawer's links. */
   header.lab { position: relative; }
-  header.lab .wrap { padding-left: 16px; padding-right: 16px; }
-  header.lab .brand { padding-left: 4px; }
   .menu-btn { display: inline-flex; align-items: center; justify-content: center; position: absolute; right: 20px; top: 40px; width: 30px; height: 30px; margin: 0; padding: 0; z-index: 60; }
   header.lab.open .menu-btn { position: fixed; right: 20px; top: 40px; }
   .menu-btn svg { width: 24px; height: 24px; }
