@@ -1,0 +1,92 @@
+/* ==========================================================================
+   Agentic Learning AI Lab — shared design tokens
+   Canonical home: agentic-learning-ai-lab.github.io/css/lab-tokens.css
+   Served at:      https://agenticlearning.ai/css/lab-tokens.css
+   Consumers:      forecast.agenticlearning.ai (links these files);
+                   proposed for outerloop.science and this site's own pages,
+                   and for the project pages once lab-theme.css imports it
+
+   Token names are the ones agenticlearning.ai/css/index.css and
+   outerloop.science/styles.css already use, so adopting this file is a
+   deletion for both. The --lab-* names at the bottom are aliases kept for
+   the Bulma project pages that consume the old lab-theme.css.
+
+   Theme states (three, not two): an explicit choice stamps
+   data-theme="dark" | "light" on <html>; no stamp = follow the OS.
+   Components read tokens only — never a literal inside a theme block.
+   ========================================================================== */
+
+:root {
+  /* surfaces + ink */
+  --bg: #ffffff;
+  --fg: #2c2c2c;
+  --fg-muted: #6b7280;
+  --ink-strong: #0d0d0d;          /* the robot's eyes, filled buttons */
+  --link: #0d0d0d;
+  --card-bg: #f3f3f3b4;           /* soft cards: no border, 12px radius */
+  --border-soft: #e5e7eb;         /* hairlines, table rules */
+  --border: rgb(75 85 99);        /* hover borders on buttons and links */
+  --btn-bg: #0d0d0d;
+  --btn-color: #fdfdfd;
+
+  /* accent + status. Status colors mean state (P&L sign, health) and are
+     never reused as series or venue identity. */
+  --accent: #3C81F7;
+  --accent-soft: rgba(60, 129, 247, 0.12);
+  --good: #1E8E5A;
+  --warn: #B7791F;
+  --bad: #B3261E;
+  --mark: #AEB6C2;                /* chart marks, secondary strokes */
+  --grid: rgba(44, 44, 44, 0.08); /* chart gridlines */
+
+  /* shape */
+  --radius-sm: 8px;               /* buttons, inputs, chips */
+  --radius-md: 12px;              /* cards, tiles, panes (the lab's card radius) */
+  --radius-lg: 20px;              /* hero, footer, drawer, modals */
+
+  /* type. Space Mono must be linked by the page (Google Fonts); the serif
+     is a system stack with Source Serif 4 as the Google-hosted fallback. */
+  --mono: "Space Mono", "SF Mono", Monaco, Consolas, "Courier New", ui-monospace, monospace;
+  --serif: "Iowan Old Style", "Apple Garamond", Baskerville, "Source Serif 4", "Source Serif Pro", "Times New Roman", "Droid Serif", Times, serif;
+
+  /* hero wash — the pastel bands of the lab's artwork, for procedural
+     backgrounds where a commissioned illustration isn't available */
+  --wash-1: #f2c9a8; --wash-2: #c9b8e8; --wash-3: #bfd3f2; --wash-4: #bfe0da; --wash-5: #f6e8d6;
+  --wash-alpha: 0.9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #18181b; --fg: #e8e8ea; --fg-muted: #c4c4c8; --link: #e8e8ea;
+    --card-bg: #27272a; --border-soft: #3f3f46; --border: rgb(156 163 175);
+    --btn-bg: #e8e8ea; --btn-color: #18181b;
+    --accent: #5D97FF; --accent-soft: rgba(93, 151, 255, 0.18);
+    --good: #4FC08A; --warn: #E0A84A; --bad: #F07B72; --mark: #52525b;
+    --grid: rgba(232, 232, 234, 0.10);
+    --wash-alpha: 0.32;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #18181b; --fg: #e8e8ea; --fg-muted: #c4c4c8; --link: #e8e8ea;
+  --card-bg: #27272a; --border-soft: #3f3f46; --border: rgb(156 163 175);
+  --btn-bg: #e8e8ea; --btn-color: #18181b;
+  --accent: #5D97FF; --accent-soft: rgba(93, 151, 255, 0.18);
+  --good: #4FC08A; --warn: #E0A84A; --bad: #F07B72; --mark: #52525b;
+  --grid: rgba(232, 232, 234, 0.10);
+  --wash-alpha: 0.32;
+}
+
+/* Back-compat aliases for the Bulma project pages (old lab-theme.css names).
+   Same values, so a project page picks up dark mode for free. */
+:root {
+  --lab-primary-text: var(--fg);
+  --lab-secondary-text: var(--fg-muted);
+  --lab-bg: var(--bg);
+  --lab-bg-subtle: var(--card-bg);
+  --lab-border-color: var(--border-soft);
+  --lab-border-hover: var(--border);
+  --lab-link-color: var(--accent);
+  --lab-link-hover: var(--accent);
+  --lab-font-mono: var(--mono);
+  --lab-font-serif: var(--serif);
+}
