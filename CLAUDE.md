@@ -142,6 +142,13 @@ so students don't need R2 creds to add binaries).
 - `css/lab-theme.css` and `includes/lab-attribution.html` — these are
   consumed externally by per-project repos. Do **not** delete or rename
   without checking referrers.
+- `css/lab-tokens.css`, `css/lab-components.css`, `css/lab-wash.js` — the
+  lab's shared design tokens, component rules, and hero-wash painter.
+  Linked live by forecast.agenticlearning.ai (`LAB_THEME_BASE` there
+  defaults to `https://agenticlearning.ai/css`); proposed for
+  outerloop.science and for this site's own pages. Same rule: never
+  delete or rename without checking referrers, and keep token names
+  stable — downstream sites style against them.
 - `areas/<old-slug>/` directories occasionally surface from old research
   areas. They're build output; the canonical list is
   `data/research_areas.yaml`.
