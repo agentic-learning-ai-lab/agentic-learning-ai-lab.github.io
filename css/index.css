@@ -1488,3 +1488,12 @@ section {
         grid-template-columns: 1fr;
     }
 }
+
+/* Research Ecosystems (preview): swap each project icon to its dark
+   variant in dark mode. The dark SVGs use lighter blue #5D97FF and
+   (for EgoLearn) white eye rects, so the mask-carve visor doesn't
+   disappear into the dark card. --dark-icon is set inline per <img>. */
+:root[data-theme="dark"] .project-icon { content: var(--dark-icon); }
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .project-icon { content: var(--dark-icon); }
+}

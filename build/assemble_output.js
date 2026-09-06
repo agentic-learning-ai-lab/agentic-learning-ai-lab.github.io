@@ -72,6 +72,7 @@ const DIRS = [
 const ASSET_SUBDIRS = [
   'images/favicons',
   'images/logos',
+  'images/projects',
 ];
 
 // Single same-origin files under assets/ that templates / scripts
