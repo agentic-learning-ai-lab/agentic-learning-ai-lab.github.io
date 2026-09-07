@@ -140,6 +140,11 @@ svg.chart text { font-family: var(--mono); font-size: 11px; fill: var(--fg-muted
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
 .ledger { overflow-x: auto; border: 1px solid var(--border-soft); border-radius: var(--radius-md); }
 .tablewrap { overflow-x: auto; }
+/* horizontal scroll containers: a thin scrollbar in the theme's ink instead of the browser's chrome */
+.ledger, .tablewrap, pre { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--fg) 35%, transparent) transparent; }
+.ledger::-webkit-scrollbar, .tablewrap::-webkit-scrollbar, pre::-webkit-scrollbar { height: 8px; width: 8px; }
+.ledger::-webkit-scrollbar-track, .tablewrap::-webkit-scrollbar-track, pre::-webkit-scrollbar-track { background: transparent; }
+.ledger::-webkit-scrollbar-thumb, .tablewrap::-webkit-scrollbar-thumb, pre::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--fg) 35%, transparent); border-radius: 4px; }
 table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 0.82rem; }
 th, td { text-align: left; padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-soft); vertical-align: top; white-space: nowrap; }
 .ledger tr:last-child td { border-bottom: 0; }
