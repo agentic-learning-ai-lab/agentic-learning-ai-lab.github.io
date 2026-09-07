@@ -59,15 +59,18 @@ nav.lab { display: flex; gap: 0.75rem; font-family: var(--mono); font-size: 1.05
      the content below; only the button is pinned 20px from the edge, level
      with the drawer's links. */
   header.lab { position: relative; }
-  .menu-btn { display: inline-flex; align-items: center; justify-content: center; position: absolute; right: 20px; top: 40px; width: 30px; height: 30px; margin: 0; padding: 0; z-index: 60; }
-  header.lab.open .menu-btn { position: fixed; right: 20px; top: 40px; }
+  /* The button and the drawer's right padding follow the page's 5% .wrap inset, so the X sits on the
+     content column's right edge and the drawer links line up under it (the lab site's own header uses
+     a 16px inset on mobile because its body does too). */
+  .menu-btn { display: inline-flex; align-items: center; justify-content: center; position: absolute; right: 5%; top: 40px; width: 30px; height: 30px; margin: 0; padding: 0; z-index: 60; }
+  header.lab.open .menu-btn { position: fixed; right: 5%; top: 40px; }
   .menu-btn svg { width: 24px; height: 24px; }
   .menu-btn .ico-x { display: none; }
   header.lab.open .menu-btn .ico-menu { display: none; }
   header.lab.open .menu-btn .ico-x { display: block; }
   /* agenticlearning.ai's drawer: fixed top-right, sized to its links, card-bg with a faint left edge */
-  nav.lab { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; gap: 0.5rem; position: fixed; top: 0; right: 0; bottom: auto; height: auto; max-height: calc(100vh - 20px); width: 0; padding: 100px 20px 60px 8px; overflow: hidden; opacity: 0; pointer-events: none; z-index: 50; background: var(--card-bg); color: var(--fg); border-top-left-radius: var(--radius-lg); border-bottom-left-radius: var(--radius-lg); border-left: 1px solid color-mix(in srgb, var(--border) 35%, transparent); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: width 0.3s ease, opacity 0.2s ease; }
-  header.lab.open nav.lab { width: 160px; opacity: 1; pointer-events: auto; }
+  nav.lab { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; gap: 0.5rem; position: fixed; top: 0; right: 0; bottom: auto; height: auto; max-height: calc(100vh - 20px); width: 0; padding: 100px 5% 60px 8px; overflow: hidden; opacity: 0; pointer-events: none; z-index: 50; background: var(--card-bg); color: var(--fg); border-top-left-radius: var(--radius-lg); border-bottom-left-radius: var(--radius-lg); border-left: 1px solid color-mix(in srgb, var(--border) 35%, transparent); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: width 0.3s ease, opacity 0.2s ease; }
+  header.lab.open nav.lab { width: calc(140px + 5%); opacity: 1; pointer-events: auto; }   /* 132px of links + 8px + the inset */
   nav.lab .header-links { font-size: 15px; padding: 6px 10px; white-space: nowrap; }
   nav.lab .theme-toggle { margin-top: 0.25rem; }
 }
