@@ -107,9 +107,17 @@ function resolveTheme(state) {
     return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'
 }
 
-function applyTheme(resolved) {
+function applyTheme(state) {
+    // 'dark' (chosen or resolved from the OS) stamps data-theme="dark"; an
+    // explicit 'light' stamps data-theme="light" so it beats an OS dark
+    // preference under the shared tokens (/css/lab-tokens.css follow
+    // prefers-color-scheme unless <html> says light); 'system' + light OS
+    // leaves no attribute.
+    const resolved = resolveTheme(state)
     if (resolved === 'dark') {
         document.documentElement.dataset.theme = 'dark'
+    } else if (state === 'light') {
+        document.documentElement.dataset.theme = 'light'
     } else {
         delete document.documentElement.dataset.theme
     }
@@ -134,7 +142,7 @@ function cycleTheme() {
         if (next === 'system') localStorage.removeItem('theme')
         else localStorage.setItem('theme', next)
     } catch (_) {}
-    applyTheme(resolveTheme(next))
+    applyTheme(next)
     updateToggleUi(next)
 }
 
@@ -145,7 +153,7 @@ function cycleTheme() {
         const mq = window.matchMedia('(prefers-color-scheme: dark)')
         // addEventListener is the modern API; older Safari needs addListener.
         const listener = () => {
-            if (getStoredTheme() === 'system') applyTheme(resolveTheme('system'))
+            if (getStoredTheme() === 'system') applyTheme('system')
         }
         if (mq.addEventListener) mq.addEventListener('change', listener)
         else if (mq.addListener) mq.addListener(listener)
