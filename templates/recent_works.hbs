@@ -12,14 +12,14 @@
     </div>
     <div class="tw-flex tw-flex-col tw-gap-2">
         <h3 class="tw-text-xl tw-font-medium tw-mt-4">{{{title}}}</h3>
-        <p class="tw-text-[var(--fg-muted)] tw-mt-4">
+        <p class="tw-text-[var(--fg-muted)] tw-text-sm tw-mt-2">
+            {{shortVenue journal}} · {{formatDate date "YYYY-MM-DD"}}
+        </p>
+        <p class="tw-text-[var(--fg-muted)] tw-mt-2">
             {{{short_abstract}}}
         </p>
-        <p class="tw-mt-4">
-        Published: {{formatDate date "YYYY-MM-DD"}}
-        </p>
         <!-- <a href=/research/{{{permalink}}} class="tw-mt-4"> -->
-        <div  class="tw-mt-4">
+        <div  class="tw-mt-2 tw-mb-2">
             <span>Learn more</span>
             <i class="bi bi-arrow-right"></i>
         </div>

@@ -52,6 +52,15 @@
   description: "Yanlai Yang is a PhD student in Computer Science at NYU Courant, advised by Prof. Mengye Ren in the CILVR Lab. Starting Fall 2024, he also works as a Visiting Researcher at Meta. Prior to joining NYU, he got his Bachelor's degree in Computer Science and Applied Math at UC Berkeley. He was a recipient of the Mark D. Weiser Excellence in Computing Scholarship and the Outstanding Student Instructor Award at UC Berkeley."
   google_scholar: "QWd5d1oAAAAJ"
   current: true
+-
+  name: "Steven Luo"
+  image: "/assets/images/people/steven_luo.jpg"
+  position: "PhD Student"
+  webpage: "https://stevolopolis.github.io/"
+  permalink: "steven-luo"
+  description: "Steven Luo is a PhD student co-advised by Prof. Mengye Ren and Prof. Pratyusha Sharma. His current research focuses on pushing the frontiers of in-context learning to enable language models to learn at test-time, touching upon ideas like infinite-context learning and concept learning. He completed his undergraduate degree in Computer Science at the University of Toronto, where he worked on efficient algorithms for neural fields at DGP, UofT and NGai Lab, HKU."
+  google_scholar: "2ASNx9AAAAAJ"
+  current: true
 - 
   name: "Wun Ting Chan"
   image: "/assets/images/people/wun_ting_chan.jpg"
@@ -69,6 +78,24 @@
   permalink: "amelia-dai"
   description: "Amelia (Hui) Dai is a PhD student at University of Chicago. She obtained her Master's degree at NYU Center for Data Science, working with Prof. Mengye Ren in the Agentic Learning AI Lab and Prof. Krzysztof J. Geras. Her research interests include understanding LLMs (capabilities and limitations) and AI in healthcare. Recently, her work includes evaluating the generalization ability of LLMs and multi-modal learning for breast cancer detection. Previously, she completed her BS in Statistics at The Chinese University of Hong Kong, Shenzhen. Outside of school, she also does hiphop dancing!"
   google_scholar: "HmKPa2AAAAAJ"
+  current: true
+-
+  name: "Dongjun Lee"
+  image: "/assets/images/people/dongjun_lee.jpg"
+  position: "Visiting PhD Student"
+  webpage: "https://dgjun32.github.io"
+  permalink: "dongjun-lee"
+  description: "Dongjun Lee is a PhD student at KAIST. His research focuses on robot learning and human-robot interaction, where he develops training frameworks and datasets for robots that understand human intent, interact over long-horizon, and adapt to each user from the interaction itself."
+  google_scholar: "gZuDm8MAAAAJ"
+  current: true
+-
+  name: "Joohyung Yun"
+  image: "/assets/images/people/joohyung_yun.jpg"
+  position: "Visiting PhD Student"
+  webpage: "https://joohyung00.github.io/"
+  permalink: "joohyung-yun"
+  description: "Joohyung Yun is a PhD student at POSTECH and a visiting researcher at NYU through the IITP Global AI Frontier Lab program. At POSTECH, he works with Prof. Wook-Shin Han in the Data Systems Lab. His research interests include natural language processing and information retrieval, with a focus on retrieval-augmented generation (RAG) over real-world documents that mix text, tables, and images. At NYU, he is working with Prof. Mengye Ren on agentic retrieval over tree-structured hierarchical documents, where an agent navigates a document tree using an explicit record of what each summary left behind, so that evidence buried under abstraction can still be found."
+  google_scholar: "y_7wqtIAAAAJ"
   current: true
 -
   name: "Xavier (Xiaoyang) Jiang"
@@ -134,6 +161,15 @@
   google_scholar: "L8ypl78AAAAJ"
   current: true
 -
+  name: "Hyunkyung Bae"
+  image: "/assets/images/people/hyunkyung_bae.jpg"
+  position: "Master Student"
+  webpage: "https://jennybae1024.github.io/"
+  permalink: "hyunkyung-bae"
+  description: "Hyunkyung Bae is an M.S. student in Computer Science at NYU Courant, advised by Prof. Mengye Ren. Her research focuses on efficient large-model inference and KV-cache compression. Prior to NYU, she was an NLP Researcher at LG AI Research, working on post-training and document-centric large language models. She received her M.S. from Seoul National University and B.S. from POSTECH."
+  google_scholar: "e-HtQI4AAAAJ"
+  current: true
+-
   name: "Weizhen Zhou"
   image: "/assets/images/people/weizhen_zhou.jpg"
   position: "Master Student"
@@ -141,7 +177,7 @@
   permalink: "weizhen-zhou"
   description: "Weizhen is an M.S. student in Computer Engineering at NYU Tandon School of Engineering. He obtained his Bachelor's degree in Computer Science from ShanghaiTech University."
   google_scholar: ""
-  current: true
+  current: false
 -
   name: "Azwar Abdulsalam"
   image: "/assets/images/people/azwar_abdulsalam.jpg"
@@ -152,15 +188,6 @@
   google_scholar: "dnrJtSUAAAAJ"
   current: true
 -
-  name: "Steven Luo"
-  image: "/assets/images/people/steven_luo.jpg"
-  position: "Visiting Researcher"
-  webpage: "https://stevolopolis.github.io/"
-  permalink: "steven-luo"
-  description: "Steven is a visiting researcher and a CS undergraduate from University of Toronto. His current research focuses on pushing the frontiers of in-context learning to enable language models to learn at test-time, touching upon ideas like infinite-context learning and concept learning. Previously, Steven worked on efficient algorithms for neural fields at DGP, UofT and NGai Lab, HKU."
-  google_scholar: "2ASNx9AAAAAJ"
-  current: true
-- 
   name: "Suliang Jin"
   image: "/assets/images/people/suliang_jin.jpg"
   position: "Visiting Researcher"
@@ -247,9 +274,9 @@
   position: "Visiting Researcher"
   webpage: "https://www.linkedin.com/in/frank-wu-1636911ba/"
   permalink: "frank-wu"
-  description: "Frank (Zequan) Wu is a Master's student at CMU. He was a visiting researcher at NYU and an Algorithm Engineer. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning."
+  description: "Frank (Zequan) Wu is a Master's student at CMU and a visiting researcher at NYU. He previously graduated with a joint bachelor degree in Computer Science and Mathematics from NYU, where he worked with Prof. Mengye Ren on the Forward-Forward Algorithm. His primary interests lie in exploring new, emerging paradigms to train deep neural networks. Recently, his work has focused on localized learning and reinforcement learning."
   google_scholar: ""
-  current: false
+  current: true
 -
   name: "Alex N. Wang"
   image: "/assets/images/people/alex_wang.jpg"
@@ -258,4 +285,13 @@
   permalink: "alex-wang"
   description: "Alex Wang is a PhD student in CILVR at New York University. He did his MSc with Rich Zemel and BASc in Engineering Science at University of Toronto. He is supported by the NSERC PGS-D scholarship. He is interested in intelligent, large-scale generative vision models. Through generative modeling, he aims to define, build, and evaluate a notion of visual intelligence."
   google_scholar: "X0n8TX0AAAAJ"
+  current: false
+-
+  name: "Donggyun Kim"
+  image: "/assets/images/people/donggyun_kim.jpg"
+  position: "Visiting PhD Student"
+  webpage: "https://gitgyun.github.io/"
+  permalink: "donggyun-kim"
+  description: "Donggyun Kim is a postdoctoral researcher at the KAIST Institute of Information Electronics, working with Prof. Seunghoon Hong in the Vision and Learning Lab. Previously, he was a visiting scholar at the Agentic Learning AI Lab at NYU. He received his Ph.D. in Computer Science from KAIST, advised by Prof. Seunghoon Hong. His current research interests include computationally efficient learning, meta-learning, and continual learning toward building lifelong and general-purpose AI."
+  google_scholar: "g_CtB50AAAAJ"
   current: false

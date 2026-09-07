@@ -59,16 +59,13 @@
 
         <div class="tw-gap-2 tw-max-w-100">
             <p class="tw-mt-4">
-                Authors: {{{formatAuthorsWithLinks authors}}}
+                {{{formatAuthorsWithLinks authors}}}
+            </p>
+            <p class="tw-text-[var(--fg-muted)] tw-text-sm tw-mt-2">
+                {{journal}} · {{formatDate date "YYYY-MM-DD"}}
             </p>
             <p class="tw-text-[var(--fg-muted)] tw-mt-4">
-                Abstract: {{{abstract}}}
-            </p>
-            <p class="tw-mt-4">
-                Published: {{formatDate date "YYYY-MM-DD"}}
-            </p>
-            <p class="tw-mt-4">
-                Venue: {{journal}}
+                {{{abstract}}}
             </p>
             <div class="tw-flex tw-mt-8 tw-gap-x-2 tw-gap-y-4 tw-min-w-[100px] tw-flex-wrap">
                 {{#if has_full_paper}}
