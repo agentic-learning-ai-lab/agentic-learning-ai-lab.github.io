@@ -55,18 +55,22 @@ nav.lab { display: flex; gap: 0.75rem; font-family: var(--mono); font-size: 1.05
 .menu-btn { display: none; background: transparent; border: 0; color: var(--fg); cursor: pointer; padding: 6px; border-radius: var(--radius-sm); }
 .menu-btn svg { width: 28px; height: 28px; fill: currentColor; display: block; }
 @media (max-width: 1023px) {
+  /* The header keeps the page's .wrap inset so the brand stays aligned with
+     the content below; only the button is pinned 20px from the edge, level
+     with the drawer's links. */
   header.lab { position: relative; }
-  header.lab .wrap { padding-left: 16px; padding-right: 16px; }
-  header.lab .brand { padding-left: 4px; }
-  .menu-btn { display: inline-flex; align-items: center; justify-content: center; position: absolute; right: 20px; top: 40px; width: 30px; height: 30px; margin: 0; padding: 0; z-index: 60; }
-  header.lab.open .menu-btn { position: fixed; right: 20px; top: 40px; }
+  /* The button and the drawer's right padding follow the page's 5% .wrap inset, so the X sits on the
+     content column's right edge and the drawer links line up under it (the lab site's own header uses
+     a 16px inset on mobile because its body does too). */
+  .menu-btn { display: inline-flex; align-items: center; justify-content: center; position: absolute; right: 5%; top: 40px; width: 30px; height: 30px; margin: 0; padding: 0; z-index: 60; }
+  header.lab.open .menu-btn { position: fixed; right: 5%; top: 40px; }
   .menu-btn svg { width: 24px; height: 24px; }
   .menu-btn .ico-x { display: none; }
   header.lab.open .menu-btn .ico-menu { display: none; }
   header.lab.open .menu-btn .ico-x { display: block; }
   /* agenticlearning.ai's drawer: fixed top-right, sized to its links, card-bg with a faint left edge */
-  nav.lab { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; gap: 0.5rem; position: fixed; top: 0; right: 0; bottom: auto; height: auto; max-height: calc(100vh - 20px); width: 0; padding: 100px 20px 60px 8px; overflow: hidden; opacity: 0; pointer-events: none; z-index: 50; background: var(--card-bg); color: var(--fg); border-top-left-radius: var(--radius-lg); border-bottom-left-radius: var(--radius-lg); border-left: 1px solid color-mix(in srgb, var(--border) 35%, transparent); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: width 0.3s ease, opacity 0.2s ease; }
-  header.lab.open nav.lab { width: 160px; opacity: 1; pointer-events: auto; }
+  nav.lab { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; gap: 0.5rem; position: fixed; top: 0; right: 0; bottom: auto; height: auto; max-height: calc(100vh - 20px); width: 0; padding: 100px 5% 60px 8px; overflow: hidden; opacity: 0; pointer-events: none; z-index: 50; background: var(--card-bg); color: var(--fg); border-top-left-radius: var(--radius-lg); border-bottom-left-radius: var(--radius-lg); border-left: 1px solid color-mix(in srgb, var(--border) 35%, transparent); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: width 0.3s ease, opacity 0.2s ease; }
+  header.lab.open nav.lab { width: calc(140px + 5%); opacity: 1; pointer-events: auto; }   /* 132px of links + 8px + the inset */
   nav.lab .header-links { font-size: 15px; padding: 6px 10px; white-space: nowrap; }
   nav.lab .theme-toggle { margin-top: 0.25rem; }
 }
@@ -108,13 +112,13 @@ nav.lab { display: flex; gap: 0.75rem; font-family: var(--mono); font-size: 1.05
 /* ---- sections -------------------------------------------------------- */
 section.lab { padding: 2.5rem 0; }
 .section-title::after { content: ""; display: block; width: 52px; height: 5px; background: var(--accent); border-radius: 3px; margin-top: 0.5rem; }
-.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
-.grid5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; }
-.steps { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 720px; }
-.showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+.grid5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1rem; }
+.steps { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; max-width: 720px; }
+.showcase { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.25rem; }
 
 /* ---- figures --------------------------------------------------------- */
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
 .stat b { display: block; font-family: var(--mono); font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .stat span { font-family: var(--mono); font-size: 0.8rem; color: var(--fg-muted); }
 .tile { background: var(--card-bg); border-radius: var(--radius-md); padding: 1.1rem 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.1rem; }
@@ -136,6 +140,11 @@ svg.chart text { font-family: var(--mono); font-size: 11px; fill: var(--fg-muted
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
 .ledger { overflow-x: auto; border: 1px solid var(--border-soft); border-radius: var(--radius-md); }
 .tablewrap { overflow-x: auto; }
+/* horizontal scroll containers: a thin scrollbar in the theme's ink instead of the browser's chrome */
+.ledger, .tablewrap, pre { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--fg) 35%, transparent) transparent; }
+.ledger::-webkit-scrollbar, .tablewrap::-webkit-scrollbar, pre::-webkit-scrollbar { height: 8px; width: 8px; }
+.ledger::-webkit-scrollbar-track, .tablewrap::-webkit-scrollbar-track, pre::-webkit-scrollbar-track { background: transparent; }
+.ledger::-webkit-scrollbar-thumb, .tablewrap::-webkit-scrollbar-thumb, pre::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--fg) 35%, transparent); border-radius: 4px; }
 table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 0.82rem; }
 th, td { text-align: left; padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-soft); vertical-align: top; white-space: nowrap; }
 .ledger tr:last-child td { border-bottom: 0; }
@@ -147,13 +156,14 @@ td.dim { color: var(--fg-muted); }
 /* ---- footer + attribution ------------------------------------------- */
 footer.lab { margin-top: 3rem; font-family: var(--mono); font-size: 0.875rem; }
 footer.lab .foot { min-height: 100px; background: var(--card-bg); border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 2rem; }
-footer.lab .links { display: flex; align-items: center; gap: 1.5rem; margin-left: auto; padding: 0 0.5rem; }
+footer.lab .links { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; margin-left: auto; padding: 0 0.5rem; }
 footer.lab .links a { text-decoration: none; display: inline-flex; align-items: center; color: var(--fg); }
 footer.lab .links a:hover { color: var(--accent); }
 footer.lab .links svg { width: 24px; height: 24px; fill: currentColor; }
 footer.lab .links .site { font-family: var(--mono); font-size: 0.875rem; }
 .attribution { display: flex; align-items: center; gap: 12px; line-height: 1.5; }
 .attribution svg { width: 28px; height: 28px; flex: none; }
+.attribution > span { min-width: 0; }   /* let the two-line credit wrap on narrow screens instead of widening the page */
 .attribution a { color: var(--fg); }
 .lab-attribution { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); text-align: center; font-family: var(--mono); font-size: 0.875rem; color: var(--fg-muted); }
 .lab-attribution a { color: var(--accent); text-decoration: none; }
@@ -161,13 +171,13 @@ footer.lab .links .site { font-family: var(--mono); font-size: 0.875rem; }
 
 @media (max-width: 860px) {
   .hero.lab { padding: 2rem 1.5rem; }
-  .showcase { grid-template-columns: 1fr; }
-  .grid3, .grid5, .stats { grid-template-columns: 1fr 1fr; }
+  .showcase { grid-template-columns: minmax(0, 1fr); }
+  .grid3, .grid5, .stats { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   header.lab { height: auto; }
   header.lab .wrap { height: auto; padding-top: 1rem; padding-bottom: 1rem; }
 }
 @media (max-width: 640px) {
-  .grid3, .grid5, .stats { grid-template-columns: 1fr; }
+  .grid3, .grid5, .stats { grid-template-columns: minmax(0, 1fr); }
   footer.lab .foot { flex-direction: column; align-items: flex-start; gap: 1.25rem; padding: 1.5rem; }
   footer.lab .links { margin-left: 0; padding: 0; }
 }

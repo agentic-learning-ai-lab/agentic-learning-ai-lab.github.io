@@ -17,6 +17,7 @@
    ========================================================================== */
 
 :root {
+  color-scheme: light;             /* native scrollbars and form controls follow the theme */
   /* surfaces + ink */
   --bg: #ffffff;
   --fg: #2c2c2c;
@@ -57,7 +58,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #18181b; --fg: #e8e8ea; --fg-muted: #c4c4c8; --link: #e8e8ea;
+    color-scheme: dark; --bg: #18181b; --fg: #e8e8ea; --fg-muted: #c4c4c8; --link: #e8e8ea;
     --card-bg: #27272a; --border-soft: #3f3f46; --border: rgb(156 163 175);
     --btn-bg: #e8e8ea; --btn-color: #18181b;
     --accent: #5D97FF; --accent-soft: rgba(93, 151, 255, 0.18);
@@ -67,7 +68,7 @@
   }
 }
 :root[data-theme="dark"] {
-  --bg: #18181b; --fg: #e8e8ea; --fg-muted: #c4c4c8; --link: #e8e8ea;
+  color-scheme: dark; --bg: #18181b; --fg: #e8e8ea; --fg-muted: #c4c4c8; --link: #e8e8ea;
   --card-bg: #27272a; --border-soft: #3f3f46; --border: rgb(156 163 175);
   --btn-bg: #e8e8ea; --btn-color: #18181b;
   --accent: #5D97FF; --accent-soft: rgba(93, 151, 255, 0.18);
