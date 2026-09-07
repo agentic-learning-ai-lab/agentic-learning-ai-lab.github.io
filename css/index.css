@@ -1,54 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 :root {
-    /* Semantic theme tokens (light defaults). Dark overrides below
-       under [data-theme="dark"]. Auto-activation via OS preference is
-       deferred — for now, dark mode is opt-in: set
-       document.documentElement.dataset.theme = "dark" to test in
-       devtools, or wait for the toggle UI shipping in a follow-up PR. */
-    --bg: #ffffff;
-    --fg: #2c2c2c;
-    --fg-muted: #6b7280;
-    --link: #0d0d0d;
-    --border: rgb(75 85 99);
-    /* card-bg etc. defined here so dark overrides can pre-stage values
-       even though chrome PR doesn't yet wire content surfaces to them.
-       Cards / project pages / arxiv view get themed in a follow-up PR. */
-    --card-bg: #f3f3f3b4;
-
-    --btn-color: #fdfdfd;
-    /* button color*/
-    --btn-bg: #0d0d0d;
-    /* button bg color*/
-
+    /* Theme tokens (--bg --fg --fg-muted --link --border --card-bg
+       --btn-* --radius-*) come from /css/lab-tokens.css, the lab's shared
+       sheet linked in templates/head.hbs before this file. Only the
+       tokens specific to this site stay here. */
     --primary-text-color: #000;
     --header-link-hover: #dddcdccf;
     --footer-link-hover: #6dbb00;
     --input-focus-bd-color: #0d0d0d;
-
-    /* Corner-radius scale. Echoes the agent-mark's ~20% rounding.
-       Adjust these three tokens to tune the site-wide radius. */
-    --radius-sm: 8px;   /* buttons, form inputs */
-    --radius-md: 12px;  /* cards (papers / areas / headshots / thumbnails) */
-    --radius-lg: 20px;  /* hero image containers */
 }
 
-:root[data-theme="dark"] {
-    /* Softer-than-pitch-black background (zinc-900). Pure #000 reads as
-       harsh against the serif body type; a slight warm-gray tint is
-       easier to look at and matches conventional dark-mode palettes
-       (GitHub, Linear, Notion all sit in this neighborhood). */
-    --bg: #18181b;
-    --fg: #e8e8ea;
-    /* Muted gray — used for captions, subtitles, affiliations, and
-       similar "secondary" text. Was a1a1aa (zinc-400) but reads dim
-       on the page; bumped one step lighter for better readability
-       while still visually distinct from --fg. */
-    --fg-muted: #c4c4c8;
-    --link: #e8e8ea;
-    --border: rgb(156 163 175);
-    --card-bg: #27272a;
-}
 
 
 html {
