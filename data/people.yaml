@@ -269,6 +269,15 @@
   google_scholar: ""
   current: true
 -
+  name: "Adam Soliman"
+  image: "/assets/images/people/adam_soliman.jpg"
+  position: "Undergraduate Student"
+  webpage: "https://www.adamesoliman.com/"
+  permalink: "adam-soliman"
+  description: "Adam Soliman is a senior at NYU's College of Arts and Sciences studying Computer Science and Mathematics with honors. He is conducting research with Prof. Mengye Ren, focusing on Relay Agents, a project exploring how AI agents can better coordinate researchers and their reports. Outside of school Adam has a passion for basketball, music, and learning languages."
+  google_scholar: ""
+  current: true
+-
   name: "Frank (Zequan) Wu"
   image: "/assets/images/people/frank_wu.jpg"
   position: "Visiting Researcher"
