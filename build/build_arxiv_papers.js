@@ -763,13 +763,43 @@ async function compressAllPdfs(force = false) {
   let compressed = 0;
   let skipped = 0;
 
+  // Manifest-hash short-circuit: if a paper.pdf's current bytes already
+  // match the hash the manifest points at, this file IS the shipped
+  // finalized version — re-running qpdf on it would mutate the bytes
+  // (qpdf isn't a strict fixed-point on its own compressed output), which
+  // then triggers a spurious sync:r2 upload + manifest bump on every
+  // rebuild. Skip in that case, and touch the marker so future runs
+  // short-circuit even earlier. Only bypassed by --force.
+  const { loadManifest, hashFile, keyFromCdnUrl } = require('./r2_lib');
+  const shipManifest = force ? {} : await loadManifest();
+
   const dirs = await fs.readdir(OUTPUT_DIR);
   for (const dir of dirs) {
     const pdfPath = path.join(OUTPUT_DIR, dir, 'paper.pdf');
     if (!await fs.pathExists(pdfPath)) continue;
 
-    // Check marker file for caching
     const markerPath = pdfPath + '.qpdf-compressed';
+
+    // 1) Manifest match — cheapest safe skip.
+    if (!force) {
+      const shippedUrl = shipManifest['/research/' + dir + '/paper.pdf'];
+      const shippedKey = shippedUrl && keyFromCdnUrl(shippedUrl);
+      const shippedHash = shippedKey && shippedKey.split('/')[0];
+      if (shippedHash) {
+        const localHash = await hashFile(pdfPath);
+        if (localHash === shippedHash) {
+          // Local is already the finalized ship target — nothing to do.
+          // Also refresh the marker so subsequent runs skip via marker too.
+          await fs.ensureFile(markerPath);
+          const now = new Date();
+          await fs.utimes(markerPath, now, now);
+          skipped++;
+          continue;
+        }
+      }
+    }
+
+    // 2) Marker check for caching (freshly compiled → marker written below).
     if (!force && await fs.pathExists(markerPath)) {
       const pdfStat = await fs.stat(pdfPath);
       const markerStat = await fs.stat(markerPath);
