@@ -286,9 +286,27 @@ async function main() {
       const cdnUrl = `${CDN_BASE}/${r2Key}`;
       const logicalPath = '/' + file;
 
-      // Trust the manifest first (free). Fall back to HEAD only in --verify mode.
+      // Same-hash preservation: R2 keys are content-addressed by hash,
+      // so if the manifest already points at the same-hash content (even
+      // under an older basename convention), preserve that URL — the
+      // bytes are identical, and a rename-only upload would churn the
+      // manifest on every rebuild for zero user-visible change. The most
+      // common trigger is a basename convention change (e.g. paper.pdf
+      // → <slug>.pdf) landing on an existing entry.
+      const existingUrl = existingManifest[logicalPath];
+      const existingHash = existingUrl && existingUrl.startsWith(CDN_BASE + '/')
+        ? existingUrl.slice(CDN_BASE.length + 1).split('/')[0]
+        : null;
+
+      let effectiveUrl = cdnUrl;
       let needsUpload;
-      if (existingManifest[logicalPath] === cdnUrl) {
+      if (existingHash === hash) {
+        // Same content already on R2. Keep the existing URL.
+        effectiveUrl = existingUrl;
+        needsUpload = verify
+          ? !(await r2ObjectExists(existingUrl.slice(CDN_BASE.length + 1)))
+          : false;
+      } else if (existingUrl === cdnUrl) {
         needsUpload = verify ? !(await r2ObjectExists(r2Key)) : false;
       } else {
         needsUpload = true;
@@ -304,7 +322,7 @@ async function main() {
         console.log(`⬆️  ${logicalPath} → ${r2Key}`);
       }
 
-      manifest[logicalPath] = cdnUrl;
+      manifest[logicalPath] = effectiveUrl;
       touched.add(logicalPath);
     } catch (err) {
       console.error(`❌ ${file}: ${err.message}`);
