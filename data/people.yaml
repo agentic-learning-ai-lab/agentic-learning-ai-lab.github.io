@@ -278,6 +278,15 @@
   google_scholar: ""
   current: true
 -
+  name: "Thomas Yanle Li"
+  image: "/assets/images/people/thomas_li.jpg"
+  position: "Undergraduate Student"
+  webpage: "https://www.linkedin.com/in/yanle-li-446491326/"
+  permalink: "thomas-li"
+  description: "Thomas Yanle Li is an undergraduate studying Mathematics and Computer Science at New York University. He is conducting research under the guidance of Prof. Mengye Ren and Ryan Teehan, currently focusing on Outerloop, an autonomous research agent. His research interests include agentic learning and world models. Beyond his research, Thomas enjoys playing the clarinet, soccer, and badminton."
+  google_scholar: ""
+  current: true
+-
   name: "Frank (Zequan) Wu"
   image: "/assets/images/people/frank_wu.jpg"
   position: "Visiting Researcher"
