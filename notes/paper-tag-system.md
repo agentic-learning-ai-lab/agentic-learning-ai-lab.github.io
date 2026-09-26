@@ -37,9 +37,13 @@ Tags sit **between** the current abstract Key Areas
 (`saycam`, `arxiv`). They should be:
 
 - **Compositional / thematic** — a tag names a *cross-cutting concern*
-  the lab returns to, not a single method or dataset. Good: `World
-  Models`, `Test-time Learning`, `Egocentric Video`. Weak:
-  `jepa` (too specific), `machine learning` (too broad).
+  the lab returns to, not a paper-specific method. Good: `World
+  Models`, `Test-time Learning`, `Egocentric Video`, `JEPA` (a family
+  of methods the lab returns to, not just one paper). Weak:
+  paper-specific method names that recur in only one paper
+  (e.g., a single algorithm's acronym), and umbrella terms so broad
+  that they'd match half the corpus (`machine learning`, `deep
+  learning`).
 - **Discoverable** — a curious reader clicking a tag should get 3+
   papers back. Rare tags (1 paper) probably belong under a broader
   parent.
