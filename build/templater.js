@@ -410,6 +410,26 @@ function registerHelpers(handlebars, documents) {
         return moment.utc(date).format(format);
     });
 
+    // Map an array of tag slug strings → array of full tag records
+    // (label, description, monogram, cluster, ...) from data/tags.yaml.
+    // Silently skips unknown slugs — build/lint_tags.js catches those at
+    // pre-commit and in CI, so at render time we just avoid rendering
+    // orphaned chips.
+    // Optional second arg caps the returned length (e.g. `resolveTags tags 3`
+    // for the top 3 to fit on a paper card).
+    handlebars.registerHelper('resolveTags', function (slugs, limit) {
+        if (!Array.isArray(slugs)) return [];
+        const records = [];
+        for (const s of slugs) {
+            const rec = documents.tagsBySlug.get(s);
+            if (rec) records.push(rec);
+        }
+        // Handlebars passes the options hash as the last arg when limit
+        // isn't a number — guard against it.
+        if (typeof limit === 'number') return records.slice(0, limit);
+        return records;
+    });
+
     // Short venue: extract the acronym-in-parens for conference/journal
     // strings like "The 43rd International Conference on Machine Learning
     // (ICML 2026)" → "ICML 2026". Falls back to the full string when

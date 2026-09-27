@@ -1,0 +1,8 @@
+{{!-- Single tag chip. Expects context to be a tag record from tags.yaml
+      (label, slug). Used inline in paper cards + paper detail.
+
+      Anchor stops propagation so clicks on chips inside a
+      card-wrapping anchor don't also trigger the outer link. --}}
+<a href="/tags/{{slug}}/"
+   onclick="event.stopPropagation();"
+   class="tag-chip">{{label}}</a>
