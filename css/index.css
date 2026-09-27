@@ -1477,7 +1477,7 @@ section {
     border-color: var(--border);
 }
 
-/* Tag-page side list of all topics (lg+), grouped by cluster. Not
+/* Tag-page side list of all topics (xl+, where it fits beside the full-width list), grouped by cluster. Not
    sticky: the full list is taller than a laptop viewport, and a clipped
    or inner-scrolling panel read worse than letting it scroll away. Mirrors
    the paper-page TOC sidebar (arxiv-paper.css .paper-sidebar-sticky /

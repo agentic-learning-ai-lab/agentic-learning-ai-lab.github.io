@@ -11,7 +11,7 @@
     {{> header}}
 
     <section class="tw-flex tw-flex-row tw-w-full tw-gap-12 tw-px-[5%] tw-pt-[5%] tw-pb-[3%] tw-mt-[150px] max-lg:tw-p-4">
-        <div class="tw-flex tw-flex-col tw-w-full md:tw-w-[80%] lg:tw-w-[60%] xl:tw-w-[50%]">
+        <div class="tw-flex tw-flex-col tw-w-full tw-max-w-[720px] tw-min-w-0">
             <a href="/tags/" class="tag-back-link"><i class="bi bi-arrow-left"></i> All topics</a>
             <div class="tw-flex tw-items-center tw-gap-4">
                 <span class="tag-monogram-badge" aria-hidden="true">{{monogram}}</span>
@@ -41,7 +41,7 @@
             {{/if}}
         </div>
 
-        <nav class="tag-aside max-lg:tw-hidden" aria-label="Topics">
+        <nav class="tag-aside max-xl:tw-hidden" aria-label="Topics">
             {{#each navClusters}}
             <div class="tag-aside__group">
                 <div class="tag-aside__heading">{{label}}</div>
