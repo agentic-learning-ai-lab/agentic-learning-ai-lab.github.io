@@ -64,7 +64,6 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
 />
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-44MVTGBV0D"></script>
@@ -76,15 +75,7 @@
   gtag('config', 'G-44MVTGBV0D');
 </script>
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script type="text/javascript">
-    (function() {
-        // https://dashboard.emailjs.com/admin/account
-        emailjs.init({
-          publicKey: "y6ebNBhEpEzmyqS8F",
-        });
-    })();
-</script>
+<!-- reCAPTCHA + emailjs live in contact.hbs (only page that uses them). -->
 
 <script
     src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"

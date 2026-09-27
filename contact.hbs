@@ -8,6 +8,16 @@
 <!--Replace with the current website url-->
 <meta property="og:image" content="{{cdnUrl '/assets/images/background/bg3.png'}}" />
 {{> head description="Contact the Agentic Learning AI Lab at NYU."}}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+    (function() {
+        // https://dashboard.emailjs.com/admin/account
+        emailjs.init({
+          publicKey: "y6ebNBhEpEzmyqS8F",
+        });
+    })();
+</script>
 </head>
     <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[var(--bg)] tw-font-mono">
         {{> header}} 
