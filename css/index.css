@@ -399,7 +399,7 @@ header>.collapsible-header {
 /* Home hero: a soft indigo tint (from the illustration's own palette)
    fades in from the left behind the tagline and paragraph so the white
    text stays legible without a dark box. Lighter in light mode, deeper
-   in dark mode. On xl screens the text sits a little below center. */
+   in dark mode. */
 :root { --hero-tint-1: rgba(78, 72, 168, 0.46); --hero-tint-2: rgba(78, 72, 168, 0.20); }
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) { --hero-tint-1: rgba(38, 34, 92, 0.62); --hero-tint-2: rgba(38, 34, 92, 0.28); }
@@ -423,8 +423,19 @@ header>.collapsible-header {
    keep the gradient under the (relatively wider) text block. */
 @media (max-width: 1279px) { .hero-home picture img { transform: scale(1.7); } }
 @media (max-width: 1023px) { .hero-home picture img { transform: scale(2); } }
+/* Vertical position of the hero text per width: a little below center on
+   xl, slightly below center on lg, and lifted off the bottom edge below
+   lg. */
 @media (min-width: 1280px) {
     .hero-home .text-overlay { top: 56%; }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+    .hero-home .text-overlay { top: 53%; }
+}
+@media (max-width: 1023px) {
+    /* Below lg the overlay is bottom-anchored (see the tablet rule
+       further down); lift it off the bottom edge a little. */
+    .hero-home .text-overlay { bottom: 44px; }
 }
 
 /* In dark mode the hero image itself is dimmed via the universal
