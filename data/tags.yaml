@@ -9,8 +9,9 @@
 #   label         — human display name.
 #   description   — short noun phrase, shown on the tag page + og:description.
 #   monogram      — 1–2 letters shown in the tag badge.
-#   cluster       — section on the /tags/ index.
-#                   values: learning-paradigms | content-and-applications | special
+#   cluster       — group on the /tags/ index and the tag-page side list.
+#                   values: learning-paradigms | models-and-representations |
+#                           data-and-applications | perspectives
 #   featured      — true → surfaces on the home page card grid (9 total).
 #                   false → still gets a listing page + chip appearance
 #                   on paper cards, just no home-page real estate.
@@ -21,14 +22,14 @@
   label: World Models
   description: Latent predictive models for planning, prediction, and control.
   monogram: WM
-  cluster: learning-paradigms
+  cluster: models-and-representations
   featured: true
 
 - slug: egocentric-video
   label: Egocentric Video
   description: Learning from continuous first-person visual streams.
   monogram: EV
-  cluster: content-and-applications
+  cluster: data-and-applications
   featured: true
 
 - slug: continual-learning
@@ -56,28 +57,28 @@
   label: LLM Reasoning
   description: Reasoning, verification, and calibration in language models.
   monogram: LR
-  cluster: content-and-applications
+  cluster: data-and-applications
   featured: true
 
 - slug: creative-exploration
   label: Creative Exploration
   description: Novel generation and open-ended exploration.
   monogram: CE
-  cluster: content-and-applications
+  cluster: learning-paradigms
   featured: true
 
 - slug: human-like-learning
   label: Human-like Learning
   description: Learning inspired by human cognitive development.
   monogram: HL
-  cluster: content-and-applications
+  cluster: perspectives
   featured: true
 
 - slug: forecasting
   label: Forecasting
   description: Predicting future events from evolving evidence.
   monogram: FC
-  cluster: content-and-applications
+  cluster: data-and-applications
   featured: true
 
 # ─── Non-featured (10) ───────────────────────────────────────────
@@ -93,7 +94,7 @@
   label: Multimodal Learning
   description: Joint learning across vision, language, and other modalities.
   monogram: MM
-  cluster: content-and-applications
+  cluster: data-and-applications
   featured: false
 
 - slug: self-supervised-learning
@@ -107,7 +108,7 @@
   label: Hierarchical Abstraction
   description: Representations across multiple levels of time and granularity.
   monogram: HA
-  cluster: learning-paradigms
+  cluster: models-and-representations
   featured: false
 
 - slug: local-learning
@@ -128,26 +129,26 @@
   label: Concept Learning
   description: Acquiring and composing concepts from few examples.
   monogram: CN
-  cluster: content-and-applications
+  cluster: models-and-representations
   featured: false
 
 - slug: multi-agent
   label: Multi-Agent
   description: Interaction and coordination among multiple agents.
   monogram: MA
-  cluster: special
+  cluster: perspectives
   featured: false
 
 - slug: ai-safety
   label: AI Safety
   description: Safe and reliable behavior in learning systems.
   monogram: AS
-  cluster: special
+  cluster: perspectives
   featured: false
 
 - slug: philosophy-of-ai
   label: Philosophy of AI
   description: Foundational questions about AI.
   monogram: PA
-  cluster: special
+  cluster: perspectives
   featured: false
