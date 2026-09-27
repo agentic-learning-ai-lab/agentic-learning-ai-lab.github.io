@@ -17,7 +17,7 @@ By the end of Phase 1, on `dev`:
 - Each paper card grows a chip row (top ~3 tags, curator-ordered).
 - Each paper detail page grows a full tag row.
 - **Home page "Key Areas" block** (formerly rendered via
-  `research_area_tabs`) is retired — Themes grid supersedes it.
+  `research_area_tabs`) is retired — Research Topics grid supersedes it.
   `/areas/<slug>/` pages themselves stay live for external inbound
   links; Phase 4 retires the route entirely and lands the redirects.
 - Search index includes tags; sitemap includes tag URLs;
@@ -90,8 +90,8 @@ reviewers can read them independently.
 ### 3. Existing templates to extend
 
 - [ ] `index.hbs` — insert a home block above/below existing sections.
-      Section heading placeholder ("Themes" — final copy pending
-      decision from parent doc open question). Grid of 9 featured
+      Section heading: "Research Topics" (chosen during preview review;
+      resolves the parent doc open question). Grid of 9 featured
       tag cards.
 - [ ] `paper.hbs` — add tag row near the top of the paper detail
       page (probably alongside the venue / date line, or just
