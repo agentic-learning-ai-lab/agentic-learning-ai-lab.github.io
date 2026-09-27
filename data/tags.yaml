@@ -169,7 +169,7 @@
 
 - slug: philosophy-of-ai
   label: Philosophy of AI
-  description: Foundational questions about learning agents.
+  description: Foundational questions about AI.
   monogram: PA
   cluster: special
   featured: false
