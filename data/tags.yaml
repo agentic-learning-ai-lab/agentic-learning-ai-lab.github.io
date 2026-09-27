@@ -7,7 +7,7 @@
 # Fields:
 #   slug          — kebab-case; drives /tags/<slug>/ URL. Forever.
 #   label         — human display name.
-#   description   — one line, shown on home card + tag page.
+#   description   — short noun phrase, shown on the tag page + og:description.
 #   monogram      — 1–2 letters shown in the home-card badge.
 #   cluster       — grouping for color-coding in Phase 2.
 #                   values: learning-paradigms | content-and-applications | special
@@ -23,7 +23,7 @@
 
 - slug: world-models
   label: World Models
-  description: Latent predictive models for planning, prediction, and control — including JEPA-family methods.
+  description: Latent predictive models for planning, prediction, and control.
   monogram: WM
   cluster: learning-paradigms
   featured: true
@@ -31,7 +31,7 @@
 
 - slug: egocentric-video
   label: Egocentric Video
-  description: Learning from continuous first-person visual streams — SAYCam and beyond.
+  description: Learning from continuous first-person visual streams.
   monogram: EV
   cluster: content-and-applications
   featured: true
@@ -39,7 +39,7 @@
 
 - slug: continual-learning
   label: Continual Learning
-  description: Learning under distribution shift without catastrophic forgetting — in streams or across tasks.
+  description: Learning from nonstationary streams without forgetting.
   monogram: CL
   cluster: learning-paradigms
   featured: true
@@ -47,7 +47,7 @@
 
 - slug: test-time-learning
   label: Test-time Learning
-  description: Adapting the model at inference from the very inputs it's being asked about.
+  description: Adapting models during inference.
   monogram: TT
   cluster: learning-paradigms
   featured: true
@@ -55,7 +55,7 @@
 
 - slug: in-context-learning
   label: In-Context Learning
-  description: Using an LLM's context window as a learning surface, not just a prompt.
+  description: Learning from examples within a model's context.
   monogram: IC
   cluster: learning-paradigms
   featured: true
@@ -63,7 +63,7 @@
 
 - slug: llm-reasoning
   label: LLM Reasoning
-  description: How large language models reason, verify, retrieve, and forecast — capabilities and limits.
+  description: Reasoning, verification, and calibration in language models.
   monogram: LR
   cluster: content-and-applications
   featured: true
@@ -71,7 +71,7 @@
 
 - slug: creative-exploration
   label: Creative Exploration
-  description: Generating novel, memorable stimuli — plus the open-ended search over what makes something creative.
+  description: Novel generation and open-ended exploration.
   monogram: CE
   cluster: content-and-applications
   featured: true
@@ -79,7 +79,7 @@
 
 - slug: human-like-learning
   label: Human-like Learning
-  description: Learning algorithms inspired by human and developmental cognition — from a child's perspective outward.
+  description: Learning inspired by human cognitive development.
   monogram: HL
   cluster: content-and-applications
   featured: true
@@ -87,7 +87,7 @@
 
 - slug: forecasting
   label: Forecasting
-  description: Predicting the future from noisy, temporally structured evidence — from prediction markets to news.
+  description: Predicting future events from evolving evidence.
   monogram: FC
   cluster: content-and-applications
   featured: true
@@ -97,7 +97,7 @@
 
 - slug: meta-learning
   label: Meta-Learning
-  description: Learning to learn — methods that adapt fast to new tasks from a few examples.
+  description: Learning to learn new tasks from few examples.
   monogram: ML
   cluster: learning-paradigms
   featured: false
@@ -113,7 +113,7 @@
 
 - slug: self-supervised-learning
   label: Self-Supervised Learning
-  description: Learning representations from unlabeled data via predictive or contrastive objectives.
+  description: Representation learning from unlabeled data.
   monogram: SS
   cluster: learning-paradigms
   featured: false
@@ -121,7 +121,7 @@
 
 - slug: hierarchical-abstraction
   label: Hierarchical Abstraction
-  description: Learning representations at multiple time-scales or levels of granularity — from tokens up to concepts, plans, and summaries.
+  description: Representations across multiple levels of time and granularity.
   monogram: HA
   cluster: learning-paradigms
   featured: false
@@ -129,7 +129,7 @@
 
 - slug: local-learning
   label: Local Learning
-  description: Backprop-free and biologically-plausible learning rules — value estimation, contrastive updates, forward-only methods.
+  description: Backprop-free and biologically plausible learning rules.
   monogram: LL
   cluster: learning-paradigms
   featured: false
@@ -137,7 +137,7 @@
 
 - slug: reinforcement-learning
   label: Reinforcement Learning
-  description: Learning from reward — including value-based methods and local-learning alternatives to backprop.
+  description: Learning to act from reward.
   monogram: RL
   cluster: learning-paradigms
   featured: false
@@ -145,7 +145,7 @@
 
 - slug: concept-learning
   label: Concept Learning
-  description: Acquiring, composing, and generalizing symbolic concepts from limited examples.
+  description: Acquiring and composing concepts from few examples.
   monogram: CN
   cluster: content-and-applications
   featured: false
@@ -153,7 +153,7 @@
 
 - slug: multi-agent
   label: Multi-Agent
-  description: Systems where multiple learning agents interact, coordinate, or contest.
+  description: Interaction and coordination among multiple agents.
   monogram: MA
   cluster: special
   featured: false
@@ -161,7 +161,7 @@
 
 - slug: ai-safety
   label: AI Safety
-  description: Robustness to unsafe data, alignment behaviors, and controllable model behavior.
+  description: Safe and reliable behavior in learning systems.
   monogram: AS
   cluster: special
   featured: false
@@ -169,7 +169,7 @@
 
 - slug: philosophy-of-ai
   label: Philosophy of AI
-  description: Foundational questions about what learning agents are and can become.
+  description: Foundational questions about learning agents.
   monogram: PA
   cluster: special
   featured: false
