@@ -128,6 +128,28 @@ function doTemplating(input, output) {
             fs.writeFileSync(output_new, template(ra));
         }
     }
+    else if (input === "tag.hbs") {
+        for (const tag of documents.tags) {
+            const output_new = output.replace("{{permalink}}", tag.slug);
+            fs.mkdirSync(path.dirname(output_new), { recursive: true });
+
+            // Papers carrying this tag. Preserve papers.yaml ordering
+            // (newest first, matches /research/ listing convention).
+            const papers = documents.papers.filter(p =>
+                Array.isArray(p.tags) && p.tags.includes(tag.slug)
+            );
+
+            // Resolve related-tag slugs to full records for the sibling
+            // row. Unknown slugs are silently skipped (lint_tags.js is the
+            // enforcement point).
+            const relatedTags = (tag.related || [])
+                .map(s => documents.tagsBySlug.get(s))
+                .filter(Boolean);
+
+            const ctx = { ...tag, papers, relatedTags };
+            fs.writeFileSync(output_new, template(ctx));
+        }
+    }
     else if (input === "project.hbs") {
         // Marketing landing pages at /<permalink>/. Opt in via
         // `project_page: true` in data/papers.yaml — content lives in

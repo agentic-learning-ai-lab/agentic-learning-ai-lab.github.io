@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta property="og:title" content="{{{label}}} | Agentic Learning AI Lab" />
+<meta property="og:description" content="{{{description}}}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://agenticlearning.ai/tags/{{{slug}}}/" />
+{{> head}}
+</head>
+<body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[var(--bg)] tw-font-mono">
+    {{> header}}
+
+    <section class="tw-relative tw-flex tw-w-full tw-max-w-[100vw] tw-min-w-[350px] tw-flex-col tw-mt-[150px] tw-px-[5%] max-md:tw-px-4 max-lg:tw-px-4">
+        <div class="tw-flex tw-flex-wrap tw-place-items-center tw-gap-6">
+            <div class="tag-monogram-badge">{{monogram}}</div>
+            <h1 class="tw-text-6xl tw-font-medium max-lg:tw-text-4xl max-md:tw-text-3xl">
+                {{label}}
+            </h1>
+        </div>
+        <p class="tw-text-[var(--fg-muted)] tw-mt-6 tw-max-w-3xl">
+            {{{description}}}
+        </p>
+    </section>
+
+    <section class="tw-w-full tw-flex-col tw-px-[5%] max-lg:tw-p-4 tw-mt-8">
+        <h3 class="text-left tw-text-2xl tw-font-medium max-md:tw-text-xl">
+            Papers ({{papers.length}})
+        </h3>
+        <div class="section-underline tw-my-4"></div>
+
+        {{#if papers.length}}
+        <div class="tw-mt-8 tw-gap-10 tw-space-y-reverse sm:tw-columns-1 md:tw-columns-2 lg:tw-columns-3 xl:tw-columns-4 tw-items-start">
+            {{> recent_works papers}}
+        </div>
+        {{else}}
+        <p class="tw-text-[var(--fg-muted)] tw-mt-4">
+            No papers with this tag yet.
+        </p>
+        {{/if}}
+    </section>
+
+    {{#if relatedTags.length}}
+    <section class="tw-w-full tw-flex-col tw-px-[5%] max-lg:tw-p-4 tw-mt-12">
+        <h3 class="text-left tw-text-xl tw-font-medium max-md:tw-text-lg tw-text-[var(--fg-muted)]">
+            Related tags
+        </h3>
+        <div class="tag-chip-row tw-mt-3">
+            {{#each relatedTags}}{{> tag_chip}}{{/each}}
+        </div>
+    </section>
+    {{/if}}
+
+    {{> footer}}
+</body>
+<script src="/index.js"></script>
+</html>
