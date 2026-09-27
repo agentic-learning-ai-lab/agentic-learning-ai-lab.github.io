@@ -1,4 +1,6 @@
-const itemsPerPage = 4;
+// Page size: optional data-page-size on #flexContainer (tag pages use 10),
+// default 4 for person pages.
+const itemsPerPage = parseInt(document.getElementById('flexContainer')?.dataset.pageSize, 10) || 4;
 let currentPage = 1;
 
 let items = [];
