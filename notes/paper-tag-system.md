@@ -277,7 +277,7 @@ the 25-paper backfill (see amendment note at end of section).
 | `local-learning` | Local Learning | LL | Learning Paradigms |
 | `reinforcement-learning` | Reinforcement Learning | RL | Learning Paradigms |
 | `concept-learning` | Concept Learning | CN | Models & Representations |
-| `multi-agent` | Multi-Agent | MA | Perspectives |
+| `multi-agent` | Multi-Agent | MA | Learning Paradigms |
 | `ai-safety` | AI Safety | AS | Perspectives |
 | `philosophy-of-ai` | Philosophy of AI | PA | Perspectives |
 
