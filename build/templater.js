@@ -52,11 +52,11 @@ process.on('exit', () => {
 
 function doTemplating(input, output) {
     const handlebars = handlebarsFactory.create();
-    registerHelpers(handlebars);
+    const documents = parseDocuments();
+    registerHelpers(handlebars, documents);
     registerPartials(handlebars);
 
     const template = compileTemplate(handlebars, input);
-    const documents = parseDocuments();
 
     if (input === "paper.hbs") {
         for (const paper of documents.papers) {
@@ -259,6 +259,7 @@ function parseDocuments() {
     const research_areas = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/research_areas.yaml')));
     const papers = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/papers.yaml')));
     const people = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/people.yaml')));
+    const tags = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/tags.yaml')));
     // Sort within each section (current / alumni) by position group, then
     // last name within the group. Last name = final token after stripping
     // any parenthesized middle names (e.g. "Amelia (Hui) Dai" → "Dai").
@@ -299,7 +300,22 @@ function parseDocuments() {
     }
     const recent_papers = papers.filter((p) => p['is_recent']);
 
-    return { research_areas, papers, recent_papers, people, people_current, people_alumni };
+    // Tag lookup structures. Built once here so templater branches and
+    // Handlebars helpers don't each rebuild them.
+    const tagsBySlug = new Map(tags.map(t => [t.slug, t]));
+    const featured_tags = tags.filter(t => t.featured);
+
+    // Author name → person permalink. Consumed by the
+    // formatAuthorsWithLinks helper; passing it through here avoids the
+    // redundant parseDocuments() call the helper used to make.
+    const peopleMap = new Map(people.map(p => [p.name, p.permalink]));
+
+    return {
+        research_areas,
+        papers, recent_papers,
+        people, people_current, people_alumni, peopleMap,
+        tags, tagsBySlug, featured_tags,
+    };
 }
 
 function registerPartials(handlebars) {
@@ -311,7 +327,7 @@ function registerPartials(handlebars) {
     }
 }
 
-function registerHelpers(handlebars) {
+function registerHelpers(handlebars, documents) {
     // Apply page-scoped prose emphasis without adding HTML to canonical
     // abstracts, metadata, search indexes, or JSON-LD.
     handlebars.registerHelper('emphasizeTerms', function (text, terms) {
@@ -417,17 +433,8 @@ function registerHelpers(handlebars) {
         }
     });
 
-    // Cache people map to avoid re-parsing YAML on every call
-    let _peopleMap = null;
-    function getPeopleMap() {
-        if (!_peopleMap) {
-            const peopleData = parseDocuments().people;
-            _peopleMap = new Map(peopleData.map(p => [p.name, p.permalink]));
-        }
-        return _peopleMap;
-    }
     handlebars.registerHelper('formatAuthorsWithLinks', function (authors) {
-        const peopleMap = getPeopleMap();
+        const peopleMap = documents.peopleMap;
 
         if (!authors || authors.length === 0) {
             return "";
@@ -513,7 +520,7 @@ function registerHelpers(handlebars) {
     // in the deduplicated `orderedAffs` list — matches the numbering
     // emitted by formatAffiliationsForProjectPage.
     handlebars.registerHelper('formatAuthorsForProjectPage', function (authors, affiliations) {
-        const peopleMap = getPeopleMap();
+        const peopleMap = documents.peopleMap;
         const affs = Array.isArray(affiliations) ? affiliations : [];
         if (!authors || authors.length === 0) return "";
 
