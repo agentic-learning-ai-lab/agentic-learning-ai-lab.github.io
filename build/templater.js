@@ -328,12 +328,15 @@ function parseDocuments() {
         for (const s of new Set(p.tags || [])) papersByTag.get(s)?.push(p);
     }
     const tagsBySlug = new Map(tags.map(t => [t.slug, t]));
-    // Cluster grouping for /tags/ and the tag-page side list, A–Z within
-    // each cluster. (The home grid keeps tags.yaml's curated order.)
+    // Cluster grouping for /tags/ and the tag-page side list. Within each
+    // cluster: most papers first, ties A–Z. (The home grid keeps
+    // tags.yaml's curated order.)
     const tag_clusters = Object.entries(require('./tag_clusters')).map(([key, label]) => ({
         key, label,
         tags: tags.filter(t => t.cluster === key)
-            .sort((a, b) => a.label.localeCompare(b.label)),
+            .sort((a, b) =>
+                papersByTag.get(b.slug).length - papersByTag.get(a.slug).length
+                || a.label.localeCompare(b.label)),
     })).filter(c => c.tags.length > 0);
     const featured_tags = tags.filter(t => t.featured);
 
