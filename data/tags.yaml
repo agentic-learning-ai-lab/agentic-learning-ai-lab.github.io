@@ -12,11 +12,11 @@
 #   cluster       — group on the /tags/ index and the tag-page side list.
 #                   values: learning-paradigms | models-and-representations |
 #                           data-and-applications | perspectives
-#   featured      — true → surfaces on the home page card grid (9 total).
+#   featured      — true → surfaces on the home page card grid (6 total).
 #                   false → still gets a listing page + chip appearance
 #                   on paper cards, just no home-page real estate.
 
-# ─── Featured (9) ────────────────────────────────────────────────
+# ─── Featured (6) ────────────────────────────────────────────────
 
 - slug: world-models
   label: World Models
@@ -37,27 +37,6 @@
   description: Learning from nonstationary streams without forgetting.
   monogram: CL
   cluster: learning-paradigms
-  featured: true
-
-- slug: test-time-learning
-  label: Test-time Learning
-  description: Adapting models during inference.
-  monogram: TT
-  cluster: learning-paradigms
-  featured: true
-
-- slug: in-context-learning
-  label: In-Context Learning
-  description: Learning from examples within a model's context.
-  monogram: IC
-  cluster: learning-paradigms
-  featured: true
-
-- slug: llm-reasoning
-  label: LLM Reasoning
-  description: Reasoning, verification, and calibration in language models.
-  monogram: LR
-  cluster: data-and-applications
   featured: true
 
 - slug: creative-exploration
@@ -81,7 +60,28 @@
   cluster: data-and-applications
   featured: true
 
-# ─── Non-featured (11) ───────────────────────────────────────────
+# ─── Non-featured (14) ───────────────────────────────────────────
+
+- slug: test-time-learning
+  label: Test-time Learning
+  description: Adapting models during inference.
+  monogram: TT
+  cluster: learning-paradigms
+  featured: false
+
+- slug: in-context-learning
+  label: In-Context Learning
+  description: Learning from examples within a model's context.
+  monogram: IC
+  cluster: learning-paradigms
+  featured: false
+
+- slug: llm-reasoning
+  label: LLM Reasoning
+  description: Reasoning, verification, and calibration in language models.
+  monogram: LR
+  cluster: data-and-applications
+  featured: false
 
 - slug: meta-learning
   label: Meta-Learning
