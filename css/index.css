@@ -418,7 +418,7 @@ header>.collapsible-header {
 /* Zoom the illustration in and pin its left edge, so the soft gradient
    on the image's left side stays behind the text and the clouds and
    robots sit to the right. */
-.hero-home picture img { object-position: left center; transform: scale(1.3); transform-origin: 0% 55%; }
+.hero-home picture img { object-position: left center; transform: scale(1.3); transform-origin: 0% 40%; }
 /* Narrower banners show more of the image's width, so zoom further to
    keep the gradient under the (relatively wider) text block. */
 @media (max-width: 1279px) { .hero-home picture img { transform: scale(1.7); } }
@@ -430,12 +430,12 @@ header>.collapsible-header {
     .hero-home .text-overlay { top: 56%; }
 }
 @media (min-width: 1024px) and (max-width: 1279px) {
-    .hero-home .text-overlay { top: 53%; }
+    .hero-home .text-overlay { top: 55%; }
 }
 @media (max-width: 1023px) {
     /* Below lg the overlay is bottom-anchored (see the tablet rule
        further down); lift it off the bottom edge a little. */
-    .hero-home .text-overlay { bottom: 44px; }
+    .hero-home .text-overlay { bottom: 38px; }
 }
 
 /* In dark mode the hero image itself is dimmed via the universal
