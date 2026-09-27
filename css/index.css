@@ -1516,10 +1516,10 @@ section {
 }
 
 /* Rows on /tags/ index. Full-width clickable region with monogram +
-   label + description + count. Description truncates on narrow. */
+   label + description. */
 .tag-index-row {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 1fr;
     align-items: center;
     gap: 16px;
     padding: 10px 12px;
@@ -1548,16 +1548,6 @@ section {
     font-size: 0.85rem;
     line-height: 1.35;
     margin-top: 2px;
-}
-.tag-index-row__count {
-    color: var(--fg-muted);
-    font-family: var(--mono);
-    font-size: 0.85rem;
-    padding: 2px 10px;
-    border: 1px solid var(--border-soft);
-    border-radius: var(--radius-sm);
-    min-width: 32px;
-    text-align: center;
 }
 
 /* Home page "Themes" grid — 9 featured tag cards. 3×3 desktop,
@@ -1588,21 +1578,6 @@ section {
     transition: border-color 150ms ease;
 }
 .tag-card:hover { border-color: var(--border); }
-.tag-card__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.tag-card__count {
-    color: var(--fg-muted);
-    font-family: var(--mono);
-    font-size: 0.85rem;
-    padding: 2px 10px;
-    border: 1px solid var(--border-soft);
-    border-radius: var(--radius-sm);
-    min-width: 32px;
-    text-align: center;
-}
 .tag-card__label {
     font-size: 1.25rem;
     font-weight: 500;
