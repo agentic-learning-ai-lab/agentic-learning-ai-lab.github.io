@@ -14,9 +14,10 @@
 #   featured      — true → surfaces on the home page card grid (9 total).
 #                   false → still gets a listing page + chip appearance
 #                   on paper cards, just no home-page real estate.
-#   related       — 2–3 sibling tag slugs shown on /tags/<slug>/ as
+#   related       — 1–3 sibling tag slugs shown on /tags/<slug>/ as
 #                   "related tags". Curated (co-occurrence over 25
-#                   papers is too noisy). Optional.
+#                   papers is too noisy). Optional. May be asymmetric
+#                   where the reverse direction isn't a natural sibling.
 
 # ─── Featured (9) ────────────────────────────────────────────────
 
@@ -26,7 +27,7 @@
   monogram: WM
   cluster: learning-paradigms
   featured: true
-  related: [test-time-learning, self-supervised-learning, human-like-learning]
+  related: [test-time-learning, self-supervised-learning, hierarchical-abstraction]
 
 - slug: egocentric-video
   label: Egocentric Video
@@ -42,7 +43,7 @@
   monogram: CL
   cluster: learning-paradigms
   featured: true
-  related: [egocentric-video, self-supervised-learning, human-like-learning]
+  related: [test-time-learning, egocentric-video, self-supervised-learning]
 
 - slug: test-time-learning
   label: Test-time Learning
@@ -90,9 +91,9 @@
   monogram: FC
   cluster: content-and-applications
   featured: true
-  related: [llm-reasoning]
+  related: [llm-reasoning, test-time-learning]
 
-# ─── Non-featured (8) ────────────────────────────────────────────
+# ─── Non-featured (10) ───────────────────────────────────────────
 
 - slug: meta-learning
   label: Meta-Learning
@@ -100,7 +101,7 @@
   monogram: ML
   cluster: learning-paradigms
   featured: false
-  related: [in-context-learning, concept-learning]
+  related: [in-context-learning, concept-learning, creative-exploration]
 
 - slug: multimodal-learning
   label: Multimodal Learning
@@ -140,7 +141,7 @@
   monogram: RL
   cluster: learning-paradigms
   featured: false
-  related: [world-models]
+  related: [local-learning, world-models]
 
 - slug: concept-learning
   label: Concept Learning
@@ -148,7 +149,7 @@
   monogram: CN
   cluster: content-and-applications
   featured: false
-  related: [meta-learning, creative-exploration]
+  related: [meta-learning, creative-exploration, hierarchical-abstraction]
 
 - slug: multi-agent
   label: Multi-Agent
@@ -156,7 +157,7 @@
   monogram: MA
   cluster: special
   featured: false
-  related: [egocentric-video]
+  related: [llm-reasoning, egocentric-video]
 
 - slug: ai-safety
   label: AI Safety
@@ -172,4 +173,4 @@
   monogram: PA
   cluster: special
   featured: false
-  related: [human-like-learning]
+  related: [human-like-learning, continual-learning]

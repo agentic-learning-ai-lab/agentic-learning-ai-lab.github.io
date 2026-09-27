@@ -247,7 +247,9 @@ change specifically, staging is worth the extra step.
 
 ## Finalized vocabulary (2026-09-26)
 
-Locked in this doc. 17 tags total, 9 featured.
+Locked in this doc. **19 tags total, 9 featured, 10 non-featured.**
+`hierarchical-abstraction` and `local-learning` were added during
+the 25-paper backfill (see amendment note at end of section).
 
 ### Featured (9) — surface on the home card grid
 
@@ -263,18 +265,35 @@ Locked in this doc. 17 tags total, 9 featured.
 | `human-like-learning` | Human-like Learning | HL | Content & Applications | SAYCam, BabyCL, Self Requires Learning, Memory Storyboard |
 | `forecasting` | Forecasting | FC | Content & Applications | |
 
-### Non-featured (8) — listed at `/tags/`, appear on paper chips, no home card
+### Non-featured (10) — listed at `/tags/`, appear on paper chips, no home card
 
 | Slug | Label | Monogram | Cluster |
 |---|---|---|---|
 | `meta-learning` | Meta-Learning | ML | Learning Paradigms |
 | `multimodal-learning` | Multimodal Learning | MM | Content & Applications |
 | `self-supervised-learning` | Self-Supervised Learning | SS | Learning Paradigms |
+| `hierarchical-abstraction` | Hierarchical Abstraction | HA | Learning Paradigms |
+| `local-learning` | Local Learning | LL | Learning Paradigms |
 | `reinforcement-learning` | Reinforcement Learning | RL | Learning Paradigms |
 | `concept-learning` | Concept Learning | CN | Content & Applications |
 | `multi-agent` | Multi-Agent | MA | Special |
 | `ai-safety` | AI Safety | AS | Special |
 | `philosophy-of-ai` | Philosophy of AI | PA | Special |
+
+**Amendment (2026-09-26, during backfill):** two tags added on
+review of the paper corpus:
+
+- `hierarchical-abstraction` — multiple papers work at more than
+  one temporal or representational scale (Midway Network's dense
+  + pooled hierarchy, Memory Storyboard's short/long-term memory,
+  Discrete JEPA's token-over-pixel abstraction, Temporal
+  Straightening's temporal hierarchy, CoLLEGe's concept-over-examples).
+  Without this tag, "hierarchy" would leak into `world-models`
+  and `concept-learning`, blurring both.
+- `local-learning` — carves out the backprop-free / biologically-
+  plausible learning family (ARQ). Currently 1 paper but a
+  standing lab direction; kept in vocabulary to avoid needing a
+  vocabulary PR when the next one lands.
 
 ### Clusters (define the color system in Phase 2)
 
