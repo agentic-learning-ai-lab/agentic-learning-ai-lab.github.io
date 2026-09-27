@@ -1516,29 +1516,11 @@ section {
     border-radius: var(--radius-sm);
 }
 
-/* Rows on /tags/ index. Full-width clickable region: monogram + label. */
-.tag-index-row {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: 16px;
-    padding: 10px 12px;
-    border: 1px solid transparent;
-    border-radius: var(--radius-md);
-    color: var(--fg);
-    text-decoration: none;
-    transition: background 150ms ease, border-color 150ms ease;
-}
-.tag-index-row:hover {
-    background: var(--card-bg);
-    border-color: var(--border-soft);
-}
-.tag-index-row__label {
-    font-family: var(--mono);
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--fg);
-}
+
+/* /tags/ index rows reuse the person-page paper row (.search-result-item);
+   center the monogram against the two-line text instead of top-aligning
+   it like a thumbnail. */
+.tag-index-item__content { align-items: center; }
 
 /* Home page "Research Topics" grid — 9 featured tag tiles. 3×3 desktop,
    2 cols tablet, 1 col mobile. */

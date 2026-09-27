@@ -17,6 +17,7 @@
         </h3>
         <div class="section-underline tw-my-4"></div>
 
+        <div class="tw-flex-col sm:tw-w-[100%] md:tw-w-[80%] lg:tw-w-[60%] xl:tw-w-[50%]">
         {{#each clusters}}
         <div class="tw-mt-12">
             <h4 class="tw-text-xl tw-font-medium tw-text-[var(--fg-muted)] max-md:tw-text-lg">
@@ -24,21 +25,23 @@
             </h4>
             <div class="section-underline tw-my-3"></div>
 
-            <ul class="tw-mt-4 tw-flex tw-flex-col tw-gap-3">
+            <div class="tw-mt-4 tw-flex tw-flex-col tw-gap-y-2">
                 {{#each tags}}
-                <li>
-                    <a href="/tags/{{slug}}/" class="tag-index-row">
+                <a href="/tags/{{slug}}/" class="search-result-item person-paper-item">
+                    <div class="search-result-content tag-index-item__content">
                         <span class="tag-monogram-badge tag-monogram-badge--sm">{{monogram}}</span>
-                        <span class="tag-card__body">
-                            <span class="tag-index-row__label">{{label}}</span>
-                            <span class="tag-card__desc">{{description}}</span>
-                        </span>
-                    </a>
-                </li>
+                        <div class="search-result-text">
+                            <div class="search-result-title">{{label}}</div>
+                            <div class="search-result-subtitle">{{description}}</div>
+                        </div>
+                        <i class="bi bi-arrow-right search-result-arrow"></i>
+                    </div>
+                </a>
                 {{/each}}
-            </ul>
+            </div>
         </div>
         {{/each}}
+        </div>
     </section>
 
     {{> footer}}
