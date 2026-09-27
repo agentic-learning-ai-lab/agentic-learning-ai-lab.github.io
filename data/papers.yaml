@@ -15,6 +15,11 @@
   research_areas:
     - learning-from-visual-experience
     - adaptive-agents-and-foundation-models
+  tags:
+    - world-models
+    - test-time-learning
+    - self-supervised-learning
+    - continual-learning
   date: 2026-07-02T00:00:00.000Z
   journal: CoRR
   is_recent: true
@@ -34,6 +39,13 @@
   enable_full_paper: true
   research_areas:
     - learning-from-visual-experience
+  tags:
+    - human-like-learning
+    - continual-learning
+    - egocentric-video
+    - multimodal-learning
+    - concept-learning
+    - self-supervised-learning
   date: 2026-06-03T00:00:00.000Z
   journal: CoRR
   is_recent: true
@@ -53,6 +65,9 @@
   enable_full_paper: true
   research_areas:
     - adaptive-agents-and-foundation-models
+  tags:
+    - forecasting
+    - llm-reasoning
   date: 2026-05-26T00:00:00.000Z
   journal: 'CoRR'
   is_recent: true
@@ -68,6 +83,10 @@
   enable_full_paper: true
   research_areas:
     - concept-learning-and-abstraction
+  tags:
+    - creative-exploration
+    - meta-learning
+    - concept-learning
   date: 2026-05-15T00:00:00.000Z
   journal: 'CoRR'
   is_recent: true
@@ -84,6 +103,11 @@
   enable_full_paper: true
   research_areas:
     - adaptive-agents-and-foundation-models
+  tags:
+    - philosophy-of-ai
+    - continual-learning
+    - human-like-learning
+    - world-models
   date: 2026-04-08T00:00:00.000Z
   journal: 'PhilPapers preprint'
   is_recent: true
@@ -106,6 +130,11 @@
   enable_full_paper: true
   research_areas:
     - learning-from-visual-experience
+  tags:
+    - world-models
+    - self-supervised-learning
+    - human-like-learning
+    - hierarchical-abstraction
   date: 2026-3-12T00:00:00.000Z
   journal: The 43rd International Conference on Machine Learning (ICML 2026)
   is_recent: true
@@ -127,6 +156,11 @@
   enable_full_paper: true
   research_areas:
     - adaptive-agents-and-foundation-models
+  tags:
+    - egocentric-video
+    - multi-agent
+    - llm-reasoning
+    - multimodal-learning
   date: 2026-3-10T00:00:00.000Z
   journal: CoRR
   is_recent: false
@@ -146,6 +180,9 @@
   project_page: true
   research_areas:
     - adaptive-agents-and-foundation-models
+  tags:
+    - llm-reasoning
+    - multi-agent
   date: 2025-12-2T00:00:00.000Z
   journal: CoRR
   is_recent: false
@@ -164,6 +201,10 @@
   enable_full_paper: true
   research_areas:
     - concept-learning-and-abstraction
+  tags:
+    - in-context-learning
+    - llm-reasoning
+    - test-time-learning
   date: 2025-10-09T00:00:00.000Z
   journal: CoRR
   is_recent: true
@@ -181,6 +222,9 @@
   enable_full_paper: true
   research_areas:
     - adaptive-agents-and-foundation-models
+  tags:
+    - reinforcement-learning
+    - local-learning
   date: 2025-10-08T00:00:00.000Z
   journal: The 14th International Conference on Learning Representations (ICLR 2026)
   is_recent: true
@@ -197,6 +241,11 @@
   project_page: true
   research_areas:
     - learning-from-visual-experience
+  tags:
+    - self-supervised-learning
+    - world-models
+    - hierarchical-abstraction
+    - egocentric-video
   date: 2025-10-07T00:00:00.000Z
   journal: The 14th International Conference on Learning Representations (ICLR 2026)
   is_recent: false
@@ -221,6 +270,11 @@
   research_areas:
     - learning-from-visual-experience
     - adaptive-agents-and-foundation-models
+  tags:
+    - egocentric-video
+    - llm-reasoning
+    - continual-learning
+    - multimodal-learning
   date: 2025-08-21T00:00:00.000Z
   journal: CoRR
   is_recent: false
@@ -240,6 +294,10 @@
   research_areas:
     - adaptive-agents-and-foundation-models
     - concept-learning-and-abstraction
+  tags:
+    - in-context-learning
+    - test-time-learning
+    - llm-reasoning
   date: 2025-07-06T00:00:00.000Z
   journal: The 43rd International Conference on Machine Learning (ICML 2026)
   is_recent: true
@@ -260,6 +318,10 @@
   permalink: discrete-jepa
   research_areas:
     - concept-learning-and-abstraction
+  tags:
+    - self-supervised-learning
+    - concept-learning
+    - hierarchical-abstraction
   date: 2025-06-22T00:00:00.000Z
   journal: CoRR
   is_recent: false
@@ -281,6 +343,8 @@
   permalink: replay-can-provably-increase-forgetting
   research_areas:
     - learning-from-visual-experience
+  tags:
+    - continual-learning
   date: 2025-06-04T00:00:00.000Z
   journal: The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)
   is_recent: false
@@ -298,6 +362,12 @@
   project_page: true
   research_areas:
     - learning-from-visual-experience
+  tags:
+    - continual-learning
+    - egocentric-video
+    - self-supervised-learning
+    - human-like-learning
+    - hierarchical-abstraction
   date: 2025-01-21T00:00:00.000Z
   journal: The Fourth Conference on Lifelong Learning Agents (CoLLAs 2025)
   is_recent: false
@@ -316,6 +386,9 @@
   project_page: true
   research_areas:
     - adaptive-agents-and-foundation-models
+  tags:
+    - forecasting
+    - llm-reasoning
   date: 2024-11-13T00:00:00.000Z
   journal: The 42nd International Conference on Machine Learning (ICML 2025)
   is_recent: false
@@ -336,6 +409,9 @@
   project_page: true
   research_areas:
     - learning-from-visual-experience
+  tags:
+    - self-supervised-learning
+    - egocentric-video
   date: 2024-08-20T00:00:00.000Z
   journal: The 13th International Conference on Learning Representations (ICLR 2025)
   is_recent: false
@@ -354,6 +430,9 @@
   project_page: true
   research_areas:
     - concept-learning-and-abstraction
+  tags:
+    - creative-exploration
+    - concept-learning
   date: 2024-08-05T00:00:00.000Z
   journal: The 18th European Conference on Computer Vision (ECCV 2024)
   is_recent: false
@@ -373,6 +452,9 @@
   permalink: osiris
   research_areas:
     - learning-from-visual-experience
+  tags:
+    - continual-learning
+    - self-supervised-learning
   date: 2024-04-29T00:00:00.000Z
   journal: The Third Conference on Lifelong Learning Agents (CoLLAs 2024)
   is_recent: false
@@ -392,6 +474,12 @@
   research_areas:
     - adaptive-agents-and-foundation-models
     - concept-learning-and-abstraction
+  tags:
+    - concept-learning
+    - meta-learning
+    - in-context-learning
+    - llm-reasoning
+    - hierarchical-abstraction
   date: 2024-03-22T00:00:00.000Z
   journal: The First Conference on Language Modeling (COLM 2024)
   is_recent: false
@@ -410,6 +498,9 @@
   permalink: anticipatory-recovery
   research_areas:
     - adaptive-agents-and-foundation-models
+  tags:
+    - continual-learning
+    - test-time-learning
   date: 2024-03-14T00:00:00.000Z
   journal: Advances in Neural Information Processing Systems 37 (NeurIPS 2024)
   is_recent: false
@@ -431,6 +522,10 @@
   permalink: video-ssl-from-child
   research_areas:
     - learning-from-visual-experience
+  tags:
+    - human-like-learning
+    - egocentric-video
+    - self-supervised-learning
   date: 2024-02-01T00:00:00.000Z
   journal: The 46th Annual Meeting of the Cognitive Science Society (CogSci 2024)
   is_recent: false
@@ -451,6 +546,10 @@
   permalink: learning-forgetting-llms
   research_areas:
     - adaptive-agents-and-foundation-models
+  tags:
+    - ai-safety
+    - continual-learning
+    - llm-reasoning
   date: 2023-12-20T00:00:00.000Z
   journal: The 41st International Conference on Machine Learning (ICML 2024)
   is_recent: false
@@ -470,6 +569,10 @@
   research_areas:
     - learning-from-visual-experience
     - adaptive-agents-and-foundation-models
+  tags:
+    - egocentric-video
+    - llm-reasoning
+    - multimodal-learning
   date: 2023-12-07T00:00:00.000Z
   journal: CoRR
   is_recent: false
