@@ -1556,29 +1556,16 @@ section {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 96px;
-    height: 96px;
+    width: 40px;
+    height: 40px;
     flex-shrink: 0;
     background: var(--badge-bg);
     color: var(--badge-fg);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     font-family: var(--mono);
-    font-size: 2.25rem;
+    font-size: 0.95rem;
     font-weight: 500;
     letter-spacing: 0.02em;
-}
-@media (max-width: 640px) {
-    .tag-monogram-badge {
-        width: 64px;
-        height: 64px;
-        font-size: 1.5rem;
-    }
-}
-.tag-monogram-badge--sm {
-    width: 40px;
-    height: 40px;
-    font-size: 0.95rem;
-    border-radius: var(--radius-sm);
 }
 
 

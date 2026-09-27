@@ -325,18 +325,12 @@ function parseDocuments() {
     // papers.yaml order (newest first).
     const papersByTag = new Map(tags.map(t => [t.slug, []]));
     for (const p of papers) {
-        for (const s of (p.tags || [])) papersByTag.get(s)?.push(p);
+        for (const s of new Set(p.tags || [])) papersByTag.get(s)?.push(p);
     }
     const tagsBySlug = new Map(tags.map(t => [t.slug, t]));
     // Cluster grouping for /tags/ and the tag-page side list; tags.yaml
     // order within each cluster (curator intent).
-    const clusterLabels = {
-        'learning-paradigms': 'Learning Paradigms',
-        'models-and-representations': 'Models & Representations',
-        'data-and-applications': 'Data & Applications',
-        'perspectives': 'Perspectives',
-    };
-    const tag_clusters = Object.entries(clusterLabels).map(([key, label]) => ({
+    const tag_clusters = Object.entries(require('./tag_clusters')).map(([key, label]) => ({
         key, label, tags: tags.filter(t => t.cluster === key),
     })).filter(c => c.tags.length > 0);
     const featured_tags = tags.filter(t => t.featured);
