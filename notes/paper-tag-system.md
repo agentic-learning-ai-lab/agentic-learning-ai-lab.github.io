@@ -98,16 +98,19 @@ Home-page cards need per-tag visual anchors — some graphic/icon that
 gives each tag a distinct character. Three options on the table, to be
 picked once the tag vocab is settled:
 
-- **Monogram** — colored circle with 1–2 letters. Cheapest, scales
-  automatically as new tags land.
+- **Monogram** — colored circle with 1–2 letters (e.g., **WM** for
+  World Models). Cheapest, scales automatically as new tags land.
 - **Bootstrap icon per tag** — pick one bi-* per tag. Expressive but
   can look clip-arty without careful curation.
 - **Custom SVG per tag** — bespoke glyph in the same drawing tradition
   as the Research Ecosystems icons. Highest polish; ~20 min per tag.
 
-Decision waits until the tag list is locked (drawing glyphs before
-locking vocabulary invites rework). In the meantime, Phase 1 can ship
-with monograms as a placeholder that's easy to upgrade later.
+**Decision: monogram badges ship only on `dev`. The `main` cutover is
+gated on Phase 2 visuals.** Reason: monograms as v1 read "in progress"
+on a lab site's front door. Better to ship a coherent visual system
+once, than ship a placeholder to prod and negotiate its removal later.
+Custom SVG per featured tag is the most likely Phase 2 outcome
+(9 featured tags × ~20 min = ~3 hrs of drawing).
 
 ## Where tags surface
 
@@ -141,12 +144,32 @@ Auto-generated (like `/areas/<slug>/` used to be). Contents:
 - Related tags — top N tags that co-occur with this one across the
   corpus, ranked by co-occurrence count.
 
+### Also in Phase 1
+
+- **Root index at `/tags/`** — mirrors the old `/areas/` root; lists
+  every tag (label + paper count) grouped by cluster.
+- **`sitemap.xml`** — add `/tags/<slug>/` entries and `/tags/` itself
+  so Google discovers them at Phase 1, not later.
+- **Search index integration** — fold tags into
+  `assets/search-index.json`. If tags are the primary navigation,
+  site search *must* return tag hits from Phase 1, not Phase 3.
+- **Related tags on `/tags/<slug>/` pages** — hand-curated list of
+  2–3 related-tag slugs in `data/tags.yaml` per entry. Co-occurrence
+  ranking over a 25-paper corpus is too noisy (ties + tiny counts);
+  curate now, revisit when the corpus is larger.
+- **A11y acceptance criteria for Phase 1:**
+  - Chip rows on paper cards + detail pages: keyboard-focusable, real
+    focus rings, `aria-label` per chip.
+  - Home grid: arrow-key nav across cards (not just tab-per-link).
+  - `/tags/<slug>/` pages announce the tag label in `<title>` and
+    `<h1>`, not just the slug.
+
 ### Not in Phase 1
 
-- Multi-select filter chip bar on `/research/` (Phase 2).
-- Search index integration (Phase 3 — tags fed into
-  `assets/search-index.json`).
-- `llms.txt` per-paper tags (Phase 3).
+- Multi-select filter chip bar on `/research/` (Phase 2 — visual
+  upgrade lands in the same phase since both are UX work atop the
+  Phase 1 machinery).
+- `llms.txt` per-paper tags (Phase 3 — polish).
 - `build/lint_tags.js` hygiene script (Phase 3, or when the vocab
   grows past what a human can eyeball).
 
@@ -157,14 +180,44 @@ Auto-generated (like `/areas/<slug>/` used to be). Contents:
 2. Retire the `research_areas` field on papers. Delete
    `data/research_areas.yaml`.
 3. Remove the `/areas/` route entirely from templates and build
-   scripts.
-4. Add 301 redirects from each `/areas/<slug>/` to the closest
-   `/tags/<slug>/` (or `/research/` if there's no good single target).
-5. Update the Handlebars `research_area_tabs` partial or delete it.
+   scripts. Delete `out/areas/` at cutover so old paths 404 back to
+   the CF `_redirects` rules below.
+4. Update `person.hbs` / `person_paper.hbs`: if they render
+   `research_areas` labels on paper listings, retire that too. Same
+   for `research_tab.hbs`, `paper.hbs`, and the search-index
+   generator — audit for `research_areas` references in Phase 1.
+5. Add 301 redirects via `out/_redirects` (Cloudflare Pages picks the
+   file up at deploy time — same file that already handles legacy
+   `/<slug>/` renames):
+
+   | From | To |
+   | --- | --- |
+   | `/areas/learning-from-visual-experience/` | `/tags/egocentric-video/` |
+   | `/areas/adaptive-agents-and-foundation-models/` | `/tags/in-context-learning/` |
+   | `/areas/concept-learning-and-abstraction/` | `/tags/concept-learning/` |
+
+   These are lossy — each area fans out to 4–6 tags. The redirect
+   picks the single closest primary tag rather than dropping viewers
+   at `/research/`, on the theory that "the one page you probably
+   wanted" beats "the whole catalog" for inbound-link recovery.
+6. Update the Handlebars `research_area_tabs` partial or delete it.
 
 Inbound-link check: search external references (Google Scholar, DBLP,
 CV mentions) for `agenticlearning.ai/areas/` before final cutover.
 Redirects handle most.
+
+### URL slug vs UI copy
+
+The URL space is `/tags/<slug>/`, the yaml field is `tags:`, the
+build is `build/lint_tags.js`. These are the machine terms and are
+permanent (permalinks are forever).
+
+The **UI copy** on the home page — the section title above the card
+grid — is free to be whatever reads best in context ("Themes",
+"Research Threads", "Focus"). Precedent: GitHub URL is `/topics` but
+their nav copy says "Topics" too; we're deliberately letting the two
+diverge because the UI term is discoverable-through-reading and the
+URL is deliberately the technical one.
 
 ## Staging via `dev`
 
@@ -180,19 +233,71 @@ touching production. Workflow:
 4. Iterate on `dev` until the whole system reads right — tag vocab,
    home cards, per-tag pages, redirects.
 5. When settled, single squash-merge `dev` → `main` = production
-   launch.
+   launch. **The Phase 1 `dev`→`main` cutover is gated on Phase 2
+   visuals landing on `dev` first.** Monogram placeholders never
+   ship to production; they exist only as a `dev`-side scaffold.
+6. **Rebase `dev` on `main` weekly** while the migration is
+   in-flight. Ordinary content PRs (new papers, people entries) keep
+   landing on `main` on their own cadence; `dev` needs to pull those
+   in so the eventual cutover is a clean fast-forward, not a fight.
 
 This is a deliberate revival of the `dev` branch, which recent PRs
 have bypassed (see `project_pr_workflow_drift` in memory). For this
 change specifically, staging is worth the extra step.
 
+## Finalized vocabulary (2026-09-26)
+
+Locked in this doc. 17 tags total, 9 featured.
+
+### Featured (9) — surface on the home card grid
+
+| Slug | Label | Monogram | Cluster | Notes |
+|---|---|---|---|---|
+| `world-models` | World Models | WM | Learning Paradigms | Absorbs JEPA (AdaJEPA, Discrete JEPA, Temporal Straightening, Midway Network) |
+| `egocentric-video` | Egocentric Video | EV | Content & Applications | SAYCam-adjacent + video streams |
+| `continual-learning` | Continual Learning | CL | Learning Paradigms | Absorbs Streaming Learning |
+| `test-time-learning` | Test-time Learning | TT | Learning Paradigms | |
+| `in-context-learning` | In-Context Learning | IC | Learning Paradigms | |
+| `llm-reasoning` | LLM Reasoning | LR | Content & Applications | |
+| `creative-exploration` | Creative Exploration | CE | Content & Applications | Broader than "creativity + generation" — open-ended planning, novelty search |
+| `human-like-learning` | Human-like Learning | HL | Content & Applications | SAYCam, BabyCL, Self Requires Learning, Memory Storyboard |
+| `forecasting` | Forecasting | FC | Content & Applications | |
+
+### Non-featured (8) — listed at `/tags/`, appear on paper chips, no home card
+
+| Slug | Label | Monogram | Cluster |
+|---|---|---|---|
+| `meta-learning` | Meta-Learning | ML | Learning Paradigms |
+| `multimodal-learning` | Multimodal Learning | MM | Content & Applications |
+| `self-supervised-learning` | Self-Supervised Learning | SS | Learning Paradigms |
+| `reinforcement-learning` | Reinforcement Learning | RL | Learning Paradigms |
+| `concept-learning` | Concept Learning | CN | Content & Applications |
+| `multi-agent` | Multi-Agent | MA | Special |
+| `ai-safety` | AI Safety | AS | Special |
+| `philosophy-of-ai` | Philosophy of AI | PA | Special |
+
+### Clusters (define the color system in Phase 2)
+
+- **Learning Paradigms** — the methods lens.
+- **Content & Applications** — the subject-matter lens.
+- **Special** — cross-cutting concerns that don't fit either.
+
+## Author workflow
+
+When adding a new paper:
+1. Author picks tags from the approved vocabulary in `data/tags.yaml`.
+2. If the paper genuinely needs a new tag, author opens a
+   `data/tags.yaml` PR alongside the paper PR (or as a separate
+   pre-req PR). New tags land through review, not free-form.
+3. `build/lint_tags.js` (Phase 3) will fail the build on unknown
+   tags. Before that lands, PR review is the enforcement mechanism.
+4. Order of tags in `papers.yaml` matters — the first 3 are what
+   surface on the paper card. Curator-controlled per paper.
+
 ## Rollout phases
 
-**Phase 0 — Alignment (this doc + tag vocabulary)**
-- Land this doc.
-- Draft `data/tags.yaml` — ~15–20 slugs with labels + descriptions,
-  8–10 marked `featured: true`.
-- Curator conversation to lock names + featured set.
+**Phase 0 — Alignment**
+- ✅ Land this doc with the finalized vocabulary above.
 
 **Phase 1 — Ship the machinery on `dev`**
 - Add `tags: [...]` to all 25 papers.
@@ -224,16 +329,7 @@ change specifically, staging is worth the extra step.
 
 - **Section title on the home page.** "Themes"? "Research Threads"?
   "Focus"? Something else? Needs a name that reads as more than
-  "tags."
-- **Cluster grouping?** Do we group featured tags visually (Methods /
-  Systems / Applications style)? Recommendation: no in Phase 1 — flat
-  grid reads cleaner. Revisit if the grid feels unstructured.
-- **How many featured tags?** 8 is tight, 12 is generous. Depends on
-  whether the vocab naturally splits into ~10 canonical themes.
+  "tags." URL space (`/tags/`) is locked regardless.
 - **What happens when a paper has 0 featured tags?** It still appears
   under all its non-featured tag pages, just not featured on the home.
   Fine as long as the paper listing on `/research/` shows tags.
-- **The word "Tags."** Do we ever call them tags in-app, or is it
-  purely the developer word? For UI copy, I'd avoid the word "tags"
-  (it reads too technical) and use the section title instead
-  ("Themes" / "Threads" / whatever we pick).
