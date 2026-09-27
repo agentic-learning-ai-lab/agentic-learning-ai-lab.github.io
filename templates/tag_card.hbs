@@ -1,0 +1,11 @@
+{{!-- Featured tag card for the home page grid. Expects a tag record
+      from data/tags.yaml with .paperCount attached (populated in
+      parseDocuments). Whole card is the click target. --}}
+<a href="/tags/{{slug}}/" class="tag-card">
+    <div class="tag-card__head">
+        <span class="tag-monogram-badge tag-monogram-badge--sm">{{monogram}}</span>
+        <span class="tag-card__count">{{paperCount}}</span>
+    </div>
+    <h4 class="tag-card__label">{{label}}</h4>
+    <p class="tag-card__desc">{{description}}</p>
+</a>
