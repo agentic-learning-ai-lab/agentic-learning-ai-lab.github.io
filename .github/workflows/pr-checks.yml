@@ -44,6 +44,13 @@ jobs:
       - name: Lint bibtex / papers.yaml alignment
         run: npm run lint:bibtex
 
+      # Assert every paper tag slug exists in data/tags.yaml. Catches
+      # typos that would silently drop chips + break /tags/<slug>/
+      # generation. Same check runs as scripts/checks/10_tag_slugs.js
+      # at pre-commit. See build/lint_tags.js.
+      - name: Lint tag vocabulary
+        run: npm run lint:tags
+
       # Verifies every cdn.agenticlearning.ai URL baked into the
       # rendered HTML actually resolves. Catches sync:r2 skipping a
       # file, or stale/typo'd manifest entries that would 404 in prod.

@@ -31,6 +31,7 @@
     "pull:r2": "node ./build/pull_from_r2.js",
     "fix:r2:mime": "node ./build/fix_r2_content_types.js",
     "lint:bibtex": "node ./build/lint_bibtex.js",
+    "lint:tags": "node ./build/lint_tags.js",
     "prepare": "husky",
     "upload": "node ./build/upload.js",
     "purge:cdn": "node ./build/purge_cdn_cache.js"
