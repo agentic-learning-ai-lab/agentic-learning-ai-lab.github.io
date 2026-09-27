@@ -1,23 +1,19 @@
 # Paper tag vocabulary — controlled list.
 #
 # Adding a new tag: PR against this file. `papers.yaml` may reference
-# only slugs that appear here. `build/lint_tags.js` (Phase 3) will
-# enforce that automatically; until then PR review is the check.
+# only slugs that appear here; `build/lint_tags.js` enforces that (plus
+# the fields below) at pre-commit and in CI.
 #
 # Fields:
 #   slug          — kebab-case; drives /tags/<slug>/ URL. Forever.
 #   label         — human display name.
 #   description   — short noun phrase, shown on the tag page + og:description.
-#   monogram      — 1–2 letters shown in the home-card badge.
-#   cluster       — grouping for color-coding in Phase 2.
+#   monogram      — 1–2 letters shown in the tag badge.
+#   cluster       — section on the /tags/ index.
 #                   values: learning-paradigms | content-and-applications | special
 #   featured      — true → surfaces on the home page card grid (9 total).
 #                   false → still gets a listing page + chip appearance
 #                   on paper cards, just no home-page real estate.
-#   related       — 1–3 sibling tag slugs shown on /tags/<slug>/ as
-#                   "related tags". Curated (co-occurrence over 25
-#                   papers is too noisy). Optional. May be asymmetric
-#                   where the reverse direction isn't a natural sibling.
 
 # ─── Featured (9) ────────────────────────────────────────────────
 
@@ -27,7 +23,6 @@
   monogram: WM
   cluster: learning-paradigms
   featured: true
-  related: [test-time-learning, self-supervised-learning, hierarchical-abstraction]
 
 - slug: egocentric-video
   label: Egocentric Video
@@ -35,7 +30,6 @@
   monogram: EV
   cluster: content-and-applications
   featured: true
-  related: [human-like-learning, continual-learning, self-supervised-learning]
 
 - slug: continual-learning
   label: Continual Learning
@@ -43,7 +37,6 @@
   monogram: CL
   cluster: learning-paradigms
   featured: true
-  related: [test-time-learning, egocentric-video, self-supervised-learning]
 
 - slug: test-time-learning
   label: Test-time Learning
@@ -51,7 +44,6 @@
   monogram: TT
   cluster: learning-paradigms
   featured: true
-  related: [in-context-learning, world-models, continual-learning]
 
 - slug: in-context-learning
   label: In-Context Learning
@@ -59,7 +51,6 @@
   monogram: IC
   cluster: learning-paradigms
   featured: true
-  related: [test-time-learning, llm-reasoning, meta-learning]
 
 - slug: llm-reasoning
   label: LLM Reasoning
@@ -67,7 +58,6 @@
   monogram: LR
   cluster: content-and-applications
   featured: true
-  related: [in-context-learning, forecasting, ai-safety]
 
 - slug: creative-exploration
   label: Creative Exploration
@@ -75,7 +65,6 @@
   monogram: CE
   cluster: content-and-applications
   featured: true
-  related: [meta-learning, concept-learning]
 
 - slug: human-like-learning
   label: Human-like Learning
@@ -83,7 +72,6 @@
   monogram: HL
   cluster: content-and-applications
   featured: true
-  related: [egocentric-video, continual-learning, philosophy-of-ai]
 
 - slug: forecasting
   label: Forecasting
@@ -91,7 +79,6 @@
   monogram: FC
   cluster: content-and-applications
   featured: true
-  related: [llm-reasoning, test-time-learning]
 
 # ─── Non-featured (10) ───────────────────────────────────────────
 
@@ -101,7 +88,6 @@
   monogram: ML
   cluster: learning-paradigms
   featured: false
-  related: [in-context-learning, concept-learning, creative-exploration]
 
 - slug: multimodal-learning
   label: Multimodal Learning
@@ -109,7 +95,6 @@
   monogram: MM
   cluster: content-and-applications
   featured: false
-  related: [egocentric-video, concept-learning]
 
 - slug: self-supervised-learning
   label: Self-Supervised Learning
@@ -117,7 +102,6 @@
   monogram: SS
   cluster: learning-paradigms
   featured: false
-  related: [world-models, egocentric-video, continual-learning]
 
 - slug: hierarchical-abstraction
   label: Hierarchical Abstraction
@@ -125,7 +109,6 @@
   monogram: HA
   cluster: learning-paradigms
   featured: false
-  related: [concept-learning, world-models]
 
 - slug: local-learning
   label: Local Learning
@@ -133,7 +116,6 @@
   monogram: LL
   cluster: learning-paradigms
   featured: false
-  related: [reinforcement-learning, self-supervised-learning]
 
 - slug: reinforcement-learning
   label: Reinforcement Learning
@@ -141,7 +123,6 @@
   monogram: RL
   cluster: learning-paradigms
   featured: false
-  related: [local-learning, world-models]
 
 - slug: concept-learning
   label: Concept Learning
@@ -149,7 +130,6 @@
   monogram: CN
   cluster: content-and-applications
   featured: false
-  related: [meta-learning, creative-exploration, hierarchical-abstraction]
 
 - slug: multi-agent
   label: Multi-Agent
@@ -157,7 +137,6 @@
   monogram: MA
   cluster: special
   featured: false
-  related: [llm-reasoning, egocentric-video]
 
 - slug: ai-safety
   label: AI Safety
@@ -165,7 +144,6 @@
   monogram: AS
   cluster: special
   featured: false
-  related: [llm-reasoning, continual-learning]
 
 - slug: philosophy-of-ai
   label: Philosophy of AI
@@ -173,4 +151,3 @@
   monogram: PA
   cluster: special
   featured: false
-  related: [human-like-learning, continual-learning]

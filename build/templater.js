@@ -130,8 +130,7 @@ function doTemplating(input, output) {
     }
     else if (input === "tags.hbs") {
         // /tags/ root index. Group by cluster; within each cluster,
-        // keep tags.yaml order (curator intent). paperCount is already
-        // populated on each tag record by parseDocuments.
+        // keep tags.yaml order (curator intent).
         const clusterOrder = ['learning-paradigms', 'content-and-applications', 'special'];
         const clusterLabels = {
             'learning-paradigms': 'Learning Paradigms',
@@ -152,13 +151,11 @@ function doTemplating(input, output) {
             const output_new = output.replace("{{permalink}}", tag.slug);
             fs.mkdirSync(path.dirname(output_new), { recursive: true });
 
-            // Papers carrying this tag. Preserve papers.yaml ordering
-            // (newest first, matches /research/ listing convention).
-            const papers = documents.papers.filter(p =>
-                Array.isArray(p.tags) && p.tags.includes(tag.slug)
-            );
-
-            const ctx = { ...tag, papers };
+            const papers = documents.papersByTag.get(tag.slug) || [];
+            const allTags = documents.tags.map(t => ({
+                slug: t.slug, label: t.label, isCurrent: t.slug === tag.slug,
+            }));
+            const ctx = { ...tag, papers, allTags };
             fs.writeFileSync(output_new, template(ctx));
         }
     }
@@ -334,14 +331,12 @@ function parseDocuments() {
     }
     const recent_papers = papers.filter((p) => p['is_recent']);
 
-    // Tag lookup structures. Built once here so templater branches and
-    // Handlebars helpers don't each rebuild them. paperCount is
-    // computed on every tag record so both listing pages and home
-    // cards can render it without a helper.
-    for (const t of tags) {
-        t.paperCount = papers.filter(p =>
-            Array.isArray(p.tags) && p.tags.includes(t.slug)
-        ).length;
+    // Tag lookup structures, built once so templater branches and
+    // Handlebars helpers don't each rescan. papersByTag preserves
+    // papers.yaml order (newest first).
+    const papersByTag = new Map(tags.map(t => [t.slug, []]));
+    for (const p of papers) {
+        for (const s of (p.tags || [])) papersByTag.get(s)?.push(p);
     }
     const tagsBySlug = new Map(tags.map(t => [t.slug, t]));
     const featured_tags = tags.filter(t => t.featured);
@@ -355,7 +350,7 @@ function parseDocuments() {
         research_areas,
         papers, recent_papers,
         people, people_current, people_alumni, peopleMap,
-        tags, tagsBySlug, featured_tags,
+        tags, tagsBySlug, featured_tags, papersByTag,
     };
 }
 

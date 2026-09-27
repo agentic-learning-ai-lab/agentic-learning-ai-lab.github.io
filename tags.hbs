@@ -6,7 +6,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://agenticlearning.ai/tags/" />
     <meta property="og:image" content="{{cdnUrl '/assets/images/background/bg3.png'}}" />
-    {{> head description="Browse research at the Agentic Learning AI Lab by tag."}}
+    {{> head title="Tags" description="Browse research at the Agentic Learning AI Lab by tag."}}
 </head>
 <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[var(--bg)] tw-font-mono">
     {{> header}}
@@ -29,7 +29,7 @@
                 {{#each tags}}
                 <a href="/tags/{{slug}}/" class="search-result-item person-paper-item">
                     <div class="search-result-content tag-index-item__content">
-                        <span class="tag-monogram-badge tag-monogram-badge--sm">{{monogram}}</span>
+                        <span class="tag-monogram-badge tag-monogram-badge--sm" aria-hidden="true">{{monogram}}</span>
                         <div class="search-result-text">
                             <div class="search-result-title">{{label}}</div>
                             <div class="search-result-subtitle">{{description}}</div>
