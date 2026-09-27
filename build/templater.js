@@ -129,22 +129,8 @@ function doTemplating(input, output) {
         }
     }
     else if (input === "tags.hbs") {
-        // /tags/ root index. Group by cluster; within each cluster,
-        // keep tags.yaml order (curator intent).
-        const clusterOrder = ['learning-paradigms', 'content-and-applications', 'special'];
-        const clusterLabels = {
-            'learning-paradigms': 'Learning Paradigms',
-            'content-and-applications': 'Content & Applications',
-            'special': 'Special',
-        };
-        const clusters = clusterOrder.map(k => ({
-            key: k,
-            label: clusterLabels[k],
-            tags: documents.tags.filter(t => t.cluster === k),
-        })).filter(c => c.tags.length > 0);
-
         fs.mkdirSync(path.dirname(output), { recursive: true });
-        fs.writeFileSync(output, template({ clusters }));
+        fs.writeFileSync(output, template({ clusters: documents.tag_clusters }));
     }
     else if (input === "tag.hbs") {
         for (const tag of documents.tags) {
@@ -152,10 +138,13 @@ function doTemplating(input, output) {
             fs.mkdirSync(path.dirname(output_new), { recursive: true });
 
             const papers = documents.papersByTag.get(tag.slug) || [];
-            const allTags = documents.tags.map(t => ({
-                slug: t.slug, label: t.label, isCurrent: t.slug === tag.slug,
+            const navClusters = documents.tag_clusters.map(c => ({
+                label: c.label,
+                tags: c.tags.map(t => ({
+                    slug: t.slug, label: t.label, isCurrent: t.slug === tag.slug,
+                })),
             }));
-            const ctx = { ...tag, papers, allTags };
+            const ctx = { ...tag, papers, navClusters };
             fs.writeFileSync(output_new, template(ctx));
         }
     }
@@ -339,6 +328,16 @@ function parseDocuments() {
         for (const s of (p.tags || [])) papersByTag.get(s)?.push(p);
     }
     const tagsBySlug = new Map(tags.map(t => [t.slug, t]));
+    // Cluster grouping for /tags/ and the tag-page side list; tags.yaml
+    // order within each cluster (curator intent).
+    const clusterLabels = {
+        'learning-paradigms': 'Learning Paradigms',
+        'content-and-applications': 'Content & Applications',
+        'special': 'Special',
+    };
+    const tag_clusters = Object.entries(clusterLabels).map(([key, label]) => ({
+        key, label, tags: tags.filter(t => t.cluster === key),
+    })).filter(c => c.tags.length > 0);
     const featured_tags = tags.filter(t => t.featured);
 
     // Author name → person permalink. Consumed by the
@@ -350,7 +349,7 @@ function parseDocuments() {
         research_areas,
         papers, recent_papers,
         people, people_current, people_alumni, peopleMap,
-        tags, tagsBySlug, featured_tags, papersByTag,
+        tags, tagsBySlug, featured_tags, papersByTag, tag_clusters,
     };
 }
 

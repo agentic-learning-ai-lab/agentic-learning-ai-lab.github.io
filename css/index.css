@@ -1477,21 +1477,50 @@ section {
     border-color: var(--border);
 }
 
-.tag-chip--active,
-.tag-chip--active:hover {
+/* Tag-page side list of all topics (lg+), grouped by cluster. Quiet
+   text links; the current topic gets an accent rule. */
+.tag-aside {
+    width: 240px;
+    flex-shrink: 0;
+    margin-left: auto;
+    align-self: flex-start;
+    position: sticky;
+    top: 140px;
+}
+.tag-aside__group + .tag-aside__group { margin-top: 20px; }
+.tag-aside__heading {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--fg-muted);
+    margin-bottom: 6px;
+}
+.tag-aside__link {
+    display: block;
+    padding: 3px 0 3px 10px;
+    border-left: 2px solid transparent;
+    color: var(--fg-muted);
+    font-size: 0.88rem;
+    line-height: 1.4;
+    text-decoration: none;
+}
+.tag-aside__link:hover { color: var(--fg); }
+.tag-aside__link.is-current {
     color: var(--fg);
-    border-color: var(--accent);
-    background: var(--accent-soft);
+    border-left-color: var(--accent);
 }
-
-/* Tag-page topic bar: every tag as a chip, current one highlighted.
-   Wraps on narrow screens. */
-.tag-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 0;
-    margin-bottom: 28px;
+.tag-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    margin-bottom: 16px;
+    font-size: 0.88rem;
+    color: var(--fg-muted);
+    text-decoration: none;
 }
+.tag-back-link:hover { color: var(--fg); }
 
 .tag-chip-row {
     display: flex;

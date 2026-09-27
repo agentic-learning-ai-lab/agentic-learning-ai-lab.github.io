@@ -10,26 +10,21 @@
 <body class="tw-flex tw-min-h-[100vh] tw-flex-col tw-bg-[var(--bg)] tw-font-mono">
     {{> header}}
 
-    <section class="tw-flex tw-w-full tw-flex-col tw-p-[5%] tw-pb-0 tw-mt-[150px] max-lg:tw-p-4 max-lg:tw-pb-0">
-        <nav class="tag-nav" aria-label="Research topics">
-            <a href="/tags/" class="tag-chip">All</a>
-            {{#each allTags}}<a href="/tags/{{slug}}/" class="tag-chip{{#if isCurrent}} tag-chip--active{{/if}}"{{#if isCurrent}} aria-current="page"{{/if}}>{{label}}</a>{{/each}}
-        </nav>
-        <div class="tw-flex tw-items-center tw-gap-4">
-            <span class="tag-monogram-badge tag-monogram-badge--sm" aria-hidden="true">{{monogram}}</span>
-            <h1 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
-                {{label}}
-            </h1>
-        </div>
-        <p class="tw-text-[var(--fg-muted)] tw-mt-6 tw-max-w-3xl">
-            {{{description}}}
-        </p>
-    </section>
+    <section class="tw-flex tw-flex-row tw-w-full tw-gap-12 tw-px-[5%] tw-pt-[5%] tw-pb-[3%] tw-mt-[150px] max-lg:tw-p-4">
+        <div class="tw-flex tw-flex-col tw-w-full md:tw-w-[80%] lg:tw-w-[60%] xl:tw-w-[50%]">
+            <a href="/tags/" class="tag-back-link"><i class="bi bi-arrow-left"></i> All topics</a>
+            <div class="tw-flex tw-items-center tw-gap-4">
+                <span class="tag-monogram-badge tag-monogram-badge--sm" aria-hidden="true">{{monogram}}</span>
+                <h1 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
+                    {{label}}
+                </h1>
+            </div>
+            <p class="tw-text-[var(--fg-muted)] tw-mt-6">
+                {{{description}}}
+            </p>
 
-    <section class="tw-w-full tw-flex-col tw-px-[5%] tw-py-[3%] max-lg:tw-p-4">
-        {{#if papers}}
-        <div class="tw-flex-col sm:tw-w-[100%] md:tw-w-[80%] lg:tw-w-[60%] xl:tw-w-[50%]">
-            <h3 class="tw-mt-10 text-left tw-text-xl tw-font-medium max-md:tw-text-2xl">
+            {{#if papers}}
+            <h3 class="tw-mt-8 text-left tw-text-xl tw-font-medium max-md:tw-text-2xl">
                 Papers
             </h3>
             <div id="flexContainer" data-page-size="10" class="tw-mt-4 tw-flex tw-flex-col tw-gap-y-2">
@@ -43,8 +38,21 @@
                 <button id="nextButton" class="tw-px-6 tw-py-1 tw-text-[var(--fg)] disabled:tw-opacity-30"
                     onclick="nextPage()">Next</button>
             </div>
+            {{/if}}
         </div>
-        {{/if}}
+
+        <nav class="tag-aside max-lg:tw-hidden" aria-label="Research topics">
+            {{#each navClusters}}
+            <div class="tag-aside__group">
+                <div class="tag-aside__heading">{{label}}</div>
+                <ul>
+                    {{#each tags}}
+                    <li><a href="/tags/{{slug}}/" class="tag-aside__link{{#if isCurrent}} is-current{{/if}}"{{#if isCurrent}} aria-current="page"{{/if}}>{{label}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+            {{/each}}
+        </nav>
     </section>
 
     {{> footer}}
