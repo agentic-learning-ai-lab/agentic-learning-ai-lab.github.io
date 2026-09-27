@@ -58,12 +58,14 @@ reviewers can read them independently.
       this file, fix the redundant `parseDocuments()` call by
       threading the already-parsed documents through. Applies equally
       to any future `getTagMap()`.
-- [ ] Consolidate `assets-manifest.json` loading. Six callers today
-      each roll their own read; `r2_lib.js` already has `loadManifest()`
-      but only one caller uses it. Move all readers to that single
-      helper (or a new `manifest_lib.js` if `r2_lib` is meant for
-      network-only). Phase 1 adds a 7th caller (tag page CDN URLs);
-      natural moment to consolidate.
+- [ ] **DEFERRED** to a follow-up: consolidate `assets-manifest.json`
+      loading. On implementation-time inspection, Phase 1's new
+      templates reuse the existing `{{cdnUrl}}` helper — no new
+      manifest reader gets introduced. Also, `r2_lib.js`'s
+      `loadManifest` is async + pulls in AWS SDK, so blanket migration
+      would drag deps into CF Pages build. Right consolidation is a
+      slim `manifest_lib.js` for the 6 sync callers, done as its
+      own cleanup PR. Orthogonal to Phase 1.
 
 ### 2. New templates
 
