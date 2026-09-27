@@ -1477,6 +1477,22 @@ section {
     border-color: var(--border);
 }
 
+.tag-chip--active,
+.tag-chip--active:hover {
+    color: var(--fg);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+/* Tag-page topic bar: every tag as a chip, current one highlighted.
+   Wraps on narrow screens. */
+.tag-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 0;
+    margin-bottom: 28px;
+}
+
 .tag-chip-row {
     display: flex;
     flex-wrap: wrap;
@@ -1485,8 +1501,14 @@ section {
 }
 
 /* Tag monogram badge — Phase 1 placeholder for bespoke SVGs (Phase 2).
-   Lab accent blue with white text; --accent is redefined for dark mode
-   in lab-tokens.css, so the badge reads on both grounds. */
+   Lab blue, tuned for AA text contrast: white on a slightly deeper blue
+   in light mode (4.65:1; white on --accent is only 3.7:1), near-black on
+   the dark-mode --accent (6.2:1; white would be 2.9:1). */
+:root { --badge-bg: #2F6FE4; --badge-fg: #ffffff; }
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --badge-bg: var(--accent); --badge-fg: #18181b; }
+}
+:root[data-theme="dark"] { --badge-bg: var(--accent); --badge-fg: #18181b; }
 .tag-monogram-badge {
     display: inline-flex;
     align-items: center;
@@ -1494,8 +1516,8 @@ section {
     width: 96px;
     height: 96px;
     flex-shrink: 0;
-    background: var(--accent);
-    color: #fff;
+    background: var(--badge-bg);
+    color: var(--badge-fg);
     border-radius: var(--radius-md);
     font-family: var(--mono);
     font-size: 2.25rem;

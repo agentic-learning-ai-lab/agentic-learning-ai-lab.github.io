@@ -8,9 +8,10 @@
  * unmatched chip on the paper card — the build never fails, the
  * mistake ships.
  *
- * Also enforces:
- *   - Every tag slug in tags.yaml is unique.
- *   - Every related: entry in tags.yaml points at an existing slug.
+ * Also enforces, per tag in tags.yaml:
+ *   - slug is unique.
+ *   - label, monogram, description are present.
+ *   - cluster is one of CLUSTERS (the /tags/ index drops unknown ones).
  *
  * Exit code: 0 if clean, 1 if any mismatches. CI + pre-commit both
  * invoke this file directly; the pre-commit wrapper is at
@@ -22,6 +23,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 const ROOT = path.resolve(__dirname, '..');
+const CLUSTERS = ['learning-paradigms', 'content-and-applications', 'special'];
 
 function loadYaml(rel) {
     const full = path.join(ROOT, rel);
@@ -48,13 +50,17 @@ function main() {
 
     const validSlugs = new Set(tags.map(t => t.slug));
 
-    // 2. every related: entry points at a real slug
+    // 2. required fields + known cluster
     for (const t of tags) {
-        for (const r of (t.related || [])) {
-            if (!validSlugs.has(r)) {
-                console.error(`⛔ tags.yaml: "${t.slug}".related references unknown tag "${r}"`);
+        for (const f of ['label', 'monogram', 'description']) {
+            if (!t[f]) {
+                console.error(`⛔ tags.yaml: "${t.slug}" is missing ${f}:`);
                 ok = false;
             }
+        }
+        if (!CLUSTERS.includes(t.cluster)) {
+            console.error(`⛔ tags.yaml: "${t.slug}" has cluster "${t.cluster}" (expected one of ${CLUSTERS.join(', ')})`);
+            ok = false;
         }
     }
 

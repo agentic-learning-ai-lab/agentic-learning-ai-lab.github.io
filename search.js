@@ -173,6 +173,7 @@ function performSearch(query) {
     searchResults.innerHTML = results.map(result => {
         const typeLabel = result.type === 'paper' ? 'Paper' :
                          result.type === 'person' ? 'Researcher' :
+                         result.type === 'tag' ? 'Topic' :
                          'Area';
         const typeClass = result.type === 'paper' ? 'search-badge-paper' :
                          result.type === 'person' ? 'search-badge-person' :

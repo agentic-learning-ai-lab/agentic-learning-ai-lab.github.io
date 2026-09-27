@@ -143,20 +143,15 @@ researchAreas.forEach(area => {
     });
 });
 
-// Add tags to search index. type:'tag' entries surface /tags/<slug>/
-// as a search hit alongside papers/people. No thumbnail (Phase 1
-// monogram is the visual — Phase 2 replaces with bespoke SVG). Papers
-// per tag inflate the keywords blob so a search matching a paper title
-// also nudges its tag(s) up.
+// Add tags to search index so a search for "world models" surfaces
+// /tags/world-models/ alongside matching papers. Keywords are the tag's
+// own words only — folding in paper titles made tags crowd out people
+// and papers on unrelated queries.
 tags.forEach(tag => {
-    const paperTitles = papers
-        .filter(p => Array.isArray(p.tags) && p.tags.includes(tag.slug))
-        .map(p => p.title);
     searchIndex.push({
         type: 'tag',
         title: tag.label,
         description: tag.description || '',
-        monogram: tag.monogram || '',
         image: '',
         thumbnail: '',
         url: `/tags/${tag.slug}/`,
@@ -164,7 +159,6 @@ tags.forEach(tag => {
             tag.label,
             tag.slug,
             tag.description || '',
-            ...paperTitles,
         ].join(' ').toLowerCase(),
     });
 });
