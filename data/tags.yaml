@@ -143,7 +143,7 @@
   label: Multi-Agent
   description: Interaction and coordination among multiple agents.
   monogram: MA
-  cluster: perspectives
+  cluster: learning-paradigms
   featured: false
 
 - slug: ai-safety
