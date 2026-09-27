@@ -1477,7 +1477,10 @@ section {
     border-color: var(--border);
 }
 
-/* Tag-page side list of all topics (xl+, where it fits beside the full-width list), grouped by cluster. Not
+/* Tag-page side list of all topics, grouped by cluster. Shown from 1140px:
+   the 720px list + 48px gap + 240px sidebar need 1008px, which fits in
+   90% of the width (5% side padding) once the ~15px scrollbar is taken
+   out, so the list never shrinks. Not
    sticky: the full list is taller than a laptop viewport, and a clipped
    or inner-scrolling panel read worse than letting it scroll away. Mirrors
    the paper-page TOC sidebar (arxiv-paper.css .paper-sidebar-sticky /
@@ -1485,6 +1488,7 @@ section {
    links with a soft pill on hover and a tinted accent pill for the
    current topic. */
 .tag-aside {
+    display: none;
     width: 240px;
     flex-shrink: 0;
     margin-left: auto;
@@ -1493,6 +1497,7 @@ section {
     border-radius: var(--radius-md);
     padding: 1.25rem;
 }
+@media (min-width: 1140px) { .tag-aside { display: block; } }
 .tag-aside ul { margin: 0; padding: 0; list-style: none; }
 .tag-aside__group + .tag-aside__group { margin-top: 1rem; }
 .tag-aside__heading {
