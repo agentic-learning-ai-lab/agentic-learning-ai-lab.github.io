@@ -81,7 +81,7 @@
   cluster: data-and-applications
   featured: true
 
-# ─── Non-featured (10) ───────────────────────────────────────────
+# ─── Non-featured (11) ───────────────────────────────────────────
 
 - slug: meta-learning
   label: Meta-Learning
@@ -94,6 +94,13 @@
   label: Multimodal Learning
   description: Joint learning across vision, language, and other modalities.
   monogram: MM
+  cluster: data-and-applications
+  featured: false
+
+- slug: embodied-ai
+  label: Embodied AI
+  description: Agents that perceive and act in physical environments.
+  monogram: EA
   cluster: data-and-applications
   featured: false
 

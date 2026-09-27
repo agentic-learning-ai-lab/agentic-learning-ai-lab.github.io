@@ -247,7 +247,7 @@ change specifically, staging is worth the extra step.
 
 ## Finalized vocabulary (2026-09-26)
 
-Locked in this doc. **19 tags total, 9 featured, 10 non-featured.**
+Locked in this doc. **20 tags total, 9 featured, 11 non-featured.**
 `hierarchical-abstraction` and `local-learning` were added during
 the 25-paper backfill (see amendment note at end of section).
 
@@ -265,12 +265,13 @@ the 25-paper backfill (see amendment note at end of section).
 | `human-like-learning` | Human-like Learning | HL | Perspectives | SAYCam, BabyCL, Self Requires Learning, Memory Storyboard |
 | `forecasting` | Forecasting | FC | Data & Applications | |
 
-### Non-featured (10) — listed at `/tags/`, appear on paper chips, no home card
+### Non-featured (11) — listed at `/tags/`, appear on paper chips, no home card
 
 | Slug | Label | Monogram | Cluster |
 |---|---|---|---|
 | `meta-learning` | Meta-Learning | ML | Learning Paradigms |
 | `multimodal-learning` | Multimodal Learning | MM | Data & Applications |
+| `embodied-ai` | Embodied AI | EA | Data & Applications |
 | `self-supervised-learning` | Self-Supervised Learning | SS | Learning Paradigms |
 | `hierarchical-abstraction` | Hierarchical Abstraction | HA | Models & Representations |
 | `local-learning` | Local Learning | LL | Learning Paradigms |
@@ -294,6 +295,9 @@ review of the paper corpus:
   plausible learning family (ARQ). Currently 1 paper but a
   standing lab direction; kept in vocabulary to avoid needing a
   vocabulary PR when the next one lands.
+- `embodied-ai` (added 2026-09-27) — agents that plan or act (MA-EgoQA,
+  AdaJEPA, Temporal Straightening, ARQ). Egocentric-video papers where
+  models only watch stay under `egocentric-video`.
 
 ### Clusters (group /tags/ and the tag-page side list)
 
