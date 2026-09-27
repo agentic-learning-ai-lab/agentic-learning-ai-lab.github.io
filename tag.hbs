@@ -23,20 +23,22 @@
     </section>
 
     <section class="tw-w-full tw-flex-col tw-px-[5%] max-lg:tw-p-4 tw-mt-8">
-        <h3 class="text-left tw-text-2xl tw-font-medium max-md:tw-text-xl">
-            Papers
-        </h3>
-        <div class="section-underline tw-my-4"></div>
+        <div class="tw-flex-col sm:tw-w-[100%] md:tw-w-[80%] lg:tw-w-[60%] xl:tw-w-[50%]">
+            <h3 class="text-left tw-text-2xl tw-font-medium max-md:tw-text-xl">
+                Papers
+            </h3>
+            <div class="section-underline tw-my-4"></div>
 
-        {{#if papers.length}}
-        <div class="tw-mt-4 tw-flex tw-flex-col tw-gap-y-2">
-            {{> person_paper papers}}
+            {{#if papers.length}}
+            <div class="tw-mt-4 tw-flex tw-flex-col tw-gap-y-2">
+                {{> person_paper papers}}
+            </div>
+            {{else}}
+            <p class="tw-text-[var(--fg-muted)] tw-mt-4">
+                No papers with this tag yet.
+            </p>
+            {{/if}}
         </div>
-        {{else}}
-        <p class="tw-text-[var(--fg-muted)] tw-mt-4">
-            No papers with this tag yet.
-        </p>
-        {{/if}}
     </section>
 
     {{> footer}}
