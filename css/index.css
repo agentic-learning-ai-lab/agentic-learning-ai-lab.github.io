@@ -1508,6 +1508,57 @@ section {
         font-size: 1.5rem;
     }
 }
+.tag-monogram-badge--sm {
+    width: 40px;
+    height: 40px;
+    font-size: 0.95rem;
+    border-radius: var(--radius-sm);
+}
+
+/* Rows on /tags/ index. Full-width clickable region with monogram +
+   label + description + count. Description truncates on narrow. */
+.tag-index-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 12px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    color: var(--fg);
+    text-decoration: none;
+    transition: background 150ms ease, border-color 150ms ease;
+}
+.tag-index-row:hover {
+    background: var(--card-bg);
+    border-color: var(--border-soft);
+}
+.tag-index-row__body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.tag-index-row__label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--fg);
+}
+.tag-index-row__desc {
+    color: var(--fg-muted);
+    font-size: 0.85rem;
+    line-height: 1.35;
+    margin-top: 2px;
+}
+.tag-index-row__count {
+    color: var(--fg-muted);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    padding: 2px 10px;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-sm);
+    min-width: 32px;
+    text-align: center;
+}
 
 /* Research Ecosystems (preview): swap each project icon to its dark
    variant in dark mode. The dark SVGs use lighter blue #5D97FF and

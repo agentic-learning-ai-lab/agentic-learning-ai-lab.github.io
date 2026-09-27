@@ -9,6 +9,7 @@ const pages = [
     { template: 'person.hbs', output: 'people/{{permalink}}/index.html' },
     { template: 'research_area.hbs', output: 'areas/{{permalink}}/index.html' },
     { template: 'tag.hbs', output: 'tags/{{permalink}}/index.html' },
+    { template: 'tags.hbs', output: 'tags/index.html' },
     // Marketing landing pages for papers with project_page.enabled: true.
     // Emit directly to out/<slug>/ so they don't clutter the repo root.
     // assemble_output.js copies the rest of the site into out/ alongside.
