@@ -1484,6 +1484,31 @@ section {
     margin-top: 6px;
 }
 
+/* Tag hero monogram badge — Phase 1 placeholder. Replaced with
+   bespoke SVG per cluster in Phase 2. Uses --ink-strong so it reads
+   as a deliberate mark rather than blending into the card fill. */
+.tag-monogram-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 96px;
+    background: var(--ink-strong);
+    color: var(--bg);
+    border-radius: var(--radius-md);
+    font-family: var(--mono);
+    font-size: 2.25rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+@media (max-width: 640px) {
+    .tag-monogram-badge {
+        width: 64px;
+        height: 64px;
+        font-size: 1.5rem;
+    }
+}
+
 /* Research Ecosystems (preview): swap each project icon to its dark
    variant in dark mode. The dark SVGs use lighter blue #5D97FF and
    (for EgoLearn) white eye rects, so the mask-carve visor doesn't
