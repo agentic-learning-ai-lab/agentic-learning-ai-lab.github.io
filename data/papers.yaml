@@ -322,6 +322,7 @@
     - self-supervised-learning
     - concept-learning
     - hierarchical-abstraction
+    - world-models
   date: 2025-06-22T00:00:00.000Z
   journal: CoRR
   is_recent: false
