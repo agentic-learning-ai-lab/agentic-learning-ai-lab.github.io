@@ -282,20 +282,20 @@ function parseDocuments() {
 
     // Normalize the data — ensure required fields exist
     for (const ra of research_areas) {
-        ensureArrayExists(ra, 'title');
-        ensureArrayExists(ra, 'image');
-        ensureArrayExists(ra, 'Description');
+        ensureExists(ra, 'title');
+        ensureExists(ra, 'image');
+        ensureExists(ra, 'description');
     }
     for (const p of papers) {
-        ensureArrayExists(p, 'title');
-        ensureArrayExists(p, 'image');
-        ensureArrayExists(p, 'short_abstract');
+        ensureExists(p, 'title');
+        ensureExists(p, 'image');
+        ensureExists(p, 'short_abstract');
     }
     for (const p of people) {
-        ensureArrayExists(p, 'name');
-        ensureArrayExists(p, 'position');
-        ensureArrayExists(p, 'image');
-        ensureArrayExists(p, 'url');
+        ensureExists(p, 'name');
+        ensureExists(p, 'position');
+        ensureExists(p, 'image');
+        ensureExists(p, 'url');
     }
     const recent_papers = papers.filter((p) => p['is_recent']);
 
@@ -599,8 +599,8 @@ function registerHelpers(handlebars) {
     });
 }
 
-function ensureArrayExists(obj, prop) {
+function ensureExists(obj, prop) {
     if (!(prop in obj)) {
-        obj[prop] = [];
+        obj[prop] = '';
     }
 }
