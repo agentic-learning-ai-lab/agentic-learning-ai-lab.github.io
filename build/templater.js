@@ -332,8 +332,9 @@ function parseDocuments() {
     // order within each cluster (curator intent).
     const clusterLabels = {
         'learning-paradigms': 'Learning Paradigms',
-        'content-and-applications': 'Content & Applications',
-        'special': 'Special',
+        'models-and-representations': 'Models & Representations',
+        'data-and-applications': 'Data & Applications',
+        'perspectives': 'Perspectives',
     };
     const tag_clusters = Object.entries(clusterLabels).map(([key, label]) => ({
         key, label, tags: tags.filter(t => t.cluster === key),

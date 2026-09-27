@@ -23,7 +23,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 const ROOT = path.resolve(__dirname, '..');
-const CLUSTERS = ['learning-paradigms', 'content-and-applications', 'special'];
+const CLUSTERS = ['learning-paradigms', 'models-and-representations', 'data-and-applications', 'perspectives'];
 
 function loadYaml(rel) {
     const full = path.join(ROOT, rel);

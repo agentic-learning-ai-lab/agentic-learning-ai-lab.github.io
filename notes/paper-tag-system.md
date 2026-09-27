@@ -255,30 +255,30 @@ the 25-paper backfill (see amendment note at end of section).
 
 | Slug | Label | Monogram | Cluster | Notes |
 |---|---|---|---|---|
-| `world-models` | World Models | WM | Learning Paradigms | Absorbs JEPA (AdaJEPA, Discrete JEPA, Temporal Straightening, Midway Network) |
-| `egocentric-video` | Egocentric Video | EV | Content & Applications | SAYCam-adjacent + video streams |
+| `world-models` | World Models | WM | Models & Representations | Absorbs JEPA (AdaJEPA, Discrete JEPA, Temporal Straightening, Midway Network) |
+| `egocentric-video` | Egocentric Video | EV | Data & Applications | SAYCam-adjacent + video streams |
 | `continual-learning` | Continual Learning | CL | Learning Paradigms | Absorbs Streaming Learning |
 | `test-time-learning` | Test-time Learning | TT | Learning Paradigms | |
 | `in-context-learning` | In-Context Learning | IC | Learning Paradigms | |
-| `llm-reasoning` | LLM Reasoning | LR | Content & Applications | |
-| `creative-exploration` | Creative Exploration | CE | Content & Applications | Broader than "creativity + generation" — open-ended planning, novelty search |
-| `human-like-learning` | Human-like Learning | HL | Content & Applications | SAYCam, BabyCL, Self Requires Learning, Memory Storyboard |
-| `forecasting` | Forecasting | FC | Content & Applications | |
+| `llm-reasoning` | LLM Reasoning | LR | Data & Applications | |
+| `creative-exploration` | Creative Exploration | CE | Learning Paradigms | Broader than "creativity + generation" — open-ended planning, novelty search |
+| `human-like-learning` | Human-like Learning | HL | Perspectives | SAYCam, BabyCL, Self Requires Learning, Memory Storyboard |
+| `forecasting` | Forecasting | FC | Data & Applications | |
 
 ### Non-featured (10) — listed at `/tags/`, appear on paper chips, no home card
 
 | Slug | Label | Monogram | Cluster |
 |---|---|---|---|
 | `meta-learning` | Meta-Learning | ML | Learning Paradigms |
-| `multimodal-learning` | Multimodal Learning | MM | Content & Applications |
+| `multimodal-learning` | Multimodal Learning | MM | Data & Applications |
 | `self-supervised-learning` | Self-Supervised Learning | SS | Learning Paradigms |
-| `hierarchical-abstraction` | Hierarchical Abstraction | HA | Learning Paradigms |
+| `hierarchical-abstraction` | Hierarchical Abstraction | HA | Models & Representations |
 | `local-learning` | Local Learning | LL | Learning Paradigms |
 | `reinforcement-learning` | Reinforcement Learning | RL | Learning Paradigms |
-| `concept-learning` | Concept Learning | CN | Content & Applications |
-| `multi-agent` | Multi-Agent | MA | Special |
-| `ai-safety` | AI Safety | AS | Special |
-| `philosophy-of-ai` | Philosophy of AI | PA | Special |
+| `concept-learning` | Concept Learning | CN | Models & Representations |
+| `multi-agent` | Multi-Agent | MA | Perspectives |
+| `ai-safety` | AI Safety | AS | Perspectives |
+| `philosophy-of-ai` | Philosophy of AI | PA | Perspectives |
 
 **Amendment (2026-09-26, during backfill):** two tags added on
 review of the paper corpus:
@@ -295,11 +295,18 @@ review of the paper corpus:
   standing lab direction; kept in vocabulary to avoid needing a
   vocabulary PR when the next one lands.
 
-### Clusters (define the color system in Phase 2)
+### Clusters (group /tags/ and the tag-page side list)
 
-- **Learning Paradigms** — the methods lens.
-- **Content & Applications** — the subject-matter lens.
-- **Special** — cross-cutting concerns that don't fit either.
+Revised 2026-09-27 during preview review: the original "Content &
+Applications" / "Special" groups mixed data sources, applications,
+and perspectives.
+
+- **Learning Paradigms** — how the learning happens (incl. open-ended
+  creative exploration).
+- **Models & Representations** — what gets learned.
+- **Data & Applications** — where the data comes from and what it's
+  used for.
+- **Perspectives** — cross-cutting lenses on learning agents.
 
 ## Author workflow
 
