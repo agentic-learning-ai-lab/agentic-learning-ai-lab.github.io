@@ -1,6 +1,9 @@
-{{!-- Featured tag tile for the home page grid: monogram + label.
-      Whole tile is the click target. --}}
+{{!-- Featured tag tile for the home page grid. Whole tile is the
+      click target. --}}
 <a href="/tags/{{slug}}/" class="tag-card">
     <span class="tag-monogram-badge tag-monogram-badge--sm">{{monogram}}</span>
-    <h4 class="tag-card__label">{{label}}</h4>
+    <span class="tag-card__body">
+        <span class="tag-card__label">{{label}}</span>
+        <span class="tag-card__desc">{{description}}</span>
+    </span>
 </a>

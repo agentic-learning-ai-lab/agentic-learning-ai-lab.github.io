@@ -1484,17 +1484,18 @@ section {
     margin-top: 6px;
 }
 
-/* Tag hero monogram badge — Phase 1 placeholder. Replaced with
-   bespoke SVG per cluster in Phase 2. Uses --ink-strong so it reads
-   as a deliberate mark rather than blending into the card fill. */
+/* Tag monogram badge — Phase 1 placeholder for bespoke SVGs (Phase 2).
+   Lab accent blue with white text; --accent is redefined for dark mode
+   in lab-tokens.css, so the badge reads on both grounds. */
 .tag-monogram-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 96px;
     height: 96px;
-    background: var(--ink-strong);
-    color: var(--bg);
+    flex-shrink: 0;
+    background: var(--accent);
+    color: #fff;
     border-radius: var(--radius-md);
     font-family: var(--mono);
     font-size: 2.25rem;
@@ -1533,6 +1534,7 @@ section {
     border-color: var(--border-soft);
 }
 .tag-index-row__label {
+    font-family: var(--mono);
     font-size: 1rem;
     font-weight: 500;
     color: var(--fg);
@@ -1565,11 +1567,23 @@ section {
     transition: border-color 150ms ease;
 }
 .tag-card:hover { border-color: var(--border); }
+.tag-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
 .tag-card__label {
-    font-size: 1.25rem;
+    font-size: 1.05rem;
     font-weight: 500;
     line-height: 1.3;
     color: var(--fg);
+}
+.tag-card__desc {
+    color: var(--fg-muted);
+    font-family: var(--serif);
+    font-size: 0.9rem;
+    line-height: 1.4;
 }
 
 /* Research Ecosystems (preview): swap each project icon to its dark
