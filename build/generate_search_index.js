@@ -3,15 +3,22 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 // Read all data files
-let papers, people, researchAreas;
+let papers, people, researchAreas, tags;
 try {
     papers = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/papers.yaml'), 'utf8'));
     people = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/people.yaml'), 'utf8'));
     researchAreas = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/research_areas.yaml'), 'utf8'));
+    tags = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/tags.yaml'), 'utf8'));
 } catch (err) {
     console.error('Failed to load YAML data files:', err.message);
     process.exit(1);
 }
+
+// tag slug → label, for enriching paper keywords with human-readable
+// tag labels ("world models" not "world-models"). Falls back to the
+// slug itself so a paper tagged with a slug not in the vocabulary
+// still contributes something searchable.
+const tagLabels = new Map(tags.map(t => [t.slug, t.label]));
 
 // Load the asset manifest so we can emit CDN URLs for the thumbnails
 // instead of same-origin /assets/images/thumbnails/... paths. The slim
@@ -73,7 +80,9 @@ papers.forEach(paper => {
             paper.title,
             ...(paper.authors || []),
             paper.short_abstract || '',
-            ...(paper.research_areas || [])
+            ...(paper.research_areas || []),
+            ...(paper.tags || []),
+            ...((paper.tags || []).map(s => tagLabels.get(s) || s)),
         ].join(' ').toLowerCase()
     });
 });
@@ -131,6 +140,32 @@ researchAreas.forEach(area => {
             area.title,
             area.description || ''
         ].join(' ').toLowerCase()
+    });
+});
+
+// Add tags to search index. type:'tag' entries surface /tags/<slug>/
+// as a search hit alongside papers/people. No thumbnail (Phase 1
+// monogram is the visual — Phase 2 replaces with bespoke SVG). Papers
+// per tag inflate the keywords blob so a search matching a paper title
+// also nudges its tag(s) up.
+tags.forEach(tag => {
+    const paperTitles = papers
+        .filter(p => Array.isArray(p.tags) && p.tags.includes(tag.slug))
+        .map(p => p.title);
+    searchIndex.push({
+        type: 'tag',
+        title: tag.label,
+        description: tag.description || '',
+        monogram: tag.monogram || '',
+        image: '',
+        thumbnail: '',
+        url: `/tags/${tag.slug}/`,
+        keywords: [
+            tag.label,
+            tag.slug,
+            tag.description || '',
+            ...paperTitles,
+        ].join(' ').toLowerCase(),
     });
 });
 

@@ -13,6 +13,8 @@
  *   /research/<slug>/       — one per paper in data/papers.yaml
  *   /people/<slug>/         — one per person in data/people.yaml
  *   /areas/<slug>/          — one per research area
+ *   /tags/                  — tag index
+ *   /tags/<slug>/           — one per tag in data/tags.yaml
  *   /<slug>/                — one per paper with project_page: true
  *
  * `lastmod` uses paper.date when known (papers have ISO timestamps).
@@ -50,6 +52,7 @@ function main() {
     const papers = loadYaml('data/papers.yaml');
     const people = loadYaml('data/people.yaml');
     const areas = loadYaml('data/research_areas.yaml');
+    const tags = loadYaml('data/tags.yaml');
 
     const entries = [];
 
@@ -81,6 +84,13 @@ function main() {
     for (const a of areas) {
         if (!a.permalink) continue;
         entries.push(urlEntry(`/areas/${a.permalink}/`));
+    }
+
+    // Tag pages.
+    entries.push(urlEntry('/tags/'));
+    for (const t of tags) {
+        if (!t.slug) continue;
+        entries.push(urlEntry(`/tags/${t.slug}/`));
     }
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>

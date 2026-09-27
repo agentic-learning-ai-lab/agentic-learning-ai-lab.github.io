@@ -16,6 +16,7 @@
  *   - "Papers": one bullet per paper (sorted newest first)
  *   - "People": current members, then alumni
  *   - "Research areas": one bullet per area
+ *   - "Tags": one bullet per tag with description
  */
 
 const fs = require('fs');
@@ -39,6 +40,7 @@ function main() {
     const papers = loadYaml('data/papers.yaml');
     const people = loadYaml('data/people.yaml');
     const areas = loadYaml('data/research_areas.yaml');
+    const tags = loadYaml('data/tags.yaml');
 
     // Papers: newest first by date.
     const papersSorted = [...papers]
@@ -95,11 +97,22 @@ function main() {
         lines.push(bullet(a.title, url, a.keywords));
     }
     lines.push('');
+    lines.push('## Tags');
+    lines.push('');
+    lines.push(`See [/tags/](${SITE}/tags/) for the full index. Each tag has a page`);
+    lines.push('listing every paper that carries it.');
+    lines.push('');
+    for (const t of tags) {
+        if (!t.slug) continue;
+        const url = `${SITE}/tags/${t.slug}/`;
+        lines.push(bullet(t.label, url, t.description));
+    }
+    lines.push('');
 
     fs.mkdirSync(OUT_DIR, { recursive: true });
     const outPath = path.join(OUT_DIR, 'llms.txt');
     fs.writeFileSync(outPath, lines.join('\n'));
-    console.log(`✓ wrote llms.txt — ${papersSorted.length} papers, ${peopleCurrent.length + peopleAlumni.length} people, ${areas.length} areas`);
+    console.log(`✓ wrote llms.txt — ${papersSorted.length} papers, ${peopleCurrent.length + peopleAlumni.length} people, ${areas.length} areas, ${tags.length} tags`);
 }
 
 main();
