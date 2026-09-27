@@ -16,7 +16,10 @@ By the end of Phase 1, on `dev`:
   monogram placeholders — bespoke visuals are Phase 2).
 - Each paper card grows a chip row (top ~3 tags, curator-ordered).
 - Each paper detail page grows a full tag row.
-- Redirects from `/areas/<old-slug>/` to closest primary tag.
+- **Home page "Key Areas" block** (formerly rendered via
+  `research_area_tabs`) is retired — Themes grid supersedes it.
+  `/areas/<slug>/` pages themselves stay live for external inbound
+  links; Phase 4 retires the route entirely and lands the redirects.
 - Search index includes tags; sitemap includes tag URLs;
   `llms.txt` grows a `## Tags` section.
 - `research_areas` field is **retained** through Phase 1 (retirement
@@ -129,12 +132,14 @@ reviewers can read them independently.
 - [ ] `.github/workflows/pr-checks.yml` — add `npm run lint:tags`
       to the CI step list.
 
-### 6. Redirects
+### 6. Redirects → deferred to Phase 4
 
-- [ ] Extend `out/_redirects` (via `build/build_assemble.js` or
-      whatever generates it — check the current path). Add the
-      three area→tag redirects from the parent doc migration table.
-      Redirects are 301s.
+- [x] **DEFERRED** to Phase 4 (the /areas/ retirement sweep). Adding
+      the redirects now would intercept internal Key Areas home
+      links — but Key Areas came off the home page in Phase 1 anyway,
+      leaving /areas/*/ pages reachable ONLY by direct URL (external
+      inbound from Google Scholar, DBLP, etc.). Redirects belong
+      with the retirement, not the machinery.
 
 ### 7. Handlebars helpers (may already suffice)
 
