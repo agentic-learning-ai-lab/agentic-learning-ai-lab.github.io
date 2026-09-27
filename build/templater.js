@@ -158,14 +158,7 @@ function doTemplating(input, output) {
                 Array.isArray(p.tags) && p.tags.includes(tag.slug)
             );
 
-            // Resolve related-tag slugs to full records for the sibling
-            // row. Unknown slugs are silently skipped (lint_tags.js is the
-            // enforcement point).
-            const relatedTags = (tag.related || [])
-                .map(s => documents.tagsBySlug.get(s))
-                .filter(Boolean);
-
-            const ctx = { ...tag, papers, relatedTags };
+            const ctx = { ...tag, papers };
             fs.writeFileSync(output_new, template(ctx));
         }
     }

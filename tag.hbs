@@ -24,7 +24,7 @@
 
     <section class="tw-w-full tw-flex-col tw-px-[5%] max-lg:tw-p-4 tw-mt-8">
         <h3 class="text-left tw-text-2xl tw-font-medium max-md:tw-text-xl">
-            Papers ({{papers.length}})
+            Papers
         </h3>
         <div class="section-underline tw-my-4"></div>
 
@@ -38,17 +38,6 @@
         </p>
         {{/if}}
     </section>
-
-    {{#if relatedTags.length}}
-    <section class="tw-w-full tw-flex-col tw-px-[5%] max-lg:tw-p-4 tw-mt-12">
-        <h3 class="text-left tw-text-xl tw-font-medium max-md:tw-text-lg tw-text-[var(--fg-muted)]">
-            Related tags
-        </h3>
-        <div class="tag-chip-row tw-mt-3">
-            {{#each relatedTags}}{{> tag_chip}}{{/each}}
-        </div>
-    </section>
-    {{/if}}
 
     {{> footer}}
 </body>

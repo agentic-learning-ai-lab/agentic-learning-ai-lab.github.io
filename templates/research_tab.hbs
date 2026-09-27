@@ -24,7 +24,7 @@ tw-overflow-hidden tw-transition-all tw-duration-200">
         </p>
         {{#if tags}}
         <div class="tag-chip-row">
-            {{#each (resolveTags tags 3)}}{{> tag_chip}}{{/each}}
+            {{#each (resolveTags tags 3)}}{{> tag_chip static=true}}{{/each}}
         </div>
         {{/if}}
         <p class="tw-text-[var(--fg-muted)] tw-mt-2">

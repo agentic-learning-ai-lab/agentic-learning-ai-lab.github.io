@@ -1,8 +1,4 @@
-{{!-- Single tag chip. Expects context to be a tag record from tags.yaml
-      (label, slug). Used inline in paper cards + paper detail.
-
-      Anchor stops propagation so clicks on chips inside a
-      card-wrapping anchor don't also trigger the outer link. --}}
-<a href="/tags/{{slug}}/"
-   onclick="event.stopPropagation();"
-   class="tag-chip">{{label}}</a>
+{{!-- Single tag chip; context is a tag record from tags.yaml.
+      Pass static=true inside card-wrapping anchors: nested <a> is
+      invalid HTML and the parser splits the card apart. --}}
+{{#if static}}<span class="tag-chip">{{label}}</span>{{else}}<a href="/tags/{{slug}}/" class="tag-chip">{{label}}</a>{{/if}}
