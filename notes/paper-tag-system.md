@@ -140,23 +140,25 @@ Full tag row above the abstract. Each chip links to `/tags/<slug>/`.
 
 Auto-generated (like `/areas/<slug>/` used to be). Contents:
 - Tag label + description.
-- Grid of matching papers (reuse `research_tab.hbs` render).
-- Related tags — top N tags that co-occur with this one across the
-  corpus, ranked by co-occurrence count.
+- Paper list in the person-page row style (`person_paper.hbs`),
+  paginated at 10.
+- Side list of all topics grouped by cluster (lg+), plus a
+  "← All topics" back link. (A related-tags row was built and then
+  dropped during preview review.)
 
 ### Also in Phase 1
 
 - **Root index at `/tags/`** — mirrors the old `/areas/` root; lists
-  every tag (label + paper count) grouped by cluster.
+  every tag (monogram, label, description) grouped by cluster. No
+  paper counts (dropped during preview review).
 - **`sitemap.xml`** — add `/tags/<slug>/` entries and `/tags/` itself
   so Google discovers them at Phase 1, not later.
 - **Search index integration** — fold tags into
   `assets/search-index.json`. If tags are the primary navigation,
   site search *must* return tag hits from Phase 1, not Phase 3.
-- **Related tags on `/tags/<slug>/` pages** — hand-curated list of
-  2–3 related-tag slugs in `data/tags.yaml` per entry. Co-occurrence
-  ranking over a 25-paper corpus is too noisy (ties + tiny counts);
-  curate now, revisit when the corpus is larger.
+- ~~Related tags on `/tags/<slug>/` pages~~ — dropped during preview
+  review in favor of the all-topics side list; the `related:` field
+  was removed from `data/tags.yaml`.
 - **A11y acceptance criteria for Phase 1:**
   - Chip rows on paper cards + detail pages: keyboard-focusable, real
     focus rings, `aria-label` per chip.

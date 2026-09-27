@@ -184,6 +184,8 @@ function performSearch(query) {
             subtitle = `<div class="search-result-subtitle">${result.authors}</div>`;
         } else if (result.type === 'person' && result.position) {
             subtitle = `<div class="search-result-subtitle">${result.position}</div>`;
+        } else if (result.type === 'tag') {
+            subtitle = `<div class="search-result-subtitle tw-line-clamp-2">Topic · ${result.description || ''}</div>`;
         } else if (result.description) {
             subtitle = `<div class="search-result-subtitle tw-line-clamp-2">${result.description}</div>`;
         }

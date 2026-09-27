@@ -9,7 +9,7 @@
  * mistake ships.
  *
  * Also enforces, per tag in tags.yaml:
- *   - slug is unique.
+ *   - slug is present, kebab-case, and unique.
  *   - label, monogram, description are present.
  *   - cluster is one of CLUSTERS (the /tags/ index drops unknown ones).
  *
@@ -23,7 +23,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 const ROOT = path.resolve(__dirname, '..');
-const CLUSTERS = ['learning-paradigms', 'models-and-representations', 'data-and-applications', 'perspectives'];
+const CLUSTERS = Object.keys(require('./tag_clusters'));
 
 function loadYaml(rel) {
     const full = path.join(ROOT, rel);
@@ -50,8 +50,12 @@ function main() {
 
     const validSlugs = new Set(tags.map(t => t.slug));
 
-    // 2. required fields + known cluster
+    // 2. slug shape, required fields, known cluster
     for (const t of tags) {
+        if (typeof t.slug !== 'string' || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(t.slug)) {
+            console.error(`⛔ tags.yaml: entry "${t.label || '(no label)'}" has missing or non-kebab-case slug: ${JSON.stringify(t.slug)}`);
+            ok = false;
+        }
         for (const f of ['label', 'monogram', 'description']) {
             if (!t[f]) {
                 console.error(`⛔ tags.yaml: "${t.slug}" is missing ${f}:`);
@@ -66,7 +70,12 @@ function main() {
 
     // 3. every paper tag is in the vocabulary
     for (const p of papers) {
-        for (const t of (p.tags || [])) {
+        const list = p.tags || [];
+        if (new Set(list).size !== list.length) {
+            console.error(`⛔ papers.yaml: "${p.permalink}" lists the same tag more than once`);
+            ok = false;
+        }
+        for (const t of list) {
             if (!validSlugs.has(t)) {
                 console.error(
                     `⛔ papers.yaml: "${p.permalink}" tags: contains unknown slug "${t}"\n` +
