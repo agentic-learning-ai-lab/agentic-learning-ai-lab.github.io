@@ -130,13 +130,8 @@ function doTemplating(input, output) {
     }
     else if (input === "tags.hbs") {
         // /tags/ root index. Group by cluster; within each cluster,
-        // keep tags.yaml order (curator intent).
-        const tagsWithCount = documents.tags.map(t => ({
-            ...t,
-            paperCount: documents.papers.filter(p =>
-                Array.isArray(p.tags) && p.tags.includes(t.slug)
-            ).length,
-        }));
+        // keep tags.yaml order (curator intent). paperCount is already
+        // populated on each tag record by parseDocuments.
         const clusterOrder = ['learning-paradigms', 'content-and-applications', 'special'];
         const clusterLabels = {
             'learning-paradigms': 'Learning Paradigms',
@@ -146,7 +141,7 @@ function doTemplating(input, output) {
         const clusters = clusterOrder.map(k => ({
             key: k,
             label: clusterLabels[k],
-            tags: tagsWithCount.filter(t => t.cluster === k),
+            tags: documents.tags.filter(t => t.cluster === k),
         })).filter(c => c.tags.length > 0);
 
         fs.mkdirSync(path.dirname(output), { recursive: true });
@@ -347,7 +342,14 @@ function parseDocuments() {
     const recent_papers = papers.filter((p) => p['is_recent']);
 
     // Tag lookup structures. Built once here so templater branches and
-    // Handlebars helpers don't each rebuild them.
+    // Handlebars helpers don't each rebuild them. paperCount is
+    // computed on every tag record so both listing pages and home
+    // cards can render it without a helper.
+    for (const t of tags) {
+        t.paperCount = papers.filter(p =>
+            Array.isArray(p.tags) && p.tags.includes(t.slug)
+        ).length;
+    }
     const tagsBySlug = new Map(tags.map(t => [t.slug, t]));
     const featured_tags = tags.filter(t => t.featured);
 
