@@ -1451,6 +1451,39 @@ section {
     }
 }
 
+/* ── Tag chips ─────────────────────────────────────────────────────
+   Small pill used on paper cards + paper detail to surface
+   data/tags.yaml tags. Phase 1 is deliberately neutral — cluster
+   colors are Phase 2. Uses --radius-sm ("buttons, inputs, chips"
+   from lab-tokens.css). --mono font matches the site character.
+   Sits inline within paragraph text, so vertical rhythm matters —
+   pad small and cap line-height. */
+.tag-chip {
+    display: inline-block;
+    padding: 2px 8px;
+    margin-right: 4px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-sm);
+    color: var(--fg-muted);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    line-height: 1.4;
+    text-decoration: none;
+    transition: color 150ms ease, border-color 150ms ease;
+}
+.tag-chip:hover {
+    color: var(--fg);
+    border-color: var(--border);
+}
+
+.tag-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 0;
+    margin-top: 6px;
+}
+
 /* Research Ecosystems (preview): swap each project icon to its dark
    variant in dark mode. The dark SVGs use lighter blue #5D97FF and
    (for EgoLearn) white eye rects, so the mask-carve visor doesn't
