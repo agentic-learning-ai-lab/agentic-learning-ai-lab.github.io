@@ -1576,6 +1576,17 @@ section {
     text-decoration: none;
 }
 .tag-back-link:hover { color: var(--fg); }
+.tag-all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-end;
+    margin-top: 16px;
+    font-size: 0.88rem;
+    color: var(--fg-muted);
+    text-decoration: none;
+}
+.tag-all-link:hover { color: var(--fg); }
 
 .tag-chip-row {
     display: flex;

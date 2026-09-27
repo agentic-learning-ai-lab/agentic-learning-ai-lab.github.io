@@ -249,7 +249,7 @@ change specifically, staging is worth the extra step.
 
 ## Finalized vocabulary (2026-09-26)
 
-Locked in this doc. **20 tags total, 9 featured, 11 non-featured.**
+Locked in this doc. **20 tags total, 6 featured, 14 non-featured.** (Featured cut from 9 to 6 on 2026-09-27: test-time learning, in-context learning, and LLM reasoning read as field-wide labels on the home page; they remain regular tags.)
 `hierarchical-abstraction` and `local-learning` were added during
 the 25-paper backfill (see amendment note at end of section).
 
