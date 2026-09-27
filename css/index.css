@@ -400,7 +400,7 @@ header>.collapsible-header {
    fades in from the left behind the tagline and paragraph so the white
    text stays legible without a dark box. Lighter in light mode, deeper
    in dark mode. */
-:root { --hero-tint-1: rgba(78, 72, 168, 0.46); --hero-tint-2: rgba(78, 72, 168, 0.20); }
+:root { --hero-tint-1: rgba(124, 106, 214, 0.42); --hero-tint-2: rgba(124, 106, 214, 0.18); }
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) { --hero-tint-1: rgba(38, 34, 92, 0.62); --hero-tint-2: rgba(38, 34, 92, 0.28); }
 }
@@ -411,7 +411,7 @@ header>.collapsible-header {
     inset: 0;
     pointer-events: none;
     z-index: 1;
-    background: linear-gradient(90deg, var(--hero-tint-1) 0%, var(--hero-tint-2) 40%, rgba(78, 72, 168, 0) 68%);
+    background: linear-gradient(90deg, var(--hero-tint-1) 0%, var(--hero-tint-2) 40%, transparent 68%);
     border-radius: var(--radius-lg);
 }
 .hero-home .text-overlay { z-index: 2; }
