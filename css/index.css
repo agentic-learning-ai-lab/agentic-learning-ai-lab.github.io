@@ -396,6 +396,37 @@ header>.collapsible-header {
     }
 }
 
+/* Home hero: a soft indigo tint (from the illustration's own palette)
+   fades in from the left behind the tagline and paragraph so the white
+   text stays legible without a dark box. Lighter in light mode, deeper
+   in dark mode. On xl screens the text sits a little below center. */
+:root { --hero-tint-1: rgba(78, 72, 168, 0.46); --hero-tint-2: rgba(78, 72, 168, 0.20); }
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --hero-tint-1: rgba(38, 34, 92, 0.62); --hero-tint-2: rgba(38, 34, 92, 0.28); }
+}
+:root[data-theme="dark"] { --hero-tint-1: rgba(38, 34, 92, 0.62); --hero-tint-2: rgba(38, 34, 92, 0.28); }
+.hero-home::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(90deg, var(--hero-tint-1) 0%, var(--hero-tint-2) 40%, rgba(78, 72, 168, 0) 68%);
+    border-radius: var(--radius-lg);
+}
+.hero-home .text-overlay { z-index: 2; }
+/* Zoom the illustration in and pin its left edge, so the soft gradient
+   on the image's left side stays behind the text and the clouds and
+   robots sit to the right. */
+.hero-home picture img { object-position: left center; transform: scale(1.3); transform-origin: 0% 55%; }
+/* Narrower banners show more of the image's width, so zoom further to
+   keep the gradient under the (relatively wider) text block. */
+@media (max-width: 1279px) { .hero-home picture img { transform: scale(1.7); } }
+@media (max-width: 1023px) { .hero-home picture img { transform: scale(2); } }
+@media (min-width: 1280px) {
+    .hero-home .text-overlay { top: 56%; }
+}
+
 /* In dark mode the hero image itself is dimmed via the universal
    img brightness rule, so pure-white overlay text reads "too loud"
    against the now-darker photo. Drop one notch from pure white. */
