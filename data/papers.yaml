@@ -20,6 +20,7 @@
     - test-time-learning
     - self-supervised-learning
     - continual-learning
+    - embodied-ai
   date: 2026-07-02T00:00:00.000Z
   journal: CoRR
   is_recent: true
@@ -136,6 +137,7 @@
     - self-supervised-learning
     - human-like-learning
     - hierarchical-abstraction
+    - embodied-ai
   date: 2026-3-12T00:00:00.000Z
   journal: The 43rd International Conference on Machine Learning (ICML 2026)
   is_recent: true
@@ -162,6 +164,7 @@
     - multi-agent
     - llm-reasoning
     - multimodal-learning
+    - embodied-ai
   date: 2026-3-10T00:00:00.000Z
   journal: CoRR
   is_recent: false
@@ -226,6 +229,7 @@
   tags:
     - reinforcement-learning
     - local-learning
+    - embodied-ai
   date: 2025-10-08T00:00:00.000Z
   journal: The 14th International Conference on Learning Representations (ICLR 2026)
   is_recent: true
