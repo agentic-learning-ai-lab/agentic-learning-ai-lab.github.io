@@ -423,19 +423,13 @@ header>.collapsible-header {
    keep the gradient under the (relatively wider) text block. */
 @media (max-width: 1279px) { .hero-home picture img { transform: scale(1.7); } }
 @media (max-width: 1023px) { .hero-home picture img { transform: scale(2); } }
-/* Vertical position of the hero text per width: a little below center on
-   xl, slightly below center on lg, and lifted off the bottom edge below
-   lg. */
-@media (min-width: 1280px) {
-    .hero-home .text-overlay { top: 56%; }
-}
-@media (min-width: 1024px) and (max-width: 1279px) {
-    .hero-home .text-overlay { top: 55%; }
-}
-@media (max-width: 1023px) {
-    /* Below lg the overlay is bottom-anchored (see the tablet rule
-       further down); lift it off the bottom edge a little. */
-    .hero-home .text-overlay { bottom: 38px; }
+/* Hero text is pinned to the bottom of the banner at every width, with a
+   bottom margin that scales smoothly with the viewport (~36px on phones,
+   52px on wide screens) instead of per-breakpoint jumps. */
+.hero-home .text-overlay {
+    top: auto;
+    bottom: clamp(30px, calc(2vw + 20px), 52px);
+    transform: none;
 }
 
 /* In dark mode the hero image itself is dimmed via the universal
