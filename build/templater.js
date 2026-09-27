@@ -145,7 +145,7 @@ function doTemplating(input, output) {
         })).filter(c => c.tags.length > 0);
 
         fs.mkdirSync(path.dirname(output), { recursive: true });
-        fs.writeFileSync(output, template({ clusters, total: documents.tags.length }));
+        fs.writeFileSync(output, template({ clusters }));
     }
     else if (input === "tag.hbs") {
         for (const tag of documents.tags) {
