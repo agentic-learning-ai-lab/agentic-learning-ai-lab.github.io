@@ -1477,7 +1477,9 @@ section {
     border-color: var(--border);
 }
 
-/* Tag-page side list of all topics (lg+), grouped by cluster. Mirrors
+/* Tag-page side list of all topics (lg+), grouped by cluster. Not
+   sticky: the full list is taller than a laptop viewport, and a clipped
+   or inner-scrolling panel read worse than letting it scroll away. Mirrors
    the paper-page TOC sidebar (arxiv-paper.css .paper-sidebar-sticky /
    .paper-toc-link): --card-bg panel, uppercase mono headings, serif
    links with a soft pill on hover and a tinted accent pill for the
@@ -1487,16 +1489,12 @@ section {
     flex-shrink: 0;
     margin-left: auto;
     align-self: flex-start;
-    position: sticky;
-    top: 140px;
-    max-height: calc(100vh - 160px);
-    overflow-y: auto;
     background: var(--card-bg);
     border-radius: var(--radius-md);
-    padding: 1.5rem;
+    padding: 1.25rem;
 }
 .tag-aside ul { margin: 0; padding: 0; list-style: none; }
-.tag-aside__group + .tag-aside__group { margin-top: 1.25rem; }
+.tag-aside__group + .tag-aside__group { margin-top: 1rem; }
 .tag-aside__heading {
     font-family: var(--mono);
     font-size: 0.75rem;
@@ -1504,11 +1502,11 @@ section {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--fg-muted);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
 }
 .tag-aside__link {
     display: block;
-    padding: 0.35rem 0.75rem;
+    padding: 0.25rem 0.75rem;
     font-family: var(--serif);
     font-size: 0.875rem;
     line-height: 1.4;
