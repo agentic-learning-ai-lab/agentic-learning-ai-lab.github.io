@@ -1,4 +1,6 @@
 {{!-- Single tag chip; context is a tag record from tags.yaml.
-      Pass static=true inside card-wrapping anchors: nested <a> is
-      invalid HTML and the parser splits the card apart. --}}
+      Paper cards link through a stretched title link (.paper-card__link),
+      not a card-wrapping <a>, so chips there stay real links. Pass
+      static=true only inside an element that is itself an <a>: nested <a>
+      is invalid HTML and the parser splits the card apart. --}}
 {{#if static}}<span class="tag-chip">{{label}}</span>{{else}}<a href="/tags/{{slug}}/" class="tag-chip">{{label}}</a>{{/if}}
