@@ -1,10 +1,9 @@
 {{#each this}}
-<a href="/research/{{{permalink}}}">
 <div class="page-item">
 <div class="safari-padding-fix">
     <!-- tw-rounded-lg  -->
     <!-- hover:tw-shadow-lg tw-transition-shadow tw-duration-300 -->
-<div class="tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-bg-[var(--card-bg)] tw-p-5 max-lg:tw-w-full
+<div class="paper-card tw-flex tw-h-fit tw-break-inside-avoid tw-flex-col tw-gap-2 tw-bg-[var(--card-bg)] tw-p-5 max-lg:tw-w-full
 tw-border-transparent tw-border-2 hover:tw-border-solid  hover:tw-border-[var(--border)]
 tw-overflow-hidden tw-transition-all tw-duration-200">
     <div class="tw-flex tw-place-items-center tw-gap-3">
@@ -15,7 +14,7 @@ tw-overflow-hidden tw-transition-all tw-duration-200">
         <!--  tw-transition-transform tw-duration-300 tw-transform hover:tw-scale-110 -->
     </div>
     <div class="tw-flex tw-flex-col tw-gap-2">
-        <h3 class="tw-text-xl tw-font-medium tw-mt-4">{{{title}}}</h3>
+        <h3 class="tw-text-xl tw-font-medium tw-mt-4"><a href="/research/{{{permalink}}}" class="paper-card__link">{{{title}}}</a></h3>
         <p class="tw-mt-4">
             {{{formatAuthors authors}}}
         </p>
@@ -24,7 +23,7 @@ tw-overflow-hidden tw-transition-all tw-duration-200">
         </p>
         {{#if tags}}
         <div class="tag-chip-row">
-            {{#each (resolveTags tags 3)}}{{> tag_chip static=true}}{{/each}}
+            {{#each (resolveTags tags 3)}}{{> tag_chip}}{{/each}}
         </div>
         {{/if}}
         <p class="tw-text-[var(--fg-muted)] tw-mt-2">
@@ -40,5 +39,4 @@ tw-overflow-hidden tw-transition-all tw-duration-200">
 </div>
 </div>
 </div>
-</a>
 {{/each}}

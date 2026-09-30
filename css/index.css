@@ -1513,6 +1513,30 @@ section {
     border-color: var(--border);
 }
 
+/* Paper cards (home Recent Works, /research/): the title link stretches
+   over the whole card, so a click anywhere opens the paper, while the
+   tag chips sit above that layer and open their own /tags/<slug>/ page.
+   (A card-wrapping <a> can't hold the chip links: nested <a> is invalid.) */
+.paper-card {
+    position: relative;
+}
+.paper-card__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+.paper-card__link:focus-visible {
+    outline: none;
+}
+.paper-card__link:focus-visible::after {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+.paper-card .tag-chip {
+    position: relative;
+    z-index: 1;
+}
+
 /* Tag-page side list of all topics, grouped by cluster. Shown from 1140px:
    the 720px list + 48px gap + 240px sidebar need 1008px, which fits in
    90% of the width (5% side padding) once the ~15px scrollbar is taken
