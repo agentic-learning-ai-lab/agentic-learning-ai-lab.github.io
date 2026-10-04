@@ -111,23 +111,6 @@ function doTemplating(input, output) {
             fs.writeFileSync(output_new, template(person));
         }
     }
-    else if (input === "research_area.hbs") {
-        for (const ra of documents.research_areas) {
-            const output_new = output.replace("{{permalink}}", ra.permalink);
-            fs.mkdirSync(path.dirname(output_new), { recursive: true });
-
-            const papers = [];
-            for (const p of documents.papers) {
-                for (const ra2 of p.research_areas) {
-                    if (ra2 === ra.permalink) {
-                        papers.push(p);
-                    }
-                }
-            }
-            ra.papers = papers;
-            fs.writeFileSync(output_new, template(ra));
-        }
-    }
     else if (input === "tags.hbs") {
         fs.mkdirSync(path.dirname(output), { recursive: true });
         fs.writeFileSync(output, template({ clusters: documents.tag_clusters }));
@@ -156,7 +139,7 @@ function doTemplating(input, output) {
         // The permalink doubles as a top-level URL path, so it MUST NOT
         // collide with a reserved route.
         const RESERVED = new Set([
-            'research', 'people', 'areas', 'contact',
+            'research', 'people', 'areas', 'tags', 'contact',
             'assets', 'css', 'includes', 'build', 'data',
             'templates', 'notes', 'out', 'staging', 'node_modules',
         ]);
@@ -276,7 +259,6 @@ function compileTemplate(handlebars, input) {
 }
 
 function parseDocuments() {
-    const research_areas = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/research_areas.yaml')));
     const papers = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/papers.yaml')));
     const people = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/people.yaml')));
     const tags = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/tags.yaml')));
@@ -302,11 +284,6 @@ function parseDocuments() {
     const people_alumni = sortPeople(people.filter(x => !x.current));
 
     // Normalize the data — ensure required fields exist
-    for (const ra of research_areas) {
-        ensureExists(ra, 'title');
-        ensureExists(ra, 'image');
-        ensureExists(ra, 'description');
-    }
     for (const p of papers) {
         ensureExists(p, 'title');
         ensureExists(p, 'image');
@@ -346,7 +323,6 @@ function parseDocuments() {
     const peopleMap = new Map(people.map(p => [p.name, p.permalink]));
 
     return {
-        research_areas,
         papers, recent_papers,
         people, people_current, people_alumni, peopleMap,
         tags, tagsBySlug, featured_tags, papersByTag, tag_clusters,

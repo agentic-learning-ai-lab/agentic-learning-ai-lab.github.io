@@ -10,3 +10,15 @@
 /research/are-llms-prescient         /research/daily-oracle         301
 /research/are-llms-prescient/        /research/daily-oracle/        301
 /research/are-llms-prescient/*       /research/daily-oracle/:splat  301
+
+# Research areas retired in favor of topic tags (notes/paper-tag-system.md).
+# Each old area maps to its closest single tag; anything else under
+# /areas/ lands on the topic index.
+/areas/learning-from-visual-experience         /tags/egocentric-video/      301
+/areas/learning-from-visual-experience/        /tags/egocentric-video/      301
+/areas/adaptive-agents-and-foundation-models   /tags/in-context-learning/   301
+/areas/adaptive-agents-and-foundation-models/  /tags/in-context-learning/   301
+/areas/concept-learning-and-abstraction        /tags/concept-learning/      301
+/areas/concept-learning-and-abstraction/       /tags/concept-learning/      301
+/areas                                         /tags/                       301
+/areas/*                                       /tags/                       301

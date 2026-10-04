@@ -7,7 +7,6 @@ const pages = [
     { template: 'research.hbs', output: 'research/index.html' },
     { template: 'paper.hbs', output: 'research/{{permalink}}/index.html' },
     { template: 'person.hbs', output: 'people/{{permalink}}/index.html' },
-    { template: 'research_area.hbs', output: 'areas/{{permalink}}/index.html' },
     { template: 'tag.hbs', output: 'tags/{{permalink}}/index.html' },
     { template: 'tags.hbs', output: 'tags/index.html' },
     // Marketing landing pages for papers with project_page.enabled: true.

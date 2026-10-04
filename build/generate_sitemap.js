@@ -12,7 +12,6 @@
  *   /contact/               — contact form
  *   /research/<slug>/       — one per paper in data/papers.yaml
  *   /people/<slug>/         — one per person in data/people.yaml
- *   /areas/<slug>/          — one per research area
  *   /tags/                  — tag index
  *   /tags/<slug>/           — one per tag in data/tags.yaml
  *   /<slug>/                — one per paper with project_page: true
@@ -51,7 +50,6 @@ function isoDate(d) {
 function main() {
     const papers = loadYaml('data/papers.yaml');
     const people = loadYaml('data/people.yaml');
-    const areas = loadYaml('data/research_areas.yaml');
     const tags = loadYaml('data/tags.yaml');
 
     const entries = [];
@@ -78,12 +76,6 @@ function main() {
     for (const person of people) {
         if (!person.permalink) continue;
         entries.push(urlEntry(`/people/${person.permalink}/`));
-    }
-
-    // Research area pages.
-    for (const a of areas) {
-        if (!a.permalink) continue;
-        entries.push(urlEntry(`/areas/${a.permalink}/`));
     }
 
     // Tag pages.

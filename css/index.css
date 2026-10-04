@@ -543,9 +543,9 @@ header>.collapsible-header {
     border-radius: var(--radius-sm);
 }
 
-/* STANDALONE 200x200 hero images (person headshot on /people/<slug>/,
-   research-area hero on /areas/<slug>/) — no outer card, so keep the
-   medium radius that reads as a proper image treatment. */
+/* STANDALONE 200x200 hero images (person headshot on /people/<slug>/)
+   — no outer card, so keep the medium radius that reads as a proper
+   image treatment. */
 .tw-h-\[200px\].tw-w-\[200px\].tw-overflow-hidden,
 .tw-h-\[200px\].tw-w-\[200px\].tw-overflow-hidden > picture,
 .tw-h-\[200px\].tw-w-\[200px\].tw-overflow-hidden > picture > img,

@@ -12,9 +12,6 @@
   permalink: adajepa
   project_page: true
   enable_full_paper: true
-  research_areas:
-    - learning-from-visual-experience
-    - adaptive-agents-and-foundation-models
   tags:
     - world-models
     - test-time-learning
@@ -38,8 +35,6 @@
   pdf: 'https://arxiv.org/pdf/2606.05115'
   permalink: baby-cl
   enable_full_paper: true
-  research_areas:
-    - learning-from-visual-experience
   tags:
     - human-like-learning
     - continual-learning
@@ -64,8 +59,6 @@
   permalink: beta-bernoulli-calibrator
   project_page: true
   enable_full_paper: true
-  research_areas:
-    - adaptive-agents-and-foundation-models
   tags:
     - forecasting
     - llm-reasoning
@@ -82,8 +75,6 @@
   pdf: 'https://arxiv.org/pdf/2605.16477'
   permalink: conceptual-creativity-meta-learning
   enable_full_paper: true
-  research_areas:
-    - concept-learning-and-abstraction
   tags:
     - creative-exploration
     - meta-learning
@@ -103,8 +94,6 @@
   philpapers: 'https://philpapers.org/rec/RENTSR'
   permalink: the-self-requires-learning
   enable_full_paper: true
-  research_areas:
-    - adaptive-agents-and-foundation-models
   tags:
     - philosophy-of-ai
     - continual-learning
@@ -130,8 +119,6 @@
   permalink: temporal-straightening
   project_page: true
   enable_full_paper: true
-  research_areas:
-    - learning-from-visual-experience
   tags:
     - world-models
     - self-supervised-learning
@@ -157,8 +144,6 @@
   pdf: 'https://arxiv.org/pdf/2603.09827'
   permalink: ma-egoqa
   enable_full_paper: true
-  research_areas:
-    - adaptive-agents-and-foundation-models
   tags:
     - egocentric-video
     - multi-agent
@@ -182,8 +167,6 @@
   permalink: llm-verification
   enable_full_paper: true
   project_page: true
-  research_areas:
-    - adaptive-agents-and-foundation-models
   tags:
     - llm-reasoning
     - multi-agent
@@ -203,8 +186,6 @@
   permalink: icc
   project_page: true
   enable_full_paper: true
-  research_areas:
-    - concept-learning-and-abstraction
   tags:
     - in-context-learning
     - llm-reasoning
@@ -224,8 +205,6 @@
   permalink: arq
   project_page: true
   enable_full_paper: true
-  research_areas:
-    - adaptive-agents-and-foundation-models
   tags:
     - reinforcement-learning
     - local-learning
@@ -244,8 +223,6 @@
   pdf: 'https://arxiv.org/pdf/2510.05558'
   permalink: midway-network
   project_page: true
-  research_areas:
-    - learning-from-visual-experience
   tags:
     - self-supervised-learning
     - world-models
@@ -272,9 +249,6 @@
   webpage: 'https://yangyanl.ai/streammem/'
   permalink: stream-mem
   enable_full_paper: true
-  research_areas:
-    - learning-from-visual-experience
-    - adaptive-agents-and-foundation-models
   tags:
     - egocentric-video
     - llm-reasoning
@@ -296,9 +270,6 @@
   pdf: 'https://arxiv.org/pdf/2507.04221'
   permalink: context-tuning
   project_page: true
-  research_areas:
-    - adaptive-agents-and-foundation-models
-    - concept-learning-and-abstraction
   tags:
     - in-context-learning
     - test-time-learning
@@ -321,8 +292,6 @@
   pdf: 'https://arxiv.org/pdf/2506.14373'
   webpage: ''
   permalink: discrete-jepa
-  research_areas:
-    - concept-learning-and-abstraction
   tags:
     - self-supervised-learning
     - concept-learning
@@ -347,8 +316,6 @@
   pdf: 'https://arxiv.org/pdf/2506.04377'
   webpage: ''
   permalink: replay-can-provably-increase-forgetting
-  research_areas:
-    - learning-from-visual-experience
   tags:
     - continual-learning
   date: 2025-06-04T00:00:00.000Z
@@ -366,8 +333,6 @@
   pdf: 'https://arxiv.org/pdf/2501.12254'
   permalink: memory-storyboard
   project_page: true
-  research_areas:
-    - learning-from-visual-experience
   tags:
     - continual-learning
     - egocentric-video
@@ -390,8 +355,6 @@
   pdf: 'https://arxiv.org/pdf/2411.08324'
   permalink: daily-oracle
   project_page: true
-  research_areas:
-    - adaptive-agents-and-foundation-models
   tags:
     - forecasting
     - llm-reasoning
@@ -413,8 +376,6 @@
   pdf: 'https://arxiv.org/pdf/2408.11208'
   permalink: poodle
   project_page: true
-  research_areas:
-    - learning-from-visual-experience
   tags:
     - self-supervised-learning
     - egocentric-video
@@ -434,8 +395,6 @@
   pdf: 'https://arxiv.org/pdf/2408.02226'
   permalink: procreate
   project_page: true
-  research_areas:
-    - concept-learning-and-abstraction
   tags:
     - creative-exploration
     - concept-learning
@@ -456,8 +415,6 @@
   pdf: 'https://arxiv.org/pdf/2404.19132'
   webpage: ''
   permalink: osiris
-  research_areas:
-    - learning-from-visual-experience
   tags:
     - continual-learning
     - self-supervised-learning
@@ -477,9 +434,6 @@
   pdf: 'https://arxiv.org/pdf/2403.15362'
   permalink: college
   project_page: true
-  research_areas:
-    - adaptive-agents-and-foundation-models
-    - concept-learning-and-abstraction
   tags:
     - concept-learning
     - meta-learning
@@ -502,8 +456,6 @@
   arxiv: 'https://arxiv.org/abs/2403.09613'
   pdf: 'https://arxiv.org/pdf/2403.09613'
   permalink: anticipatory-recovery
-  research_areas:
-    - adaptive-agents-and-foundation-models
   tags:
     - continual-learning
     - test-time-learning
@@ -526,8 +478,6 @@
   pdf: 'https://arxiv.org/pdf/2402.00300'
   webpage: ''
   permalink: video-ssl-from-child
-  research_areas:
-    - learning-from-visual-experience
   tags:
     - human-like-learning
     - egocentric-video
@@ -550,8 +500,6 @@
   pdf: 'https://arxiv.org/pdf/2312.12736'
   webpage: ''
   permalink: learning-forgetting-llms
-  research_areas:
-    - adaptive-agents-and-foundation-models
   tags:
     - ai-safety
     - continual-learning
@@ -572,9 +520,6 @@
   pdf: 'https://arxiv.org/pdf/2312.05269'
   permalink: lifelong-memory
   project_page: true
-  research_areas:
-    - learning-from-visual-experience
-    - adaptive-agents-and-foundation-models
   tags:
     - egocentric-video
     - llm-reasoning
