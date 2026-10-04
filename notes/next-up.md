@@ -10,10 +10,10 @@ Big-picture history lives in git log and the per-design docs
 ## Staging preview
 
 Cloudflare Pages is connected to this repo (set up 2026-05-17). Every
-push to `dev` (or any non-`main` branch) auto-builds and deploys a
-preview within ~3-4 min:
+push to a non-`main` branch auto-builds and deploys a preview within
+~3-4 min:
 
-- Branch alias (always latest): `dev.agentic-learning-ai-lab-github-io.pages.dev`
+- Branch alias (always latest): `<branch>.agentic-learning-ai-lab-github-io.pages.dev`
 - Per-commit immutable: `<short-sha>.agentic-learning-ai-lab-github-io.pages.dev`
 
 Use the branch alias for sharing iterative review links. Build logs

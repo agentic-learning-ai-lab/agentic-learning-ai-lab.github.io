@@ -4,8 +4,8 @@ Source for [agenticlearning.ai](https://agenticlearning.ai).
 
 ## Branches
 
-- **`dev`** — development branch. Make changes here.
-- **`main`** — production branch. Push/merge to main auto-deploys to Cloudflare Pages.
+- **`main`** — production branch. Merging a PR to main auto-deploys to Cloudflare Pages.
+- Work on a feature branch and open a PR to `main`; every branch gets a Cloudflare preview URL.
 
 ## Prerequisites
 
@@ -81,13 +81,13 @@ npm run build:compress:force   # re-compress all images
 2. Drop a paper image at `assets/images/papers/<slug>.png` (locally; gitignored)
 3. Run `npm run build` — this generates thumbnails, syncs new assets to R2, and renders pages
 4. Optionally run `npm run build:arxiv:pdf` to compile a local PDF
-5. Commit and push to `dev`, then merge to `main` to deploy
+5. Commit on a feature branch, open a PR to `main`, and merge to deploy
 
 Binary assets are not committed to git — they live on R2 (mirror via `npm run sync:r2`, recorded in `assets-manifest.json`). Only the manifest entry is committed.
 
 ## Deployment
 
-Cloudflare Pages auto-deploys both `dev` (preview at `dev.agentic-learning-ai-lab-github-io.pages.dev`) and `main` (production at `agenticlearning.ai`). Build command: `npm run build:cf`. No CI workflow files in this repo; CF Pages reads the build settings from its dashboard.
+Cloudflare Pages auto-deploys `main` to production (`agenticlearning.ai`) and every other branch to a preview at `<branch>.agentic-learning-ai-lab-github-io.pages.dev`. Build command: `npm run build:cf`; CF Pages reads the build settings from its dashboard. PR checks run in `.github/workflows/pr-checks.yml`.
 
 For local preview:
 
