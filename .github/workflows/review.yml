@@ -1,0 +1,26 @@
+name: advisory-review
+
+# Outerloop advisory PR review (outerloop-science/outerloop). Comments only:
+# never approves, never blocks a merge, never fails CI. Runs on open/reopen;
+# add the `outerloop:review` label for another round, `outerloop:no-review`
+# to silence it on one PR. Fork PRs are skipped (they must not reach the key),
+# and the reviewer never executes the PR's code.
+on:
+  pull_request_target:
+    types: [opened, reopened, labeled]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  advisory:
+    if: github.event.action != 'labeled' || github.event.label.name == 'outerloop:review'
+    uses: outerloop-science/outerloop/.github/workflows/advisory-review-agent.yml@main
+    with:
+      # Upload/register workflows commit as this login; never review them.
+      bot_login: 'github-actions[bot]'
+      backend: codex
+      model: gpt-5.6-terra
+    secrets:
+      openai_reviewer_key: ${{ secrets.OPENAI_REVIEWER_KEY }}

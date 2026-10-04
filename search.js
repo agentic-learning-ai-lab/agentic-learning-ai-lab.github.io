@@ -96,7 +96,7 @@ function createSearchModal() {
                     <input
                         type="text"
                         id="search-input"
-                        placeholder="Search papers, people, research areas..."
+                        placeholder="Search papers, people, topics..."
                         autocomplete="off"
                     />
                     <button onclick="closeSearch()" class="search-close-btn" aria-label="Close search">
@@ -173,8 +173,7 @@ function performSearch(query) {
     searchResults.innerHTML = results.map(result => {
         const typeLabel = result.type === 'paper' ? 'Paper' :
                          result.type === 'person' ? 'Researcher' :
-                         result.type === 'tag' ? 'Topic' :
-                         'Area';
+                         'Topic';
         const typeClass = result.type === 'paper' ? 'search-badge-paper' :
                          result.type === 'person' ? 'search-badge-person' :
                          'search-badge-area';

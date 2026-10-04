@@ -34,21 +34,21 @@ user-facing setup steps changed.
 ## Repo layout
 
 ```
-data/                       # YAML sources (papers, people, areas, alumni)
+data/                       # YAML sources (papers, people, tags, alumni)
   papers.yaml               #   one list entry per paper
   people.yaml               #   current + alumni; `current: true` flag
-  research_areas.yaml
+  tags.yaml                 #   topic-tag vocabulary (slug, label, cluster, featured)
   alumni.yaml
 
 research/<slug>/            # Per-paper directory
-  index.html                #   built from paper.hbs — generated, but committed
+  index.html                #   built from paper.hbs — generated, gitignored
   paper.pdf                 #   compiled PDF — local + R2, gitignored
   paper-content.json        #   arXiv HTML extraction (cached, committed)
   assets/                   #   figures for the HTML view — local + R2, gitignored
   # latex/ is transient (gitignored). Real source is a tar.gz on R2.
 
-areas/<slug>/index.html     # Generated from research_area.hbs (committed)
-people/<slug>/index.html    # Generated from person.hbs (committed)
+tags/<slug>/index.html      # Generated from tag.hbs (gitignored)
+people/<slug>/index.html    # Generated from person.hbs (gitignored)
 
 assets/
   images/papers/            # Paper hero/card — local + R2, gitignored
@@ -58,11 +58,11 @@ assets/
   images/background/        # Hero bg — local + R2, gitignored
   images/favicons/          # Same-origin (committed; tiny)
   images/logos/             # Same-origin (committed; logo.svg etc.)
-  search-index.json         # Built by generate_search_index.js (committed)
+  search-index.json         # Built by generate_search_index.js (gitignored)
 
 build/                      # All build scripts (Node, no bundler)
   build_pages.js            #   Top-level driver — runs templater.js per template
-  templater.js              #   Handlebars renderer; iterates papers/people/areas
+  templater.js              #   Handlebars renderer; iterates papers/people/tags
   build_arxiv_papers.js     #   arXiv HTML download + LaTeX→PDF compile (R2 source)
   r2_lib.js                 #   Shared S3 client + manifest helpers for R2 scripts
   sync_to_r2.js             #   Bulk site asset sync (images, paper.pdf)
@@ -149,11 +149,11 @@ so students don't need R2 creds to add binaries).
   outerloop.science and for this site's own pages. Same rule: never
   delete or rename without checking referrers, and keep token names
   stable — downstream sites style against them.
-- `areas/<old-slug>/` directories occasionally surface from old research
-  areas. They're build output; the canonical list is
-  `data/research_areas.yaml`.
+- `/areas/<slug>/` is retired (replaced by `/tags/<slug>/`); `_redirects`
+  301s the old URLs. A local `areas/` directory is stale build output
+  from before the retirement and is gitignored.
 - Generated HTML files (`research/*/index.html`, `people/*/index.html`,
-  `areas/*/index.html`, root `index.html`, `contact/index.html`) are
+  `tags/*/index.html`, root `index.html`, `contact/index.html`) are
   **gitignored**. CF Pages rebuilds them via `npm run build:cf` on
   every push. Fresh clones don't have them on disk; `npm run build` (or
   `npm run build:cf`) regenerates everything from sources.
@@ -230,7 +230,7 @@ out/
   css/tailwind-build.css                            # ~150 KB
   people/index.html, people/<slug>/index.html × N   # ~10 KB each
   research/index.html, research/<slug>/index.html × N
-  areas/index.html, areas/<slug>/index.html × N
+  tags/index.html, tags/<slug>/index.html × N
   contact/index.html, includes/lab-header.html, ...
   assets/images/favicons/* + logos/* + search-index.json
   <project-slug>/index.html × N                     # project pages
@@ -250,6 +250,10 @@ is `assets-manifest.json` (~1245 entries, committed to git).
 - `.github/workflows/pr-checks.yml` — runs on PRs to `dev`/`main`.
   Executes `build:cf` + `lint:bibtex` (~1 min, no secrets, no
   LFS). This is the required check on `main`'s branch protection.
+- `.github/workflows/review.yml` — Outerloop advisory review (codex,
+  `gpt-5.6-terra`) on PR open/reopen; comments only, never blocks.
+  Re-run with the `outerloop:review` label. Needs the
+  `OPENAI_REVIEWER_KEY` repo secret.
 
 ## LaTeX source and PDFs
 
@@ -461,12 +465,15 @@ Active pre-commit checks (run as a single Node process from
 | # | Check | What it blocks | Bypass |
 |---|---|---|---|
 | 01 | asset-manifest | New / changed binary asset files not yet on R2 (not in `assets-manifest.json`). Tells you to run `npm run upload`. | `--no-verify` |
+| 02 | webp-companions | A PNG/JPG in the manifest (under a `<picture>`-wrapped path) without a `.webp` sibling. | `--no-verify` |
 | 03 | yaml-valid | `data/*.yaml` files that don't parse cleanly. | `--no-verify` |
-| 04 | permalink-unique | Duplicate `permalink:` within papers.yaml / people.yaml / research_areas.yaml. | `--no-verify` |
+| 04 | permalink-unique | Duplicate `permalink:` within papers.yaml / people.yaml. | `--no-verify` |
 | 05 | no-secrets | Staged diff lines matching credential patterns (R2 keys, GH PATs, OpenAI/Anthropic keys, AWS access keys). Repo is public — must rotate any leaked token immediately. | `--no-verify` |
 | 06 | large-files | **Warns** (not blocks) when adding > 1 MB files to git. Binaries belong on R2. | n/a |
 | 07 | bibtex-lint | papers.yaml `journal:` field's venue acronym not present in MD bibtex (`build/lint_bibtex.js`). | `--no-verify` |
-| 08 | required-fields | papers.yaml / people.yaml / research_areas.yaml entries missing required fields. | `--no-verify` |
+| 08 | required-fields | papers.yaml / people.yaml entries missing required fields. | `--no-verify` |
+| 09 | bibliography | `enable_full_paper` papers whose paper-content.json has an empty bibliography, over-long bibitem tags, or missing-citation spans. | `--no-verify` |
+| 10 | tag-slugs | A paper `tags:` slug not in `data/tags.yaml` (`build/lint_tags.js`). | `--no-verify` |
 
 Adding a new pre-commit check: drop a file in
 `scripts/checks/<NN>_<name>.js` that exports `{ name, run }`.
@@ -547,8 +554,8 @@ Either way, the YAML/MD steps are the same:
 
 1. Add the entry to `data/papers.yaml`. Use an existing entry as a
    template. Required (enforced by pre-commit check 08): `title`,
-   `authors`, `permalink`, `date`, `journal`, `research_areas`,
-   `abstract`, `short_abstract`. Optional: `arxiv`, `pdf`, `webpage`,
+   `authors`, `permalink`, `date`, `journal`, `tags` (slugs from
+   `data/tags.yaml`), `abstract`, `short_abstract`. Optional: `arxiv`, `pdf`, `webpage`,
    `enable_full_paper`, `project_page`, `is_recent`, `image`.
 2. Drop the hero image at `assets/images/papers/<snake_case>.png`
    (gitignored; lives on local disk + R2).
