@@ -2,7 +2,7 @@
 mathjax: true
 affiliations:
   - { name: 'Yuen-Hei Yeung',   aff: 'New York University', url: 'https://xavhl.github.io/' }
-  - { name: 'Christopher Hoang', aff: 'New York University', url: 'https://www.chrishoang.com/' }
+  - { name: 'Chris Hoang',       aff: 'New York University', url: 'https://www.chrishoang.com/' }
   - { name: 'Zifan Zhao',       aff: 'New York University', url: 'http://zifanzhao.com/' }
   - { name: 'Mengye Ren',       aff: 'New York University' }
 bibtex: |

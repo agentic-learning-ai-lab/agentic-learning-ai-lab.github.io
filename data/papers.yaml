@@ -2,7 +2,7 @@
   image: /assets/images/papers/canonical.png
   authors:
     - Yuen-Hei Yeung
-    - Christopher Hoang
+    - Chris Hoang
     - Zifan Zhao
     - Mengye Ren
   short_abstract: Canonical treats camera viewpoint change as a rotation in SO(3), learning self-calibrating visual representations that let visuomotor policies generalize to camera viewpoints unseen during training.
