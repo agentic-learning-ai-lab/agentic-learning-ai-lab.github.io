@@ -34,6 +34,7 @@ module.exports = {
                 if (!e) continue;
                 const missing = fields.filter(f =>
                     e[f] == null || (typeof e[f] === 'string' && e[f].trim() === '')
+                    || (Array.isArray(e[f]) && e[f].length === 0)
                 );
                 if (missing.length > 0) {
                     const id = e.permalink || e.name || e.title || '(unknown)';

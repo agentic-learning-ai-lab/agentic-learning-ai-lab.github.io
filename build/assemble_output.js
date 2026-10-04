@@ -66,6 +66,12 @@ const DIRS = [
                 // by external lab project repos)
 ];
 
+// Directories that used to be in DIRS. Removed from out/ on every
+// assemble so incremental local builds match CF's fresh-clone builds.
+const RETIRED_DIRS = [
+  'areas',      // research areas → /tags/ (301s in _redirects)
+];
+
 // Same-origin asset SUBTREES that templates link to as raw
 // /assets/... paths (not via cdnUrl). Tiny — favicons and the lab
 // logo. Everything else under assets/ stays out of out/ — it's on R2.
@@ -175,6 +181,12 @@ async function main() {
     }
     await fs.remove(dst);
     await fs.copy(src, dst);
+  }
+
+  // Retired routes. A stale out/<dir>/ from an earlier build would be
+  // served as static pages and shadow the 301s in _redirects.
+  for (const d of RETIRED_DIRS) {
+    await fs.remove(path.join(OUT, d));
   }
 
   const researchCopied = await copyResearchHtmlOnly();

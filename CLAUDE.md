@@ -41,14 +41,14 @@ data/                       # YAML sources (papers, people, tags, alumni)
   alumni.yaml
 
 research/<slug>/            # Per-paper directory
-  index.html                #   built from paper.hbs — generated, but committed
+  index.html                #   built from paper.hbs — generated, gitignored
   paper.pdf                 #   compiled PDF — local + R2, gitignored
   paper-content.json        #   arXiv HTML extraction (cached, committed)
   assets/                   #   figures for the HTML view — local + R2, gitignored
   # latex/ is transient (gitignored). Real source is a tar.gz on R2.
 
 tags/<slug>/index.html      # Generated from tag.hbs (gitignored)
-people/<slug>/index.html    # Generated from person.hbs (committed)
+people/<slug>/index.html    # Generated from person.hbs (gitignored)
 
 assets/
   images/papers/            # Paper hero/card — local + R2, gitignored
@@ -58,7 +58,7 @@ assets/
   images/background/        # Hero bg — local + R2, gitignored
   images/favicons/          # Same-origin (committed; tiny)
   images/logos/             # Same-origin (committed; logo.svg etc.)
-  search-index.json         # Built by generate_search_index.js (committed)
+  search-index.json         # Built by generate_search_index.js (gitignored)
 
 build/                      # All build scripts (Node, no bundler)
   build_pages.js            #   Top-level driver — runs templater.js per template

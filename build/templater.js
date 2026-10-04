@@ -139,7 +139,7 @@ function doTemplating(input, output) {
         // The permalink doubles as a top-level URL path, so it MUST NOT
         // collide with a reserved route.
         const RESERVED = new Set([
-            'research', 'people', 'areas', 'contact',
+            'research', 'people', 'areas', 'tags', 'contact',
             'assets', 'css', 'includes', 'build', 'data',
             'templates', 'notes', 'out', 'staging', 'node_modules',
         ]);

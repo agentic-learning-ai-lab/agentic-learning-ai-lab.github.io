@@ -3,7 +3,7 @@
 /**
  * Emit out/llms.txt — the agent-facing landing-page index, per the
  * llmstxt.org convention. A markdown file listing the lab's papers,
- * people, and research areas with links and short descriptions, so an
+ * people, and topic tags with links and short descriptions, so an
  * LLM crawler can ingest the corpus without first rendering every
  * HTML page.
  *
@@ -15,7 +15,6 @@
  *   - "Machine-readable index" section: pointer to /assets/search-index.json
  *   - "Papers": one bullet per paper (sorted newest first)
  *   - "People": current members, then alumni
- *   - "Research areas": one bullet per area
  *   - "Tags": one bullet per tag with description
  */
 

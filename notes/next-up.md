@@ -76,8 +76,9 @@ requires-learning`) render PDF-only.
 
 ### 3. Home page: news + selected publications
 
-Topic tags replaced research areas (`/tags/`, home Topics grid;
-`/areas/` 301s to the closest tag). Still open from the original
+Topic tags replaced research areas (`/tags/`, home Topics grid).
+Old `/areas/<slug>/` URLs 301 to the closest tag; `/areas/` and
+anything else under it go to `/tags/`. Still open from the original
 home-page sketch:
 - Recent works is just the latest N papers filtered by `is_recent`;
   no story-telling, no grouping by theme.
