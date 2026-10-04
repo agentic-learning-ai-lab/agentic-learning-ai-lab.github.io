@@ -250,6 +250,10 @@ is `assets-manifest.json` (~1245 entries, committed to git).
 - `.github/workflows/pr-checks.yml` — runs on PRs to `dev`/`main`.
   Executes `build:cf` + `lint:bibtex` (~1 min, no secrets, no
   LFS). This is the required check on `main`'s branch protection.
+- `.github/workflows/review.yml` — Outerloop advisory review (codex,
+  `gpt-5.6-terra`) on PR open/reopen; comments only, never blocks.
+  Re-run with the `outerloop:review` label. Needs the
+  `OPENAI_REVIEWER_KEY` repo secret.
 
 ## LaTeX source and PDFs
 
