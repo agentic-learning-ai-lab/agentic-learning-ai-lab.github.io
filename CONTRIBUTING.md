@@ -120,8 +120,9 @@ entry as a template.
   image: /assets/images/papers/your_slug.png
   date: 2026-05-19T00:00:00.000Z       # ISO 8601
   journal: 'The Nth International Conference on Foo (FOO 2026)'
-  research_areas:
-    - adaptive-agents-and-foundation-models    # must match data/research_areas.yaml
+  tags:                                 # slugs from data/tags.yaml, most central first
+    - world-models
+    - self-supervised-learning
   is_recent: true                       # show in "Recent" section
   enable_full_paper: true               # optional: enables /research/<slug>/ HTML view
   project_page: true                    # optional: enables /<slug>/ project page

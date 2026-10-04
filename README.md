@@ -106,7 +106,7 @@ build/                     # Build scripts
   generate_search_index.js #   Search index builder
   sync_to_r2.js            #   Upload new binary assets to R2
   pull_from_r2.js          #   Hydrate local binaries from R2 (fresh clone)
-data/                      # YAML data files (papers, people, research areas)
+data/                      # YAML data files (papers, people, topic tags)
   projects/                # Per-paper project page markdown
 research/                  # Per-paper directories (paper HTML + extracted content)
 assets/                    # Site-wide images, CSS, favicons (binaries gitignored)

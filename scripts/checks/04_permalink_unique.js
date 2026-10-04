@@ -4,11 +4,10 @@
  *   - Template generators silently overwrite one output dir with the
  *     other's content.
  *
- * Checks data/papers.yaml, data/people.yaml, data/research_areas.yaml
- * for unique `permalink:` values (per file). Cross-file overlap is
- * intentionally allowed (e.g., paper permalink "poodle" + research-area
- * permalink "poodle" wouldn't actually collide because they live at
- * different URL paths).
+ * Checks data/papers.yaml and data/people.yaml for unique `permalink:`
+ * values (per file). Cross-file overlap is intentionally allowed (a
+ * paper and a person live at different URL paths, so they can't
+ * collide).
  */
 
 const fs = require('fs');
@@ -20,7 +19,6 @@ const ROOT = path.resolve(__dirname, '..', '..');
 const TARGETS = [
     'data/papers.yaml',
     'data/people.yaml',
-    'data/research_areas.yaml',
 ];
 
 module.exports = {

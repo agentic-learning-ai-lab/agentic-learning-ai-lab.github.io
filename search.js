@@ -96,7 +96,7 @@ function createSearchModal() {
                     <input
                         type="text"
                         id="search-input"
-                        placeholder="Search papers, people, research areas..."
+                        placeholder="Search papers, people, topics..."
                         autocomplete="off"
                     />
                     <button onclick="closeSearch()" class="search-close-btn" aria-label="Close search">

@@ -61,7 +61,6 @@ const DIRS = [
   'people',     // people/index.html + people/<slug>/index.html × N
   'contact',
   'css',        // Tailwind output (~150 KB minified)
-  'areas',
   'tags',       // tags/<slug>/index.html × N (+ tags/index.html)
   'includes',   // lab-header.html / lab-attribution.html (consumed
                 // by external lab project repos)

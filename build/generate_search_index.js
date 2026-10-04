@@ -3,11 +3,10 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 // Read all data files
-let papers, people, researchAreas, tags;
+let papers, people, tags;
 try {
     papers = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/papers.yaml'), 'utf8'));
     people = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/people.yaml'), 'utf8'));
-    researchAreas = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/research_areas.yaml'), 'utf8'));
     tags = yaml.load(fs.readFileSync(path.resolve(__dirname, '../data/tags.yaml'), 'utf8'));
 } catch (err) {
     console.error('Failed to load YAML data files:', err.message);
@@ -80,7 +79,6 @@ papers.forEach(paper => {
             paper.title,
             ...(paper.authors || []),
             paper.short_abstract || '',
-            ...(paper.research_areas || []),
             ...(paper.tags || []),
             ...((paper.tags || []).map(s => tagLabels.get(s) || s)),
         ].join(' ').toLowerCase()
@@ -112,33 +110,6 @@ people.forEach(person => {
             person.name,
             person.position || '',
             person.description || ''
-        ].join(' ').toLowerCase()
-    });
-});
-
-// Add research areas to search index
-researchAreas.forEach(area => {
-    // Generate thumbnail path from image path
-    // Convert .webp to .png since thumbnails are converted to PNG
-    let thumbnail = '';
-    if (area.image) {
-        let imageName = path.basename(area.image);
-        if (imageName.endsWith('.webp')) {
-            imageName = imageName.replace('.webp', '.png');
-        }
-        thumbnail = cdnUrlFor(`/assets/images/thumbnails/${imageName}`);
-    }
-
-    searchIndex.push({
-        type: 'research-area',
-        title: area.title,
-        description: area.description || '',
-        image: area.image || '',
-        thumbnail: thumbnail,
-        url: `/areas/${area.permalink}/`,
-        keywords: [
-            area.title,
-            area.description || ''
         ].join(' ').toLowerCase()
     });
 });

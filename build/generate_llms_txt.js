@@ -39,7 +39,6 @@ function bullet(label, url, suffix) {
 function main() {
     const papers = loadYaml('data/papers.yaml');
     const people = loadYaml('data/people.yaml');
-    const areas = loadYaml('data/research_areas.yaml');
     const tags = loadYaml('data/tags.yaml');
 
     // Papers: newest first by date.
@@ -61,9 +60,9 @@ function main() {
     lines.push('');
     lines.push('## Machine-readable index');
     lines.push('');
-    lines.push(`A JSON index of every paper, person, and research area on this site is`);
+    lines.push(`A JSON index of every paper, person, and topic tag on this site is`);
     lines.push(`available at [/assets/search-index.json](${SITE}/assets/search-index.json).`);
-    lines.push('Each entry has `type` (`paper`, `person`, or `research-area`), `title`,');
+    lines.push('Each entry has `type` (`paper`, `person`, or `tag`), `title`,');
     lines.push('`url`, and a `description` or `abstract` field with full text.');
     lines.push('');
     lines.push('## Papers');
@@ -89,14 +88,6 @@ function main() {
         }
     }
     lines.push('');
-    lines.push('## Research areas');
-    lines.push('');
-    for (const a of areas) {
-        if (!a.permalink) continue;
-        const url = `${SITE}/areas/${a.permalink}/`;
-        lines.push(bullet(a.title, url, a.keywords));
-    }
-    lines.push('');
     lines.push('## Tags');
     lines.push('');
     lines.push(`See [/tags/](${SITE}/tags/) for the full index. Each tag has a page`);
@@ -112,7 +103,7 @@ function main() {
     fs.mkdirSync(OUT_DIR, { recursive: true });
     const outPath = path.join(OUT_DIR, 'llms.txt');
     fs.writeFileSync(outPath, lines.join('\n'));
-    console.log(`✓ wrote llms.txt — ${papersSorted.length} papers, ${peopleCurrent.length + peopleAlumni.length} people, ${areas.length} areas, ${tags.length} tags`);
+    console.log(`✓ wrote llms.txt — ${papersSorted.length} papers, ${peopleCurrent.length + peopleAlumni.length} people, ${tags.length} tags`);
 }
 
 main();

@@ -15,9 +15,8 @@ const ROOT = path.resolve(__dirname, '..', '..');
 
 const REQUIRED = {
     'data/papers.yaml': ['title', 'authors', 'permalink', 'date', 'journal',
-                         'research_areas', 'abstract', 'short_abstract'],
+                         'tags', 'abstract', 'short_abstract'],
     'data/people.yaml': ['name', 'permalink', 'position', 'description'],
-    'data/research_areas.yaml': ['title', 'permalink'],
 };
 
 module.exports = {
