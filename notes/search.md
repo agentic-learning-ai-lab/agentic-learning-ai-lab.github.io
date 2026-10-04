@@ -42,11 +42,11 @@ This website now includes a client-side search feature that allows users to sear
 - `templates/head.hbs` - Added `<script src="/search.js"></script>`
 - `css/index.css` - Added comprehensive search styles matching site design
 - `package.json` - Updated build script to include thumbnail and search index generation
-- `build.sh` - Added `search.js` to files copied to output directory
+- `build/assemble_output.js` - Copies `search.js` and the search index into `out/`
 
 ## Build Process
 
-When you run `npm run build` or `./build.sh`, the following happens:
+When you run `npm run build`, the following happens:
 
 1. `npm run build:tailwind` compiles and minifies Tailwind CSS for production
 2. `node ./build/generate_thumbnails.js` creates center-cropped 256x256px thumbnails
@@ -55,7 +55,7 @@ When you run `npm run build` or `./build.sh`, the following happens:
    - Uses macOS `sips` command for image processing
 3. `node ./build/generate_search_index.js` creates `assets/search-index.json` with thumbnail paths
 4. `node ./build/build_pages.js` generates HTML pages
-5. `build.sh` copies all files including `search.js` and thumbnails to the `out/` directory
+5. `build/assemble_output.js` copies `search.js` and `assets/search-index.json` into `out/` (thumbnails are served from R2)
 
 ## Design Choices
 
