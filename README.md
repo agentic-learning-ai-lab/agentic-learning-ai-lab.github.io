@@ -9,7 +9,7 @@ Source for [agenticlearning.ai](https://agenticlearning.ai).
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 24 (see `.nvmrc`)
 - [qpdf](https://qpdf.sourceforge.io/) for PDF compression + deterministic finalization (optional locally; `brew install qpdf` on macOS)
 
 Image processing uses [sharp](https://sharp.pixelplumbing.com/) (cross-platform, installed via npm). Binary assets (paper PDFs, hero images, figures) live on Cloudflare R2 — not in git.

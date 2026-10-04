@@ -81,6 +81,11 @@ assets/projects/**/*.csv
 # the build pipeline's R2 download branch. See notes/latex-tarball-storage.md.
 research/*/latex/
 research/*/latex_arXiv/
+research/*/*.tar.gz
+
+# Claude Code local state (per-machine settings, agent worktrees).
+.claude/settings.local.json
+.claude/worktrees/
 
 # Build pipeline cache for downloaded tarballs + compile workdirs.
 .cache/
