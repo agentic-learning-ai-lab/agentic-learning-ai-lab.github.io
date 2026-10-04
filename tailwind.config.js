@@ -5,12 +5,13 @@ module.exports = {
 	prefix: 'tw-',
 	important: false,
 	content: [
-		"**/*.{html,jsx,js,hbs}",
-		"**/*.js",
-		"**/*.html",
-		"**/*.hbs",
-		"*.html",
-		"**/**/*.html",
+		// Source files only. Cloudflare's slim build runs Tailwind before
+		// pages are rendered, so generated HTML must not be a class source
+		// (and **/*.js would also crawl node_modules).
+		"./*.{html,hbs,js}",
+		"./templates/**/*.hbs",
+		"./includes/**/*.html",
+		"./build/**/*.js",
 	],
 	theme: {
 		extend: {
