@@ -1,3 +1,21 @@
+- title: 'Canonical Observation Pretraining for Visuomotor Control'
+  image: /assets/images/papers/canonical.png
+  authors:
+    - Yuen-Hei Yeung
+    - Chris Hoang
+    - Zifan Zhao
+    - Mengye Ren
+  short_abstract: Canonical treats camera viewpoint change as a rotation in SO(3), learning self-calibrating visual representations that let visuomotor policies generalize to camera viewpoints unseen during training.
+  abstract: "Visuomotor policies learned from human demonstrations are brittle to camera viewpoint changes. Existing remedies each make a different assumption: novel-view synthesis requires a rendering pipeline, equivariant architectures require 3D inputs or symmetry hard-coded into the network, and view-invariant pretraining requires only multi-view RGB but does not model how a viewpoint change acts on the features. We present Canonical, a self-supervised pretraining method that instead keeps viewpoint as a recoverable latent factor, modeling camera viewpoint change as a rotation in SO(3) and warping features into a shared canonical frame before a standard behavior-cloned policy that needs no viewpoint-specific changes. Pretraining consumes multi-view RGB and one rotation label per camera; at deployment an angle predictor recovers the rotation from the image itself, requiring no pose information. Canonical generalizes to camera viewpoints unseen by the policy, reaching 0.87 success at pretraining-pool views and 0.78 outside the pool on vision-only LIBERO-Goal against the strongest multi-view baseline's 0.65 and 0.50; on MetaWorld's main camera split it is the only tested visual representation that does not degrade a proprioceptive policy under viewpoint shift, and it remains the strongest method at viewpoints unseen by the policy on a real-world xArm robot."
+  permalink: canonical
+  project_page: true
+  tags:
+    - embodied-ai
+    - self-supervised-learning
+    - world-models
+  date: 2026-10-02T00:00:00.000Z
+  journal: CoRR
+  is_recent: true
 - title: 'AdaJEPA: An Adaptive Latent World Model'
   image: /assets/images/papers/adajepa.png
   authors:
