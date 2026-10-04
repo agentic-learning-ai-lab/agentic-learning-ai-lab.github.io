@@ -12,6 +12,7 @@ module.exports = {
 		"./templates/**/*.hbs",
 		"./includes/**/*.html",
 		"./build/**/*.js",
+		"./data/projects/**/*.md",
 	],
 	theme: {
 		extend: {
