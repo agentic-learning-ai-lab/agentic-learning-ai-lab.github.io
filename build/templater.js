@@ -2,11 +2,13 @@
 const path = require('path');
 const yaml = require('js-yaml');
 const fs = require('fs');
+const crypto = require('crypto');
 const handlebarsFactory = require('handlebars');
 const moment = require('moment');
 
 const TEMPLATES_DIR = path.resolve(__dirname, '../templates');
 const ASSETS_MANIFEST_PATH = path.resolve(__dirname, '../assets-manifest.json');
+const SEARCH_INDEX_PATH = path.resolve(__dirname, '../assets/search-index.json');
 
 const { paperJsonLd, personJsonLd, organizationJsonLd } = require('./jsonld');
 
@@ -322,10 +324,19 @@ function parseDocuments() {
     // redundant parseDocuments() call the helper used to make.
     const peopleMap = new Map(people.map(p => [p.name, p.permalink]));
 
+    // Content hash of the search index (generate_search_index.js runs
+    // before build:pages). search.js fetches the index with ?v=<hash>, so
+    // each new index is a new URL: the agenticlearning.ai edge cache held
+    // a stale /assets/search-index.json for weeks across deploys.
+    const searchIndexVersion = fs.existsSync(SEARCH_INDEX_PATH)
+        ? crypto.createHash('sha256').update(fs.readFileSync(SEARCH_INDEX_PATH)).digest('hex').slice(0, 12)
+        : '';
+
     return {
         papers, recent_papers,
         people, people_current, people_alumni, peopleMap,
         tags, tagsBySlug, featured_tags, papersByTag, tag_clusters,
+        searchIndexVersion,
     };
 }
 
@@ -357,6 +368,8 @@ function registerHelpers(handlebars, documents) {
     // build/sync_to_r2.js). Falls back to the local path if the manifest
     // doesn't have an entry — graceful degradation lets us migrate
     // templates incrementally without breaking pages mid-migration.
+    handlebars.registerHelper('searchIndexVersion', () => documents.searchIndexVersion);
+
     handlebars.registerHelper('cdnUrl', function (logicalPath) {
         if (!logicalPath) return '';
         const manifest = loadAssetsManifest();
