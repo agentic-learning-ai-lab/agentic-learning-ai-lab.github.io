@@ -1,4 +1,9 @@
 // Search functionality
+// Versioned index URL (content hash stamped by the build onto this
+// script's tag) so the CDN can't serve a stale index after a deploy.
+const SEARCH_INDEX_VERSION = (document.currentScript && document.currentScript.dataset.indexVersion) || '';
+const SEARCH_INDEX_URL = '/assets/search-index.json' + (SEARCH_INDEX_VERSION ? `?v=${SEARCH_INDEX_VERSION}` : '');
+
 let searchIndex = [];
 let searchModal = null;
 let searchInput = null;
@@ -7,7 +12,7 @@ let searchResults = null;
 // Initialize search
 async function initSearch() {
     try {
-        const response = await fetch('/assets/search-index.json');
+        const response = await fetch(SEARCH_INDEX_URL);
         searchIndex = await response.json();
         console.log(`Search index loaded: ${searchIndex.length} items`);
     } catch (error) {
