@@ -1,3 +1,25 @@
+- title: 'HyperThink: Text-to-Parameter Hypernetworks for Efficient Reasoning'
+  image: /assets/images/papers/hyperthink.png
+  authors:
+    - Donggyun Kim
+    - Jack Lu
+    - Chanwoo Kim
+    - Mengye Ren
+    - Seunghoon Hong
+  short_abstract: A hypernetwork turns each question into a compact parameter update, so the LLM answers without a long thinking trace.
+  abstract: 'Long-form thinking traces can substantially improve the multi-step reasoning performance of large language models (LLMs), but they introduce high inference-time overhead, with latency dominated by sequential decoding. We propose HyperThink, a text-to-parameter approach that amortizes this reasoning computation into a single query-conditioned parameter update: a lightweight hypernetwork reads the question and predicts updates to a small subset of the base LLM''s parameters, while a vector-quantized decoder constrains them to a finite set of reusable patterns to improve robustness and transfer. Trained end-to-end on outputs from the base model itself, HyperThink eliminates long thinking traces at test time: after one hypernetwork forward pass, the adapted model generates a concise step-by-step solution and final answer without an intermediate trace, using far fewer tokens while retaining strong reasoning performance. Empirically, HyperThink improves the low-latency region of the accuracy-latency trade-off on mathematical and general reasoning tasks, with its strongest gains in the near-non-thinking regime.'
+  arxiv: 'https://arxiv.org/abs/2610.03039'
+  pdf: 'https://arxiv.org/pdf/2610.03039'
+  webpage: 'https://hyperthink-llm.github.io/'
+  permalink: hyperthink
+  enable_full_paper: true
+  tags:
+    - llm-reasoning
+    - test-time-learning
+    - meta-learning
+  date: 2026-10-02T00:00:00.000Z
+  journal: The Third Conference on Language Modeling (COLM 2026)
+  is_recent: true
 - title: 'AdaJEPA: An Adaptive Latent World Model'
   image: /assets/images/papers/adajepa.png
   authors:
