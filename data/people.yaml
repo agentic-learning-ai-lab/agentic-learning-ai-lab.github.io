@@ -170,6 +170,15 @@
   google_scholar: "e-HtQI4AAAAJ"
   current: true
 -
+  name: "Charles O'Hanlon"
+  image: "/assets/images/people/charles_ohanlon.jpg"
+  position: "Master Student"
+  webpage: ""
+  permalink: "charles-ohanlon"
+  description: "Charles is an M.S. student in Computer Science at New York University’s Courant Institute of Mathematical Sciences. He is advised by Prof. Mengye Ren, and works with Ying Wang. His research interests include generalization, sample-efficient learning, latent space geometry, multimodal learning, and world models for planning and control. He earned his B.S. in Computer Science with a minor in Mathematics from California Polytechnic State University, San Luis Obispo."
+  google_scholar: ""
+  current: true
+-
   name: "Weizhen Zhou"
   image: "/assets/images/people/weizhen_zhou.jpg"
   position: "Master Student"
