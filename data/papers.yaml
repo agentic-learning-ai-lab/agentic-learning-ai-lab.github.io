@@ -274,6 +274,7 @@
     - in-context-learning
     - test-time-learning
     - llm-reasoning
+    - meta-learning
   date: 2025-07-06T00:00:00.000Z
   journal: The 43rd International Conference on Machine Learning (ICML 2026)
   is_recent: true

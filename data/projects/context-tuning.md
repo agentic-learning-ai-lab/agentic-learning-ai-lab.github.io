@@ -10,6 +10,7 @@ italic_terms:
   - CT-KV
 links:
   code: https://github.com/agentic-learning-ai-lab/context-tuning
+  poster: /assets/projects/context-tuning/icml2026-poster-context-tuning.pdf
 bibtex: |
   @inproceedings{lu2026contexttuning,
     title     = {Context Tuning for In-Context Optimization},
