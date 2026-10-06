@@ -1612,6 +1612,21 @@ section {
 }
 .tag-all-link:hover { color: var(--fg); }
 
+/* Home section heading with a right-aligned "All … →" link on the same
+   line. Lives in the heading (not under the grid) because the masonry
+   grid's bottom edge is ragged. */
+.section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+}
+.section-head .tag-all-link {
+    margin-top: 0;
+    align-self: auto;
+    white-space: nowrap;
+}
+
 .tag-chip-row {
     display: flex;
     flex-wrap: wrap;

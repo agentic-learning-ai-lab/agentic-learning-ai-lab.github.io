@@ -75,23 +75,28 @@
     </section>
 
     <section class="tw-mt-12 tw-flex tw-w-full tw-flex-col tw-p-[5%] max-lg:tw-p-4">
-        <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
-            Topics
-        </h3>
+        <div class="section-head">
+            <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
+                Topics
+            </h3>
+            <a href="/tags/" class="tag-all-link">All topics <i class="bi bi-arrow-right"></i></a>
+        </div>
         <div class="section-underline tw-my-4"></div>
 
         <div class="tag-card-grid tw-mt-4">
             {{#each featured_tags}}{{> tag_card}}{{/each}}
         </div>
-        <a href="/tags/" class="tag-all-link">All topics <i class="bi bi-arrow-right"></i></a>
     </section>
 
     <section class="tw-mt-12 tw-flex tw-w-full tw-flex-col tw-px-[5%] max-lg:tw-p-4 tw-overflow-hidden">
         <div class="tw-flex-col tw-w-full">
             <!-- reveal-up -->
-            <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
-                Recent Works
-            </h3>
+            <div class="section-head">
+                <h3 class="text-left tw-text-4xl tw-font-medium max-md:tw-text-2xl">
+                    Recent Works
+                </h3>
+                <a href="/research/" class="tag-all-link">All papers <i class="bi bi-arrow-right"></i></a>
+            </div>
 
             <!-- reveal-up -->
             <div class="section-underline tw-my-4">
