@@ -111,11 +111,7 @@ entry as a template.
 - title: 'Your Paper Title Here'
   authors:
     - First Author
-    - Second Author
     - Mengye Ren
-  equal_contribution:                   # optional: co-first authors, marked with *
-    - First Author
-    - Second Author
   short_abstract: One-sentence pitch shown on the card.
   abstract: 'Full abstract paragraph, single-line for YAML cleanliness.'
   arxiv: 'https://arxiv.org/abs/XXXX.XXXXX'

@@ -561,8 +561,7 @@ Either way, the YAML/MD steps are the same:
    template. Required (enforced by pre-commit check 08): `title`,
    `authors`, `permalink`, `date`, `journal`, `tags` (slugs from
    `data/tags.yaml`), `abstract`, `short_abstract`. Optional: `arxiv`, `pdf`, `webpage`,
-   `enable_full_paper`, `project_page`, `is_recent`, `image`, `equal_contribution`
-   (co-first author names, each marked with an asterisk).
+   `enable_full_paper`, `project_page`, `is_recent`, `image`.
 2. Drop the hero image at `assets/images/papers/<snake_case>.png`
    (gitignored; lives on local disk + R2).
 3. Get the LaTeX source onto R2:

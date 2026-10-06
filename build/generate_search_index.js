@@ -70,8 +70,7 @@ papers.forEach(paper => {
     searchIndex.push({
         type: 'paper',
         title: paper.title,
-        authors: formatAuthors((paper.authors || []).map(a =>
-            (paper.equal_contribution || []).includes(a) ? a + '*' : a)),
+        authors: formatAuthors(paper.authors),
         abstract: paper.short_abstract || paper.abstract || '',
         image: paper.image || '',
         thumbnail: thumbnail,
