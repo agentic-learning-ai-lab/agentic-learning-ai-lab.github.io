@@ -57,13 +57,10 @@ function formatAuthors(authors) {
 // Add papers to search index
 papers.forEach(paper => {
     // Generate thumbnail path from image path
-    // Convert .webp to .png since thumbnails are converted to PNG
+    // generate_thumbnails.js writes every thumbnail as <stem>.png
     let thumbnail = '';
     if (paper.image) {
-        let imageName = path.basename(paper.image);
-        if (imageName.endsWith('.webp')) {
-            imageName = imageName.replace('.webp', '.png');
-        }
+        const imageName = path.basename(paper.image).replace(/\.[^.]+$/, '.png');
         thumbnail = cdnUrlFor(`/assets/images/thumbnails/${imageName}`);
     }
 
@@ -88,13 +85,10 @@ papers.forEach(paper => {
 // Add people to search index
 people.forEach(person => {
     // Generate thumbnail path from image path
-    // Convert .webp to .png since thumbnails are converted to PNG
+    // generate_thumbnails.js writes every thumbnail as <stem>.png
     let thumbnail = '';
     if (person.image) {
-        let imageName = path.basename(person.image);
-        if (imageName.endsWith('.webp')) {
-            imageName = imageName.replace('.webp', '.png');
-        }
+        const imageName = path.basename(person.image).replace(/\.[^.]+$/, '.png');
         thumbnail = cdnUrlFor(`/assets/images/thumbnails/${imageName}`);
     }
 
