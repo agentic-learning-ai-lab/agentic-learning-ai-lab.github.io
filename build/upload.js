@@ -62,9 +62,11 @@ const ASSET_PATTERNS = [
 function globToRegex(glob) {
     let g = glob;
     g = g.replace(/\{([^}]+)\}/g, (_, csv) => '\x00BO' + csv.split(',').join('\x00BX') + '\x00BC');
+    g = g.replace(/\*\*\//g, '\x00DD'); // `**/` also matches zero directories
     g = g.replace(/\*\*/g, '\x00DS');
     g = g.replace(/\*/g, '\x00ST');
     g = g.replace(/[.+^$()|[\]\\]/g, '\\$&');
+    g = g.replace(/\x00DD/g, '(?:.*/)?');
     g = g.replace(/\x00DS/g, '.*');
     g = g.replace(/\x00ST/g, '[^/]*');
     g = g.replace(/\x00BO/g, '(');
