@@ -1612,6 +1612,32 @@ section {
 }
 .tag-all-link:hover { color: var(--fg); }
 
+/* Home section heading with a right-aligned "All … →" link on the same
+   line. Lives in the heading (not under the grid) because the masonry
+   grid's bottom edge is ragged.
+
+   The link sits on the heading's baseline, then drops by a fraction of
+   the heading's font size: on the bare baseline, small text beside the
+   large heading reads as floating high. --section-head-size mirrors the
+   heading's tw-text-4xl / max-md:tw-text-2xl, so the drop scales with it. */
+.section-head {
+    --section-head-size: 2.25rem;  /* tw-text-4xl */
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+}
+@media (max-width: 767px) {
+    .section-head { --section-head-size: 1.5rem; }  /* max-md:tw-text-2xl */
+}
+.section-head .tag-all-link {
+    margin-top: 0;
+    align-self: auto;
+    white-space: nowrap;
+    position: relative;
+    top: calc(var(--section-head-size) * 0.33);
+}
+
 .tag-chip-row {
     display: flex;
     flex-wrap: wrap;
