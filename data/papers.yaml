@@ -193,7 +193,7 @@
     - llm-reasoning
     - multi-agent
   date: 2025-12-2T00:00:00.000Z
-  journal: CoRR
+  journal: ICLR 2026 Workshop on AI with Recursive Self-Improvement
   is_recent: false
 - title: In-Context Clustering with Large Language Models
   image: /assets/images/papers/icc.png
