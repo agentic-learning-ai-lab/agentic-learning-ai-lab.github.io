@@ -4,7 +4,9 @@ affiliations:
   - { name: 'Ryan Teehan', aff: 'New York University' }
   - { name: 'Mengye Ren',  aff: 'New York University' }
 links:
-  code: https://github.com/Agentic-Learning-AI-Lab/procreate-diffusion-public
+  code: https://github.com/agentic-learning-ai-lab/procreate-diffusion
+  huggingface: https://huggingface.co/datasets/Jacklu0831/few-shot-creative-generation-8
+  poster: /assets/projects/procreate/eccv2024-poster-procreate.pdf
 bibtex: |
   @inproceedings{lu2024procreate,
     title     = {ProCreate, Don't Reproduce! Propulsive Energy Diffusion for Creative Generation},

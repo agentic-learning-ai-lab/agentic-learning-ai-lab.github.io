@@ -22,7 +22,7 @@
   position: "PhD Student"
   webpage: "https://jacklu-me.com/"
   permalink: "jack-lu"
-  description: "Jack Lu is a PhD student in Computer Science at NYU Courant, advised by Prof. Mengye Ren in the CILVR lab. His research is supported by the NSERC PGS-D Scholarship. Prior to joining NYU, he got his Bachelor’s degree in Computer Science and Mathematics at the University of Waterloo. Recently, his work focused on generative modeling, few-shot learning, and AI-assisted design."
+  description: "Jack Lu is a PhD candidate in Computer Science at NYU Courant, advised by Prof. Mengye Ren in the CILVR lab and supported by the NSERC PGS-D Scholarship. He studies reasoning and adaptation in LLMs and embodied agents, as well as world models that agents can learn and plan in. He is currently a Visiting Researcher at Meta working on recursive self-improvement, and he spent summer 2026 on reasoning VLAs and world models at NVIDIA. Before these, he did research and engineering for autonomous driving and ML for health at NVIDIA, Waabi and Uber ATG, IBM, and DarwinAI. He received his Bachelor’s degree in Computer Science and Mathematics from the University of Waterloo."
   google_scholar: "iN5SFdsAAAAJ"
   current: true
 - 
