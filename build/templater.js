@@ -288,6 +288,14 @@ function parseDocuments() {
         ensureExists(p, 'title');
         ensureExists(p, 'image');
         ensureExists(p, 'short_abstract');
+        // equal_contribution names must match authors exactly.
+        for (const name of p.equal_contribution || []) {
+            if (!p.authors.includes(name)) {
+                throw new Error(
+                    `papers.yaml "${p.permalink}": equal_contribution name "${name}" is not in authors.`
+                );
+            }
+        }
     }
     for (const p of people) {
         ensureExists(p, 'name');
@@ -452,7 +460,15 @@ function registerHelpers(handlebars, documents) {
         return m ? m[1] : journal;
     });
 
-    handlebars.registerHelper('formatAuthors', function (authors) {
+    // Asterisk after each co-first author listed in equal_contribution.
+    function markEqualContribution(authors, names, render) {
+        const equal = new Set(Array.isArray(names) ? names : []);
+        return authors.map(author => render(author)
+            + (equal.has(author) ? '<span title="Equal contribution">*</span>' : ''));
+    }
+
+    handlebars.registerHelper('formatAuthors', function (authors, equalContribution) {
+        authors = markEqualContribution(authors, equalContribution, author => author);
         if (authors.length === 0) {
             return "";
         } else if (authors.length === 1) {
@@ -464,14 +480,14 @@ function registerHelpers(handlebars, documents) {
         }
     });
 
-    handlebars.registerHelper('formatAuthorsWithLinks', function (authors) {
+    handlebars.registerHelper('formatAuthorsWithLinks', function (authors, equalContribution) {
         const peopleMap = documents.peopleMap;
 
         if (!authors || authors.length === 0) {
             return "";
         }
 
-        const formattedAuthors = authors.map(author => {
+        const formattedAuthors = markEqualContribution(authors, equalContribution, author => {
             if (peopleMap.has(author)) {
                 return `<a href="/people/${peopleMap.get(author)}/">${author}</a>`;
             }
