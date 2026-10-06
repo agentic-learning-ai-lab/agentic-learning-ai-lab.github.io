@@ -7,14 +7,14 @@ affiliations:
   - { name: 'Mengye Ren',  aff: 'New York University' }
 links:
   code: https://github.com/agentic-learning-ai-lab/llm-verification
+  huggingface: https://huggingface.co/datasets/Jacklu0831/llm-verification-raw
+  poster: /assets/projects/llm-verification/iclr2026-poster-llm-verification.pdf
 bibtex: |
-  @misc{lu2025llmverification,
-    title         = {When Does Verification Pay Off? A Closer Look at LLMs as Solution Verifiers},
-    author        = {Jack Lu and Ryan Teehan and Jinran Jin and Mengye Ren},
-    year          = {2025},
-    eprint        = {2512.02304},
-    archivePrefix = {arXiv},
-    primaryClass  = {cs.CL}
+  @inproceedings{lu2026llmverification,
+    title     = {When Does Verification Pay Off? A Closer Look at LLMs as Solution Verifiers},
+    author    = {Lu, Jack and Teehan, Ryan and Jin, Jinran and Ren, Mengye},
+    booktitle = {ICLR 2026 Workshop on AI with Recursive Self-Improvement},
+    year      = {2026}
   }
 ---
 
