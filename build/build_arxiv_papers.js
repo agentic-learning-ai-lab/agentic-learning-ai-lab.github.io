@@ -228,6 +228,15 @@ async function downloadArxivHtml(arxivUrl, outputPath) {
       content = content.substring(firstSectionIndex);
     }
 
+    // Rewrite <object data="x.svg"> figures as <img> so the steps below download them.
+    content = content.replace(/<object\b([^>]*)>\s*<\/object>/gi, (tag, attrs) => {
+      const data = attrs.match(/\sdata="([^"]+\.(?:png|jpg|jpeg|gif|svg))"/i);
+      if (!data) return tag;
+      const rest = attrs.replace(/\s(?:data|type)="[^"]*"/gi, '');
+      const alt = /\salt="/i.test(rest) ? '' : ' alt="Refer to caption"';
+      return `<img src="${data[1]}"${rest}${alt}>`;
+    });
+
     // Download images and update paths
     const assetsDir = path.join(path.dirname(outputPath), 'assets');
     await fs.ensureDir(assetsDir);
