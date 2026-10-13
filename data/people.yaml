@@ -98,6 +98,15 @@
   google_scholar: "y_7wqtIAAAAJ"
   current: true
 -
+  name: "Jin-Seop Lee"
+  image: "/assets/images/people/jin_seop_lee.jpg"
+  position: "Visiting PhD Student"
+  webpage: "https://jinsuby.github.io/"
+  permalink: "jin-seop-lee"
+  description: "Jin-Seop Lee is a Ph.D. student at Sungkyunkwan University and a visiting Ph.D. student in the Agentic Learning AI Lab at NYU. At Sungkyunkwan University, he works with Prof. Jee-Hyong Lee in the Information & Intelligence System Lab. Previously, he was a visiting researcher at Nanyang Technological University, working with Prof. Jaehong Yoon and Prof. Boyang Albert Li. His current research interests include human-centered AI agents, personal world models, and proactive AI. At NYU, he is working with Prof. Mengye Ren toward building a J.A.R.V.I.S.-like AI assistant that provides assistance aligned with human intent, understands individual user preferences, and continually develops its proactive assistance skills."
+  google_scholar: "6oAkrhMAAAAJ"
+  current: true
+-
   name: "Xavier (Xiaoyang) Jiang"
   image: "/assets/images/people/xavier_jiang.jpg"
   position: "Master Student"
