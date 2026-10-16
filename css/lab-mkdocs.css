@@ -1,0 +1,800 @@
+/* ==========================================================================
+   Agentic Learning AI Lab — MkDocs Material look
+   Canonical home: agentic-learning-ai-lab.github.io/css/lab-mkdocs.css
+   Served at:      https://agenticlearning.ai/css/lab-mkdocs.css
+   Consumers:      the lab's MkDocs sites (lab wiki, jepa-agent, egolearn,
+                   chronology, forecasting-agent API docs)
+
+   Maps MkDocs Material onto the shared tokens, so a docs site matches
+   agenticlearning.ai. Load it after lab-tokens.css; a site's own
+   stylesheet comes after it for page-specific rules. CSS only, on
+   Material's class names. Each site keeps two small template overrides:
+   overrides/main.html (keeps <html data-theme> in sync with Material's
+   color scheme) and overrides/partials/logo.html (logo plus site word).
+   ========================================================================== */
+
+/* ---- tokens → Material variables --------------------------------------
+   Material sets its palette variables on <body data-md-color-scheme ...
+   data-md-color-primary ...>; this selector outranks those. */
+body[data-md-color-scheme][data-md-color-primary] {
+  --md-default-bg-color: var(--bg);
+  --md-default-fg-color: var(--fg);
+  --md-default-fg-color--light: var(--fg-muted);
+  --md-default-fg-color--lighter: color-mix(in srgb, var(--fg) 32%, transparent);
+  --md-default-fg-color--lightest: color-mix(in srgb, var(--fg) 8%, transparent);
+  --md-typeset-color: var(--fg);
+  --md-typeset-a-color: var(--accent);
+  --md-accent-fg-color: var(--accent);
+  --md-accent-fg-color--transparent: var(--accent-soft);
+  --md-primary-fg-color: var(--bg);
+  --md-primary-fg-color--light: var(--bg);
+  --md-primary-fg-color--dark: var(--bg);
+  --md-primary-bg-color: var(--fg);
+  --md-primary-bg-color--light: var(--fg-muted);
+  --md-code-bg-color: var(--card-bg);
+  --md-code-fg-color: var(--fg);
+  --md-footer-bg-color: var(--bg);
+  --md-footer-bg-color--dark: var(--bg);
+  --md-footer-fg-color: var(--fg);
+  --md-footer-fg-color--light: var(--fg-muted);
+  --md-footer-fg-color--lighter: var(--fg-muted);
+  --md-typeset-table-color: var(--border-soft);
+  --md-admonition-bg-color: var(--card-bg);
+  --md-admonition-fg-color: var(--fg);
+  --md-shadow-z1: none;
+  --md-shadow-z2: none;
+  --md-shadow-z3: none;
+}
+
+:root {
+  --lab-icon-x: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/></svg>');
+  --lab-header-h: 6rem; /* 120px, the lab site's header */
+  --md-text-font: "Iowan Old Style", "Apple Garamond", Baskerville, "Source Serif 4";
+  --md-code-font: "Space Mono";
+  --lab-content-max: 960px; /* text, code and tables share one column */
+}
+
+/* Material enlarges everything above 1600px (html 137.5% / 150%); the lab
+   sites don't, so hold the 20px rem at every width. */
+html {
+  font-size: 125%;
+}
+body {
+  background: var(--bg);
+}
+
+/* ---- header ------------------------------------------------------------ */
+.md-header {
+  background: var(--bg);
+  color: var(--fg);
+}
+.md-header--shadow {
+  box-shadow: none; /* the lab sites' headers have no rule under them */
+}
+/* Scrolled (html.lab-scrolled, set by main.html): the lab site's header card
+   — --card-bg with rounded bottom corners, mirroring the footer. Light
+   --card-bg is translucent, so a light blur frosts the text behind it; dark
+   --card-bg is solid, so no blur there. */
+.md-header {
+  transition: background-color 0.15s ease, border-radius 0.15s ease;
+}
+:root.lab-scrolled .md-header {
+  background-color: var(--card-bg);
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+:root[data-theme="dark"].lab-scrolled .md-header {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.md-header__inner {
+  height: var(--lab-header-h);
+  padding: 0; /* logo lines up with the text and footer card edges */
+}
+.md-header__title {
+  display: none; /* the logo and site word carry the name */
+}
+.md-header__button.md-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0.2rem 0;
+  flex-shrink: 0;
+}
+.md-header__button.md-logo img {
+  height: 3rem; /* 60px, the lab site's header logo */
+  width: auto;
+}
+.lab-wiki-word {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 1.3rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  white-space: nowrap;
+}
+.lab-wiki-sub {
+  color: var(--fg-muted);
+  margin-left: 0.6em;
+  padding-left: 0.6em;
+  border-left: 1px solid var(--border-soft);
+}
+/* Order like the lab sites: logo … search, theme toggle at the far right. */
+.md-header__inner > .md-search { order: 1; }
+.md-header__inner > .md-header__option { order: 2; }
+.md-header__inner > label[for="__search"] { order: 1; }
+/* Mobile: menu button last, at the far right, like the lab sites. */
+.md-header__inner > label[for="__drawer"] { order: 3; }
+@media screen and (max-width: 44.9375em) {
+  :root { --lab-header-h: 3.6rem; }
+  .md-header__button.md-logo { gap: 0.45rem; }
+  .md-header__button.md-logo img { height: 1.8rem; }
+  .md-header__button.md-logo .lab-wiki-word { font-size: 0.95rem; }
+}
+/* Repo link stays in mkdocs.yml for the per-page edit/view buttons, but
+   isn't shown in the header. */
+.md-header__source { display: none; }
+/* Header icon buttons (search, theme): the lab sites' `.header-links`
+   pill — transparent until hover, then --card-bg with a 2px border. */
+.md-header__inner > .md-header__button:not(.md-logo),
+.md-header__option > .md-header__button {
+  color: var(--fg);
+  margin: 0 0.1rem;
+  padding: 0.25rem 0.6rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.md-header__inner > .md-header__button:not(.md-logo):hover,
+.md-header__option > .md-header__button:hover {
+  opacity: 1;
+  background-color: var(--card-bg);
+  border-color: var(--border);
+}
+/* The search button pushes itself and the theme button to the right edge. */
+.md-header__inner > label.md-header__button[for="__search"] {
+  margin-left: auto;
+}
+.md-header__inner > .md-header__button:not(.md-logo) svg,
+.md-header__option > .md-header__button svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+/* Narrowest phones (< 360px): logo and buttons tighten so the menu button
+   stays on screen. */
+@media screen and (max-width: 22.4375em) {
+  .md-header__button.md-logo img { height: 1.5rem; }
+  .md-header__button.md-logo .lab-wiki-word { font-size: 0.8rem; }
+  .md-header__inner > .md-header__button:not(.md-logo),
+  .md-header__option > .md-header__button {
+    margin: 0;
+    padding: 0.25rem 0.3rem;
+  }
+}
+
+/* ---- search: an icon button that opens a centered panel over a dimmed
+   page, like the lab site's search modal (desktop). Mobile keeps
+   Material's full-screen search, restyled below. */
+@media screen and (min-width: 60em) {
+  .md-header__inner > label.md-header__button[for="__search"] {
+    display: inline-block;
+  }
+  .md-search {
+    padding: 0;
+  }
+  /* Closed: invisible but still focusable (focusing the input is what
+     opens Material's search). Open: the centered panel. */
+  .md-search__inner,
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__inner {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    width: min(700px, calc(100vw - 40px));
+    height: auto;
+    float: none;
+    z-index: 5;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .md-search__inner {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -12px);
+  }
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__inner {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+  }
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__overlay {
+    position: fixed;
+    inset: 0;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    transform: none;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__form {
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .md-search__output {
+    position: static;
+    width: auto;
+    box-shadow: none !important;
+    border-radius: 0;
+  }
+  [data-md-toggle="search"]:checked ~ .md-header .md-search__scrollwrap {
+    max-height: calc(100vh - 220px);
+  }
+}
+.md-search__input {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--fg);
+}
+.md-search__input::placeholder {
+  color: var(--fg-muted);
+}
+.md-search__icon {
+  color: var(--fg-muted);
+}
+.md-search-result__meta {
+  background: transparent;
+  color: var(--fg-muted);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.6rem 0.9rem;
+}
+.md-search-result__item {
+  box-shadow: 0 -1px 0 var(--border-soft);
+}
+.md-search-result__link:hover,
+.md-search-result__link:focus,
+.md-search-result__more > summary:hover {
+  background-color: var(--card-bg);
+}
+.md-search-result .md-typeset h1::after,
+.md-search-result__article h1::after {
+  content: none; /* the page-title bar is for pages, not result titles */
+}
+.md-search__scrollwrap,
+[data-md-toggle="search"]:checked ~ .md-header .md-search__scrollwrap {
+  width: auto;
+}
+.md-search-result__article {
+  overflow-wrap: anywhere;
+}
+.md-search-result__article h1 {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--fg);
+}
+.md-search-result__article h2 {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.7rem;
+  color: var(--fg);
+}
+.md-search-result__teaser,
+.md-search-result__article p {
+  font-family: var(--serif);
+  font-size: 0.7rem;
+  color: var(--fg-muted);
+}
+.md-search-result__icon {
+  color: var(--fg-muted);
+}
+.md-search-result mark {
+  background: var(--accent-soft);
+  color: var(--fg);
+  text-decoration: none;
+  border-radius: 3px;
+}
+.md-search-result__more > summary > div {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--fg-muted);
+}
+
+/* Light/dark logo swap. <html data-theme> is kept in sync by main.html.
+   Selectors outrank Material's `.md-logo img { display: block }`. */
+/* !important: Material's drawer-title logo rules would otherwise show both. */
+img.lab-logo--dark { display: none !important; }
+:root[data-theme="dark"] img.lab-logo--light { display: none !important; }
+:root[data-theme="dark"] img.lab-logo--dark { display: block !important; }
+
+/* Drawer (mobile) copy of the logo: smaller. */
+.md-nav__button.md-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.md-nav__button.md-logo img {
+  height: 2rem;
+  width: auto;
+}
+.md-nav__button.md-logo .lab-wiki-word {
+  font-size: 1rem;
+}
+
+/* ---- layout: reading column + nav panel ------------------------------------
+   Two columns like the lab's /tags/<slug>/ pages: a reading column capped at
+   --lab-content-max on the left, and the site nav (with each page's table of
+   contents folded in via toc.integrate) as a --card-bg panel pinned to the
+   right edge. Side margins follow the lab sites: 5% from 1024px up, 16px
+   below. Header, page, and footer share them, so all three line up. */
+.md-grid {
+  max-width: none;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+@media screen and (max-width: 63.984375em) {
+  .md-grid {
+    margin-left: 0.8rem;
+    margin-right: 0.8rem;
+  }
+}
+.md-main__inner.md-grid {
+  margin-top: 1.6rem;
+}
+/* !important: Material's `[dir=ltr] .md-sidebar--primary:not([hidden]) ~
+   .md-content > .md-content__inner` adds a gutter for its left sidebar. */
+.md-content__inner {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.md-content {
+  max-width: var(--lab-content-max);
+}
+/* The panel shows from 960px; below that the nav is the slide-in menu. */
+@media screen and (min-width: 60em) {
+  .md-header__inner > label[for="__drawer"] {
+    display: none;
+  }
+  [dir] .md-sidebar--primary {
+    order: 2;
+    position: static;
+    width: 14.4rem; /* 240px panel, as on the tag page, plus the gap */
+    height: auto;
+    align-self: flex-start;
+    margin-left: auto;
+    padding-left: 2.4rem; /* the tag page's 48px gap to the reading column */
+    transform: none;
+    background: transparent;
+    box-shadow: none;
+    transition: none;
+    z-index: auto;
+  }
+  [dir] .md-sidebar--primary .md-sidebar__scrollwrap {
+    position: static;
+    height: auto !important;
+    max-height: none;
+    overflow: visible;
+    margin: 0;
+  }
+  .md-sidebar--primary .md-sidebar__inner {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 0.9rem 0.6rem;
+  }
+  .md-nav--primary > .md-nav__title {
+    display: none; /* site name repeats the header */
+  }
+}
+
+/* nav text: serif links, uppercase mono section labels, pill for current */
+.md-nav {
+  font-family: var(--serif);
+  font-size: 0.7rem;
+}
+.md-nav__item--section > .md-nav__link {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--fg-muted);
+  margin-top: 0.9rem;
+}
+.md-nav__link {
+  color: var(--fg-muted);
+  border-radius: var(--radius-sm);
+  padding: 0.15rem 0.5rem;
+  margin-top: 0.15rem;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.md-nav__link:hover,
+.md-nav__link:focus {
+  color: var(--fg);
+  background-color: color-mix(in srgb, var(--fg) 6%, transparent);
+}
+.md-nav__item--section > .md-nav__link:hover {
+  background: none;
+  color: var(--fg-muted);
+}
+.md-nav__link--active,
+.md-nav__link--active:hover,
+.md-nav__item .md-nav__link--active {
+  color: var(--accent);
+  background-color: var(--accent-soft);
+  font-weight: 600;
+}
+
+/* Page TOC folded into the nav (toc.integrate): drop Material's vertical
+   tree line and show the headings as small indented sub-links. */
+.md-nav--primary .md-nav--secondary,
+[dir] .md-nav--integrated > .md-nav__list > .md-nav__item--active .md-nav--secondary {
+  border-left: 0;
+  margin: 0.1rem 0 0.3rem;
+}
+.md-nav--primary .md-nav--secondary .md-nav__link {
+  font-size: 0.65rem;
+  padding-left: 1.2rem;
+  margin-top: 0.05rem;
+}
+.md-nav--primary .md-nav--secondary .md-nav--secondary .md-nav__link {
+  padding-left: 1.8rem;
+}
+
+/* ---- below 1220px Material restyles the nav for its drawer ------------------
+   Undo that so the list stays flat and grouped like the wide-screen panel
+   (instead of Material's one-level-at-a-time sliding panels). This covers
+   both the 960–1220px panel and the phone menu. */
+@media screen and (max-width: 76.234375em) {
+  /* No white sheets or dividers inside the card. */
+  .md-nav--primary,
+  .md-nav--primary .md-nav,
+  .md-nav--primary .md-nav__title ~ .md-nav__list {
+    position: static;
+    background: transparent;
+    box-shadow: none;
+  }
+  .md-nav--primary .md-nav__item {
+    border-top: 0;
+  }
+  .md-nav--primary .md-nav__item,
+  .md-nav--primary .md-nav__title {
+    font-size: inherit;
+  }
+  .md-nav--primary .md-nav__link {
+    padding: 0.15rem 0.5rem;
+    margin-top: 0.15rem;
+  }
+
+  /* Flatten: show every section's pages at once. */
+  .md-nav--primary .md-nav__toggle ~ .md-nav,
+  .md-nav--primary .md-nav__item--nested > .md-nav {
+    position: static;
+    display: block;
+    height: auto;
+    opacity: 1;
+    transform: none;
+    transition: none;
+    margin-bottom: 0; /* Material's -0.4rem pairs with a wide-screen-only margin */
+  }
+  /* A page after a section (Editing, Links) starts a new group. */
+  .md-nav--primary > .md-nav__list > .md-nav__item--section + .md-nav__item:not(.md-nav__item--section) {
+    margin-top: 0.9rem;
+  }
+  .md-nav--primary .md-nav .md-nav__title {
+    display: none; /* nested "back" headers */
+  }
+  .md-nav--primary .md-nav__link .md-nav__icon {
+    display: none; /* the ">" and TOC glyphs */
+  }
+  .md-nav--primary .md-nav__link[for="__toc"] {
+    display: none; /* toc.integrate's duplicate of the current page link */
+  }
+  .md-nav--primary .md-nav__link[for="__toc"] + .md-nav__link {
+    display: flex; /* Material hides the real link in favor of that label */
+  }
+  .md-nav__source {
+    display: none; /* repo link; per-page edit/view buttons remain */
+  }
+  .md-nav--primary > .md-nav__list > .md-nav__item--nested > .md-nav__link {
+    pointer-events: none; /* section labels, not links */
+    margin-top: 0.9rem;
+  }
+  .md-nav--primary .md-nav__item--active > .md-nav__link:not(.md-nav__link--active) {
+    color: var(--fg-muted);
+  }
+}
+
+/* ---- phones and small tablets (< 960px): slide-in menu ----------------------
+   The main site's mobile menu: a --card-bg card sliding in from the right
+   with rounded left corners, holding the same flat, grouped list. */
+@media screen and (max-width: 59.984375em) {
+  [dir] .md-sidebar--primary {
+    left: auto;
+    right: -13rem;
+    width: 13rem;
+    height: auto; /* as tall as its links, like the lab site's menu */
+    max-height: calc(100vh - 20px);
+    padding: 0;
+    /* --card-bg over --bg: the lab card tone, but opaque so page text
+       doesn't show through behind the links. */
+    background: linear-gradient(var(--card-bg), var(--card-bg)), var(--bg);
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    border-left: 1px solid color-mix(in srgb, var(--border) 35%, transparent);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+  [dir] [data-md-toggle="drawer"]:checked ~ .md-container .md-sidebar--primary {
+    transform: translateX(-13rem);
+    box-shadow: none;
+  }
+  [dir] .md-sidebar--primary .md-sidebar__scrollwrap {
+    position: static;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+  }
+  [dir] .md-sidebar--primary .md-sidebar__inner {
+    padding: 0; /* Material's top padding and scrollbar gutter */
+  }
+  :root[data-theme="dark"] .md-sidebar--primary {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  [data-md-toggle="drawer"]:checked ~ .md-overlay {
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+
+  /* Drawer top: just a close mark, level with (and in the same spot as) the
+     header's menu button it replaces, like the lab site's menu → X. The
+     whole row is Material's close control. */
+  /* matches Material palette's `html [data-md-color-primary=black] ...` */
+  html body[data-md-color-primary] .md-nav--primary .md-nav__title[for="__drawer"] {
+    background: transparent;
+    height: var(--lab-header-h);
+    padding: 0 1.3rem 0 0; /* centers the mark under the menu button */
+    font-size: 0; /* hide the repeated site name */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .md-nav--primary .md-nav__title[for="__drawer"] .md-logo {
+    display: none;
+  }
+  .md-nav--primary .md-nav__title[for="__drawer"]::after {
+    content: "";
+    width: 0.9rem;
+    height: 0.9rem;
+    background-color: var(--fg);
+    -webkit-mask: var(--lab-icon-x) center / contain no-repeat;
+    mask: var(--lab-icon-x) center / contain no-repeat;
+  }
+
+  .md-nav--primary .md-nav__item > .md-nav--secondary {
+    display: none !important; /* the page's headings stay in the panel only */
+  }
+
+  /* Section labels and links, same vocabulary as the panel, a bit larger
+     for touch. */
+  .md-nav--primary > .md-nav__list {
+    padding: 0 0.6rem 1.2rem;
+  }
+  .md-nav--primary > .md-nav__list > .md-nav__item--nested > .md-nav__link {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--fg-muted);
+    margin-top: 0.9rem;
+    padding: 0.15rem 0.5rem;
+  }
+  .md-nav--primary .md-nav__link {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+  }
+}
+
+/* ---- typography ---------------------------------------------------------- */
+.md-typeset {
+  font-family: var(--serif);
+  font-size: 0.85rem; /* 17px, the lab sites' body size */
+  line-height: 1.7;
+}
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-family: var(--mono);
+  font-weight: 400;
+  color: var(--fg);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.md-typeset h1 {
+  font-size: 1.8rem;
+  line-height: 1.2;
+  margin: 0 0 1.4rem;
+}
+.md-typeset h1::after {
+  content: "";
+  display: block;
+  width: 52px;
+  height: 5px;
+  background: var(--accent);
+  border-radius: 3px;
+  margin-top: 0.6rem;
+}
+.md-typeset h2 {
+  font-size: 1.2rem;
+  line-height: 1.3;
+  margin: 2rem 0 0.8rem;
+}
+.md-typeset h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 1.6rem 0 0.6rem;
+}
+.md-typeset h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.md-typeset a {
+  text-underline-offset: 2px;
+}
+.md-typeset a:hover {
+  text-decoration: underline;
+}
+.md-typeset code {
+  font-size: 0.82em;
+  border-radius: 4px;
+}
+.md-typeset pre > code {
+  border-radius: var(--radius-sm);
+}
+.md-typeset .headerlink {
+  color: var(--fg-muted);
+}
+.md-content__button {
+  color: var(--fg-muted);
+}
+
+/* ---- tables ---------------------------------------------------------------- */
+.md-typeset table:not([class]) {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  font-size: 0.8rem;
+  overflow: hidden;
+}
+.md-typeset table:not([class]) th {
+  background: var(--card-bg);
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--fg-muted);
+}
+.md-typeset table:not([class]) td {
+  border-top: 1px solid var(--border-soft);
+}
+/* Names in a table's first column (Slack channels, paths) stay on one line. */
+.md-typeset table:not([class]) td:first-child code {
+  white-space: nowrap;
+}
+
+/* ---- admonitions: soft cards, no heavy colored left border -------------- */
+.md-typeset .admonition,
+.md-typeset details {
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  box-shadow: none;
+  font-size: 0.8rem;
+}
+.md-typeset .admonition-title,
+.md-typeset summary {
+  background: transparent !important;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 0.7rem;
+}
+
+/* ---- footer: the main site's footer card — grey, rounded top corners,
+   flat bottom flush with the viewport bottom, same width as the header. */
+.md-footer {
+  background: transparent;
+  color: var(--fg);
+}
+.md-footer-meta {
+  background: transparent;
+  margin-top: 2.4rem;
+}
+/* One row at every width, like the lab site: address left, icons right. */
+.md-footer-meta__inner.md-grid {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 1.6rem 1.6rem;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--mono);
+}
+.md-copyright {
+  width: auto;
+  color: var(--fg);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+[dir] .md-social {
+  display: flex;
+  margin: 0 0 0 auto;
+  padding: 0;
+  gap: 1.2rem;
+}
+@media screen and (max-width: 44.9375em) {
+  .md-footer-meta__inner.md-grid {
+    padding: 1.6rem 1.2rem;
+  }
+  [dir] .md-social {
+    gap: 1rem;
+  }
+}
+.md-social__link {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.md-social__link svg {
+  fill: var(--fg);
+  max-height: 1.2rem;
+}
+.md-social__link:hover svg {
+  fill: var(--accent);
+}
+.md-copyright__highlight {
+  white-space: nowrap; /* keep "60 Fifth Ave" on one line */
+}
+@media screen and (max-width: 22.4375em) {
+  .md-footer-meta__inner.md-grid {
+    padding: 1.4rem 0.8rem;
+    gap: 0.6rem;
+  }
+  [dir] .md-social {
+    gap: 0.55rem;
+  }
+  .md-social__link,
+  .md-social__link svg {
+    width: 1rem;
+    height: 1rem;
+    max-height: 1rem;
+  }
+}
+
+/* Pages with several short tables (e.g. Slack channels): full width, so the
+   tables line up with each other. */
+.md-typeset .wide-tables .md-typeset__table {
+  display: block; /* Material's wrapper shrinks to fit */
+}
+.md-typeset .wide-tables table:not([class]) {
+  display: table;
+  width: 100%;
+}
+.md-typeset .wide-tables td:first-child {
+  width: 11rem;
+}
+
+/* Anchor targets clear the taller lab header (Material assumes 68px). */
+.md-typeset [id] { scroll-margin-top: calc(var(--lab-header-h) + 0.8rem); }

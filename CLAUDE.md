@@ -149,6 +149,10 @@ so students don't need R2 creds to add binaries).
   outerloop.science and for this site's own pages. Same rule: never
   delete or rename without checking referrers, and keep token names
   stable — downstream sites style against them.
+- `css/lab-mkdocs.css` — the MkDocs Material look shared by the lab's docs
+  sites (lab wiki, jepa-agent, egolearn, chronology, forecasting-agent),
+  which link it after `lab-tokens.css`. A change here restyles all of
+  them at once; check one of them in its preview before merging.
 - `/areas/<slug>/` is retired (replaced by `/tags/<slug>/`); `_redirects`
   301s the old URLs. A local `areas/` directory is stale build output
   from before the retirement and is gitignored.
