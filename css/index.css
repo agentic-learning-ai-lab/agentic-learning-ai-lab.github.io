@@ -1205,6 +1205,11 @@ section {
     font-size: 1.1875rem;
     line-height: 1.566;
 }
+.project-prose a {
+    color: var(--accent);
+    text-decoration: none;
+}
+.project-prose a:hover { text-decoration: underline; }
 
 /* Trim the last project-page section's bottom margin — the per-section
    mb-40 (160px) is for between-section gaps; doubling it above the
