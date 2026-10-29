@@ -20,7 +20,7 @@ const ASSET_PATTERNS = [
     'assets/images/background/*.{png,jpg,jpeg,gif,webp}',
     'assets/images/home/*.{png,jpg,jpeg,gif,webp}',
     'assets/images/thumbnails/*.{png,jpg,jpeg,gif,webp}',
-    'assets/projects/**/*.{png,jpg,jpeg,gif,webp,mp4,pdf,csv}',
+    'assets/projects/**/*.{png,jpg,jpeg,gif,webp,svg,mp4,pdf,css,csv}',
 ];
 
 function globToRegex(glob) {
