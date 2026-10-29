@@ -1,0 +1,31 @@
+/* Main results table: booktabs-style rules to match the paper. */
+.prompto-table-wrap {
+    overflow-x: auto;
+    max-width: 832px;
+    margin: 0 auto;
+}
+.prompto-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+    border-top: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+}
+.prompto-table th,
+.prompto-table td {
+    padding: 0.3rem 0.75rem;
+    line-height: 1.4;
+    text-align: right;
+    white-space: nowrap;
+}
+.prompto-table th:first-child,
+.prompto-table td:first-child {
+    text-align: left;
+}
+.prompto-table thead th {
+    font-weight: 600;
+    border-bottom: 1px solid currentColor;
+}
+.prompto-table tr.ours td {
+    border-top: 1px solid currentColor;
+}

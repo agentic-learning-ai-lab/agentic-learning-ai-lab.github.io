@@ -1,3 +1,20 @@
+- title: 'What Is It Like to Write Like Haiku?'
+  image: /assets/images/papers/prompto.png
+  authors:
+    - Jinran Jin
+    - Ryan Teehan
+    - Jack Lu
+    - Mengye Ren
+  short_abstract: PrompTo distills LLMs' implicit writing styles into system prompts that other models can follow.
+  abstract: 'Language models have distinct and recognizable writing styles, yet these writing styles are rarely articulated precisely. In this paper, we study whether a model''s style can be described in words for another model to adapt and follow. To measure the fitness of a description, we ask independent evaluators to distinguish the pair of responses. Rather than coming up with an ad hoc prompt, our proposed framework, PrompTo, creates a search loop to optimize for the style prompt that confuses the evaluator. A reflector then takes in the reward and language feedback and generates a prompt candidate for the next iteration. The optimized prompts recover 74.8% of the source–target gap on average, against at most 15.2% for existing baselines. Moreover, we found style prompts optimized with one source model readily transfer to other source models.'
+  permalink: prompto
+  project_page: true
+  tags:
+    - in-context-learning
+    - llm-reasoning
+  date: 2026-10-27T00:00:00.000Z
+  journal: 'Preprint'
+  is_recent: true
 - title: 'HyperThink: Text-to-Parameter Hypernetworks for Efficient Reasoning'
   image: /assets/images/papers/hyperthink.png
   authors:
