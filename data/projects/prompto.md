@@ -9,7 +9,7 @@ italic_terms:
   - PrompTo
 bibtex: |
   @misc{jin2026prompto,
-    title  = {What is it like to write like Haiku?},
+    title  = {What Is It Like to Write Like Haiku?},
     author = {Jin, Jinran and Teehan, Ryan and Lu, Jack and Ren, Mengye},
     note   = {Preprint},
     year   = {2026}
