@@ -108,19 +108,20 @@
   image: /assets/images/papers/conceptual_creativity_meta_learning.png
   authors:
     - Mengye Ren
-  short_abstract: Creativity is producing stimuli that are unfamiliar at first sight but quickly learnable from a few exposures. A Creator-Appraiser meta-learning loop lets a frozen diffusion model generate novel concepts the base model would not.
+  short_abstract: Creativity is producing stimuli that are unfamiliar at first sight but quickly learnable from a few exposures. A Creator-Appraiser meta-learning loop lets a frozen diffusion model generate new concepts.
   abstract: 'What does it mean to create a new concept, rather than retrieve a familiar one? Repeatedly sampling a generative model at the same prompt produces variations with similar styles and typical content. We propose that creativity is the production of stimuli that are unfamiliar to an adaptive observer at first sight, but quickly learnable from a few exposures. We formalize this as a Creator-Appraiser pair: a Creator generates a candidate, an Appraiser adapts to it for a few inner-loop learning steps, and the Appraiser''s improvement becomes the reward the Creator optimizes through. We instantiate the framework with diffusion as the Creator, an autoencoder Appraiser on MNIST, and a CLIP Appraiser with a low-rank adapter for natural images. The diffusion model remains frozen with no additional language conditioning; the meta-learning gradient is enough to produce both stylistic variations and concept compositions that the base model does not generate on its own.'
   arxiv: 'https://arxiv.org/abs/2605.16477'
   pdf: 'https://arxiv.org/pdf/2605.16477'
   permalink: conceptual-creativity-meta-learning
   enable_full_paper: true
+  project_page: true
   tags:
     - creative-exploration
     - meta-learning
     - concept-learning
     - philosophy-of-ai
   date: 2026-05-15T00:00:00.000Z
-  journal: 'CoRR'
+  journal: 'Advances in Neural Information Processing Systems 39 (NeurIPS 2026)'
   is_recent: true
 - title: The Self Requires Learning
   image: /assets/images/papers/the_self_requires_learning.png
