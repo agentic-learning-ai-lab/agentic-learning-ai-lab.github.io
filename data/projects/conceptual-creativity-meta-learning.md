@@ -2,6 +2,8 @@
 mathjax: true
 affiliations:
   - { name: 'Mengye Ren', aff: 'New York University' }
+links:
+  code: https://github.com/agentic-learning-ai-lab/conceptual-creativity-meta-learning
 italic_terms:
   - Creator
   - Appraiser
