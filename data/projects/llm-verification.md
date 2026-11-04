@@ -22,7 +22,7 @@ bibtex: |
 
 ## Overview of Our Study {data-toc=Overview}
 
-We describe our experimental setup, the metrics we use to measure verification ability, and the verification settings we study.
+Solver–verifier pairs are a common building block of multi-agent LLM systems, in which one model checks another's work. We describe our experimental setup, the metrics we use to measure verification ability, and the verification settings we study.
 
 ### Models
 
