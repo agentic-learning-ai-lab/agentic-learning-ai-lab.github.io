@@ -115,7 +115,7 @@ Across 21 post-trained models, we average verifier accuracy and gain over solver
 
 ## A Checklist for Designing Effective Solver–Verifier Systems {data-toc="Design Checklist"}
 
-The checklist applies to solver–verifier systems of all kinds, including multi-agent LLM systems in which one model checks another's work.
+The checklist applies to LLM solver–verifier systems, including multi-agent systems in which one model checks another's work.
 
 > - **Use verifier gain, not accuracy, to evaluate a solver–verifier pair.** Verification accuracy can be misleading, while verifier gain strongly predicts actual rejection sampling gains.
 > - **Check whether the task is easier to verify than to solve.** Our experiments find higher gains on logical and mathematical reasoning tasks than on knowledge-recall tasks.
