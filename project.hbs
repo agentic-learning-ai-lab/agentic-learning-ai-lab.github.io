@@ -49,6 +49,11 @@
         },
         options: {
           skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        },
+        // Typeset once the page fonts have loaded: MathJax scales math to the surrounding text's x-height, and
+        // measuring a fallback font makes the math size change from one page load to the next.
+        startup: {
+          pageReady: () => document.fonts.ready.then(() => MathJax.startup.defaultPageReady())
         }
       };
     </script>
