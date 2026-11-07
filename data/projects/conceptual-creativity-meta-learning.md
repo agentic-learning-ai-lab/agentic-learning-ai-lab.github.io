@@ -60,7 +60,7 @@ The adapter rank sets how far the outputs move from the prompt. A larger rank gi
 
 ## Beyond Vanilla Sampling {data-toc="Baselines"}
 
-We embed samples with DINOv2 and measure each sample's distance to the nearest of 1000 vanilla samples for the same prompt. Baselines reach comparable distances only at settings that keep fewer samples on-prompt. Even the most atypical of 1000 vanilla samples lies closer to the vanilla set than our typical on-prompt sample at rank 8.
+We embed samples with DINOv2 and measure each sample's distance to the nearest of 1000 vanilla samples for the same prompt. Baselines reach comparable distances only at settings that keep fewer samples on-prompt. Only the single most atypical of 1000 vanilla samples comes close to the distance of our on-prompt samples at rank 8.
 
 <figure class="tw-text-center tw-my-10">
 <div class="ccml-table-wrap">
@@ -76,16 +76,19 @@ We embed samples with DINOv2 and measure each sample's distance to the nearest o
 <tr><td>ProCreate, γ = 250</td><td>0.73</td><td>0.38</td></tr>
 <tr><td>ProCreate, γ = 500</td><td>0.28</td><td>0.58</td></tr>
 <tr><td>ProCreate, γ = 1000</td><td>0.08</td><td>0.72</td></tr>
-<tr><td>Vanilla, most atypical of 1000</td><td>–</td><td>0.52</td></tr>
-<tr class="ours"><td><strong>Ours, rank 4</strong></td><td>0.64</td><td>0.42</td></tr>
-<tr><td><strong>Ours, rank 8</strong></td><td>0.35</td><td>0.60</td></tr>
-<tr><td><strong>Ours, rank 16</strong></td><td>0.22</td><td>0.66</td></tr>
-<tr><td><strong>Ours, rank 32</strong></td><td>0.13</td><td>0.70</td></tr>
+<tr><td>Vanilla (CFG 7.5)</td><td>0.96</td><td>0.11</td></tr>
+<tr><td>Vanilla, most atypical of 1000</td><td>0.85</td><td>0.52</td></tr>
+<tr class="ours"><td><strong>Ours, rank 4</strong></td><td>0.62</td><td>0.41</td></tr>
+<tr><td><strong>Ours, rank 8</strong></td><td>0.27</td><td>0.53</td></tr>
+<tr><td><strong>Ours, rank 16</strong></td><td>0.14</td><td>0.55</td></tr>
+<tr><td><strong>Ours, rank 32</strong></td><td>0.07</td><td>0.66</td></tr>
 </tbody>
 </table>
 </div>
-<figcaption class="tw-text-base tw-text-[var(--fg-muted)] tw-mt-4 tw-italic tw-inline-block tw-text-left">Diversity baselines on 20 prompts. On-prompt rate: fraction of samples with Qwen2.5-VL relevance ≥ 5. NN distance: median across prompts of the DINOv2 distance to the nearest of 1000 vanilla samples, on on-prompt samples.</figcaption>
+<figcaption class="tw-text-base tw-text-[var(--fg-muted)] tw-mt-4 tw-italic tw-inline-block tw-text-left">Diversity baselines on 20 prompts. On-prompt rate: fraction of samples with Qwen2.5-VL relevance ≥ 5. NN distance: median across prompts of the DINOv2 distance to the nearest of 1000 vanilla samples, on on-prompt samples. Vanilla distance is to the other 999 vanilla samples.</figcaption>
 </figure>
+
+![Random on-prompt samples of the baselines and ours at rank 8. Vanilla samples are random draws from the 1000-sample pool.](baseline-compare.png){width=900}
 
 ## Limitations
 
