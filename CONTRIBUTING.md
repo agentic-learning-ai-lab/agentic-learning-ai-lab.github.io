@@ -195,26 +195,35 @@ by [latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab),
 which runs arXiv's own converter in a GitHub Action.
 
 1. Set `enable_full_paper: true` on the paper's entry in `data/papers.yaml`.
-2. Download the source from Overleaf (**Menu → Download → Source**, a
-   `.zip`) and the compiled PDF (**Download PDF**). A source folder works
-   in place of the zip.
-3. On your branch, run:
+2. On your branch, run `paper:add`.
 
-   ```bash
-   npm run paper:add -- <slug> ~/Downloads/<project>.zip ~/Downloads/<project>.pdf
-   ```
+   - **On arXiv.** If the entry has an `arxiv:` URL, the slug is enough.
+     The source and PDF come from arXiv:
+
+     ```bash
+     npm run paper:add -- <slug>
+     ```
+
+   - **Any other source.** Download the source from Overleaf
+     (**Menu → Download → Source**, a `.zip`) and the compiled PDF
+     (**Download PDF**). A source folder works in place of the zip.
+
+     ```bash
+     npm run paper:add -- <slug> ~/Downloads/<project>.zip ~/Downloads/<project>.pdf
+     ```
 
    It takes about five minutes. It strips comments from the source (the
    source becomes public), uploads the source and PDF, converts the paper,
    uploads the figures, and stages `data/papers.yaml` and
    `research/<slug>/paper-content.json`. It pushes the branch first if
    origin does not have it yet.
-4. Commit and push. The pull request's Cloudflare preview shows the page.
+3. Commit and push. The pull request's Cloudflare preview shows the page.
 
 If a step fails, `paper:add` names the command that failed. Fix the cause
 and run it again from the start.
 
-**Updating the paper.** Run `paper:add` again with the new zip and PDF.
+**Updating the paper.** Run `paper:add` again, with the new zip and PDF
+or, after a new arXiv version, with only the slug.
 Pre-commit check 11 and CI fail if the source on R2 changed but the HTML
 was not rebuilt, so the text cannot fall behind the source.
 
@@ -222,6 +231,14 @@ was not rebuilt, so the text cannot fall behind the source.
 [latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab/issues)
 with the slug and what looks wrong. Most problems are a LaTeX package the
 converter does not support yet, and a fix there applies to every paper.
+
+### Lab technical reports
+
+A paper that is not on arXiv and not at a venue can get a lab report
+number (`AGL-TR-2026-01`, ...) and a DOI, so people can cite it and
+Google Scholar finds it. Ask Mengye for one before you post the final PDF.
+You get a number and DOI to put in a footnote on page 1, then run
+`paper:add` with that PDF. CLAUDE.md lists the full procedure.
 
 ## Adding a project page
 

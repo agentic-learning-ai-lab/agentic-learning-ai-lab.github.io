@@ -6,6 +6,7 @@
  * with `enable_full_paper: true`; no R2 credentials, LaTeX or Docker.
  *
  *   npm run paper:add -- <slug> <source.zip|source-dir> <paper.pdf>
+ *   npm run paper:add -- <slug>     # source and PDF from the entry's arxiv: URL
  *
  * Steps (each one is also its own npm script):
  *   1. push the current branch if origin does not have it yet
@@ -36,12 +37,35 @@ function git(args) {
     return spawnSync('git', args, { cwd: ROOT, encoding: 'utf8' });
 }
 
-function main() {
+// Download the arXiv e-print and PDF into .cache/arxiv/<slug>/.
+async function fromArxiv(slug, arxivUrl) {
+    const { ensureLatexSource } = require('./build_arxiv_papers');
+    const id = (arxivUrl.match(/\d{4}\.\d{4,5}(v\d+)?/) || [])[0];
+    if (!id) {
+        console.error(`✗ Cannot read an arXiv ID from "${arxivUrl}".`);
+        process.exit(1);
+    }
+    const dir = path.join(ROOT, '.cache/arxiv', slug);
+    fs.rmSync(dir, { recursive: true, force: true });
+    const source = path.join(dir, 'src');
+    await ensureLatexSource(id, source);
+    const res = await fetch(`https://arxiv.org/pdf/${id}`);
+    if (!res.ok) {
+        console.error(`✗ Downloading https://arxiv.org/pdf/${id} failed: HTTP ${res.status}`);
+        process.exit(1);
+    }
+    const pdf = path.join(dir, 'paper.pdf');
+    fs.writeFileSync(pdf, Buffer.from(await res.arrayBuffer()));
+    return { source, pdf };
+}
+
+async function main() {
     // The PDF is required: packing a new source drops the old local PDF,
     // and the slim Cloudflare build never compiles one.
-    const [slug, source, pdf] = process.argv.slice(2);
-    if (!slug || !source || !pdf) {
-        console.error('Usage: npm run paper:add -- <slug> <source.zip|source-dir> <paper.pdf>');
+    let [slug, source, pdf] = process.argv.slice(2);
+    if (!slug || !source !== !pdf) {
+        console.error('Usage: npm run paper:add -- <slug> [<source.zip|source-dir> <paper.pdf>]\n' +
+            '       With only <slug>, the source and PDF come from the entry\'s arxiv: URL.');
         process.exit(1);
     }
 
@@ -55,7 +79,11 @@ function main() {
         console.error(`✗ Set \`enable_full_paper: true\` on "${slug}" in data/papers.yaml first.`);
         process.exit(1);
     }
-    for (const f of [source, pdf]) {
+    if (!source && !paper.arxiv) {
+        console.error(`✗ "${slug}" has no arxiv: URL in data/papers.yaml. Pass the source and PDF instead.`);
+        process.exit(1);
+    }
+    for (const f of source ? [source, pdf] : []) {
         if (!fs.existsSync(f)) {
             console.error(`✗ Not found: ${f}`);
             process.exit(1);
@@ -75,6 +103,7 @@ function main() {
     if (!fs.existsSync(path.join(ROOT, '.venv/bin/arxiv_latex_cleaner'))) {
         run('npm', ['run', 'setup:python']);
     }
+    if (!source) ({ source, pdf } = await fromArxiv(slug, paper.arxiv));
     run('node', ['build/latex_pack.js', '--local', slug, source]);
     fs.copyFileSync(pdf, path.join(ROOT, 'research', slug, 'paper.pdf'));
     run('node', ['build/upload.js', `research/${slug}/latex.tar.gz`, `research/${slug}/paper.pdf`]);
@@ -90,4 +119,7 @@ function main() {
         '   The pull request\'s Cloudflare preview shows the page.');
 }
 
-main();
+main().then(() => process.exit(0), (e) => {
+    console.error(`✗ paper:add stopped: ${e.message}`);
+    process.exit(1);
+});

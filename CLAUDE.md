@@ -578,16 +578,15 @@ Either way, the YAML/MD steps are the same:
    `authors`, `permalink`, `date`, `journal`, `tags` (slugs from
    `data/tags.yaml`), `abstract`, `short_abstract`. Optional: `arxiv`, `pdf`, `webpage`,
    `enable_full_paper`, `project_page`, `is_recent`, `image`, and for a lab
-   technical report `report_number` (`AGL-TR-<year>-<nn>`, next free number)
-   + `doi` (reserved on Zenodo, community `agentic-learning-ai-lab`). Only
-   papers with no arXiv ID or venue get a report number; the paper page then
-   carries Scholar's `citation_technical_report_*` and `citation_doi` tags.
+   technical report `report_number` + `doi` (see
+   [Lab technical reports](#lab-technical-reports)).
 2. Drop the hero image at `assets/images/papers/<snake_case>.png`
    (gitignored; lives on local disk + R2).
-3. Full paper view from LaTeX source (no arXiv needed): set
-   `enable_full_paper: true`, then on the feature branch run
-   `npm run paper:add -- <slug> <overleaf-source.zip> <paper.pdf>`
-   (CONTRIBUTING.md, Step 6). It needs `gh auth login` and Python 3: it cleans
+3. Full paper view: set `enable_full_paper: true`, then on the feature
+   branch run `npm run paper:add -- <slug>` for a paper on arXiv (source and
+   PDF come from its `arxiv:` URL), or
+   `npm run paper:add -- <slug> <overleaf-source.zip> <paper.pdf>` for any
+   other source (CONTRIBUTING.md, Step 6). It needs `gh auth login` and Python 3: it cleans
    and uploads the source and PDF, runs latexml-lab's conversion, uploads
    the figures, and stages `data/papers.yaml` +
    `research/<slug>/paper-content.json` for the commit. Rerun it for a
@@ -613,6 +612,44 @@ Either way, the YAML/MD steps are the same:
    any new/updated `research/<slug>/paper-content.json`, and the
    updated `assets-manifest.json`. The new binaries are gitignored —
    they live on local disk + R2 only.
+
+## Lab technical reports
+
+A paper with no arXiv ID and no venue can get a lab report number
+(`AGL-TR-<year>-<nn>`, numbered in order within a year) and a Zenodo DOI,
+so it can be cited and Google Scholar indexes it. A paper already on arXiv
+or at a venue does not get one: a second DOI splits its citations. The PI
+issues numbers and publishes the Zenodo record; the token is the PI's own,
+never a repo secret.
+
+1. Pick the next free number: `grep report_number data/papers.yaml`.
+2. Create a Zenodo draft with a reserved DOI: `POST
+   https://zenodo.org/api/deposit/depositions` with metadata
+   `upload_type: publication`, `publication_type: report`, title, creators,
+   description, `publication_date`, `prereserve_doi: true`, and
+   `imprint_publisher: Agentic Learning AI Lab`. The response's
+   `metadata.prereserve_doi.doi` is the DOI.
+3. Add an unnumbered footnote on page 1 of the paper, right after
+   `\maketitle`:
+   ```latex
+   {\let\thefootnote\relax\footnotetext{Agentic Learning AI Lab Technical Report AGL-TR-<year>-<nn>. \href{https://doi.org/<DOI>}{doi:<DOI>}}}
+   ```
+4. Compile, then upload that exact PDF to the Zenodo draft and add
+   `report_number:`, `doi:` and `journal: 'Technical report'` to the
+   paper's entry. Run `paper:add` with the same source and PDF.
+5. The PI clicks Publish on Zenodo. A published DOI is permanent.
+6. Add the record to the lab community. The deposit API ignores
+   `metadata.communities`, so after publishing `POST
+   /api/records/<id>/communities` with
+   `{"communities":[{"id":"623bbae6-8970-4659-921a-d9ddf1637cee"}]}`, then
+   `POST /api/requests/<request id>/actions/accept`.
+7. If the paper later appears on arXiv, add the arXiv ID to the Zenodo
+   record as a related identifier (`isIdenticalTo`) and `arxiv:` to
+   papers.yaml. Keep the report number and DOI.
+
+The paper page renders `citation_technical_report_number`,
+`citation_technical_report_institution` and `citation_doi` from these
+fields.
 
 ## When the user asks you to update something
 
