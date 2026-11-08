@@ -577,7 +577,11 @@ Either way, the YAML/MD steps are the same:
    template. Required (enforced by pre-commit check 08): `title`,
    `authors`, `permalink`, `date`, `journal`, `tags` (slugs from
    `data/tags.yaml`), `abstract`, `short_abstract`. Optional: `arxiv`, `pdf`, `webpage`,
-   `enable_full_paper`, `project_page`, `is_recent`, `image`.
+   `enable_full_paper`, `project_page`, `is_recent`, `image`, and for a lab
+   technical report `report_number` (`AGL-TR-<year>-<nn>`, next free number)
+   + `doi` (reserved on Zenodo, community `agentic-learning-ai-lab`). Only
+   papers with no arXiv ID or venue get a report number; the paper page then
+   carries Scholar's `citation_technical_report_*` and `citation_doi` tags.
 2. Drop the hero image at `assets/images/papers/<snake_case>.png`
    (gitignored; lives on local disk + R2).
 3. Full paper view from LaTeX source (no arXiv needed): set
