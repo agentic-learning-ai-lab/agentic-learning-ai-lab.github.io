@@ -632,7 +632,7 @@ never a repo secret.
 3. Add an unnumbered footnote on page 1 of the paper, right after
    `\maketitle`:
    ```latex
-   {\let\thefootnote\relax\footnotetext{Agentic Learning AI Lab Technical Report AGL-TR-2026-01. \href{https://doi.org/10.5281/zenodo.24047404}{doi:10.5281/zenodo.24047404}}}
+   {\let\thefootnote\relax\footnotetext{Agentic Learning AI Lab Technical Report AGL-TR-<year>-<nn>. \href{https://doi.org/<DOI>}{doi:<DOI>}}}
    ```
 4. Compile, then upload that exact PDF to the Zenodo draft and add
    `report_number:`, `doi:` and `journal: 'Technical report'` to the

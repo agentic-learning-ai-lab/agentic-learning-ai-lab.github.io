@@ -40,7 +40,7 @@ function git(args) {
 // Download the arXiv e-print and PDF into .cache/arxiv/<slug>/.
 async function fromArxiv(slug, arxivUrl) {
     const { ensureLatexSource } = require('./build_arxiv_papers');
-    const id = (arxivUrl.match(/\d{4}\.\d{4,5}/) || [])[0]; // latest version, as ensureLatexSource fetches
+    const id = (arxivUrl.match(/\d{4}\.\d{4,5}(v\d+)?/) || [])[0];
     if (!id) {
         console.error(`✗ Cannot read an arXiv ID from "${arxivUrl}".`);
         process.exit(1);
@@ -79,14 +79,11 @@ async function main() {
         console.error(`✗ Set \`enable_full_paper: true\` on "${slug}" in data/papers.yaml first.`);
         process.exit(1);
     }
-    if (!source) {
-        if (!paper.arxiv) {
-            console.error(`✗ "${slug}" has no arxiv: URL in data/papers.yaml. Pass the source and PDF instead.`);
-            process.exit(1);
-        }
-        ({ source, pdf } = await fromArxiv(slug, paper.arxiv));
+    if (!source && !paper.arxiv) {
+        console.error(`✗ "${slug}" has no arxiv: URL in data/papers.yaml. Pass the source and PDF instead.`);
+        process.exit(1);
     }
-    for (const f of [source, pdf]) {
+    for (const f of source ? [source, pdf] : []) {
         if (!fs.existsSync(f)) {
             console.error(`✗ Not found: ${f}`);
             process.exit(1);
@@ -106,6 +103,7 @@ async function main() {
     if (!fs.existsSync(path.join(ROOT, '.venv/bin/arxiv_latex_cleaner'))) {
         run('npm', ['run', 'setup:python']);
     }
+    if (!source) ({ source, pdf } = await fromArxiv(slug, paper.arxiv));
     run('node', ['build/latex_pack.js', '--local', slug, source]);
     fs.copyFileSync(pdf, path.join(ROOT, 'research', slug, 'paper.pdf'));
     run('node', ['build/upload.js', `research/${slug}/latex.tar.gz`, `research/${slug}/paper.pdf`]);

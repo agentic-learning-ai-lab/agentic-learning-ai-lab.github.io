@@ -409,11 +409,14 @@ async function ensureLatexSource(arxivUrl, latexDir, _opts = {}) {
     throw new Error(`Could not extract arXiv ID from ${arxivUrl}`);
   }
 
+  // A version pinned in the URL (2403.01944v2) is fetched as pinned.
+  const pinned = (arxivUrl.match(/\d{4}\.\d{4,5}(v\d+)/) || [])[1] || '';
+
   await fs.ensureDir(latexDir);
   const tarPath = path.join(latexDir, 'source.tar.gz');
 
-  console.log(`    fetching LaTeX source from arxiv.org/e-print/${arxivId}`);
-  await downloadFile(`https://arxiv.org/e-print/${arxivId}`, tarPath);
+  console.log(`    fetching LaTeX source from arxiv.org/e-print/${arxivId}${pinned}`);
+  await downloadFile(`https://arxiv.org/e-print/${arxivId}${pinned}`, tarPath);
 
   try {
     // arXiv e-prints are usually gzipped tar, occasionally plain tar,
