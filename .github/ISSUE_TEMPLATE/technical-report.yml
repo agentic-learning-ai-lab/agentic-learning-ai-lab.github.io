@@ -1,0 +1,36 @@
+name: Technical report request
+description: Ask for a lab report number (AGL-TR) and a DOI for a paper that is not on arXiv or at a venue.
+title: "Technical report: <paper title>"
+labels: [tech-report]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Mengye reserves a report number and DOI and replies here with a footnote for page 1 and the
+        lines for `data/papers.yaml`. Then add the paper with `npm run paper:add` (CONTRIBUTING.md).
+  - type: input
+    id: title
+    attributes:
+      label: Title
+    validations:
+      required: true
+  - type: textarea
+    id: authors
+    attributes:
+      label: Authors
+      description: One per line, as in data/papers.yaml (First Last).
+    validations:
+      required: true
+  - type: textarea
+    id: abstract
+    attributes:
+      label: Abstract
+    validations:
+      required: true
+  - type: input
+    id: slug
+    attributes:
+      label: Permalink
+      description: The paper's slug; its page will be /research/<slug>/.
+    validations:
+      required: true

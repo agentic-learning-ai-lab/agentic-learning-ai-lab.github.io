@@ -7,17 +7,17 @@
  *   assets-manifest.json (/research/<slug>/latex.tar.gz)
  *     → dispatch convert.yml in agentic-learning-ai-lab/latexml-lab
  *     → downloadable `latexml-lab-<slug>` artifact
- *     → research/<slug>/paper-content.json + assets/
+ *     → research/<slug>/paper-content.json + assets/ + paper.pdf
  *
  * The remote workflow runs arXiv's own converter (latexml/ar5ivist), so
  * the output is the same `ltx_*` HTML `downloadArxivHtml` parses.
  *
  * Usage:
- *   npm run paper:html -- <slug>
+ *   npm run paper:build -- <slug>
  *
- * Requires `gh auth login`. The converted figures are new binaries —
- * run `npm run build` (or `npm run upload`) afterwards to publish them
- * to R2 + the manifest.
+ * Requires `gh auth login`. The figures and PDF are new binaries — run
+ * `npm run upload` (or `npm run build`) afterwards to publish them to R2
+ * + the manifest. A PDF locked by build/pdf_lock.js is left in place.
  */
 
 const fs = require('fs-extra');
@@ -35,13 +35,14 @@ const {
     waitForRun,
     downloadArtifact,
 } = require('./gh_actions');
+const { pdfLockReason } = require('./pdf_lock');
 
 const PAPERS_YAML = path.join(ROOT, 'data/papers.yaml');
 const CONVERT_REPO = 'agentic-learning-ai-lab/latexml-lab';
 const CONVERT_WORKFLOW = 'convert.yml';
 
 function usage() {
-    console.error('Usage: npm run paper:html -- <slug>');
+    console.error('Usage: npm run paper:build -- <slug>');
 }
 
 function findPaper(papers, slug) {
@@ -53,9 +54,8 @@ function findPaper(papers, slug) {
 }
 
 /**
- * Run the same bibliography normalizers `build:arxiv` applies after it
- * downloads arXiv's HTML (build/normalize_bib_tags.js then
- * build/normalize_bib_authors.js).
+ * Normalize the bibliography's tags and author lists
+ * (build/normalize_bib_tags.js then build/normalize_bib_authors.js).
  */
 async function runNormalizers(slug) {
     try {
@@ -77,20 +77,33 @@ async function runNormalizers(slug) {
  * Assets are swapped wholesale so a figure dropped from the paper does
  * not survive a re-conversion.
  */
-async function installArtifact(slug, artifactDir, tarballUrl) {
+async function installArtifact(slug, artifactDir, tarballUrl, { pdfLock = null } = {}) {
     const srcJson = path.join(artifactDir, 'paper-content.json');
     if (!await fs.pathExists(srcJson)) {
         throw new Error(`Artifact latexml-lab-${slug} has no paper-content.json`);
     }
-    // Record which tarball this HTML came from; check_paper_html.js
+    // Record which tarball this HTML came from; check_paper_build.js
     // compares it with the manifest to catch HTML left stale by a new
     // source upload.
     const content = await fs.readJson(srcJson);
     content.latex_tarball = tarballUrl;
-    await fs.writeJson(srcJson, content, { spaces: 2 });
 
     const destDir = path.join(ROOT, 'research', slug);
     await fs.ensureDir(destDir);
+
+    // The PDF built from the same tarball. check_paper_build.js matches
+    // pdf_sha256 against the manifest's content-hashed PDF URL.
+    const srcPdf = path.join(artifactDir, 'paper.pdf');
+    if (pdfLock) {
+        console.log(`   keeping research/${slug}/paper.pdf (${pdfLock})`);
+    } else if (await fs.pathExists(srcPdf)) {
+        const pdfPath = path.join(destDir, 'paper.pdf');
+        await fs.copy(srcPdf, pdfPath);
+        content.pdf_sha256 = crypto.createHash('sha256').update(await fs.readFile(pdfPath)).digest('hex');
+    } else {
+        throw new Error(`Artifact latexml-lab-${slug} has no paper.pdf`);
+    }
+    await fs.writeJson(srcJson, content, { spaces: 2 });
     await fs.remove(path.join(destDir, 'assets'));
 
     const srcAssets = path.join(artifactDir, 'assets');
@@ -99,13 +112,13 @@ async function installArtifact(slug, artifactDir, tarballUrl) {
     }
     await fs.move(srcJson, path.join(destDir, 'paper-content.json'), { overwrite: true });
 
-    console.log(`✅ wrote research/${slug}/paper-content.json + assets/`);
+    console.log(`✅ wrote research/${slug}/paper-content.json + assets/${pdfLock ? '' : ' + paper.pdf'}`);
 }
 
 /**
  * Default path: convert the R2 tarball in GitHub Actions.
  */
-async function fromLatexTarball(slug) {
+async function fromLatexTarball(slug, paper) {
     const manifest = await loadManifest();
     const key = manifestKey(slug);
     const tarballUrl = manifest[key];
@@ -116,7 +129,7 @@ async function fromLatexTarball(slug) {
             `    npm run latex:pack ${slug} <path-to-zip-or-dir>\n` +
             `  or, for an arXiv paper, refetch the source:\n` +
             `    npm run latex:update ${slug}\n` +
-            `  Then re-run \`npm run paper:html ${slug}\`.`
+            `  Then re-run \`npm run paper:build ${slug}\`.`
         );
     }
 
@@ -140,7 +153,7 @@ async function fromLatexTarball(slug) {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'latexml-lab-'));
     try {
         downloadArtifact(runId, `latexml-lab-${slug}`, tmpDir, { repo: CONVERT_REPO });
-        await installArtifact(slug, tmpDir, tarballUrl);
+        await installArtifact(slug, tmpDir, tarballUrl, { pdfLock: await pdfLockReason(paper) });
     } finally {
         await fs.remove(tmpDir);
     }
@@ -155,17 +168,17 @@ async function main() {
     const slug = positional[0];
 
     const papers = yaml.load(await fs.readFile(PAPERS_YAML, 'utf8'));
-    findPaper(papers, slug);
+    const paper = findPaper(papers, slug);
 
-    await fromLatexTarball(slug);
+    await fromLatexTarball(slug, paper);
     await runNormalizers(slug);
 
-    console.log('\nNext: `npm run build` (or `npm run upload`) to publish the figures to R2.');
+    console.log('\nNext: `npm run upload` (or `npm run build`) to publish the figures and PDF to R2.');
 }
 
 if (require.main === module) {
     main().catch(err => {
-        console.error('paper:html failed:', err.message);
+        console.error('paper:build failed:', err.message);
         process.exit(1);
     });
 }

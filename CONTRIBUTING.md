@@ -80,26 +80,23 @@ to green, so you don't have to refresh the PR.
 
 ## Adding a new paper
 
-A paper appears on the site in three possible forms — pick whichever the
-contribution needs:
+Adding a paper takes one YAML entry and one command:
+
+1. Add the entry to `data/papers.yaml` (Step 1).
+2. Optionally, drop the hero image at `assets/images/papers/<slug>.png` (Step 2).
+3. On a branch, run `npm run paper:add -- <slug>` (Step 3), adding the
+   source zip for a full paper that is not on arXiv.
+4. Commit and push, and open a pull request (Step 4).
 
 | Form | Where it shows up | What you need to provide |
 |---|---|---|
-| **Paper card** (default) | The `/research/` listing page | `data/papers.yaml` entry (hero image optional — can be added later, see below) |
-| **+ embedded paper view** | A `/research/<slug>/` page with the full paper text and PDF | Above + `enable_full_paper: true` + the LaTeX source (Step 6; arXiv not needed) |
+| **Paper card** (default) | The `/research/` listing page | `data/papers.yaml` entry, hero image optional |
+| **+ full paper** | A `/research/<slug>/` page with the full text and PDF | Above + `enable_full_paper: true` + the LaTeX source (arXiv or a zip) |
 | **+ marketing project page** | A custom `/<slug>/` page with images, videos, custom CSS | Above + `project_page: true` + `data/projects/<slug>.md` |
 
-The `image:` field is optional. Omit it to publish without a card
-image and add it later — drop the file at
-`assets/images/papers/<slug>.png`, add the `image:` line in
-papers.yaml, `npm run upload`, commit.
-
-For collaborative image selection: open the PR with `image:` left out,
-and Mengye (or whoever you'd like input from) can push their preferred
-hero image directly to your feature branch. GitHub allows repo
-collaborators to push to a same-repo PR's branch by default, so no
-extra setup needed — you keep iterating on the branch, the image
-commit just lands alongside your text changes.
+For collaborative image selection, open the PR with `image:` left out.
+Mengye (or whoever you'd like input from) can push a hero image directly
+to your branch.
 
 ### Step 1 — Add the YAML entry
 
@@ -131,101 +128,71 @@ entry as a template.
 **Permalink rules**: kebab-case, unique across all papers, permanent.
 Changing it breaks every inbound link (arXiv abstracts, tweets, slide decks).
 
-### Step 2 — Drop the hero image
+### Step 2 — Drop the hero image (optional)
 
-Put it at `assets/images/papers/<slug>.png` (the path you set in `image:`).
-PNG or JPG; ideally < 2 MB.
+Put it at the path you set in `image:`, normally
+`assets/images/papers/<slug>.png`. PNG or JPG, ideally under 2 MB. The
+file is gitignored: it lives on your disk and on R2, not in git.
 
-The file is gitignored — it lives on local disk + R2, not in git.
+### Step 3 — Run `paper:add`
 
-### Step 3 — Commit (the hook will block you)
-
-```bash
-git add data/papers.yaml
-git commit -m "Add Your Paper Title"
-```
-
-The pre-commit hook stops you:
-
-```
-⛔ asset-manifest: binary assets not on R2:
-   + assets/images/papers/your_slug.png   (new, not in manifest)
-   → run `npm run upload` to mirror to R2 + update manifest
-```
-
-R2 is the source of truth for binaries; the hook catches "forgot to
-upload before committing".
-
-### Step 4 — Upload the binary to R2
+On your branch:
 
 ```bash
-npm run upload
+npm run paper:add -- <slug>                              # on arXiv, or a card only
+npm run paper:add -- <slug> ~/Downloads/<project>.zip    # full paper from any other source
 ```
 
-Behind the scenes:
+**Use the lab template.** The site shows the paper in the
+[lab template](https://www.overleaf.com/read/jnccnnkphyhq#aa5272), also
+after it is accepted somewhere: the venue's style is for the venue's
+camera-ready only. If the paper's arXiv source is in a venue style, pass
+the lab-template Overleaf zip rather than only the slug.
 
-1. Scans your working tree for binaries not in `assets-manifest.json`.
-2. Triggers a GitHub Action (you don't need R2 credentials locally — the
-   Action has them) to mint a 10-minute pre-signed PUT URL.
-3. `curl`s your file up to R2.
-4. Triggers a second Action to write the `assets-manifest.json` entry and
-   commit it back to your branch.
+The full paper is built on the first run, and again only when you pass a
+new zip, or `arxiv` after a new arXiv version
+(`npm run paper:add -- <slug> arxiv`). So to add the hero image later,
+drop the file, add `image:` to the entry and run `npm run paper:add -- <slug>`.
 
-Takes 1-2 minutes end-to-end (most of it is GitHub Actions startup).
+`paper:add` needs only `gh auth login`, and Python 3 for a full paper.
+You need no R2 credentials, LaTeX or Docker. It pushes the branch if
+origin does not have it yet, then:
 
-### Step 5 — Pull, commit, push
+- **Hero image.** Makes the thumbnail and WebP copies and uploads all
+  three to R2.
+- **Full paper** (`enable_full_paper: true`). Takes the source from the
+  zip or, with no zip, from the entry's `arxiv:` URL. It strips comments
+  from the source (the source becomes public) and uploads it.
+  [latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab)
+  then compiles the PDF on a pinned TeX Live and converts the text with
+  arXiv's own converter, both in a GitHub Action, and the PDF and figures
+  are uploaded. Nobody uploads a PDF by hand, and an arXiv paper's PDF
+  carries no arXiv stamp. For an Overleaf project, get the zip from
+  **Menu → Download → Source**; a folder works too.
+- **Staging.** It stages `data/papers.yaml` and, for a full paper,
+  `research/<slug>/paper-content.json`.
+
+A full paper takes about five minutes, most of it in GitHub Actions. If a
+step fails, `paper:add` names the command that failed; fix the cause and
+run it again. A failed compile prints the end of the LaTeX log.
+
+### Step 4 — Commit and push
 
 ```bash
-git pull                                       # gets the manifest update
-git add data/papers.yaml
-git commit -m "Add Your Paper Title"           # now passes
-git push
+git commit -m "Add <slug>" && git push
 ```
 
-Open a PR to `main`. Done.
+Open a pull request to `main`. Its Cloudflare preview shows the page.
 
-### (Optional) Step 6 — Add the full paper from its LaTeX source
+**Engines.** Papers on the lab template compile with XeLaTeX
+(`agenticlearning-xelatex`) or LuaLaTeX (`agenticlearning-lualatex`); the
+`agenticlearning-pdflatex` variant is refused. Other papers use arXiv's
+compiler setting, a `%!TEX program = xelatex` comment, or pdfLaTeX. See the
+[latexml-lab README](https://github.com/agentic-learning-ai-lab/latexml-lab#the-pdf).
 
-This step gives the paper a `/research/<slug>/` page with the full text,
-figures, equations, references and PDF, built from the paper's LaTeX
-source alone. The paper does not need to be on arXiv, and you need no R2
-credentials, LaTeX or Docker: only `gh auth login` and Python 3, which
-`paper:add` uses to set up the comment stripper on its first run. The text is converted
-by [latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab),
-which runs arXiv's own converter in a GitHub Action.
-
-1. Set `enable_full_paper: true` on the paper's entry in `data/papers.yaml`.
-2. On your branch, run `paper:add`.
-
-   - **On arXiv.** If the entry has an `arxiv:` URL, the slug is enough.
-     The source and PDF come from arXiv:
-
-     ```bash
-     npm run paper:add -- <slug>
-     ```
-
-   - **Any other source.** Download the source from Overleaf
-     (**Menu → Download → Source**, a `.zip`) and the compiled PDF
-     (**Download PDF**). A source folder works in place of the zip.
-
-     ```bash
-     npm run paper:add -- <slug> ~/Downloads/<project>.zip ~/Downloads/<project>.pdf
-     ```
-
-   It takes about five minutes. It strips comments from the source (the
-   source becomes public), uploads the source and PDF, converts the paper,
-   uploads the figures, and stages `data/papers.yaml` and
-   `research/<slug>/paper-content.json`. It pushes the branch first if
-   origin does not have it yet.
-3. Commit and push. The pull request's Cloudflare preview shows the page.
-
-If a step fails, `paper:add` names the command that failed. Fix the cause
-and run it again from the start.
-
-**Updating the paper.** Run `paper:add` again, with the new zip and PDF
-or, after a new arXiv version, with only the slug.
-Pre-commit check 11 and CI fail if the source on R2 changed but the HTML
-was not rebuilt, so the text cannot fall behind the source.
+**Updating the paper.** Run `paper:add` again with the new zip or, after
+a new arXiv version, with `arxiv` in place of the zip. Pre-commit check 11 and CI fail if
+the source on R2 changed but the HTML or PDF was not rebuilt.
 
 **When the conversion looks wrong.** Open an issue on
 [latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab/issues)
@@ -235,10 +202,20 @@ converter does not support yet, and a fix there applies to every paper.
 ### Lab technical reports
 
 A paper that is not on arXiv and not at a venue can get a lab report
-number (`AGL-TR-2026-01`, ...) and a DOI, so people can cite it and
-Google Scholar finds it. Ask Mengye for one before you post the final PDF.
-You get a number and DOI to put in a footnote on page 1, then run
-`paper:add` with that PDF. CLAUDE.md lists the full procedure.
+number (`AGL-TR-2026-03`, ...) and a DOI, so people can cite it and
+Google Scholar finds it.
+
+1. Open a **Technical report request** issue (title, authors, abstract,
+   permalink) before you add the paper.
+2. Mengye replies on the issue with your number and DOI, a footnote to
+   paste on page 1, and three lines for the paper's entry.
+3. Paste them, run `paper:add` with the source (Step 3), and open the pull
+   request with "Closes #<issue>". Check page 1 of the PDF in the preview.
+4. Mengye publishes the DOI with that PDF, CI checks that the site's PDF
+   and Zenodo's are the same file, and the pull request merges.
+
+Once the DOI is published the PDF is frozen: a later `paper:add` updates
+the web page but keeps the PDF.
 
 ## Adding a project page
 

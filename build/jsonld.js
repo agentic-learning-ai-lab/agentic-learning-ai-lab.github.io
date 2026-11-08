@@ -83,6 +83,12 @@ function paperCitationMeta(paper, { pdfUrl } = {}) {
     if (paper.date) {
         tags.push(['citation_publication_date', new Date(paper.date).toISOString().slice(0, 10).replace(/-/g, '/')]);
     }
+    // The venue, so Scholar can tell a published paper from a preprint.
+    const venue = paper.journal || '';
+    if (venue && !/^(corr|preprint|technical report)$|preprint$/i.test(venue.trim())) {
+        const kind = /journal|transactions|letters|\bnature\b|\bscience\b/i.test(venue) ? 'journal' : 'conference';
+        tags.push([`citation_${kind}_title`, venue]);
+    }
     if (paper.report_number) {
         tags.push(['citation_technical_report_number', paper.report_number]);
         tags.push(['citation_technical_report_institution', REPORT_INSTITUTION]);

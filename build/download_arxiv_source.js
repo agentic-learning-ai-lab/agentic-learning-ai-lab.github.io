@@ -3,7 +3,7 @@
 /**
  * Standalone CLI to download LaTeX source from arXiv into research/<slug>/latex/.
  *
- * The core fetch+extract logic also lives in build/build_arxiv_papers.js
+ * The core fetch+extract logic also lives in build/arxiv_source.js
  * (ensureLatexSource). This script exists for one-off manual fetches.
  *
  * Usage:

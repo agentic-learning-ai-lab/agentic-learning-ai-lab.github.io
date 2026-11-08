@@ -14,11 +14,9 @@
  * is ~20-30% smaller than PNG with no quality risk. See
  * build/generate_webp.js for the lossless encoder choice.
  *
- * Runs as part of `npm run build` after build:arxiv:pdf (which emits
- * paper-content.json) and after the author has run `npm run sync:r2`
- * (which populates the manifest entries for the asset binaries). Build
- * pipeline order in package.json: build:arxiv:pdf →
- * build:rewrite-paper-content → build:compress → build:pages.
+ * Runs as part of `npm run build` after `npm run sync:r2` (which
+ * populates the manifest entries for the asset binaries) and before
+ * build:pages. paper-content.json comes from `npm run paper:build`.
  *
  * Idempotent. The regex matches only `./assets/...` — once rewritten to
  * `https://cdn.agenticlearning.ai/.../<file>`, a re-run finds no

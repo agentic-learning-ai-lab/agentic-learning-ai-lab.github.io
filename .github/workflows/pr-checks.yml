@@ -65,7 +65,7 @@ jobs:
         run: node build/check_webp_companions.js
 
       # Audits paper-content.json across every paper for the
-      # bibliography regressions we hit during the inject_bbl /
+      # bibliography regressions we hit during the
       # normalize_bib_tags rollout: empty <ul class="ltx_biblist">
       # on enable_full_paper papers, long author lists in tags,
       # and leftover ltx_missing_citation spans. See
@@ -73,7 +73,12 @@ jobs:
       - name: Check bibliography integrity
         run: node build/check_bibliography.js
 
-      # A paper whose LaTeX tarball is on R2 must have HTML converted
-      # from that tarball by latexml-lab. See build/check_paper_html.js.
-      - name: Check full-paper HTML is current
-        run: node build/check_paper_html.js
+      # A paper whose LaTeX tarball is on R2 must have HTML and PDF built
+      # from that tarball by latexml-lab. See build/check_paper_build.js.
+      - name: Check full-paper HTML and PDF are current
+        run: node build/check_paper_build.js
+
+      # A technical report's PDF must be the same bytes as the file on its
+      # published Zenodo record. See build/check_zenodo_pdfs.js.
+      - name: Check technical report PDFs match Zenodo
+        run: node build/check_zenodo_pdfs.js

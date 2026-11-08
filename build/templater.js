@@ -70,10 +70,8 @@ function doTemplating(input, output) {
             // the opt-in flag AND the cached arXiv HTML extraction at
             // research/<slug>/paper-content.json — without that file
             // the toggle would fetch a 404'd resource and hang on
-            // 'Loading paper...'. The file exists only for papers an
-            // admin has bootstrapped (npm run build:arxiv); non-arXiv
-            // papers (custom LaTeX, e.g. PhilPapers) skip the HTML
-            // view entirely and just expose paper.pdf via has_pdf_link.
+            // 'Loading paper...'. The file comes from
+            // `npm run paper:build`.
             const paperContentPath = path.join(__dirname, '..', 'research', paper.permalink, 'paper-content.json');
             paper.has_full_paper = !!paper.enable_full_paper && fs.existsSync(paperContentPath);
 
@@ -90,6 +88,8 @@ function doTemplating(input, output) {
             paper.has_pdf_link = paper.has_local_pdf || !!paper.pdf;
 
             paper.jsonLd = paperJsonLd(paper, { cdnUrl: resolveCdn });
+            // arXiv ID for the venue line (arXiv:2508.15717).
+            paper.arxiv_id = ((paper.arxiv || '').match(/\d{4}\.\d{4,5}(v\d+)?/) || [])[0];
             paper.citationMeta = paperCitationMeta(paper, {
                 pdfUrl: paper.has_local_pdf ? resolveCdn(paper.local_pdf) : paper.pdf,
             });

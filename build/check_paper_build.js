@@ -5,9 +5,11 @@
  *
  * Every enable_full_paper paper whose LaTeX tarball is on R2 must have a
  * paper-content.json converted from that exact tarball by latexml-lab
- * (`npm run paper:html -- <slug>`). The tarball's manifest URL is content
+ * (`npm run paper:build -- <slug>`). The tarball's manifest URL is content
  * hashed, so a new upload changes it and the recorded `latex_tarball` no
- * longer matches. Papers without a tarball keep arXiv's HTML and are not
+ * longer matches. Likewise paper.pdf must be the one CI compiled from that
+ * tarball (`pdf_sha256`), unless papers.yaml sets `pdf_override:` or a
+ * Zenodo `doi:`. Papers without a tarball keep arXiv's HTML and are not
  * checked here.
  *
  * Exits 0 when clean, 1 otherwise. Runs in CI and as pre-commit check 11.
@@ -16,6 +18,8 @@
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
+
+const { zenodoId } = require('./pdf_lock');
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -43,18 +47,29 @@ function audit() {
       problems.push(`${slug}: HTML is from arXiv but its LaTeX source is on R2`);
     } else if (pc.latex_tarball !== tarball) {
       problems.push(`${slug}: LaTeX source changed since the HTML was built`);
+    } else if (!paper.pdf_override && !(zenodoId(paper) && !pc.pdf_sha256)) {
+      // The PDF must be the one CI compiled from this tarball. A published
+      // Zenodo report's PDF is frozen (no pdf_sha256 recorded) and checked
+      // against Zenodo instead (check_zenodo_pdfs.js); a reserved draft is
+      // checked here like any paper.
+      const pdf = manifest[`/research/${slug}/paper.pdf`] || '';
+      if (!pc.pdf_sha256) {
+        problems.push(`${slug}: no CI-built PDF recorded for this source`);
+      } else if (!pdf.includes(`/${pc.pdf_sha256.slice(0, 16)}/`)) {
+        problems.push(`${slug}: paper.pdf on R2 is not the PDF CI built from this source`);
+      }
     }
   }
 
   if (problems.length) {
-    console.error('✗ Full-paper HTML out of date:');
+    console.error('✗ Full-paper HTML or PDF out of date:');
     for (const p of problems) {
       const slug = p.split(':')[0];
-      console.error(`   - ${p}\n     Fix: npm run paper:html -- ${slug}`);
+      console.error(`   - ${p}\n     Fix: npm run paper:build -- ${slug} && npm run upload`);
     }
     return 1;
   }
-  console.log('✓ Full-paper HTML matches its LaTeX source');
+  console.log('✓ Full-paper HTML and PDF match their LaTeX source');
   return 0;
 }
 
