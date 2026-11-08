@@ -58,22 +58,12 @@ This runs the following steps in order:
 1. **build:tailwind** — compile and minify TailwindCSS
 2. **generate_thumbnails** — create 256x256 paper/people thumbnails via `sips`
 3. **generate_search_index** — build searchable JSON index
-4. **build:arxiv** — download arXiv HTML papers and images (skips existing)
-5. **build:compress** — resize oversized images to max 1400px width
+4. **build:compress** — resize oversized images to max 1400px width
+5. **sync:r2** — upload new binaries to R2 and update `assets-manifest.json`
 6. **build:pages** — render HTML pages from Handlebars templates
 
-### Build PDFs from LaTeX source
-
-```bash
-npm run build:arxiv:pdf        # compile PDFs (reproducible) + compress via qpdf
-```
-
-### Force rebuild
-
-```bash
-npm run build:arxiv:force      # re-download all arXiv HTML and images
-npm run build:compress:force   # re-compress all images
-```
+Paper PDFs and full-paper HTML are built in CI from each paper's LaTeX
+source (`npm run paper:add`; see CONTRIBUTING.md), not by `npm run build`.
 
 ## Adding a new paper
 
@@ -96,7 +86,8 @@ npm run preview        # runs the full local build + serves out/ on :8000
 
 ```
 build/                     # Build scripts
-  build_arxiv_papers.js    #   Download arXiv HTML, compile PDFs, compress
+  paper_add.js             #   One command to add a paper (image, PDF, HTML)
+  paper_build.js           #   PDF + HTML from LaTeX source via latexml-lab
   build_pages.js           #   Handlebars template renderer
   compress_assets.js       #   Image compression (sharp)
   generate_thumbnails.js   #   Thumbnail generation

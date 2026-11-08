@@ -64,6 +64,11 @@ function addImage(slug, paper) {
         return;
     }
     const image = paper.image.replace(/^\//, '');
+    const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets-manifest.json'), 'utf8'));
+    if (!fs.existsSync(path.join(ROOT, image)) && manifest[paper.image]) {
+        console.log(`\n· ${slug}: hero image already on R2`);
+        return;
+    }
     if (!fs.existsSync(path.join(ROOT, image))) {
         console.error(`✗ ${slug}: image: is ${paper.image}, but ${image} does not exist. Put the image there, or remove the image: line.`);
         process.exit(1);
@@ -76,15 +81,19 @@ function addImage(slug, paper) {
     run('node', ['build/upload.js', ...files]);
 }
 
-async function addFullPaper(slug, paper, source, branch) {
-    // The comment stripper (arxiv_latex_cleaner) lives in the repo's venv.
-    if (!fs.existsSync(path.join(ROOT, '.venv/bin/arxiv_latex_cleaner'))) {
-        run('npm', ['run', 'setup:python']);
+async function addFullPaper(slug, paper, source, branch, resume) {
+    if (resume) {
+        console.log(`\n· ${slug}: source already uploaded; finishing the build`);
+    } else {
+        // The comment stripper (arxiv_latex_cleaner) lives in the repo's venv.
+        if (!fs.existsSync(path.join(ROOT, '.venv/bin/arxiv_latex_cleaner'))) {
+            run('npm', ['run', 'setup:python']);
+        }
+        if (!source || source === 'arxiv') source = await fromArxiv(slug, paper.arxiv);
+        run('node', ['build/latex_pack.js', '--local', slug, source]);
+        run('node', ['build/upload.js', `research/${slug}/latex.tar.gz`]);
+        run('git', ['pull', '--autostash', '--no-rebase', 'origin', branch]);
     }
-    if (!source || source === 'arxiv') source = await fromArxiv(slug, paper.arxiv);
-    run('node', ['build/latex_pack.js', '--local', slug, source]);
-    run('node', ['build/upload.js', `research/${slug}/latex.tar.gz`]);
-    run('git', ['pull', '--autostash', '--no-rebase', 'origin', branch]);
 
     run('node', ['build/paper_build.js', slug]);
     // A PDF locked by build/pdf_lock.js stays as it is on R2.
@@ -121,10 +130,21 @@ async function main() {
     }
     // Build the full paper when there is something new to build. A rerun
     // with no source (to add an image later) leaves a built paper alone.
-    const built = !!JSON.parse(fs.readFileSync(path.join(ROOT, 'assets-manifest.json'), 'utf8'))[`/research/${slug}/latex.tar.gz`];
+    const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets-manifest.json'), 'utf8'));
+    const tarball = manifest[`/research/${slug}/latex.tar.gz`];
+    const built = !!tarball;
+    // Uploaded source but no finished build (an earlier run stopped):
+    // resume from the uploaded source.
+    let resume = false;
+    if (built && !source && paper.enable_full_paper) {
+        const contentFile = path.join(ROOT, 'research', slug, 'paper-content.json');
+        const content = fs.existsSync(contentFile) ? JSON.parse(fs.readFileSync(contentFile, 'utf8')) : {};
+        resume = content.latex_tarball !== tarball || !manifest[`/research/${slug}/paper.pdf`];
+    }
     let buildFull = false;
     if (paper.enable_full_paper) {
         if (source) buildFull = true;
+        else if (resume) buildFull = true;
         else if (!built && paper.arxiv) buildFull = true;
         else if (!built) {
             console.error(`✗ "${slug}" has no arxiv: URL. Pass the source: npm run paper:add -- ${slug} <source.zip>`);
@@ -144,7 +164,7 @@ async function main() {
     }
 
     addImage(slug, paper);
-    if (buildFull) await addFullPaper(slug, paper, source, branch);
+    if (buildFull) await addFullPaper(slug, paper, source, branch, resume && !source);
     run('git', ['pull', '--autostash', '--no-rebase', 'origin', branch]);
 
     const content = `research/${slug}/paper-content.json`;

@@ -97,22 +97,26 @@ async function cleanLatexSource(latexDir) {
   // style file names (fairmeta.cls loads its font and logo from assets/).
   const keepExt = /\.(bbl|bst|cls|sty|clo|cfg|def|fd|tfm|vf|enc|map|pfb|afm|ttf|otf)$/i;
   const all = await listFiles(latexDir, '');
-  const templates = all.filter(rel => /\.(cls|sty)$/i.test(rel));
+  // Only class and style files the cleaner kept, with their comments
+  // stripped, can name a file to restore.
+  const keptTemplates = (await listFiles(cleanedDir, '')).filter(rel => /\.(cls|sty)$/i.test(rel));
   const named = new Set();
-  for (const t of templates) {
-    const text = await fs.readFile(path.join(latexDir, t), 'latin1');
+  for (const t of keptTemplates) {
+    const text = (await fs.readFile(path.join(cleanedDir, t), 'latin1'))
+      .split('\n').map(l => l.replace(/(^|[^\\])%.*/, '$1')).join('\n');
     for (const rel of all) {
       const stem = rel.replace(/\.[^./]+$/, '').split(path.sep).join('/');
       if (stem.length >= 4 && text.includes(stem)) named.add(rel);
     }
   }
-  // A figure epstopdf already converted (name-eps-converted-to.pdf) is
-  // build output with no author text.
-  const converted = /-eps-converted-to\.pdf$/i;
   for (const rel of all) {
-    if (!keepExt.test(rel) && !named.has(rel) && !converted.test(rel)) continue;
     const dest = path.join(cleanedDir, rel);
-    if (!await fs.pathExists(dest)) await fs.copy(path.join(latexDir, rel), dest);
+    if (await fs.pathExists(dest)) continue;
+    // A figure epstopdf already converted is kept only beside its kept .eps.
+    const eps = rel.match(/^(.*)-eps-converted-to\.pdf$/i);
+    const keep = keepExt.test(rel) || named.has(rel) ||
+      (eps && await fs.pathExists(path.join(cleanedDir, eps[1] + '.eps')));
+    if (keep) await fs.copy(path.join(latexDir, rel), dest);
   }
 
   await fs.remove(latexDir);

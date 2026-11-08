@@ -47,9 +47,11 @@ function audit() {
       problems.push(`${slug}: HTML is from arXiv but its LaTeX source is on R2`);
     } else if (pc.latex_tarball !== tarball) {
       problems.push(`${slug}: LaTeX source changed since the HTML was built`);
-    } else if (!paper.pdf_override && !zenodoId(paper)) {
-      // The PDF must be the one CI compiled from this tarball. A Zenodo
-      // report's PDF is checked against Zenodo instead (check_zenodo_pdfs.js).
+    } else if (!paper.pdf_override && !(zenodoId(paper) && !pc.pdf_sha256)) {
+      // The PDF must be the one CI compiled from this tarball. A published
+      // Zenodo report's PDF is frozen (no pdf_sha256 recorded) and checked
+      // against Zenodo instead (check_zenodo_pdfs.js); a reserved draft is
+      // checked here like any paper.
       const pdf = manifest[`/research/${slug}/paper.pdf`] || '';
       if (!pc.pdf_sha256) {
         problems.push(`${slug}: no CI-built PDF recorded for this source`);

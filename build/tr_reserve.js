@@ -94,7 +94,14 @@ Reserved **${number}** with DOI \`${doi}\` (not published yet).
 
 3. Run \`npm run paper:add -- ${slug} <source.zip>\` and open the pull request with "Closes #${issue}".
    The DOI is published once the PR's PDF is checked.`;
-    gh(['issue', 'comment', issue, '--body-file', '-'], comment);
+    try {
+        gh(['issue', 'comment', issue, '--body-file', '-'], comment);
+    } catch (e) {
+        // The DOI is reserved either way; do not rerun (that reserves another).
+        console.error(`⚠️  Reserved ${number} → ${doi} (Zenodo draft ${dep.id}), but the issue comment failed: ${e.message}\n` +
+            '   Post this on the issue by hand; do not rerun tr:reserve:\n\n' + comment);
+        process.exit(1);
+    }
 
     console.log(`✅ ${number} → ${doi} (Zenodo draft ${dep.id}). Commented on ${data.url}`);
 }

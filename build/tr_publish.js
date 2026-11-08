@@ -49,18 +49,30 @@ async function main() {
     if (!id || !paper.report_number) fail(`"${slug}" needs report_number: and a Zenodo doi: in data/papers.yaml.`);
 
     let dep = await api('GET', `/deposit/depositions/${id}`);
-    if (dep.submitted) fail(`${paper.doi} is already published.`);
-
-    // The PDF must be the one CI built from the paper's current source.
     const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets-manifest.json'), 'utf8'));
     const pdfUrl = manifest[`/research/${slug}/paper.pdf`];
-    const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', slug, 'paper-content.json'), 'utf8'));
-    if (!pdfUrl || !content.pdf_sha256 || !pdfUrl.includes(`/${content.pdf_sha256.slice(0, 16)}/`)) {
-        fail(`No CI-built PDF for "${slug}" in the manifest. Run npm run paper:add first.`);
-    }
-    const res = await fetch(pdfUrl);
-    if (!res.ok) fail(`${pdfUrl}: HTTP ${res.status}`);
+    const res = pdfUrl && await fetch(pdfUrl);
+    if (!res || !res.ok) fail(`No downloadable PDF for "${slug}" in the manifest.`);
     const pdf = Buffer.from(await res.arrayBuffer());
+    const md5 = crypto.createHash('md5').update(pdf).digest('hex');
+
+    if (dep.submitted) {
+        // Published on an earlier run that stopped before the community
+        // step: check the published file, then finish the remaining steps.
+        const published = (dep.files || []).map(f => String(f.checksum).replace(/^md5:/, ""));
+        if (!published.includes(md5)) fail(`${paper.doi} is published with a different PDF than the site's.`);
+        console.log(`${paper.doi} is already published with the site's PDF; finishing the community step.`);
+        await addToCommunity(id);
+        rerunChecks();
+        return;
+    }
+
+    // The PDF must be the one CI built from the paper's current source.
+    const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', slug, 'paper-content.json'), 'utf8'));
+    const tarball = manifest[`/research/${slug}/latex.tar.gz`];
+    if (!content.pdf_sha256 || !pdfUrl.includes(`/${content.pdf_sha256.slice(0, 16)}/`) || content.latex_tarball !== tarball) {
+        fail(`The PDF for "${slug}" is not CI's build of its current source. Run npm run paper:add first.`);
+    }
     if (crypto.createHash('sha256').update(pdf).digest('hex') !== content.pdf_sha256) {
         fail(`${pdfUrl} does not match the PDF CI built.`);
     }
@@ -87,7 +99,7 @@ async function main() {
     console.log(`  title    ${metadata.title}`);
     console.log(`  authors  ${paper.authors.join(', ')}`);
     console.log(`  date     ${metadata.publication_date}`);
-    console.log(`  file     ${filename} (${pdf.length} bytes, md5 ${crypto.createHash('md5').update(pdf).digest('hex')})`);
+    console.log(`  file     ${filename} (${pdf.length} bytes, md5 ${md5})`);
     console.log(`  preview  https://zenodo.org/deposit/${id}`);
     if (!yes) {
         if (!process.stdin.isTTY) fail('Not a terminal: review the draft and rerun with --yes to publish.');
@@ -97,9 +109,20 @@ async function main() {
     await api('POST', `/deposit/depositions/${id}/actions/publish`);
     console.log(`✅ published https://doi.org/${paper.doi}`);
 
-    // The deposit API ignores metadata.communities: request inclusion, then
-    // accept it as the community owner.
-    const inclusion = await api('POST', `/records/${id}/communities`, { communities: [{ id: COMMUNITY_ID }] });
+    await addToCommunity(id);
+    rerunChecks();
+}
+
+// The deposit API ignores metadata.communities: request inclusion, then
+// accept it as the community owner. Safe to repeat.
+async function addToCommunity(id) {
+    let inclusion;
+    try {
+        inclusion = await api('POST', `/records/${id}/communities`, { communities: [{ id: COMMUNITY_ID }] });
+    } catch (e) {
+        console.warn(`⚠️  community request: ${e.message}\n   (already included?) check https://zenodo.org/communities/agentic-learning-ai-lab`);
+        return;
+    }
     const requestId = inclusion.processed && inclusion.processed[0] && inclusion.processed[0].request_id;
     if (requestId) {
         await api('POST', `/requests/${requestId}/actions/accept`);
@@ -107,7 +130,10 @@ async function main() {
     } else {
         console.warn('⚠️  community inclusion returned no request; check https://zenodo.org/communities/agentic-learning-ai-lab');
     }
+}
 
+// Re-run the PR's checks so check_zenodo_pdfs.js compares the two files.
+function rerunChecks() {
     const branch = spawnSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).stdout.trim();
     const run = spawnSync('gh', ['run', 'list', '-b', branch, '-w', 'pr-checks.yml', '-L', '1', '--json', 'databaseId', '-q', '.[0].databaseId'],
         { cwd: ROOT, encoding: 'utf8' }).stdout.trim();

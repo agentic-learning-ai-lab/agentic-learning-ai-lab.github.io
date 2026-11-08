@@ -12,12 +12,13 @@ function zenodoId(paper) {
     return m ? m[1] : null;
 }
 
-// Published record → its files; a reserved-but-unpublished DOI → null.
+// Published record → its files; a reserved-but-unpublished DOI (404) →
+// null. Anything else, including 410 (deleted), throws: fail closed.
 async function zenodoFiles(id) {
     const res = await fetch(`https://zenodo.org/api/records/${id}`, {
         headers: { Accept: 'application/json', 'User-Agent': 'agenticlearning.ai-site-checks' },
     });
-    if (res.status === 404 || res.status === 410) return null;
+    if (res.status === 404) return null;
     if (!res.ok) throw new Error(`zenodo.org/api/records/${id}: HTTP ${res.status}`);
     return (await res.json()).files || [];
 }
