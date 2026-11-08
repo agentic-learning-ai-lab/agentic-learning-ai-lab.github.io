@@ -70,6 +70,20 @@ async function findArxivLatexCleaner() {
  * @param {string} latexDir - tree to clean in place
  * @returns {Promise<{stripped: number}>}
  */
+/** Paths (relative to root) of the files under root ending in ext. */
+async function listFiles(root, ext) {
+  const out = [];
+  const walk = async (dir) => {
+    for (const e of await fs.readdir(dir, { withFileTypes: true })) {
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) await walk(full);
+      else if (e.isFile() && e.name.endsWith(ext)) out.push(path.relative(root, full));
+    }
+  };
+  await walk(root);
+  return out;
+}
+
 async function cleanLatexSource(latexDir) {
   const cleaner = await findArxivLatexCleaner();
 
@@ -89,6 +103,14 @@ async function cleanLatexSource(latexDir) {
 
   if (!await fs.pathExists(cleanedDir)) {
     throw new Error(`arxiv_latex_cleaner did not produce ${cleanedDir}`);
+  }
+
+  // The cleaner deletes .bbl files as build output, but a source that
+  // ships only a .bbl (common on arXiv) needs it for its bibliography.
+  // A .bbl is BibTeX's output and carries no author comments.
+  for (const rel of await listFiles(latexDir, '.bbl')) {
+    const dest = path.join(cleanedDir, rel);
+    if (!await fs.pathExists(dest)) await fs.copy(path.join(latexDir, rel), dest);
   }
 
   await fs.remove(latexDir);

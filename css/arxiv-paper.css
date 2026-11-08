@@ -237,6 +237,28 @@
   background-color: #ffffff;
 }
 
+/* Multi-panel figures (LaTeXML's ltx_flex_* markup): panels sit side
+   by side, 2-4 per row, instead of stacking at full width. Sizes follow
+   LaTeXML's own stylesheet. */
+.arxiv-paper-content .ltx_flex_figure {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.arxiv-paper-content .ltx_flex_figure .ltx_flex_break {
+  flex-basis: 100%;
+  height: 0;
+}
+.arxiv-paper-content .ltx_flex_cell { flex: 1 1 0; min-width: 0; }
+.arxiv-paper-content .ltx_flex_size_2 { max-width: 48%; }
+.arxiv-paper-content .ltx_flex_size_3 { max-width: 32%; }
+.arxiv-paper-content .ltx_flex_size_4,
+.arxiv-paper-content .ltx_flex_size_many { max-width: 24%; }
+
+.arxiv-paper-content .ltx_flex_cell img { width: 100%; }
+
 .arxiv-paper-content figcaption,
 .arxiv-paper-content .ltx_caption {
   margin-top: 0.75rem;
@@ -263,8 +285,11 @@
   font-size: 0.9rem;
 }
 
-/* Fix for transformed/scaled tables that can overlap */
-.arxiv-paper-content .ltx_transformed_outer {
+/* Fix for transformed/scaled tables that can overlap. Figures keep
+   LaTeXML's own box layout (rotated labels, side-by-side minipages);
+   see the figure rules below. A table inside a figure is still a table. */
+.arxiv-paper-content .ltx_transformed_outer:not(figure.ltx_figure *),
+.arxiv-paper-content .ltx_transformed_outer:has(.ltx_tabular) {
   display: block !important;
   margin: 1.5rem 0 !important;
   width: 100% !important;
@@ -272,15 +297,46 @@
   overflow: visible;
 }
 
-.arxiv-paper-content .ltx_transformed_inner {
+.arxiv-paper-content .ltx_transformed_inner:not(figure.ltx_figure *),
+.arxiv-paper-content .ltx_transformed_inner:has(.ltx_tabular) {
   transform: none !important;
+  position: static !important;
   display: block !important;
   width: 100%;
 }
 
-.arxiv-paper-content .ltx_inline-block {
+.arxiv-paper-content .ltx_inline-block:not(figure.ltx_figure *),
+.arxiv-paper-content .ltx_inline-block:has(.ltx_tabular) {
   display: block !important;
 }
+
+/* Inside figures, LaTeXML's rules: rotated boxes (e.g. a sideways panel
+   label) and minipages laid out in a row. */
+.arxiv-paper-content figure.ltx_figure .ltx_inline-block { display: inline-block; vertical-align: middle; }
+.arxiv-paper-content figure.ltx_figure .ltx_inline-block:has(> .ltx_minipage + .ltx_minipage) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Phones: side-by-side minipages (a table next to a figure) stack. */
+@media (max-width: 640px) {
+  .arxiv-paper-content .ltx_flex_figure > .ltx_flex_cell:has(> .ltx_minipage) {
+    flex: 1 1 100% !important;
+    max-width: none !important;
+  }
+  .arxiv-paper-content .ltx_flex_figure > .ltx_flex_cell > .ltx_minipage {
+    width: 100% !important;
+  }
+}
+.arxiv-paper-content figure.ltx_figure .ltx_transformed_outer { position: relative; overflow: visible; }
+.arxiv-paper-content figure.ltx_figure .ltx_transformed_inner {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  white-space: nowrap;
+}
+.arxiv-paper-content figure.ltx_figure .ltx_transformed_inner > .ltx_p { margin: 0; padding: 0; }
 
 .arxiv-paper-content table thead {
   border-bottom: 2px solid var(--fg);
@@ -638,6 +694,45 @@
   margin-bottom: 1rem;
   white-space: pre;
   border: 1px solid #e5e5e5;
+}
+
+/* Code listings: one line per .ltx_listingline, wrapped like the PDF's
+   breaklines. The download link LaTeXML adds is not useful here. */
+.arxiv-paper-content .ltx_listing:not(.ltx_float_algorithm .ltx_listing) {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  background-color: var(--card-bg);
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  margin: 0.25rem 0 0.75rem;
+}
+.arxiv-paper-content .ltx_listing_data { display: none; }
+.arxiv-paper-content .ltx_listing:not(.ltx_float_algorithm .ltx_listing) .ltx_listingline {
+  display: block;
+  min-height: 1.5em; /* blank source lines */
+  overflow-wrap: anywhere;
+}
+.arxiv-paper-content .ltx_listing:not(.ltx_float_algorithm .ltx_listing) .ltx_listingline > span {
+  white-space: pre-wrap;
+  font-family: inherit;
+}
+
+/* tcolorbox panels (latexml-lab renders them as plain blocks). */
+.arxiv-paper-content .ltx_tcolorbox {
+  border: 1px solid color-mix(in srgb, var(--accent, #3C81F7) 45%, transparent);
+  border-radius: 6px;
+  margin: 1rem 0;
+  padding: 0 0.9rem 0.6rem;
+  overflow: hidden;
+}
+.arxiv-paper-content .ltx_tcolorbox > .ltx_tcolorbox_title {
+  margin: 0 -0.9rem 0.6rem;
+  padding: 0.4rem 0.9rem;
+  font-weight: 600;
+  background: color-mix(in srgb, var(--accent, #3C81F7) 10%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent, #3C81F7) 30%, transparent);
 }
 
 /* Paper page metadata styling (outside arxiv-paper-content) */

@@ -14,6 +14,7 @@ const MANIFEST_PATH = path.join(ROOT, 'assets-manifest.json');
 
 const ASSET_PATTERNS = [
     'research/*/paper.pdf',
+    'research/*/latex.tar.gz',
     'research/*/assets/**/*.{png,jpg,jpeg,gif,svg,webp}',
     'assets/images/papers/*.{png,jpg,jpeg,gif,webp}',
     'assets/images/people/*.{png,jpg,jpeg,gif,webp}',

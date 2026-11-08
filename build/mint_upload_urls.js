@@ -54,6 +54,7 @@ function contentType(filename) {
         mp4: 'video/mp4',
         css: 'text/css',
         csv: 'text/csv',
+        gz: 'application/gzip',
     }[ext] || 'application/octet-stream';
 }
 

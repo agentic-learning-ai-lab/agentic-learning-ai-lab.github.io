@@ -86,7 +86,7 @@ contribution needs:
 | Form | Where it shows up | What you need to provide |
 |---|---|---|
 | **Paper card** (default) | The `/research/` listing page | `data/papers.yaml` entry (hero image optional — can be added later, see below) |
-| **+ embedded paper view** | A `/research/<slug>/` page rendering the arXiv HTML inline | Above + `enable_full_paper: true` + `arxiv:` set, then `npm run latex:update <slug>` (auto-fetches arXiv source, cleans, uploads, compiles PDF — see below) |
+| **+ embedded paper view** | A `/research/<slug>/` page with the full paper text and PDF | Above + `enable_full_paper: true` + the LaTeX source (Step 6; arXiv not needed) |
 | **+ marketing project page** | A custom `/<slug>/` page with images, videos, custom CSS | Above + `project_page: true` + `data/projects/<slug>.md` |
 
 The `image:` field is optional. Omit it to publish without a card
@@ -184,60 +184,44 @@ git push
 
 Open a PR to `main`. Done.
 
-### (Optional) Step 6 — Enable the embedded paper view
+### (Optional) Step 6 — Add the full paper from its LaTeX source
 
-Setting `enable_full_paper: true` in `papers.yaml` gives the paper a
-`/research/<slug>/` page that renders the arXiv HTML inline (figures,
-equations, references — everything from the published HTML) plus
-a compiled `paper.pdf` hosted on our CDN. Three artifacts get
-produced:
+This step gives the paper a `/research/<slug>/` page with the full text,
+figures, equations, references and PDF, built from the paper's LaTeX
+source alone. The paper does not need to be on arXiv, and you need no R2
+credentials, LaTeX or Docker: only `gh auth login` and Python 3, which
+`paper:add` uses to set up the comment stripper on its first run. The text is converted
+by [latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab),
+which runs arXiv's own converter in a GitHub Action.
 
-1. `research/<slug>/paper-content.json` — extracted arXiv HTML
-   (committed to git; ~hundreds of KB per paper)
-2. `latex.tar.gz` on R2 — cleaned LaTeX source archive (manifest
-   entry `/research/<slug>/latex.tar.gz`)
-3. `paper.pdf` on R2 — compiled PDF (manifest entry
-   `/research/<slug>/paper.pdf`)
+1. Set `enable_full_paper: true` on the paper's entry in `data/papers.yaml`.
+2. Download the source from Overleaf (**Menu → Download → Source**, a
+   `.zip`) and the compiled PDF (**Download PDF**). A source folder works
+   in place of the zip.
+3. On your branch, run:
 
-**Steps 2 and 3 require R2 credentials**, which student contributors
-don't have. The pattern: a student sets `enable_full_paper: true` in
-the YAML and opens the PR; Mengye (or another admin with R2 creds)
-runs the three commands below before merging, then pushes the
-resulting `paper-content.json` + manifest updates onto the same PR
-branch:
+   ```bash
+   npm run paper:add -- <slug> ~/Downloads/<project>.zip ~/Downloads/<project>.pdf
+   ```
 
-```bash
-npm run build:arxiv     <slug>     # fetch arXiv HTML → paper-content.json
-                                   # + upload extracted figures to R2
-npm run latex:update    <slug>     # download arXiv LaTeX → clean → upload tarball to R2
-npm run build:arxiv:pdf            # compile paper.pdf → upload to R2
-```
+   It takes about five minutes. It strips comments from the source (the
+   source becomes public), uploads the source and PDF, converts the paper,
+   uploads the figures, and stages `data/papers.yaml` and
+   `research/<slug>/paper-content.json`. It pushes the branch first if
+   origin does not have it yet.
+4. Commit and push. The pull request's Cloudflare preview shows the page.
 
-(Or, equivalently, `npm run build` — runs all three plus the rest of
-the pipeline.)
+If a step fails, `paper:add` names the command that failed. Fix the cause
+and run it again from the start.
 
-A protective guard in `build/templater.js` keeps the HTML toggle
-hidden when `paper-content.json` is missing — so a student's PR with
-`enable_full_paper: true` but no admin bootstrap won't ship a broken
-'Loading paper…' spinner to production. The paper just renders
-card-only until the bootstrap lands.
+**Updating the paper.** Run `paper:add` again with the new zip and PDF.
+Pre-commit check 11 and CI fail if the source on R2 changed but the HTML
+was not rebuilt, so the text cannot fall behind the source.
 
-When a paper is updated on arXiv (v2, v3…), an admin re-runs
-`npm run latex:update <slug>` (refetches source, invalidates the
-cached `paper.pdf`) and `npm run build:arxiv:force` (re-downloads
-the HTML).
-
-**Not on arXiv?** Drop the LaTeX source at `research/<slug>/latex/`
-locally (gitignored), then run `npm run latex:pack <slug>` — same
-effect as `latex:update` (clean, tar, upload, manifest), except the
-local `latex/` tree gets auto-deleted after upload (it lives
-transiently on disk and canonically on R2). No `paper-content.json`
-is produced for non-arXiv papers (the HTML extraction comes from
-arXiv); the page renders PDF-only via the guard above.
-
-You'll need a local LaTeX install (`tlmgr install latexmk` if you got
-a warning about missing latexmk on macOS). CI installs TeXLive
-automatically for the build:arxiv:pdf step.
+**When the conversion looks wrong.** Open an issue on
+[latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab/issues)
+with the slug and what looks wrong. Most problems are a LaTeX package the
+converter does not support yet, and a fix there applies to every paper.
 
 ## Adding a project page
 

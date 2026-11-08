@@ -72,3 +72,8 @@ jobs:
       # build/check_bibliography.js.
       - name: Check bibliography integrity
         run: node build/check_bibliography.js
+
+      # A paper whose LaTeX tarball is on R2 must have HTML converted
+      # from that tarball by latexml-lab. See build/check_paper_html.js.
+      - name: Check full-paper HTML is current
+        run: node build/check_paper_html.js
