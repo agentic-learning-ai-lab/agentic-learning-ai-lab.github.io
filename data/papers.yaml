@@ -1,3 +1,20 @@
+- title: 'Outerloop: Open and Trustworthy Multi-Agent Autoresearch'
+  image: /assets/images/papers/outerloop.png
+  authors:
+    - Mengye Ren
+  short_abstract: Outerloop is an open-source kernel that runs research agents as untrusted programs and enforces measurement, edit scope, review and compute budgets, so their reported gains can be trusted.
+  abstract: 'Coding agents can now run research loops on real codebases, editing code, launching experiments, and reporting improvements. However, in current open systems the agent is both the author and the evaluator. In this paper, we argue that autoresearch needs a rigid outer structure so that the inner research loop can run freely, and we build that structure as a kernel. We present Outerloop, an open-source kernel that runs research agents as untrusted programs in sandboxes and enforces measurement, edit scope, review, and compute budgets. Within these limits, agents built on different harnesses can experiment with new ideas together in one repository. We evaluate Outerloop on a nanoGPT training-speed benchmark. When we rerun the chosen results of three published systems on new seeds, their gains shrink because part of each gain came from a lucky run. Moreover, our own agents'' gains shrink in the same way when they grade themselves, whereas our kernel''s credited gains match the audit. With the same coding model, most autoresearch systems reach similar scores, so they differ mainly in the trustworthiness of their reported results.'
+  webpage: 'https://outerloop.science'
+  permalink: outerloop
+  report_number: AGL-TR-2026-02
+  doi: 10.5281/zenodo.24047406
+  enable_full_paper: true
+  tags:
+    - multi-agent
+    - ai-safety
+  date: 2026-11-01T00:00:00.000Z
+  journal: 'Technical report'
+  is_recent: true
 - title: 'What Is It Like to Write Like Haiku?'
   image: /assets/images/papers/prompto.png
   authors:
@@ -133,6 +150,8 @@
   # export, link-back from related papers); no template renders it yet.
   philpapers: 'https://philpapers.org/rec/RENTSR'
   permalink: the-self-requires-learning
+  report_number: AGL-TR-2026-01
+  doi: 10.5281/zenodo.24047404
   enable_full_paper: true
   tags:
     - philosophy-of-ai
