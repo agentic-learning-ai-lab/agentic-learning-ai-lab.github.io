@@ -16,16 +16,15 @@ user-facing setup steps changed.
   `main` to production and every other branch to a preview URL.
 - Data lives in `data/*.yaml`. Templates in `*.hbs` (root) and
   `templates/*.hbs` (partials). Build scripts in `build/`.
-- Adding a paper = one entry in `data/papers.yaml` + one hero image
-  dropped at `assets/images/papers/<slug>.png` (locally; gitignored) +
-  `npm run build` (which calls `sync:r2` to mirror the image to R2 and
-  bake CDN URLs into the rendered HTML).
-- Full-paper HTML comes from the paper's LaTeX tarball on R2, converted
-  by [latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab):
-  `npm run latex:pack <slug> <zip-or-dir>` (or `latex:update` for an
-  arXiv paper), then `npm run paper:html -- <slug>`. Pre-commit check 11
-  and CI fail when the tarball changed but the HTML was not rebuilt.
-  Only a paper without a tarball on R2 uses arXiv's HTML.
+- Adding a paper = one entry in `data/papers.yaml` + an optional hero
+  image at `assets/images/papers/<slug>.png` (gitignored) +
+  `npm run paper:add -- <slug> [<source.zip>]`.
+- Full-paper HTML and `paper.pdf` both come from the paper's LaTeX
+  tarball on R2, built in one
+  [latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab)
+  run: `npm run paper:add -- <slug> [<source.zip>]` does the whole thing.
+  Pre-commit check 11 and CI fail when the tarball changed but the HTML
+  or PDF was not rebuilt.
 - `npm run build` runs the full local pipeline (Sharp / PDF compile /
   sync:r2). `npm run build:cf` is the slim cloud-build path Cloudflare
   Pages uses (no binary processing — reads CDN URLs from manifest).
@@ -330,7 +329,7 @@ npm run latex:pack   <slug> [<zip-or-dir>]
                               # clean → tar → R2 → manifest → delete local
 npm run latex:update <slug>   # arXiv → clean → tar → R2 → manifest → invalidate paper.pdf
 npm run latex:clean  <slug>   # run arxiv_latex_cleaner only (rarely needed directly)
-npm run paper:html   -- <slug>
+npm run paper:build   -- <slug>
                               # R2 LaTeX → ar5ivist GH Action → paper-content.json + assets/
 npm run build:arxiv:pdf       # compile any missing paper.pdf (cache-first)
 ```
@@ -488,7 +487,7 @@ Active pre-commit checks (run as a single Node process from
 | 08 | required-fields | papers.yaml / people.yaml entries missing required fields. | `--no-verify` |
 | 09 | bibliography | `enable_full_paper` papers whose paper-content.json has an empty bibliography, over-long bibitem tags, or missing-citation spans. | `--no-verify` |
 | 10 | tag-slugs | A paper `tags:` slug not in `data/tags.yaml` (`build/lint_tags.js`). | `--no-verify` |
-| 11 | paper-html | An `enable_full_paper` paper with a LaTeX tarball on R2 whose paper-content.json is arXiv's, or was converted from a different tarball (`build/check_paper_html.js`). | `--no-verify` |
+| 11 | paper-build | An `enable_full_paper` paper with a LaTeX tarball on R2 whose paper-content.json is arXiv's, or was converted from a different tarball (`build/check_paper_build.js`). | `--no-verify` |
 
 Adding a new pre-commit check: drop a file in
 `scripts/checks/<NN>_<name>.js` that exports `{ name, run }`.
@@ -527,7 +526,7 @@ PRs to `main` run `.github/workflows/pr-checks.yml`:
    if any 404 — catches sync:r2 misses + stale manifest entries)
 5. `node build/check_webp_companions.js` (also pre-commit check 02)
 6. `node build/check_bibliography.js` (also pre-commit check 09)
-7. `node build/check_paper_html.js` (also pre-commit check 11)
+7. `node build/check_paper_build.js` (also pre-commit check 11)
 
 All run in the one `build-and-lint` job, the required check in
 `main`'s ruleset (which also requires one approving review).
@@ -558,20 +557,8 @@ All run in the one `build-and-lint` job, the required check in
 
 ## When the user asks you to add a new paper
 
-There are two parallel paths depending on whether the contributor
-has R2 credentials in their local `.env`:
-
-**With R2 creds** (you / admin):
-- Run `npm run build` — the full pipeline auto-syncs new binaries via
-  `sync:r2` and writes the manifest entry. Commit text + manifest.
-
-**Without R2 creds** (students):
-- `npm run upload` after dropping local binaries. It dispatches a GH
-  Action that mints pre-signed PUT URLs, the local CLI curls files up
-  to R2, then dispatches a register Action that commits the manifest
-  back to the contributor's branch.
-
-Either way, the YAML/MD steps are the same:
+One command does everything after the YAML entry, with or without R2
+credentials (CONTRIBUTING.md, "Adding a new paper"):
 
 1. Add the entry to `data/papers.yaml`. Use an existing entry as a
    template. Required (enforced by pre-commit check 08): `title`,
@@ -580,38 +567,40 @@ Either way, the YAML/MD steps are the same:
    `enable_full_paper`, `project_page`, `is_recent`, `image`, and for a lab
    technical report `report_number` + `doi` (see
    [Lab technical reports](#lab-technical-reports)).
-2. Drop the hero image at `assets/images/papers/<snake_case>.png`
-   (gitignored; lives on local disk + R2).
-3. Full paper view: set `enable_full_paper: true`, then on the feature
-   branch run `npm run paper:add -- <slug>` for a paper on arXiv (source and
-   PDF come from its `arxiv:` URL), or
-   `npm run paper:add -- <slug> <overleaf-source.zip> <paper.pdf>` for any
-   other source (CONTRIBUTING.md, Step 6). It needs `gh auth login` and Python 3: it cleans
-   and uploads the source and PDF, runs latexml-lab's conversion, uploads
-   the figures, and stages `data/papers.yaml` +
-   `research/<slug>/paper-content.json` for the commit. Rerun it for a
-   new version; check 11 fails while the HTML is stale. With R2 creds,
-   the pieces are also `latex:pack`, `latex:update` (arXiv source) and
-   `paper:html`.
-4. `npm run build:arxiv:pdf` compiles `paper.pdf` by downloading the
-   tarball from R2 (cached in `.cache/`).
-5. `npm run build` runs the full local pipeline end-to-end, which
-   includes `sync:r2` (uploads the new hero image, paper.pdf, HTML
-   figures, and any per-project assets to R2 + updates
-   `assets-manifest.json`).
-   Templates render with the new manifest entries baked in as
-   `https://cdn.agenticlearning.ai/...` URLs. If `sync:r2` is
-   skipped or fails, `build:pages` prints a
-   `⚠️ cdnUrl lookup fell back to local` warning naming the missed
-   paths — those'll 404 on CF Pages since the slim `out/` doesn't
-   include binary subtrees. See `notes/lfs-migration.md`.
-6. Check `out/<slug>/index.html` (or `out/research/<slug>/index.html`
-   for the embedded paper view) opens correctly via `npm run preview`.
-7. Walk the audit checklist above. Then commit ONLY the text
-   changes: `data/papers.yaml`, any new `data/projects/<slug>.md`,
-   any new/updated `research/<slug>/paper-content.json`, and the
-   updated `assets-manifest.json`. The new binaries are gitignored —
-   they live on local disk + R2 only.
+2. Optionally drop the hero image at the `image:` path, normally
+   `assets/images/papers/<slug>.png` (gitignored; local disk + R2).
+3. On a feature branch, run `npm run paper:add -- <slug>`, adding
+   `<source.zip|dir>` for a full paper that is not on arXiv. It needs
+   `gh auth login` (and Python 3 for a full paper). It:
+   - makes the hero image's thumbnail and WebP copies and uploads them
+     (`npm run upload`: pre-signed URLs from a GitHub Action, manifest
+     commit back to the branch);
+   - with `enable_full_paper: true`, cleans and uploads the source (from
+     the zip, or the `arxiv:` e-print), then `paper:build` has latexml-lab
+     compile `paper.pdf` and convert the HTML from that one tarball, and
+     uploads the PDF and figures. Every PDF is compiled in CI; there is
+     no PDF argument;
+   - stages `data/papers.yaml` (+ `research/<slug>/paper-content.json`).
+
+   The site uses the paper's lab-template version, also after
+   acceptance; a venue style is only for the venue's camera-ready. When
+   the arXiv source is in a venue style, ask for the lab-template zip
+   instead of building from arXiv.
+
+   The full paper is built on the first run and again only with a new
+   zip or `arxiv` (a new arXiv version), so a rerun just to add the hero
+   image later is cheap. Check 11 fails while the HTML or PDF is stale. The pieces are also scripts: `latex:pack`, `latex:update`,
+   `paper:build`, `upload`.
+
+   **PDF override (rare, PI approval only).** A paper that cannot compile
+   on the pinned TeX Live gets `pdf_override: '<reason>'` in papers.yaml;
+   put its PDF at `research/<slug>/paper.pdf` and `npm run upload`.
+   `paper:build` then leaves the PDF alone and check 11 skips it.
+4. Commit and push; check the PR's Cloudflare preview. `npm run build`
+   and `npm run preview` give the same page locally.
+5. Walk the audit checklist above. Commit only text: `data/papers.yaml`,
+   any `data/projects/<slug>.md`, `research/<slug>/paper-content.json`,
+   and the manifest commits `upload` made.
 
 ## Lab technical reports
 
@@ -622,30 +611,34 @@ or at a venue does not get one: a second DOI splits its citations. The PI
 issues numbers and publishes the Zenodo record; the token is the PI's own,
 never a repo secret.
 
-1. Pick the next free number: `grep report_number data/papers.yaml`.
-2. Create a Zenodo draft with a reserved DOI: `POST
-   https://zenodo.org/api/deposit/depositions` with metadata
-   `upload_type: publication`, `publication_type: report`, title, creators,
-   description, `publication_date`, `prereserve_doi: true`, and
-   `imprint_publisher: Agentic Learning AI Lab`. The response's
-   `metadata.prereserve_doi.doi` is the DOI.
-3. Add an unnumbered footnote on page 1 of the paper, right after
-   `\maketitle`:
-   ```latex
-   {\let\thefootnote\relax\footnotetext{Agentic Learning AI Lab Technical Report AGL-TR-<year>-<nn>. \href{https://doi.org/<DOI>}{doi:<DOI>}}}
-   ```
-4. Compile, then upload that exact PDF to the Zenodo draft and add
-   `report_number:`, `doi:` and `journal: 'Technical report'` to the
-   paper's entry. Run `paper:add` with the same source and PDF.
-5. The PI clicks Publish on Zenodo. A published DOI is permanent.
-6. Add the record to the lab community. The deposit API ignores
-   `metadata.communities`, so after publishing `POST
-   /api/records/<id>/communities` with
-   `{"communities":[{"id":"623bbae6-8970-4659-921a-d9ddf1637cee"}]}`, then
-   `POST /api/requests/<request id>/actions/accept`.
-7. If the paper later appears on arXiv, add the arXiv ID to the Zenodo
+Two PI-only scripts do the Zenodo side. They read `ZENODO_TOKEN` from
+`.env` (gitignored); the DOIs are minted under the token owner's account.
+
+1. The author opens a **Technical report request** issue
+   (`.github/ISSUE_TEMPLATE/technical-report.yml`).
+2. `npm run tr:reserve -- <issue>` takes the next number (from
+   papers.yaml and the account's Zenodo uploads, drafts included, so two
+   reservations cannot collide), creates a Zenodo draft with a reserved
+   DOI, and comments on the issue with the page-1 footnote and the
+   `journal` / `report_number` / `doi` lines.
+3. The author pastes them, runs `paper:add` with the source and opens the
+   PR. CI compiles the PDF.
+4. `gh pr checkout <pr> && npm run tr:publish -- <slug>` copies title,
+   authors, abstract and date from papers.yaml to the draft, uploads the
+   CI-built PDF from the manifest, shows the record and publishes only
+   when the PI types `publish` (a DOI is permanent). It then adds the
+   record to the lab community (the deposit API ignores
+   `metadata.communities`, so it requests inclusion and accepts it) and
+   re-runs the PR checks.
+5. Merge once `check_zenodo_pdfs.js` passes: the site PDF and Zenodo's
+   file are the same bytes.
+6. If the paper later appears on arXiv, add the arXiv ID to the Zenodo
    record as a related identifier (`isIdenticalTo`) and `arxiv:` to
    papers.yaml. Keep the report number and DOI.
+
+A published report's PDF is frozen (`build/pdf_lock.js`): `paper:build`
+keeps it, check 11 skips it, and the Zenodo check guards it. A corrected
+PDF needs a new version of the Zenodo record, not a new upload here.
 
 The paper page renders `citation_technical_report_number`,
 `citation_technical_report_institution` and `citation_doi` from these

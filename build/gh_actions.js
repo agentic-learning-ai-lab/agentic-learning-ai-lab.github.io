@@ -3,14 +3,14 @@
 /**
  * Shared helpers for driving GitHub Actions from local CLIs.
  *
- * Both `npm run upload` (build/upload.js) and `npm run paper:html`
- * (build/paper_html.js) dispatch a workflow_dispatch run, wait for it,
+ * Both `npm run upload` (build/upload.js) and `npm run paper:build`
+ * (build/paper_build.js) dispatch a workflow_dispatch run, wait for it,
  * and download its artifact. Every workflow embeds a caller-generated
  * correlation id in its `run-name`, which is how a CLI finds its own
  * run among concurrent dispatches.
  *
  * `repo` is optional: without it, `gh` targets the current checkout's
- * repo (the upload path). paper:html passes its own repo.
+ * repo (the upload path). paper:build passes its own repo.
  */
 
 const { spawnSync, execFileSync } = require('child_process');

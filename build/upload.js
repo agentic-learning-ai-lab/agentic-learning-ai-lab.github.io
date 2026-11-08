@@ -44,6 +44,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { spawnSync, execSync } = require('child_process');
+const { cdnBasename } = require('./cdn_name');
 
 const {
     checkGhAuth,
@@ -140,7 +141,7 @@ function findUnregistered(filterPaths) {
                 continue; // already on R2 with matching hash
             }
         }
-        specs.push({ logical, sha, filename: path.basename(rel) });
+        specs.push({ logical, sha, filename: cdnBasename(rel) });
     }
     return specs;
 }

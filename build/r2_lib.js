@@ -4,7 +4,6 @@
  *   - latex_pack.js   (publish local latex/ tree → R2 tarball)
  *   - latex_fetch.js  (download R2 tarball → local latex/)
  *   - latex_update.js (re-fetch from arXiv → R2 tarball)
- *   - build_arxiv_papers.js (R2 download branch on compile)
  *
  * Keeps R2 client + manifest IO in one place so we don't drift across
  * scripts. The shared design rule: read manifest at the start, write it

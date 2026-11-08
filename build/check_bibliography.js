@@ -64,7 +64,7 @@ function audit() {
   for (const paper of papers) {
     const slug = paper.permalink;
     // The embedded HTML view only needs enable_full_paper. The content
-    // can come from arXiv's HTML or from `npm run paper:html` (LaTeX
+    // can come from arXiv's HTML or from `npm run paper:build` (LaTeX
     // tarball → ar5ivist); non-arXiv papers used to be excluded here
     // because they never got a paper-content.json, which is no longer
     // true.
@@ -96,8 +96,7 @@ function audit() {
         slug,
         rule: 'empty biblist',
         msg: 'enable_full_paper:true and <ul class="ltx_biblist"></ul> is empty — ' +
-             'run `npm run paper:html <slug>` to regenerate, or `npm run build:arxiv:pdf` ' +
-             '(auto-injects via inject_bbl) after `npm run latex:update <slug>`',
+             'run `npm run paper:build -- <slug>` to regenerate',
       });
     }
 

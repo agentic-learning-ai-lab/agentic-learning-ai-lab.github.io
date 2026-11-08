@@ -38,6 +38,7 @@ const path = require('path');
 const crypto = require('crypto');
 const glob = require('glob');
 const yaml = require('js-yaml');
+const { cdnBasename } = require('./cdn_name');
 const {
   S3Client,
   PutObjectCommand,
@@ -125,20 +126,6 @@ function hashFile(filePath) {
     stream.on('end', () => resolve(hash.digest('hex').slice(0, HASH_LEN)));
     stream.on('error', reject);
   });
-}
-
-/**
- * Compute the basename to use on R2 for a given local file path.
- *
- * Special case: research/<slug>/paper.pdf → <slug>.pdf so downloads have
- * meaningful filenames in the user's browser (not "paper.pdf" × 20).
- * All other files keep their original basename — those are already
- * descriptive (e.g. 'teaser.png', 'method.pdf').
- */
-function cdnBasename(localPath) {
-  const m = localPath.match(/^research\/([^/]+)\/paper\.pdf$/);
-  if (m) return `${m[1]}.pdf`;
-  return path.basename(localPath);
 }
 
 /**
@@ -367,4 +354,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { cdnBasename, hashFile };
+module.exports = { hashFile };
