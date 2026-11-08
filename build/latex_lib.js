@@ -95,7 +95,10 @@ async function cleanLatexSource(latexDir) {
   // still needs: a .bbl (a source that ships no .bib), fonts and
   // templates, which carry no author text, and any file a kept class or
   // style file names (fairmeta.cls loads its font and logo from assets/).
-  const keepExt = /\.(bbl|bst|cls|sty|clo|cfg|def|fd|tfm|vf|enc|map|pfb|afm|ttf|otf)$/i;
+  // A .cls/.sty in use is loaded from a .tex, so the cleaner keeps it; a
+  // dropped one is unused and stays dropped.
+  const keepExt = /\.(bbl|bst|clo|cfg|def|fd|tfm|vf|enc|map|pfb|afm|ttf|otf)$/i;
+  const textExt = /\.(bst|clo|cfg|def|fd)$/i;
   const all = await listFiles(latexDir, '');
   // Only class and style files the cleaner kept, with their comments
   // stripped, can name a file to restore.
@@ -116,7 +119,13 @@ async function cleanLatexSource(latexDir) {
     const eps = rel.match(/^(.*)-eps-converted-to\.pdf$/i);
     const keep = keepExt.test(rel) || named.has(rel) ||
       (eps && await fs.pathExists(path.join(cleanedDir, eps[1] + '.eps')));
-    if (keep) await fs.copy(path.join(latexDir, rel), dest);
+    if (!keep) continue;
+    await fs.copy(path.join(latexDir, rel), dest);
+    // Restored text files lose their comment lines too (the tarball is public).
+    if (textExt.test(rel)) {
+      const text = await fs.readFile(dest, 'latin1');
+      await fs.writeFile(dest, text.split('\n').filter(l => !/^\s*%/.test(l)).join('\n'), 'latin1');
+    }
   }
 
   await fs.remove(latexDir);

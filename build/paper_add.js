@@ -96,9 +96,13 @@ async function addFullPaper(slug, paper, source, branch, resume) {
     }
 
     run('node', ['build/paper_build.js', slug]);
-    // A PDF locked by build/pdf_lock.js stays as it is on R2.
+    // Upload the PDF only if it is the one CI just built: a locked PDF
+    // (build/pdf_lock.js) records no pdf_sha256 and stays as it is on R2.
     const pdf = `research/${slug}/paper.pdf`;
-    run('node', ['build/upload.js', `research/${slug}/assets`, ...(fs.existsSync(path.join(ROOT, pdf)) ? [pdf] : [])]);
+    const content = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', slug, 'paper-content.json'), 'utf8'));
+    const built = content.pdf_sha256 && fs.existsSync(path.join(ROOT, pdf)) &&
+        require('crypto').createHash('sha256').update(fs.readFileSync(path.join(ROOT, pdf))).digest('hex') === content.pdf_sha256;
+    run('node', ['build/upload.js', `research/${slug}/assets`, ...(built ? [pdf] : [])]);
 }
 
 async function main() {
