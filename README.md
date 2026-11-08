@@ -78,8 +78,8 @@ npm run build:compress:force   # re-compress all images
 ## Adding a new paper
 
 [`CONTRIBUTING.md`](./CONTRIBUTING.md#adding-a-new-paper) walks through it,
-including the full paper view built from LaTeX source alone (no arXiv
-needed). Binaries live on R2, not in git: commit `data/papers.yaml`,
+including the full paper view, built from the arXiv source or from LaTeX
+source alone. Binaries live on R2, not in git: commit `data/papers.yaml`,
 `research/<slug>/paper-content.json` and the `assets-manifest.json` entries.
 
 ## Deployment
