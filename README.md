@@ -77,13 +77,10 @@ npm run build:compress:force   # re-compress all images
 
 ## Adding a new paper
 
-1. Add the paper entry to `data/papers.yaml` with `arxiv`, `permalink`, and optionally `enable_full_paper: true`
-2. Drop a paper image at `assets/images/papers/<slug>.png` (locally; gitignored)
-3. Run `npm run build` — this generates thumbnails, syncs new assets to R2, and renders pages
-4. Optionally run `npm run build:arxiv:pdf` to compile a local PDF
-5. Commit on a feature branch, open a PR to `main`, and merge to deploy
-
-Binary assets are not committed to git — they live on R2 (mirror via `npm run sync:r2`, recorded in `assets-manifest.json`). Only the manifest entry is committed.
+[`CONTRIBUTING.md`](./CONTRIBUTING.md#adding-a-new-paper) walks through it,
+including the full paper view built from LaTeX source alone (no arXiv
+needed). Binaries live on R2, not in git: commit `data/papers.yaml`,
+`research/<slug>/paper-content.json` and the `assets-manifest.json` entries.
 
 ## Deployment
 

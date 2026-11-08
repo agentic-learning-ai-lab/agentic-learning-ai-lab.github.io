@@ -9,9 +9,11 @@
  * (the canonical copy lives on R2 now; re-fetch with `latex:fetch`).
  *
  * Usage:
- *   node build/latex_pack.js <slug>      # pack one paper
- *   node build/latex_pack.js --all       # pack every research/<slug>/latex/ found
- *   node build/latex_pack.js --keep <slug>  # don't delete local tree after upload
+ *   node build/latex_pack.js <slug> [<zip-or-dir>]  # pack one paper; seed
+ *                                                   # research/<slug>/latex/
+ *                                                   # from Overleaf's zip first
+ *   node build/latex_pack.js --all                  # pack every research/<slug>/latex/ found
+ *   node build/latex_pack.js --keep <slug>          # don't delete local tree after upload
  *
  * The clean → tar boundary is *the* privacy guarantee: `.tex` never
  * reaches R2 with author comments because cleaning runs immediately
@@ -38,9 +40,11 @@ const {
 const { cleanLatexSource, manifestKey } = require('./latex_lib');
 
 // Build aux + macOS cruft never go into the tarball. The "source of truth"
-// is .tex / .bib / .sty / .cls + figure binaries the author authored.
+// is .tex / .bib / .sty / .cls + figure binaries the author authored, plus
+// any .bbl: arXiv sources often ship one instead of the .bib, and the HTML
+// conversion needs it for the bibliography.
 const TAR_EXCLUDES = [
-  '*.aux', '*.log', '*.out', '*.toc', '*.bbl', '*.blg',
+  '*.aux', '*.log', '*.out', '*.toc', '*.blg',
   '*.fls', '*.fdb_latexmk', '*.synctex.gz', '*.bcf', '*.run.xml',
   '*.cache', '*.spl', 'paper.pdf',
   '__MACOSX', '.DS_Store',
@@ -108,7 +112,66 @@ async function tarDir(srcDir, destTarGz) {
   await execFileAsync('tar', args);
 }
 
-async function packOne(slug, { keep = false } = {}) {
+/**
+ * Overleaf "Download Source" zips are flat, but archives re-zipped
+ * elsewhere often wrap everything in one folder. If latex/ holds
+ * exactly one directory and no top-level .tex, move that directory's
+ * contents up one level so packOne's main-.tex detection works.
+ */
+async function flattenSingleTopDir(latexDir) {
+  const entries = await fs.readdir(latexDir);
+  if (entries.some(name => name.endsWith('.tex'))) return;
+  if (entries.length !== 1) return;
+
+  const inner = path.join(latexDir, entries[0]);
+  if (!(await fs.stat(inner)).isDirectory()) return;
+
+  for (const name of await fs.readdir(inner)) {
+    await fs.move(path.join(inner, name), path.join(latexDir, name), { overwrite: true });
+  }
+  await fs.rmdir(inner);
+}
+
+/**
+ * Seed research/<slug>/latex/ from an Overleaf source zip or a plain
+ * directory. Everything after this (clean → hash → tar → R2) is the
+ * normal pack path.
+ *
+ * The new source replaces research/<slug>/latex/ entirely, so a file
+ * dropped or renamed in the new version (an old main.tex) cannot survive.
+ */
+async function prepareLocalTree(slug, sourcePath) {
+  const latexDir = path.join(ROOT, 'research', slug, 'latex');
+  const abs = path.resolve(sourcePath);
+  if (!await fs.pathExists(abs)) {
+    throw new Error(`Source path not found: ${sourcePath}`);
+  }
+
+  const stat = await fs.stat(abs);
+  if (!stat.isDirectory() && !/\.zip$/i.test(abs)) {
+    throw new Error(`Source path must be a .zip or a directory: ${sourcePath}`);
+  }
+  // Stage the new tree first: the source may sit inside latex/ itself.
+  await fs.ensureDir(path.join(ROOT, '.cache'));
+  const staging = await fs.mkdtemp(path.join(ROOT, '.cache', 'latex-import-'));
+  try {
+    if (stat.isDirectory()) {
+      await fs.copy(abs, staging);
+    } else {
+      await execFileAsync('unzip', ['-oq', abs, '-d', staging]);
+      await flattenSingleTopDir(staging);
+    }
+    await fs.remove(latexDir);
+    await fs.move(staging, latexDir);
+  } finally {
+    await fs.remove(staging);
+  }
+
+  console.log(`   📥 ${slug}: seeded research/${slug}/latex/ from ${abs}`);
+  return latexDir;
+}
+
+async function packOne(slug, { keep = false, local = false } = {}) {
   const latexDir = path.join(ROOT, 'research', slug, 'latex');
   if (!await fs.pathExists(latexDir)) {
     throw new Error(`No local latex tree at ${path.relative(ROOT, latexDir)}`);
@@ -128,7 +191,14 @@ async function packOne(slug, { keep = false } = {}) {
   const logicalPath = manifestKey(slug);
   const alreadyAtSameUrl = manifest[logicalPath] === cdnUrl;
 
-  if (alreadyAtSameUrl) {
+  if (local) {
+    // No R2 credentials: leave the cleaned tarball for `npm run upload`,
+    // which uploads it through the site's GitHub Action.
+    const tarPath = path.join(ROOT, 'research', slug, 'latex.tar.gz');
+    await fs.remove(tarPath);
+    await tarDir(latexDir, tarPath);
+    console.log(`   📦 ${slug}: wrote research/${slug}/latex.tar.gz; publish it with npm run upload`);
+  } else if (alreadyAtSameUrl) {
     console.log(`   ⤳  ${slug}: tree content unchanged (${hash}); skip upload`);
   } else {
     const tmpDir = path.join(ROOT, '.cache', 'latex-pack');
@@ -149,7 +219,7 @@ async function packOne(slug, { keep = false } = {}) {
     console.log(`   🗑️  ${slug}: removed local research/${slug}/latex/`);
   }
 
-  return { slug, cdnUrl, hash, uploaded: !alreadyAtSameUrl };
+  return { slug, cdnUrl, hash, uploaded: !local && !alreadyAtSameUrl };
 }
 
 async function packAll(opts) {
@@ -184,17 +254,31 @@ async function packAll(opts) {
 async function main() {
   const args = process.argv.slice(2);
   const keep = args.includes('--keep');
-  const rest = args.filter(a => a !== '--keep');
+  const local = args.includes('--local');
+  const rest = args.filter(a => a !== '--keep' && a !== '--local');
 
   if (rest.includes('--all')) {
     await packAll({ keep });
     return;
   }
-  if (rest.length !== 1 || rest[0].startsWith('-')) {
-    console.error('Usage: latex:pack <slug>  OR  latex:pack --all  [--keep]');
+  if (rest.length < 1 || rest.length > 2 || rest[0].startsWith('-')) {
+    console.error('Usage: latex:pack [--local] <slug> [<zip-or-dir>]  OR  latex:pack --all  [--keep]');
     process.exit(1);
   }
-  await packOne(rest[0], { keep });
+  const [slug, sourcePath] = rest;
+  if (sourcePath) await prepareLocalTree(slug, sourcePath);
+  await packOne(slug, { keep, local });
+  if (sourcePath) await invalidatePdf(slug);
+}
+
+/** New source: drop the compiled PDF so the next build recompiles it. */
+async function invalidatePdf(slug) {
+  const pdfPath = path.join(ROOT, 'research', slug, 'paper.pdf');
+  if (await fs.pathExists(pdfPath)) {
+    await fs.remove(pdfPath);
+    console.log(`   🗑️  ${slug}: removed research/${slug}/paper.pdf (next build will recompile)`);
+  }
+  await fs.remove(pdfPath + '.qpdf-compressed').catch(() => {});
 }
 
 if (require.main === module) {
@@ -204,4 +288,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { packOne, packAll };
+module.exports = { packOne, packAll, prepareLocalTree };

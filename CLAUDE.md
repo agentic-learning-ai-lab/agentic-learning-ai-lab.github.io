@@ -20,6 +20,12 @@ user-facing setup steps changed.
   dropped at `assets/images/papers/<slug>.png` (locally; gitignored) +
   `npm run build` (which calls `sync:r2` to mirror the image to R2 and
   bake CDN URLs into the rendered HTML).
+- Full-paper HTML comes from the paper's LaTeX tarball on R2, converted
+  by [latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab):
+  `npm run latex:pack <slug> <zip-or-dir>` (or `latex:update` for an
+  arXiv paper), then `npm run paper:html -- <slug>`. Pre-commit check 11
+  and CI fail when the tarball changed but the HTML was not rebuilt.
+  Only a paper without a tarball on R2 uses arXiv's HTML.
 - `npm run build` runs the full local pipeline (Sharp / PDF compile /
   sync:r2). `npm run build:cf` is the slim cloud-build path Cloudflare
   Pages uses (no binary processing — reads CDN URLs from manifest).
@@ -44,7 +50,7 @@ data/                       # YAML sources (papers, people, tags, alumni)
 research/<slug>/            # Per-paper directory
   index.html                #   built from paper.hbs — generated, gitignored
   paper.pdf                 #   compiled PDF — local + R2, gitignored
-  paper-content.json        #   arXiv HTML extraction (cached, committed)
+  paper-content.json        #   full-paper HTML (latexml-lab, or arXiv's), committed
   assets/                   #   figures for the HTML view — local + R2, gitignored
   # latex/ is transient (gitignored). Real source is a tar.gz on R2.
 
@@ -182,7 +188,7 @@ on disk (run `npm run pull:r2` on a fresh clone).
 3. `build:webp` — Sharp-driven WebP companions for every PNG/JPG.
 4. `generate_search_index.js` — emit `assets/search-index.json`.
 5. `build:arxiv:pdf` — for each paper: download arXiv HTML if
-   `enable_full_paper: true`, ensure `research/<slug>/latex/` exists,
+   `enable_full_paper: true` and no LaTeX tarball is on R2, ensure `research/<slug>/latex/` exists,
    compile `paper.pdf` (reproducibly — `SOURCE_DATE_EPOCH` is pinned to
    the R2 tarball's Last-Modified so re-compiles produce byte-identical
    PDFs), then qpdf-compress + finalize with `--deterministic-id`.
@@ -273,7 +279,7 @@ compile. The compiled `paper.pdf` lives **only** on local disk and R2
 
 ```
 git:
-  research/<slug>/paper-content.json (arXiv HTML extract, text)
+  research/<slug>/paper-content.json (full-paper HTML, text)
   assets-manifest.json               (logical → CDN URL for both
                                       /research/<slug>/paper.pdf
                                       and /research/<slug>/latex.tar.gz)
@@ -319,9 +325,13 @@ PDF compile uses a two-layer skip:
 
 ```
 npm run latex:fetch  <slug>   # R2 → research/<slug>/latex/ (for editing)
-npm run latex:pack   <slug>   # local tree → clean → tar → R2 → manifest → delete local
+npm run latex:pack   <slug> [<zip-or-dir>]
+                              # seed latex/ from Overleaf's zip/dir, then
+                              # clean → tar → R2 → manifest → delete local
 npm run latex:update <slug>   # arXiv → clean → tar → R2 → manifest → invalidate paper.pdf
 npm run latex:clean  <slug>   # run arxiv_latex_cleaner only (rarely needed directly)
+npm run paper:html   -- <slug>
+                              # R2 LaTeX → ar5ivist GH Action → paper-content.json + assets/
 npm run build:arxiv:pdf       # compile any missing paper.pdf (cache-first)
 ```
 
@@ -478,6 +488,7 @@ Active pre-commit checks (run as a single Node process from
 | 08 | required-fields | papers.yaml / people.yaml entries missing required fields. | `--no-verify` |
 | 09 | bibliography | `enable_full_paper` papers whose paper-content.json has an empty bibliography, over-long bibitem tags, or missing-citation spans. | `--no-verify` |
 | 10 | tag-slugs | A paper `tags:` slug not in `data/tags.yaml` (`build/lint_tags.js`). | `--no-verify` |
+| 11 | paper-html | An `enable_full_paper` paper with a LaTeX tarball on R2 whose paper-content.json is arXiv's, or was converted from a different tarball (`build/check_paper_html.js`). | `--no-verify` |
 
 Adding a new pre-commit check: drop a file in
 `scripts/checks/<NN>_<name>.js` that exports `{ name, run }`.
@@ -516,6 +527,7 @@ PRs to `main` run `.github/workflows/pr-checks.yml`:
    if any 404 — catches sync:r2 misses + stale manifest entries)
 5. `node build/check_webp_companions.js` (also pre-commit check 02)
 6. `node build/check_bibliography.js` (also pre-commit check 09)
+7. `node build/check_paper_html.js` (also pre-commit check 11)
 
 All run in the one `build-and-lint` job, the required check in
 `main`'s ruleset (which also requires one approving review).
@@ -568,19 +580,22 @@ Either way, the YAML/MD steps are the same:
    `enable_full_paper`, `project_page`, `is_recent`, `image`.
 2. Drop the hero image at `assets/images/papers/<snake_case>.png`
    (gitignored; lives on local disk + R2).
-3. Get the LaTeX source onto R2:
-   - On arXiv: `npm run latex:update <slug>` fetches from
-     `https://arxiv.org/e-print/<id>`, cleans, tars, uploads to R2,
-     writes a manifest entry, and invalidates any stale paper.pdf.
-   - Not on arXiv: drop the source at `research/<slug>/latex/` (the
-     directory is gitignored), then run `npm run latex:pack <slug>`.
-     Same effect — clean, tar, upload, manifest, then auto-delete the
-     local tree.
+3. Full paper view from LaTeX source (no arXiv needed): set
+   `enable_full_paper: true`, then on the feature branch run
+   `npm run paper:add -- <slug> <overleaf-source.zip> <paper.pdf>`
+   (CONTRIBUTING.md, Step 6). It needs `gh auth login` and Python 3: it cleans
+   and uploads the source and PDF, runs latexml-lab's conversion, uploads
+   the figures, and stages `data/papers.yaml` +
+   `research/<slug>/paper-content.json` for the commit. Rerun it for a
+   new version; check 11 fails while the HTML is stale. With R2 creds,
+   the pieces are also `latex:pack`, `latex:update` (arXiv source) and
+   `paper:html`.
 4. `npm run build:arxiv:pdf` compiles `paper.pdf` by downloading the
    tarball from R2 (cached in `.cache/`).
 5. `npm run build` runs the full local pipeline end-to-end, which
-   includes `sync:r2` (uploads the new hero image, paper.pdf, and
-   any per-project assets to R2 + updates `assets-manifest.json`).
+   includes `sync:r2` (uploads the new hero image, paper.pdf, HTML
+   figures, and any per-project assets to R2 + updates
+   `assets-manifest.json`).
    Templates render with the new manifest entries baked in as
    `https://cdn.agenticlearning.ai/...` URLs. If `sync:r2` is
    skipped or fails, `build:pages` prints a
@@ -591,8 +606,9 @@ Either way, the YAML/MD steps are the same:
    for the embedded paper view) opens correctly via `npm run preview`.
 7. Walk the audit checklist above. Then commit ONLY the text
    changes: `data/papers.yaml`, any new `data/projects/<slug>.md`,
-   and the updated `assets-manifest.json`. The new binaries are
-   gitignored — they live on local disk + R2 only.
+   any new/updated `research/<slug>/paper-content.json`, and the
+   updated `assets-manifest.json`. The new binaries are gitignored —
+   they live on local disk + R2 only.
 
 ## When the user asks you to update something
 

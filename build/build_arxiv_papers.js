@@ -7,6 +7,8 @@
  *
  * HTML path: downloads from arxiv.org/html (with ar5iv fallback),
  * extracts, fixes citation/image paths, writes paper-content.json.
+ * Papers without an arXiv id get their HTML from `npm run paper:html`
+ * (LaTeX tarball → ar5ivist) and are skipped here without error.
  *
  * PDF path: outer skip on research/<slug>/paper.pdf existing (CI hits
  * this 99% of the time). When recompile is needed, resolves source via
@@ -858,15 +860,18 @@ async function buildPapers(options = {}) {
   // Load papers configuration
   const papersData = yaml.load(await fs.readFile(PAPERS_YAML, 'utf-8'));
 
-  // For HTML: only papers with enable_full_paper (HTML must come from arxiv).
+  // For HTML: every paper that opted into the embedded viewer. Only the
+  // arXiv-backed ones are downloaded from arxiv.org here; papers without
+  // an arXiv id get their HTML from `npm run paper:html` (LaTeX tarball →
+  // ar5ivist) and are skipped without error.
   // For PDF: every paper. resolveLatexSourceForCompile will gracefully skip
   // papers with no available source (via the outer paper.pdf-exists skip
   // for already-built papers, or with a clear error for unbootstrapped ones).
-  const htmlPapers = papersData.filter(paper => paper.arxiv && paper.enable_full_paper);
+  const htmlPapers = papersData.filter(paper => paper.enable_full_paper);
   const pdfPapers = papersData;
 
   if (htmlPapers.length === 0 && !buildPdf) {
-    console.log('No papers with both arxiv and enable_full_paper found in papers.yaml');
+    console.log('No papers with enable_full_paper found in papers.yaml');
     console.log('Add enable_full_paper: true to papers.yaml to enable full paper view');
     return;
   }
@@ -887,11 +892,29 @@ async function buildPapers(options = {}) {
   // Process HTML papers
   if (htmlPapers.length > 0) {
     console.log('📄 Processing HTML papers...\n');
+    const latexManifest = await require('./r2_lib').loadManifest();
     for (const paper of htmlPapers) {
       try {
+        if (!paper.arxiv) {
+          // No arXiv source: HTML comes from `npm run paper:html <slug>`.
+          console.log(`⏭️  [HTML] ${paper.permalink} - no arXiv id (use npm run paper:html ${paper.permalink})`);
+          htmlSkipped++;
+          continue;
+        }
+
         const htmlOutputPath = path.join(OUTPUT_DIR, paper.permalink, 'paper-content.json');
 
-        if (!force && await fs.pathExists(htmlOutputPath)) {
+        const existing = await fs.pathExists(htmlOutputPath)
+          ? await fs.readJson(htmlOutputPath).catch(() => ({}))
+          : null;
+        if (latexManifest[`/research/${paper.permalink}/latex.tar.gz`]) {
+          // Source on R2: the HTML comes from latexml-lab, never from
+          // arXiv, even with --force. check_paper_html.js flags it if stale.
+          if (!existing || existing.source !== 'latexml') {
+            console.log(`⚠️  [HTML] ${paper.permalink} - run npm run paper:html -- ${paper.permalink}`);
+          }
+          htmlSkipped++;
+        } else if (!force && existing) {
           console.log(`⏭️  [HTML] ${paper.permalink} - already exists`);
           htmlSkipped++;
         } else {
@@ -1042,7 +1065,7 @@ async function buildPapers(options = {}) {
     );
     for (const slug of emptyBibPapers) {
       console.error(`   - ${slug}`);
-      console.error(`     Fix: npm run latex:update ${slug} && rm research/${slug}/paper.pdf research/${slug}/paper-content.json && npm run build:arxiv:pdf`);
+      console.error(`     Fix: npm run paper:html ${slug}  (or npm run latex:update ${slug} && rm research/${slug}/paper.pdf research/${slug}/paper-content.json && npm run build:arxiv:pdf)`);
     }
     process.exit(1);
   }
