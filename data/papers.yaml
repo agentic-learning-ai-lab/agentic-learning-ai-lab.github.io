@@ -133,6 +133,7 @@
   # export, link-back from related papers); no template renders it yet.
   philpapers: 'https://philpapers.org/rec/RENTSR'
   permalink: the-self-requires-learning
+  report_number: AGL-TR-2026-01
   enable_full_paper: true
   tags:
     - philosophy-of-ai

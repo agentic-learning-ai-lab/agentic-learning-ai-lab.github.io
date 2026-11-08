@@ -10,7 +10,7 @@ const TEMPLATES_DIR = path.resolve(__dirname, '../templates');
 const ASSETS_MANIFEST_PATH = path.resolve(__dirname, '../assets-manifest.json');
 const SEARCH_INDEX_PATH = path.resolve(__dirname, '../assets/search-index.json');
 
-const { paperJsonLd, personJsonLd, organizationJsonLd } = require('./jsonld');
+const { paperCitationMeta, paperJsonLd, personJsonLd, organizationJsonLd } = require('./jsonld');
 
 // Memoized once-per-process — build_pages.js spawns one templater
 // subprocess per template, so this loads ~7 times per build, ~negligible.
@@ -90,6 +90,9 @@ function doTemplating(input, output) {
             paper.has_pdf_link = paper.has_local_pdf || !!paper.pdf;
 
             paper.jsonLd = paperJsonLd(paper, { cdnUrl: resolveCdn });
+            paper.citationMeta = paperCitationMeta(paper, {
+                pdfUrl: paper.has_local_pdf ? resolveCdn(paper.local_pdf) : paper.pdf,
+            });
 
             fs.writeFileSync(output_new, template(paper));
         }
