@@ -1,4 +1,5 @@
 - title: 'Outerloop: Open and Trustworthy Multi-Agent Autoresearch'
+  image: /assets/images/papers/outerloop.png
   authors:
     - Mengye Ren
   short_abstract: Outerloop is an open-source kernel that runs research agents as untrusted programs and enforces measurement, edit scope, review and compute budgets, so their reported gains can be trusted.
