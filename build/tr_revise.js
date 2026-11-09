@@ -34,6 +34,7 @@ async function main() {
     if (!paper) fail(`No paper "${slug}" in data/papers.yaml.`);
     const id = zenodoId(paper);
     if (!id || !paper.report_number) fail(`"${slug}" is not a technical report with a Zenodo doi:.`);
+    if (paper.pdf_override) fail(`"${slug}" has pdf_override:; remove it so the new version's PDF is built from source.`);
 
     const dep = await api('GET', `/deposit/depositions/${id}`);
     if (!dep.submitted) fail(`${paper.doi} is not published yet: rebuild with paper:add, then tr:publish.`);

@@ -508,7 +508,8 @@ credentials (CONTRIBUTING.md, "Adding a new paper"):
 
 ## Lab technical reports
 
-A paper with no arXiv ID and no venue can get a lab report number
+A paper with no arXiv ID and no venue (including one held in arXiv
+moderation) can get a lab report number
 (`AGL-TR-<year>-<nn>`, numbered in order within a year) and a Zenodo DOI,
 so it can be cited and Google Scholar indexes it. A paper already on arXiv
 or at a venue does not get one: a second DOI splits its citations. The PI
