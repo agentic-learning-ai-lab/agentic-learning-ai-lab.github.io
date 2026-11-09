@@ -27,6 +27,7 @@
     "paper:build": "node ./build/paper_build.js",
     "tr:reserve": "node ./build/tr_reserve.js",
     "tr:publish": "node ./build/tr_publish.js",
+    "tr:revise": "node ./build/tr_revise.js",
     "paper:add": "node ./build/paper_add.js",
     "sync:r2": "node ./build/sync_to_r2.js",
     "pull:r2": "node ./build/pull_from_r2.js",
