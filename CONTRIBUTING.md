@@ -112,6 +112,7 @@ entry as a template.
   short_abstract: One-sentence pitch shown on the card.
   abstract: 'Full abstract paragraph, single-line for YAML cleanliness.'
   arxiv: 'https://arxiv.org/abs/XXXX.XXXXX'   # optional
+  pdf: 'https://arxiv.org/pdf/XXXX.XXXXX'     # card-only papers; a full paper serves its own compiled PDF
   permalink: your-slug                 # forever; URL becomes /research/your-slug/
   image: /assets/images/papers/your_slug.png
   date: 2026-05-19T00:00:00.000Z       # ISO 8601
