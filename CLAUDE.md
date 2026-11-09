@@ -508,7 +508,8 @@ credentials (CONTRIBUTING.md, "Adding a new paper"):
 
 ## Lab technical reports
 
-A paper with no arXiv ID and no venue can get a lab report number
+A paper with no arXiv ID and no venue (including one held in arXiv
+moderation) can get a lab report number
 (`AGL-TR-<year>-<nn>`, numbered in order within a year) and a Zenodo DOI,
 so it can be cited and Google Scholar indexes it. A paper already on arXiv
 or at a venue does not get one: a second DOI splits its citations. The PI
@@ -541,8 +542,12 @@ Two PI-only scripts do the Zenodo side. They read `ZENODO_TOKEN` from
    papers.yaml. Keep the report number and DOI.
 
 A published report's PDF is frozen (`build/pdf_lock.js`): `paper:build`
-keeps it, check 11 skips it, and the Zenodo check guards it. A corrected
-PDF needs a new version of the Zenodo record, not a new upload here.
+keeps it, check 11 skips it, and the Zenodo check guards it. To correct
+it, publish a new version: `npm run tr:revise -- <slug>` drafts the new
+Zenodo version and writes its reserved DOI to `doi:` (the report number
+stays), which unfreezes the PDF; then update the footnote, `paper:add`
+with the new source, and `tr:publish` as above. Version 1 stays on Zenodo,
+and the record's concept DOI resolves to the latest version.
 
 The paper page renders `citation_technical_report_number`,
 `citation_technical_report_institution` and `citation_doi` from these

@@ -35,7 +35,7 @@ const {
     waitForRun,
     downloadArtifact,
 } = require('./gh_actions');
-const { pdfLockReason } = require('./pdf_lock');
+const { pdfLockReason, zenodoId } = require('./pdf_lock');
 
 const PAPERS_YAML = path.join(ROOT, 'data/papers.yaml');
 const CONVERT_REPO = 'agentic-learning-ai-lab/latexml-lab';
@@ -77,7 +77,7 @@ async function runNormalizers(slug) {
  * Assets are swapped wholesale so a figure dropped from the paper does
  * not survive a re-conversion.
  */
-async function installArtifact(slug, artifactDir, tarballUrl, { pdfLock = null } = {}) {
+async function installArtifact(slug, artifactDir, tarballUrl, { pdfLock = null, paper = {} } = {}) {
     const srcJson = path.join(artifactDir, 'paper-content.json');
     if (!await fs.pathExists(srcJson)) {
         throw new Error(`Artifact latexml-lab-${slug} has no paper-content.json`);
@@ -96,6 +96,8 @@ async function installArtifact(slug, artifactDir, tarballUrl, { pdfLock = null }
     const srcPdf = path.join(artifactDir, 'paper.pdf');
     if (pdfLock) {
         console.log(`   keeping research/${slug}/paper.pdf (${pdfLock})`);
+        // check_paper_build.js accepts a frozen PDF only for this DOI.
+        if (zenodoId(paper)) content.pdf_frozen = paper.doi;
     } else if (await fs.pathExists(srcPdf)) {
         const pdfPath = path.join(destDir, 'paper.pdf');
         await fs.copy(srcPdf, pdfPath);
@@ -153,7 +155,7 @@ async function fromLatexTarball(slug, paper) {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'latexml-lab-'));
     try {
         downloadArtifact(runId, `latexml-lab-${slug}`, tmpDir, { repo: CONVERT_REPO });
-        await installArtifact(slug, tmpDir, tarballUrl, { pdfLock: await pdfLockReason(paper) });
+        await installArtifact(slug, tmpDir, tarballUrl, { pdfLock: await pdfLockReason(paper), paper });
     } finally {
         await fs.remove(tmpDir);
     }

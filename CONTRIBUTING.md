@@ -201,7 +201,8 @@ converter does not support yet, and a fix there applies to every paper.
 
 ### Lab technical reports
 
-A paper that is not on arXiv and not at a venue can get a lab report
+A paper that is not on arXiv and not at a venue, including one held in
+arXiv moderation, can get a lab report
 number (`AGL-TR-2026-03`, ...) and a DOI, so people can cite it and
 Google Scholar finds it.
 
@@ -216,7 +217,8 @@ Google Scholar finds it.
    and Zenodo's are the same file, and the pull request merges.
 
 Once the DOI is published the PDF is frozen: a later `paper:add` updates
-the web page but keeps the PDF.
+the web page but keeps the PDF. To publish a corrected PDF, ask Mengye for
+a new version: you get a new DOI for the footnote, then rerun `paper:add`.
 
 ## Adding a project page
 
