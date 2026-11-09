@@ -111,8 +111,8 @@ entry as a template.
     - Mengye Ren
   short_abstract: One-sentence pitch shown on the card.
   abstract: 'Full abstract paragraph, single-line for YAML cleanliness.'
-  arxiv: 'https://arxiv.org/abs/XXXX.XXXXX'
-  pdf: 'https://arxiv.org/pdf/XXXX.XXXXX'
+  arxiv: 'https://arxiv.org/abs/XXXX.XXXXX'   # optional
+  pdf: 'https://arxiv.org/pdf/XXXX.XXXXX'     # card-only papers; a full paper serves its own compiled PDF
   permalink: your-slug                 # forever; URL becomes /research/your-slug/
   image: /assets/images/papers/your_slug.png
   date: 2026-05-19T00:00:00.000Z       # ISO 8601
@@ -205,8 +205,9 @@ A paper that is not on arXiv and not at a venue can get a lab report
 number (`AGL-TR-2026-03`, ...) and a DOI, so people can cite it and
 Google Scholar finds it.
 
-1. Open a **Technical report request** issue (title, authors, abstract,
-   permalink) before you add the paper.
+1. Before you add the paper, open a
+   [**Technical report request**](https://github.com/agentic-learning-ai-lab/agentic-learning-ai-lab.github.io/issues/new?template=technical-report.yml)
+   issue (title, authors, abstract, permalink).
 2. Mengye replies on the issue with your number and DOI, a footnote to
    paste on page 1, and three lines for the paper's entry.
 3. Paste them, run `paper:add` with the source (Step 3), and open the pull
