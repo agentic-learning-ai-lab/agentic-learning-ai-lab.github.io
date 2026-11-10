@@ -339,36 +339,55 @@
          own controls and are left alone. -->
     <script>
       (function () {
-        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        document.querySelectorAll('video[loop]:not([controls])').forEach(function (v) {
-          if (v.closest('.project-carousel')) return;
-          if (reduce) {
-            v.removeAttribute('autoplay');
-            v.pause();
-            v.controls = true;
-            return;
-          }
-          // Keep the author's description; append the play/pause hint.
-          var base = v.getAttribute('aria-label');
+        var mq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+        var videos = [].filter.call(document.querySelectorAll('video[loop]:not([controls])'), function (v) {
+          return !v.closest('.project-carousel');
+        });
+        videos.forEach(function (v) {
+          // A distinct name: the author's aria-label, else the figure
+          // caption, else the file name (wall.mp4 → "wall").
+          var cap = v.closest('figure') && v.closest('figure').querySelector('figcaption');
+          var src = v.currentSrc || (v.querySelector('source') || {}).src || '';
+          var base = v.getAttribute('aria-label') ||
+            (cap && cap.textContent.trim()) ||
+            decodeURIComponent(src.split('/').pop().replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ')) ||
+            'Animation';
           var label = function () {
-            var hint = v.paused ? 'press to play' : 'press to pause';
-            v.setAttribute('aria-label', (base ? base + ' (' : 'Animation (') + hint + ')');
-            v.title = v.paused ? 'Click to play' : 'Click to pause';
+            v.setAttribute('aria-label', base + (v.controls ? '' : (v.paused ? ' (press to play)' : ' (press to pause)')));
+            v.title = v.controls ? '' : (v.paused ? 'Click to play' : 'Click to pause');
           };
           var toggle = function () {
+            if (v.controls) return; // native controls handle it
             if (v.paused) v.play().catch(function () {}); else v.pause();
           };
-          v.tabIndex = 0;
-          v.setAttribute('role', 'button');
-          v.style.cursor = 'pointer';
           v.addEventListener('click', toggle);
           v.addEventListener('keydown', function (e) {
-            if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
+            if (!v.controls && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); toggle(); }
           });
           v.addEventListener('play', label);
           v.addEventListener('pause', label);
-          label();
+          v._applyMotion = function (reduce) {
+            v.controls = reduce;
+            if (reduce) {
+              v.removeAttribute('autoplay');
+              v.pause();
+              v.removeAttribute('role');
+              v.style.cursor = '';
+            } else {
+              v.setAttribute('role', 'button');
+              v.tabIndex = 0;
+              v.style.cursor = 'pointer';
+            }
+            label();
+          };
         });
+        var apply = function () {
+          var reduce = !!(mq && mq.matches);
+          videos.forEach(function (v) { v._applyMotion(reduce); });
+        };
+        apply();
+        // Follow the setting if it changes while the page is open.
+        if (mq) (mq.addEventListener ? mq.addEventListener('change', apply) : mq.addListener(apply));
       })();
     </script>
 </body>
