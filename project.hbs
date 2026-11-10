@@ -49,6 +49,10 @@
         },
         options: {
           skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        },
+        // Typeset after the page fonts load, so math is sized against the real font.
+        startup: {
+          pageReady: () => document.fonts.ready.then(() => MathJax.startup.defaultPageReady())
         }
       };
     </script>

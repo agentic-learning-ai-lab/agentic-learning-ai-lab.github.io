@@ -1,3 +1,26 @@
+- title: 'The Surprising Effectiveness of Deleting Weights in LLM Post-Training'
+  image: /assets/images/papers/deleting_weights.png
+  authors:
+    - Jack Lu
+    - Zhenbang Yang
+    - Mike Lasby
+    - Tejas Pote
+    - Yani Ioannou
+    - Mengye Ren
+  short_abstract: Setting fewer than 0.05% of a pretrained LLM's weights to zero, with no other change, matches full fine-tuning at scale across reinforcement learning, supervised fine-tuning, and on-policy distillation.
+  abstract: 'How little of a pretrained large language model (LLM) has to change for it to acquire new capabilities? We find that zeroing fewer than 0.05% of its weights, with no other modification, matches full fine-tuning (FFT) at scale across three LLM post-training regimes: reinforcement learning with verifiable rewards, supervised fine-tuning, and on-policy distillation. Our method, Deletion Tuning, learns a binary mask over the gate projection of transformer blocks. Two practical advantages follow: the trained mask is hundreds to thousands of times smaller than the corresponding FFT checkpoint, and Deletion Tuning forgets far less, which addresses a central challenge in continual learning. Under reinforcement learning, its prior-task accuracy stays near the base level while FFT, LoRA, and random sparse fine-tuning lose up to 5.4 points. To understand why masking alone suffices, we analyze the geometry of the learned weight changes under reinforcement learning using stable rank, spectrum drift, and principal-weight overlap. Compared with LoRA and random sparse fine-tuning, Deletion Tuning is closest to FFT across the three measures.'
+  arxiv: 'https://arxiv.org/abs/2611.10866'
+  pdf: 'https://arxiv.org/pdf/2611.10866'
+  permalink: deleting-weights
+  project_page: true
+  enable_full_paper: true
+  tags:
+    - llm-reasoning
+    - reinforcement-learning
+    - continual-learning
+  date: 2026-11-07T00:00:00.000Z
+  journal: 'Advances in Neural Information Processing Systems 39 (NeurIPS 2026)'
+  is_recent: true
 - title: 'Outerloop: Open and Trustworthy Multi-Agent Autoresearch'
   image: /assets/images/papers/outerloop.png
   authors:
