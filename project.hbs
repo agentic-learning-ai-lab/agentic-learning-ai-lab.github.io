@@ -332,6 +332,45 @@
       })();
     </script>
     {{/if}}
+    <!-- Looping videos without controls (hero animations, figure loops):
+         readers who ask for reduced motion get a paused video with native
+         controls; everyone else can pause and resume by clicking, or with
+         Space / Enter when the video has focus. Carousel videos have their
+         own controls and are left alone. -->
+    <script>
+      (function () {
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.querySelectorAll('video[loop]:not([controls])').forEach(function (v) {
+          if (v.closest('.project-carousel')) return;
+          if (reduce) {
+            v.removeAttribute('autoplay');
+            v.pause();
+            v.controls = true;
+            return;
+          }
+          // Keep the author's description; append the play/pause hint.
+          var base = v.getAttribute('aria-label');
+          var label = function () {
+            var hint = v.paused ? 'press to play' : 'press to pause';
+            v.setAttribute('aria-label', (base ? base + ' (' : 'Animation (') + hint + ')');
+            v.title = v.paused ? 'Click to play' : 'Click to pause';
+          };
+          var toggle = function () {
+            if (v.paused) v.play().catch(function () {}); else v.pause();
+          };
+          v.tabIndex = 0;
+          v.setAttribute('role', 'button');
+          v.style.cursor = 'pointer';
+          v.addEventListener('click', toggle);
+          v.addEventListener('keydown', function (e) {
+            if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
+          });
+          v.addEventListener('play', label);
+          v.addEventListener('pause', label);
+          label();
+        });
+      })();
+    </script>
 </body>
 <!-- /index.js provides toggleHeader() (mobile hamburger menu) and
      openSearch(). Both are referenced by the shared header partial. -->
