@@ -1,0 +1,284 @@
+/* Deleting Weights project page: tables and captions follow the paper's styling. */
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/libertinus-serif@5.2.1/700-italic.css");
+
+/* Body text uses the abstract's font and leading instead of the site-wide serif at 1.75. */
+.project-prose p,
+.project-prose li {
+    font-family: inherit;
+    line-height: inherit;
+    text-wrap: pretty;
+}
+
+/* Title block: balanced lines, and no name broken across lines. */
+.project-page-main > section:first-of-type h1,
+.project-page-main > section:first-of-type p,
+.project-section > h2,
+.project-section h3 {
+    text-wrap: balance;
+}
+.project-page-main > section:first-of-type p a {
+    white-space: nowrap;
+}
+/* A tight line box, so the gaps above and below each section divider match. */
+.project-section > h2 {
+    line-height: 1.2;
+    margin-bottom: 1.85rem;
+}
+@media (max-width: 768px) {
+    .project-section h3 {
+        font-size: 1.3rem;
+    }
+}
+
+/* Sections are flex columns (no margin collapse); blocks keep about 52 px of ink-to-ink space from the text. */
+.dw-fig {
+    margin: 1.5rem 0 2.5rem;
+}
+.dw-fig:not(.dw-tab) {
+    margin-top: calc(1.5rem + 5px);
+}
+.dw-fig.dw-tab {
+    margin-bottom: calc(2.5rem + 3px);
+}
+.dw-fig + .dw-fig {
+    margin-top: 0;
+}
+/* A figure right under a section heading keeps the heading's own gap. */
+.project-section > h2 + .dw-fig:not(.dw-tab) {
+    margin-top: 5px;
+}
+.project-section > figure:last-child {
+    margin-bottom: 0;
+}
+.project-section > figure.dw-tab:last-child {
+    padding-bottom: 5px;
+}
+.project-section + .project-section::before,
+.project-prose + .project-section::before {
+    margin-bottom: calc(3rem - 2px);
+}
+
+.dw-nw {
+    white-space: nowrap;
+}
+
+.dw-points {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin: 0;
+}
+.dw-points li + li {
+    margin-top: 0.5rem;
+}
+
+/* Figures are cropped to their ink; the dark theme shows them on a white card. */
+.dw-fig video,
+.dw-fig img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+}
+/* Figure 1: one video in two sizes (desktop and phone), each with its poster frame as a background image. */
+.dw-hero {
+    aspect-ratio: auto 1920 / 430;
+    background: var(--dw-poster-wide) center / contain no-repeat;
+    background-origin: content-box;
+}
+@media (max-width: 640px) {
+    .dw-hero {
+        aspect-ratio: auto 1080 / 242;
+        background-image: var(--dw-poster-phone);
+    }
+}
+.dw-cap {
+    display: block;
+    margin-top: 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-style: italic;
+    color: var(--fg-muted);
+    text-align: left;
+    text-wrap: pretty;
+}
+.dw-tab .dw-cap {
+    margin: 0 0 1rem;
+}
+.dw-kept {
+    color: #185fa5;
+}
+.dw-deleted {
+    color: #a32d2d;
+}
+
+/* Tables. The top and bottom rules belong to the table, so cell effects can never break them. */
+.dw-scroll {
+    overflow-x: auto;
+}
+.dw-table {
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-top: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    font-size: 0.9em;
+    font-variant-numeric: lining-nums tabular-nums;
+}
+.dw-table.dw-full {
+    width: 100%;
+}
+.dw-table th,
+.dw-table td {
+    padding: 0.22rem 0.55rem;
+    line-height: 1.35;
+    text-align: right;
+    white-space: nowrap;
+}
+.dw-table th:first-child,
+.dw-table td:first-child {
+    text-align: left;
+}
+.dw-table th {
+    font-weight: 700;
+}
+.dw-table th.dw-c {
+    text-align: center;
+}
+.dw-table th.dw-n {
+    font-weight: 400;
+}
+.dw-table .dw-s {
+    font-size: 0.87em;
+}
+/* \midrule */
+.dw-table thead tr:last-child > * {
+    border-bottom: 1px solid currentColor;
+}
+/* \cmidrule(lr) under a group header */
+.dw-table th.dw-cm {
+    position: relative;
+}
+.dw-table th.dw-cm::after {
+    content: '';
+    position: absolute;
+    left: 0.3rem;
+    right: 0.3rem;
+    bottom: 0;
+    border-bottom: 1px solid currentColor;
+}
+/* Extra space before each model group after the first, as in the paper's tables. */
+.dw-table.dw-pairs tbody td:nth-child(2n+4),
+.dw-table.dw-pairs thead tr:last-child > :nth-child(2n+4) {
+    padding-left: 1rem;
+}
+/* The paper's TableHighlight (Tailwind blue-100), extended 1 px so fractional cell edges leave no seam. */
+.dw-table tr.dw-ours > * {
+    --dw-tint: #dbeafe;
+    background: var(--dw-tint);
+    box-shadow: 1px 0 0 var(--dw-tint);
+}
+.dw-table tr.dw-ours > :last-child {
+    box-shadow: none;
+}
+
+:root[data-theme="dark"] .dw-table tr.dw-ours > * {
+    --dw-tint: #27344d;
+}
+:root[data-theme="dark"] .dw-kept {
+    color: #7fb2ec;
+}
+:root[data-theme="dark"] .dw-deleted {
+    color: #ec8a8a;
+}
+:root[data-theme="dark"] .dw-fig video,
+:root[data-theme="dark"] .dw-fig img {
+    padding: 1rem;
+    background-color: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .dw-table tr.dw-ours > * {
+        --dw-tint: #27344d;
+    }
+    :root:not([data-theme="light"]) .dw-kept {
+        color: #7fb2ec;
+    }
+    :root:not([data-theme="light"]) .dw-deleted {
+        color: #ec8a8a;
+    }
+    :root:not([data-theme="light"]) .dw-fig video,
+    :root:not([data-theme="light"]) .dw-fig img {
+        padding: 1rem;
+        background-color: #ffffff;
+    }
+}
+
+/* Tablets: the contents bar fits on one row, the widest table fits without scrolling, and BibTeX wraps. */
+@media (max-width: 900px) {
+    .project-toc-label {
+        display: none;
+    }
+    .project-toc a {
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
+    }
+    .dw-table {
+        font-size: 0.8em;
+    }
+    .dw-table th,
+    .dw-table td {
+        padding-left: 0.35rem;
+        padding-right: 0.35rem;
+    }
+    .project-bibtex {
+        white-space: pre-wrap;
+    }
+    .dw-table.dw-pairs tbody td:nth-child(2n+4),
+    .dw-table.dw-pairs thead tr:last-child > :nth-child(2n+4) {
+        padding-left: 0.6rem;
+    }
+}
+
+/* Phones: wide tables scroll in their box, with the method column pinned and an edge shadow. */
+@media (max-width: 760px) {
+    .dw-scroll {
+        background:
+            linear-gradient(to left, var(--bg) 40%, transparent) right center / 2.5rem 100% no-repeat local,
+            radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.18), transparent) right 1px center / 0.8rem 100% no-repeat scroll;
+    }
+    .dw-table th:first-child,
+    .dw-table td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        background: var(--bg);
+    }
+    .dw-table tr.dw-ours > td:first-child {
+        background: var(--dw-tint);
+    }
+}
+@media (max-width: 760px) and (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .dw-scroll {
+        background:
+            linear-gradient(to left, var(--bg) 40%, transparent) right center / 2.5rem 100% no-repeat local,
+            radial-gradient(farthest-side at 100% 50%, rgba(255, 255, 255, 0.2), transparent) right 1px center / 0.8rem 100% no-repeat scroll;
+    }
+}
+@media (max-width: 760px) {
+    :root[data-theme="dark"] .dw-scroll {
+        background:
+            linear-gradient(to left, var(--bg) 40%, transparent) right center / 2.5rem 100% no-repeat local,
+            radial-gradient(farthest-side at 100% 50%, rgba(255, 255, 255, 0.2), transparent) right 1px center / 0.8rem 100% no-repeat scroll;
+    }
+}
+@media (max-width: 640px) {
+    .project-toc a {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    .dw-table th,
+    .dw-table td {
+        padding-left: 0.35rem;
+        padding-right: 0.35rem;
+    }
+}
