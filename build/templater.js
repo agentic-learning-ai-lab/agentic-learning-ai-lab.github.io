@@ -183,17 +183,17 @@ function doTemplating(input, output) {
             // usually arXiv's mirror, which we'd rather not send
             // landing-page visitors to. Mirrors the has_local_pdf
             // logic in the paper.hbs branch above.
+            // The manifest comes first: the slim Cloudflare build has no
+            // local paper.pdf, only the manifest entry.
             if (!paper.project_page.links.pdf) {
                 const localPdfPath = path.join(__dirname, '..', 'research', paper.permalink, 'paper.pdf');
-                if (fs.existsSync(localPdfPath)) {
-                    const logical = `/research/${paper.permalink}/paper.pdf`;
-                    const manifest = loadAssetsManifest();
-                    if (manifest[logical]) {
-                        paper.project_page.links.pdf = manifest[logical];
-                    } else {
-                        paper.project_page.links.pdf = logical;
-                        _cdnMisses.add(logical);
-                    }
+                const logical = `/research/${paper.permalink}/paper.pdf`;
+                const manifest = loadAssetsManifest();
+                if (manifest[logical]) {
+                    paper.project_page.links.pdf = manifest[logical];
+                } else if (fs.existsSync(localPdfPath)) {
+                    paper.project_page.links.pdf = logical;
+                    _cdnMisses.add(logical);
                 } else if (paper.pdf) {
                     paper.project_page.links.pdf = paper.pdf;
                 }
