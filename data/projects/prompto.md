@@ -8,11 +8,13 @@ affiliations:
 italic_terms:
   - PrompTo
 bibtex: |
-  @misc{jin2026prompto,
-    title  = {What Is It Like to Write Like Haiku?},
-    author = {Jin, Jinran and Teehan, Ryan and Lu, Jack and Ren, Mengye},
-    note   = {Preprint},
-    year   = {2026}
+  @techreport{jin2026prompto,
+    title       = {What Is It Like to Write Like Haiku?},
+    author      = {Jin, Jinran and Teehan, Ryan and Lu, Jack and Ren, Mengye},
+    institution = {Agentic Learning AI Lab, New York University},
+    number      = {AGL-TR-2026-03},
+    year        = {2026},
+    doi         = {10.5281/zenodo.24160383}
   }
 ---
 
@@ -52,7 +54,7 @@ Across 13 directions on 2 datasets, the optimized style prompts recover **74.8%*
 
 *PrompTo*'s style prompts discover Gemma as an enthusiastic tutor, because it uses warm openings and asks follow-up questions; Qwen as a neutral assistant, because it goes directly to the question and does nothing else; and Haiku as a knowledgeable friend, because it gets straight to the answer with warm voice but no AI-like phrases. *PrompTo* finds the most distinctive features of each model, and we measure their frequency with regex.
 
-![Stylistic features of target models. Frequencies counted with regex.](style-features.png)
+![Stylistic features of target models. Frequencies counted with regex.](style-features.png){width=720}
 
 ## Style Prompt Generalization {data-toc=Generalization}
 
@@ -64,4 +66,4 @@ Style prompts optimized for one source model transfer to other source models wit
 
 A model's behavior can be seen as a distribution of phrases, but the restyled text collapses it into just one behavior. The style prompt provides a list of openers, but the source model picks one of them almost every time. Because the discriminator only sees one triplet at a time, it cannot see the frequency mismatch.
 
-![Feature frequency for target model vs. source model with π*. The original target model writes in a more diverse way, but the source model with π* fails to replicate that diversity.](style-choice.png)
+![Feature frequency for target model vs. source model with π*. The original target model writes in a more diverse way, but the source model with π* fails to replicate that diversity.](style-choice.png){width=720}
