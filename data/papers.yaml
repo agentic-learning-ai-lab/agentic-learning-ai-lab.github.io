@@ -12,8 +12,9 @@
   permalink: latent-merger
   date: 2026-11-07T00:00:00.000Z
   journal: 'NeurIPS 2026'
-  research_areas:
-    - adaptive-agents-and-foundation-models
+  tags:
+    - test-time-learning
+    - meta-learning
   is_recent: true
   enable_full_paper: false
   project_page: true
