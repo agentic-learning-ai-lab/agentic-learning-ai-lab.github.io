@@ -16,7 +16,7 @@
     - test-time-learning
     - meta-learning
   is_recent: true
-  enable_full_paper: false
+  enable_full_paper: true
   project_page: true
 - title: 'The Surprising Effectiveness of Deleting Weights in LLM Post-Training'
   image: /assets/images/papers/deleting_weights.png
