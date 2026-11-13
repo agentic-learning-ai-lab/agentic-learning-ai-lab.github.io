@@ -470,7 +470,8 @@ credentials (CONTRIBUTING.md, "Adding a new paper"):
    `data/tags.yaml`), `abstract`, `short_abstract`. Optional: `arxiv`, `pdf`, `webpage`,
    `enable_full_paper`, `project_page`, `is_recent`, `image`,
    `equal_contribution` / `equal_advising` (author names that get * / † and
-   a legend on the paper page; a name not in `authors` fails the build),
+   a legend on the paper page; a name not in `authors` fails the build;
+   `equal_contribution_label` / `equal_advising_label` reword the legend),
    and for a lab
    technical report `report_number` + `doi` (see
    [Lab technical reports](#lab-technical-reports)).

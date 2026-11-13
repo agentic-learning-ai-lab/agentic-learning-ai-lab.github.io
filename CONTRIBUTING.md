@@ -125,6 +125,7 @@ entry as a template.
   project_page: true                    # optional: enables /<slug>/ project page
   equal_contribution: [First Author, Second Author]  # optional: * after these authors on the paper page
   equal_advising: [Mengye Ren]          # optional: † after these authors on the paper page
+  equal_contribution_label: Equal contribution, ordered randomly  # optional: rewords the legend (also equal_advising_label)
 ```
 
 **Permalink rules**: kebab-case, unique across all papers, permanent.

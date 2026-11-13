@@ -531,11 +531,14 @@ function registerHelpers(handlebars, documents) {
     });
 
     // {{{authorMarksNote}}}: the "*Equal contribution · †Equal advising"
-    // legend under a paper page's author line; empty when unused.
+    // legend under a paper page's author line; empty when unused. A paper
+    // can reword a label with `<field>_label`, e.g. equal_contribution_label:
+    // 'Equal contribution, ordered randomly'.
     handlebars.registerHelper('authorMarksNote', function () {
         const used = AUTHOR_MARKS.filter(([field]) => (this[field] || []).length > 0);
         if (used.length === 0) return '';
-        const note = used.map(([, symbol, label]) => `<sup>${symbol}</sup>${label}`).join(' · ');
+        const note = used.map(([field, symbol, label]) =>
+            `<sup>${symbol}</sup>${handlebars.escapeExpression(this[`${field}_label`] || label)}`).join(' · ');
         return new handlebars.SafeString(`<p class="tw-text-[var(--fg-muted)] tw-text-sm tw-mt-1">${note}</p>`);
     });
 
