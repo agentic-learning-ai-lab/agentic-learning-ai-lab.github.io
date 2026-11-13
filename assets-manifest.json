@@ -463,6 +463,12 @@
   "/assets/projects/icc/numeric_finetune.webp": "https://cdn.agenticlearning.ai/d27154b64acdc9e6/numeric_finetune.webp",
   "/assets/projects/icc/numeric_zeroshot.jpeg": "https://cdn.agenticlearning.ai/c58f5efe0246cee5/numeric_zeroshot.jpeg",
   "/assets/projects/icc/numeric_zeroshot.webp": "https://cdn.agenticlearning.ai/94033abc6d26d707/numeric_zeroshot.webp",
+  "/assets/projects/latent-merger/geometry.png": "https://cdn.agenticlearning.ai/16c4bd70d003707b/geometry.png",
+  "/assets/projects/latent-merger/geometry.webp": "https://cdn.agenticlearning.ai/b1398022cbaa66bd/geometry.webp",
+  "/assets/projects/latent-merger/method-overview.png": "https://cdn.agenticlearning.ai/7c6f05a1f3bd76cd/method-overview.png",
+  "/assets/projects/latent-merger/method-overview.webp": "https://cdn.agenticlearning.ai/7fe8bb790f49b6e5/method-overview.webp",
+  "/assets/projects/latent-merger/spectrum.png": "https://cdn.agenticlearning.ai/81ae0841feafedbd/spectrum.png",
+  "/assets/projects/latent-merger/spectrum.webp": "https://cdn.agenticlearning.ai/88f0e0ec95044cae/spectrum.webp",
   "/assets/projects/lifelong-memory/bucket.mp4": "https://cdn.agenticlearning.ai/49a94f74537dbdf6/bucket.mp4",
   "/assets/projects/lifelong-memory/drink.mp4": "https://cdn.agenticlearning.ai/93b164416a49165a/drink.mp4",
   "/assets/projects/lifelong-memory/egg.mp4": "https://cdn.agenticlearning.ai/e39e72bffcb86f86/egg.mp4",
@@ -1025,6 +1031,7 @@
   "/research/icc/assets/x9.webp": "https://cdn.agenticlearning.ai/80dae31c224ae946/x9.webp",
   "/research/icc/latex.tar.gz": "https://cdn.agenticlearning.ai/c0ca80e59ffa2d11/icc.tar.gz",
   "/research/icc/paper.pdf": "https://cdn.agenticlearning.ai/47ba131d21e048c5/icc-2025.pdf",
+  "/research/latent-merger/latex.tar.gz": "https://cdn.agenticlearning.ai/4fe0cec414d35326/latent-merger.tar.gz",
   "/research/learning-forgetting-llms/assets/x1.png": "https://cdn.agenticlearning.ai/2cac1a6ffcdf6c78/x1.png",
   "/research/learning-forgetting-llms/assets/x1.webp": "https://cdn.agenticlearning.ai/1cec44a160cc6f48/x1.webp",
   "/research/learning-forgetting-llms/assets/x10.png": "https://cdn.agenticlearning.ai/44f48381ae58c5fd/x10.png",
@@ -1751,11 +1758,5 @@
   "/research/video-ssl-from-child/assets/x5.webp": "https://cdn.agenticlearning.ai/88fdcaf669e18526/x5.webp",
   "/research/video-ssl-from-child/assets/x6.png": "https://cdn.agenticlearning.ai/e8944dddf2bdd868/x6.png",
   "/research/video-ssl-from-child/assets/x6.webp": "https://cdn.agenticlearning.ai/b7dd4728264c9f95/x6.webp",
-  "/research/video-ssl-from-child/paper.pdf": "https://cdn.agenticlearning.ai/9881a78ee9bfe1c7/video-ssl-from-child.pdf",
-  "/assets/projects/latent-merger/geometry.png": "https://cdn.agenticlearning.ai/16c4bd70d003707b/geometry.png",
-  "/assets/projects/latent-merger/spectrum.png": "https://cdn.agenticlearning.ai/81ae0841feafedbd/spectrum.png",
-  "/assets/projects/latent-merger/method-overview.png": "https://cdn.agenticlearning.ai/7c6f05a1f3bd76cd/method-overview.png",
-  "/assets/projects/latent-merger/geometry.webp": "https://cdn.agenticlearning.ai/b1398022cbaa66bd/geometry.webp",
-  "/assets/projects/latent-merger/spectrum.webp": "https://cdn.agenticlearning.ai/88f0e0ec95044cae/spectrum.webp",
-  "/assets/projects/latent-merger/method-overview.webp": "https://cdn.agenticlearning.ai/7fe8bb790f49b6e5/method-overview.webp"
+  "/research/video-ssl-from-child/paper.pdf": "https://cdn.agenticlearning.ai/9881a78ee9bfe1c7/video-ssl-from-child.pdf"
 }
