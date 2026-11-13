@@ -123,9 +123,6 @@ entry as a template.
   is_recent: true                       # show in "Recent" section
   enable_full_paper: true               # optional: enables /research/<slug>/ HTML view
   project_page: true                    # optional: enables /<slug>/ project page
-  equal_contribution: [First Author, Second Author]  # optional: * after these authors on the paper page
-  equal_advising: [Mengye Ren]          # optional: † after these authors on the paper page
-  equal_contribution_label: Equal contribution, ordered randomly  # optional: rewords the legend (also equal_advising_label)
 ```
 
 **Permalink rules**: kebab-case, unique across all papers, permanent.

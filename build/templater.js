@@ -480,28 +480,6 @@ function registerHelpers(handlebars, documents) {
         }
     });
 
-    // Optional per-paper author marks: `equal_contribution` (*) and
-    // `equal_advising` (†) list names from `authors`. Names in
-    // `authors` stay clean, so people links, citation meta and person
-    // pages still match. A listed name missing from `authors` fails
-    // the build rather than silently dropping its mark.
-    const AUTHOR_MARKS = [
-        ['equal_contribution', '*', 'Equal contribution'],
-        ['equal_advising', '†', 'Equal advising'],
-    ];
-    function authorMarks(paper) {
-        const marks = new Map();
-        for (const [field, symbol] of AUTHOR_MARKS) {
-            for (const name of paper[field] || []) {
-                if (!(paper.authors || []).includes(name)) {
-                    throw new Error(`papers.yaml ${paper.permalink}: ${field} lists "${name}", who is not in authors`);
-                }
-                marks.set(name, (marks.get(name) || '') + symbol);
-            }
-        }
-        return marks;
-    }
-
     handlebars.registerHelper('formatAuthorsWithLinks', function (authors) {
         const peopleMap = documents.peopleMap;
 
@@ -509,13 +487,11 @@ function registerHelpers(handlebars, documents) {
             return "";
         }
 
-        const marks = authorMarks(this);
         const formattedAuthors = authors.map(author => {
-            const mark = marks.has(author) ? `<sup class="tw-text-sm">${marks.get(author)}</sup>` : '';
             if (peopleMap.has(author)) {
-                return `<a href="/people/${peopleMap.get(author)}/">${author}</a>${mark}`;
+                return `<a href="/people/${peopleMap.get(author)}/">${author}</a>`;
             }
-            return author + mark;
+            return author;
         });
 
         let result;
@@ -528,18 +504,6 @@ function registerHelpers(handlebars, documents) {
         }
 
         return new handlebars.SafeString(result);
-    });
-
-    // {{{authorMarksNote}}}: the "*Equal contribution · †Equal advising"
-    // legend under a paper page's author line; empty when unused. A paper
-    // can reword a label with `<field>_label`, e.g. equal_contribution_label:
-    // 'Equal contribution, ordered randomly'.
-    handlebars.registerHelper('authorMarksNote', function () {
-        const used = AUTHOR_MARKS.filter(([field]) => (this[field] || []).length > 0);
-        if (used.length === 0) return '';
-        const note = used.map(([field, symbol, label]) =>
-            `<sup>${symbol}</sup>${handlebars.escapeExpression(this[`${field}_label`] || label)}`).join(' · ');
-        return new handlebars.SafeString(`<p class="tw-text-[var(--fg-muted)] tw-text-sm tw-mt-1">${note}</p>`);
     });
 
     // Build a shared affiliation-index map for project-page authors.
