@@ -62,6 +62,7 @@
             <p class="tw-mt-4">
                 {{{formatAuthorsWithLinks authors}}}
             </p>
+            {{{authorMarksNote}}}
             <p class="tw-text-[var(--fg-muted)] tw-text-sm tw-mt-2">
                 {{journal}}{{#if report_number}} · <a href="https://doi.org/{{doi}}">{{report_number}}</a>{{else if arxiv_id}} · <a href="https://arxiv.org/abs/{{arxiv_id}}">arXiv:{{arxiv_id}}</a>{{/if}} · {{formatDate date "YYYY-MM-DD"}}
             </p>

@@ -468,7 +468,10 @@ credentials (CONTRIBUTING.md, "Adding a new paper"):
    template. Required (enforced by pre-commit check 08): `title`,
    `authors`, `permalink`, `date`, `journal`, `tags` (slugs from
    `data/tags.yaml`), `abstract`, `short_abstract`. Optional: `arxiv`, `pdf`, `webpage`,
-   `enable_full_paper`, `project_page`, `is_recent`, `image`, and for a lab
+   `enable_full_paper`, `project_page`, `is_recent`, `image`,
+   `equal_contribution` / `equal_advising` (author names that get * / † and
+   a legend on the paper page; a name not in `authors` fails the build),
+   and for a lab
    technical report `report_number` + `doi` (see
    [Lab technical reports](#lab-technical-reports)).
 2. Optionally drop the hero image at the `image:` path, normally
