@@ -57,9 +57,46 @@ function paperJsonLd(paper, opts = {}) {
     }
     // sameAs: external canonical URLs that identify the same work.
     const sameAs = [];
+    if (paper.doi) sameAs.push(`https://doi.org/${paper.doi}`);
     if (paper.arxiv) sameAs.push(paper.arxiv);
     if (sameAs.length) ld.sameAs = sameAs;
+    const identifier = [];
+    if (paper.doi) identifier.push({ '@type': 'PropertyValue', propertyID: 'DOI', value: paper.doi });
+    if (paper.report_number) identifier.push({ '@type': 'PropertyValue', propertyID: 'Technical report', value: paper.report_number });
+    if (identifier.length) ld.identifier = identifier;
     return stringify(ld);
+}
+
+const REPORT_INSTITUTION = 'Agentic Learning AI Lab, New York University';
+
+const escapeAttr = (v) => String(v)
+    .replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+/**
+ * Google Scholar's citation_* meta tags (its inclusion guidelines), as an
+ * HTML string. Scholar reads these, not JSON-LD. A paper with a
+ * `report_number` is a technical report of the lab.
+ */
+function paperCitationMeta(paper, { pdfUrl } = {}) {
+    const tags = [['citation_title', paper.title]];
+    for (const name of paper.authors || []) tags.push(['citation_author', name]);
+    if (paper.date) {
+        tags.push(['citation_publication_date', new Date(paper.date).toISOString().slice(0, 10).replace(/-/g, '/')]);
+    }
+    // The venue, so Scholar can tell a published paper from a preprint.
+    const venue = paper.journal || '';
+    if (venue && !/^(corr|preprint|technical report)$|preprint$/i.test(venue.trim())) {
+        const kind = /journal|transactions|letters|\bnature\b|\bscience\b/i.test(venue) ? 'journal' : 'conference';
+        tags.push([`citation_${kind}_title`, venue]);
+    }
+    if (paper.report_number) {
+        tags.push(['citation_technical_report_number', paper.report_number]);
+        tags.push(['citation_technical_report_institution', REPORT_INSTITUTION]);
+    }
+    if (paper.doi) tags.push(['citation_doi', paper.doi]);
+    tags.push(['citation_abstract_html_url', `${SITE}/research/${paper.permalink}/`]);
+    if (pdfUrl) tags.push(['citation_pdf_url', pdfUrl]);
+    return tags.map(([k, v]) => `<meta name="${k}" content="${escapeAttr(v)}" />`).join('\n    ');
 }
 
 function personJsonLd(person, opts = {}) {
@@ -99,4 +136,5 @@ function organizationJsonLd() {
     return stringify(ld);
 }
 
-module.exports = { paperJsonLd, personJsonLd, organizationJsonLd };
+module.exports = {
+    paperCitationMeta, paperJsonLd, personJsonLd, organizationJsonLd };

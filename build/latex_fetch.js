@@ -7,7 +7,7 @@
  *   manifest → R2 → .cache/latex-tarballs/ → tar -xz → research/<slug>/latex/
  *
  * Author workflow: fetch → edit → `npm run latex:pack <slug>` → commit
- * manifest + paper.pdf (recompile happens via build:arxiv:pdf).
+ * manifest, then `npm run paper:build -- <slug>` for the PDF and HTML.
  *
  * Usage:
  *   node build/latex_fetch.js <slug>
@@ -65,8 +65,7 @@ function downloadViaHttps(url, outputPath) {
       const out = fs.createWriteStream(tmpPath);
       let settled = false;
       // Capture R2's Last-Modified header so we can persist it next to the
-      // cached file. Reproducible PDF builds use this as SOURCE_DATE_EPOCH
-      // — see build_arxiv_papers.js compileLatex(). Falling back on `date`
+      // cached file. Falling back on `date`
       // (always present) keeps the sidecar non-empty if R2 ever omits L-M.
       const r2LastModified = res.headers['last-modified'] || res.headers['date'] || null;
       const fail = async (err) => {

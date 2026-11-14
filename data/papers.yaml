@@ -1,3 +1,70 @@
+- title: 'Unbundling Multimodal Vision Encoding'
+  image: /assets/images/papers/unbundling.png
+  authors:
+    - Ellis Brown
+    - Chris Hoang
+    - Shengyi Qian
+    - Shang-Wen Li
+    - Mike Lewis
+    - Marjan Ghazvininejad
+    - Luke Zettlemoyer
+    - Lucas Beyer
+    - Mengye Ren
+    - Jakob Verbeek
+    - Saining Xie
+    - Hu Xu
+  short_abstract: Pretraining every model from scratch at matched compute, we find that multimodal language models need dedicated vision capacity, but not a pretrained visual prior or a separate encoder placed before the backbone.
+  abstract: "How multimodal language models should encode visual input remains up for debate. Most models use a pretrained vision encoder, while some recent recipes train the encoder from scratch with the language model or remove it entirely. Vision encoders bundle together three design choices: a visual prior from upstream pretraining, dedicated vision capacity, and pre-fusion placement of that capacity (i.e., before the multimodal backbone). Because published models also differ in data, architecture, and compute, comparing them cannot isolate the effect of each choice. We disentangle these choices via a controlled framework where we pretrain all models from scratch on common data and compare them on visual question answering and language benchmarks at matched lifetime compute. We find that the visual prior is not necessary; an encoder trained jointly from scratch is on par with a pretrained one, without a separate training stage. What matters instead is dedicated vision capacity: an encoder-free model trails on visual understanding even when its backbone is enlarged by the encoder's parameter count. Yet that capacity need not precede multimodal fusion, as vision-only modules added in-fusion to early backbone layers perform comparably to a pre-fusion encoder and can lower time to first token. These results also hold across backbone sizes, when encoder pretraining is treated as free, and when starting from a pretrained language model. Overall, our findings favor dedicated vision capacity trained jointly with the backbone and placed early within it."
+  arxiv: 'https://arxiv.org/abs/2611.17334'
+  pdf: 'https://arxiv.org/pdf/2611.17334'
+  webpage: 'https://unbundling.github.io'
+  permalink: unbundling
+  enable_full_paper: true
+  tags:
+    - multimodal-learning
+  date: 2026-11-12T00:00:00.000Z
+  journal: CoRR
+  is_recent: true
+- title: 'The Surprising Effectiveness of Deleting Weights in LLM Post-Training'
+  image: /assets/images/papers/deleting_weights.png
+  authors:
+    - Jack Lu
+    - Zhenbang Yang
+    - Mike Lasby
+    - Tejas Pote
+    - Yani Ioannou
+    - Mengye Ren
+  short_abstract: Setting fewer than 0.05% of a pretrained LLM's weights to zero, with no other change, matches full fine-tuning at scale across reinforcement learning, supervised fine-tuning, and on-policy distillation.
+  abstract: 'How little of a pretrained large language model (LLM) has to change for it to acquire new capabilities? We find that zeroing fewer than 0.05% of its weights, with no other modification, matches full fine-tuning (FFT) at scale across three LLM post-training regimes: reinforcement learning with verifiable rewards, supervised fine-tuning, and on-policy distillation. Our method, Deletion Tuning, learns a binary mask over the gate projection of transformer blocks. Two practical advantages follow: the trained mask is hundreds to thousands of times smaller than the corresponding FFT checkpoint, and Deletion Tuning forgets far less, which addresses a central challenge in continual learning. Under reinforcement learning, its prior-task accuracy stays near the base level while FFT, LoRA, and random sparse fine-tuning lose up to 5.4 points. To understand why masking alone suffices, we analyze the geometry of the learned weight changes under reinforcement learning using stable rank, spectrum drift, and principal-weight overlap. Compared with LoRA and random sparse fine-tuning, Deletion Tuning is closest to FFT across the three measures.'
+  arxiv: 'https://arxiv.org/abs/2611.10866'
+  pdf: 'https://arxiv.org/pdf/2611.10866'
+  permalink: deleting-weights
+  project_page: true
+  enable_full_paper: true
+  tags:
+    - llm-reasoning
+    - reinforcement-learning
+    - continual-learning
+  date: 2026-11-07T00:00:00.000Z
+  journal: 'Advances in Neural Information Processing Systems 39 (NeurIPS 2026)'
+  is_recent: true
+- title: 'Outerloop: Open and Trustworthy Multi-Agent Autoresearch'
+  image: /assets/images/papers/outerloop.png
+  authors:
+    - Mengye Ren
+  short_abstract: Outerloop is an open-source kernel that runs research agents as untrusted programs and enforces measurement, edit scope, review and compute budgets, so their reported gains can be trusted.
+  abstract: 'Coding agents can now run research loops on real codebases, editing code, launching experiments, and reporting improvements. However, in current open systems the agent is both the author and the evaluator. In this paper, we argue that autoresearch needs a rigid outer structure so that the inner research loop can run freely, and we build that structure as a kernel. We present Outerloop, an open-source kernel that runs research agents as untrusted programs in sandboxes and enforces measurement, edit scope, review, and compute budgets. Within these limits, agents built on different harnesses can experiment with new ideas together in one repository. We evaluate Outerloop on a nanoGPT training-speed benchmark. When we rerun the chosen results of three published systems on new seeds, their gains shrink because part of each gain came from a lucky run. Moreover, our own agents'' gains shrink in the same way when they grade themselves, whereas our kernel''s credited gains match the audit. With the same coding model, most autoresearch systems reach similar scores, so they differ mainly in the trustworthiness of their reported results.'
+  webpage: 'https://outerloop.science'
+  permalink: outerloop
+  report_number: AGL-TR-2026-02
+  doi: 10.5281/zenodo.24047406
+  enable_full_paper: true
+  tags:
+    - multi-agent
+    - ai-safety
+  date: 2026-11-01T00:00:00.000Z
+  journal: 'Technical report'
+  is_recent: true
 - title: 'What Is It Like to Write Like Haiku?'
   image: /assets/images/papers/prompto.png
   authors:
@@ -9,11 +76,14 @@
   abstract: 'Language models have distinct and recognizable writing styles, yet these writing styles are rarely articulated precisely. In this paper, we study whether a model''s style can be described in words for another model to adapt and follow. To measure the fitness of a description, we ask independent evaluators to distinguish the pair of responses. Rather than coming up with an ad hoc prompt, our proposed framework, PrompTo, creates a search loop to optimize for the style prompt that confuses the evaluator. A reflector then takes in the reward and language feedback and generates a prompt candidate for the next iteration. The optimized prompts recover 74.8% of the source–target gap on average, against at most 15.2% for existing baselines. Moreover, we found style prompts optimized with one source model readily transfer to other source models.'
   permalink: prompto
   project_page: true
+  report_number: AGL-TR-2026-03
+  doi: 10.5281/zenodo.24160383
+  enable_full_paper: true
   tags:
     - in-context-learning
     - llm-reasoning
-  date: 2026-10-27T00:00:00.000Z
-  journal: 'Preprint'
+  date: 2026-11-12T00:00:00.000Z
+  journal: 'Technical report'
   is_recent: true
 - title: 'HyperThink: Text-to-Parameter Hypernetworks for Efficient Reasoning'
   image: /assets/images/papers/hyperthink.png
@@ -133,6 +203,8 @@
   # export, link-back from related papers); no template renders it yet.
   philpapers: 'https://philpapers.org/rec/RENTSR'
   permalink: the-self-requires-learning
+  report_number: AGL-TR-2026-01
+  doi: 10.5281/zenodo.24047404
   enable_full_paper: true
   tags:
     - philosophy-of-ai

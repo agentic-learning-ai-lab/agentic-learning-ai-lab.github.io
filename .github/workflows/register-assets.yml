@@ -62,6 +62,12 @@ jobs:
         run: node build/register_assets.js
 
       - name: Commit + push manifest update
+        # A manifest-only bot commit skips the local pre-commit hooks:
+        # mid-way through npm run paper:add the new source is registered
+        # before its HTML is rebuilt, which check 11 would reject. The PR's
+        # own CI still runs every check on the finished branch.
+        env:
+          HUSKY: '0'
         run: |
           if git diff --quiet assets-manifest.json; then
             echo "manifest unchanged — nothing to commit"

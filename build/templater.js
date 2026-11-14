@@ -10,7 +10,7 @@ const TEMPLATES_DIR = path.resolve(__dirname, '../templates');
 const ASSETS_MANIFEST_PATH = path.resolve(__dirname, '../assets-manifest.json');
 const SEARCH_INDEX_PATH = path.resolve(__dirname, '../assets/search-index.json');
 
-const { paperJsonLd, personJsonLd, organizationJsonLd } = require('./jsonld');
+const { paperCitationMeta, paperJsonLd, personJsonLd, organizationJsonLd } = require('./jsonld');
 
 // Memoized once-per-process — build_pages.js spawns one templater
 // subprocess per template, so this loads ~7 times per build, ~negligible.
@@ -70,10 +70,8 @@ function doTemplating(input, output) {
             // the opt-in flag AND the cached arXiv HTML extraction at
             // research/<slug>/paper-content.json — without that file
             // the toggle would fetch a 404'd resource and hang on
-            // 'Loading paper...'. The file exists only for papers an
-            // admin has bootstrapped (npm run build:arxiv); non-arXiv
-            // papers (custom LaTeX, e.g. PhilPapers) skip the HTML
-            // view entirely and just expose paper.pdf via has_pdf_link.
+            // 'Loading paper...'. The file comes from
+            // `npm run paper:build`.
             const paperContentPath = path.join(__dirname, '..', 'research', paper.permalink, 'paper-content.json');
             paper.has_full_paper = !!paper.enable_full_paper && fs.existsSync(paperContentPath);
 
@@ -90,6 +88,11 @@ function doTemplating(input, output) {
             paper.has_pdf_link = paper.has_local_pdf || !!paper.pdf;
 
             paper.jsonLd = paperJsonLd(paper, { cdnUrl: resolveCdn });
+            // arXiv ID for the venue line (arXiv:2508.15717).
+            paper.arxiv_id = ((paper.arxiv || '').match(/\d{4}\.\d{4,5}(v\d+)?/) || [])[0];
+            paper.citationMeta = paperCitationMeta(paper, {
+                pdfUrl: paper.has_local_pdf ? resolveCdn(paper.local_pdf) : paper.pdf,
+            });
 
             fs.writeFileSync(output_new, template(paper));
         }
@@ -180,17 +183,17 @@ function doTemplating(input, output) {
             // usually arXiv's mirror, which we'd rather not send
             // landing-page visitors to. Mirrors the has_local_pdf
             // logic in the paper.hbs branch above.
+            // The manifest comes first: the slim Cloudflare build has no
+            // local paper.pdf, only the manifest entry.
             if (!paper.project_page.links.pdf) {
                 const localPdfPath = path.join(__dirname, '..', 'research', paper.permalink, 'paper.pdf');
-                if (fs.existsSync(localPdfPath)) {
-                    const logical = `/research/${paper.permalink}/paper.pdf`;
-                    const manifest = loadAssetsManifest();
-                    if (manifest[logical]) {
-                        paper.project_page.links.pdf = manifest[logical];
-                    } else {
-                        paper.project_page.links.pdf = logical;
-                        _cdnMisses.add(logical);
-                    }
+                const logical = `/research/${paper.permalink}/paper.pdf`;
+                const manifest = loadAssetsManifest();
+                if (manifest[logical]) {
+                    paper.project_page.links.pdf = manifest[logical];
+                } else if (fs.existsSync(localPdfPath)) {
+                    paper.project_page.links.pdf = logical;
+                    _cdnMisses.add(logical);
                 } else if (paper.pdf) {
                     paper.project_page.links.pdf = paper.pdf;
                 }

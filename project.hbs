@@ -49,6 +49,10 @@
         },
         options: {
           skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        },
+        // Typeset after the page fonts load, so math is sized against the real font.
+        startup: {
+          pageReady: () => document.fonts.ready.then(() => MathJax.startup.defaultPageReady())
         }
       };
     </script>
@@ -328,6 +332,64 @@
       })();
     </script>
     {{/if}}
+    <!-- Looping videos without controls (hero animations, figure loops):
+         readers who ask for reduced motion get a paused video with native
+         controls; everyone else can pause and resume by clicking, or with
+         Space / Enter when the video has focus. Carousel videos have their
+         own controls and are left alone. -->
+    <script>
+      (function () {
+        var mq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+        var videos = [].filter.call(document.querySelectorAll('video[loop]:not([controls])'), function (v) {
+          return !v.closest('.project-carousel');
+        });
+        videos.forEach(function (v) {
+          // A distinct name: the author's aria-label, else the figure
+          // caption, else the file name (wall.mp4 → "wall").
+          var cap = v.closest('figure') && v.closest('figure').querySelector('figcaption');
+          var src = v.currentSrc || (v.querySelector('source') || {}).src || '';
+          var base = v.getAttribute('aria-label') ||
+            (cap && cap.textContent.trim()) ||
+            decodeURIComponent(src.split('/').pop().replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ')) ||
+            'Animation';
+          var label = function () {
+            v.setAttribute('aria-label', base + (v.controls ? '' : (v.paused ? ' (press to play)' : ' (press to pause)')));
+            v.title = v.controls ? '' : (v.paused ? 'Click to play' : 'Click to pause');
+          };
+          var toggle = function () {
+            if (v.controls) return; // native controls handle it
+            if (v.paused) v.play().catch(function () {}); else v.pause();
+          };
+          v.addEventListener('click', toggle);
+          v.addEventListener('keydown', function (e) {
+            if (!v.controls && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); toggle(); }
+          });
+          v.addEventListener('play', label);
+          v.addEventListener('pause', label);
+          v._applyMotion = function (reduce) {
+            v.controls = reduce;
+            if (reduce) {
+              v.removeAttribute('autoplay');
+              v.pause();
+              v.removeAttribute('role');
+              v.style.cursor = '';
+            } else {
+              v.setAttribute('role', 'button');
+              v.tabIndex = 0;
+              v.style.cursor = 'pointer';
+            }
+            label();
+          };
+        });
+        var apply = function () {
+          var reduce = !!(mq && mq.matches);
+          videos.forEach(function (v) { v._applyMotion(reduce); });
+        };
+        apply();
+        // Follow the setting if it changes while the page is open.
+        if (mq) (mq.addEventListener ? mq.addEventListener('change', apply) : mq.addListener(apply));
+      })();
+    </script>
 </body>
 <!-- /index.js provides toggleHeader() (mobile hamburger menu) and
      openSearch(). Both are referenced by the shared header partial. -->

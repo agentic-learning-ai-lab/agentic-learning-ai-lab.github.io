@@ -79,6 +79,7 @@ assets/projects/**/*.csv
 # is a transient extract from `npm run latex:fetch <slug>` for editing, and from
 # the build pipeline's R2 download branch. See notes/latex-tarball-storage.md.
 research/*/latex/
+research/*/latex.tar.gz
 research/*/latex_arXiv/
 research/*/*.tar.gz
 

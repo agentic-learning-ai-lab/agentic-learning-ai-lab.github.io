@@ -154,9 +154,10 @@ seed data:
   consistent with how paper.pdf is rewritten to `<slug>.pdf`). Same flow
   as `cdnBasename()` in `sync_to_r2.js`. ✓
 - **Tarball cleanup before tar.** Exclude build aux (`.aux`, `.log`,
-  `.out`, `.bbl`, `.blg`, `.fls`, `.fdb_latexmk`, `.synctex.gz`,
+  `.out`, `.blg`, `.fls`, `.fdb_latexmk`, `.synctex.gz`,
   `paper.pdf` inside the tree, `__MACOSX/`). Pack only the canonical
-  sources + figure binaries. (Mirror the `.gitattributes` ignore set.)
+  sources + figure binaries. A `.bbl` stays: arXiv sources often ship it
+  instead of the `.bib`, and the HTML conversion needs it (2026-11).
 - **Manifest entry for the tarball.** Logical path
   `/research/<slug>/latex.tar.gz`. No template ever references it
   directly — it's a build-side lookup only. That's fine; the manifest

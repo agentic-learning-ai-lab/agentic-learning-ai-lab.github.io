@@ -44,12 +44,22 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { spawnSync, execSync } = require('child_process');
+const { cdnBasename } = require('./cdn_name');
+
+const {
+    checkGhAuth,
+    ghDispatch,
+    pollRunByCorrelation,
+    waitForRun,
+    downloadArtifact,
+} = require('./gh_actions');
 
 const ROOT = path.resolve(__dirname, '..');
 const MANIFEST_PATH = path.join(ROOT, 'assets-manifest.json');
 
 const ASSET_PATTERNS = [
     'research/*/paper.pdf',
+    'research/*/latex.tar.gz',  // from `npm run latex:pack -- --local <slug> <src>`
     'research/*/assets/**/*.{png,jpg,jpeg,gif,svg,webp}',
     'assets/images/papers/*.{png,jpg,jpeg,gif,webp}',
     'assets/images/people/*.{png,jpg,jpeg,gif,webp}',
@@ -131,7 +141,7 @@ function findUnregistered(filterPaths) {
                 continue; // already on R2 with matching hash
             }
         }
-        specs.push({ logical, sha, filename: path.basename(rel) });
+        specs.push({ logical, sha, filename: cdnBasename(rel) });
     }
     return specs;
 }
@@ -141,56 +151,6 @@ function shellQuoteJsonForGh(json) {
     // single string after the `=`. Most shells need it quoted; we use
     // spawn with an array so no shell parsing is involved.
     return json;
-}
-
-function ghDispatch(workflow, fields, ref) {
-    // Run the workflow against the contributor's current branch so
-    // their branch's package-lock.json / workflow code / build scripts
-    // are what executes — not main's. Without `--ref`, gh defaults to
-    // the repo's default branch.
-    const args = ['workflow', 'run', workflow, '--ref', ref];
-    for (const [k, v] of Object.entries(fields)) {
-        args.push('-f', `${k}=${v}`);
-    }
-    const r = spawnSync('gh', args, { stdio: ['ignore', 'inherit', 'inherit'] });
-    if (r.status !== 0) {
-        throw new Error(`gh workflow run ${workflow} failed`);
-    }
-}
-
-function pollRunByCorrelation(workflow, correlationId) {
-    // gh workflow run doesn't print the run ID. Each workflow uses a
-    // dynamic `run-name` that embeds the correlation_id we passed in,
-    // so we can disambiguate our run from any other contributor's
-    // concurrent dispatch by filtering on displayTitle.
-    for (let attempt = 0; attempt < 30; attempt++) {
-        const out = execSync(
-            `gh run list --workflow=${workflow} --limit=10 --json databaseId,displayTitle,status`,
-            { encoding: 'utf8' }
-        );
-        const runs = JSON.parse(out);
-        const hit = runs.find(r => r.displayTitle && r.displayTitle.includes(correlationId));
-        if (hit) return hit.databaseId;
-        execSync('sleep 2');
-    }
-    throw new Error(`Could not find run for ${workflow} with correlation=${correlationId}`);
-}
-
-function waitForRun(runId, label) {
-    process.stderr.write(`  waiting for ${label} (run #${runId}) ...`);
-    const r = spawnSync('gh', ['run', 'watch', String(runId), '--exit-status'], {
-        stdio: ['ignore', 'ignore', 'inherit'],
-    });
-    if (r.status !== 0) throw new Error(`${label} run failed`);
-    process.stderr.write(' ✓\n');
-}
-
-function downloadArtifact(runId, artifactName, destDir) {
-    fs.mkdirSync(destDir, { recursive: true });
-    const r = spawnSync('gh', ['run', 'download', String(runId), '--name', artifactName, '-D', destDir], {
-        stdio: ['ignore', 'ignore', 'inherit'],
-    });
-    if (r.status !== 0) throw new Error(`download artifact ${artifactName} failed`);
 }
 
 function currentBranch() {
@@ -220,15 +180,6 @@ function curlPut(url, filepath, contentType) {
     const r = spawnSync('curl', args, { encoding: 'utf8' });
     if (r.status !== 0) throw new Error(`curl PUT failed: ${r.stderr}`);
     if (!r.stdout.startsWith('2')) throw new Error(`PUT got HTTP ${r.stdout}`);
-}
-
-function checkGhAuth() {
-    const r = spawnSync('gh', ['auth', 'status'], { stdio: 'ignore' });
-    if (r.status !== 0) {
-        console.error('✗ `gh` is not authenticated. Run `gh auth login` first.');
-        console.error('  (npm run upload uses `gh` to dispatch GH Actions for the R2 upload.)');
-        process.exit(1);
-    }
 }
 
 async function main() {
@@ -289,7 +240,7 @@ async function main() {
 
     // 1. Mint URLs
     console.log(`1/3 Minting presigned upload URLs (corr=${correlationId.slice(0,8)})...`);
-    ghDispatch('mint-upload-urls.yml', { spec: specJson, correlation_id: correlationId }, branch);
+    ghDispatch('mint-upload-urls.yml', { spec: specJson, correlation_id: correlationId }, { ref: branch });
     const mintRunId = pollRunByCorrelation('mint-upload-urls.yml', correlationId);
     waitForRun(mintRunId, 'mint-upload-urls');
 
@@ -308,7 +259,7 @@ async function main() {
 
     // 3. Register on the contributor's branch
     console.log('3/3 Triggering manifest register on origin/' + branch + ' ...');
-    ghDispatch('register-assets.yml', { spec: specJson, branch, correlation_id: correlationId }, branch);
+    ghDispatch('register-assets.yml', { spec: specJson, branch, correlation_id: correlationId }, { ref: branch });
     const regRunId = pollRunByCorrelation('register-assets.yml', correlationId);
     waitForRun(regRunId, 'register-assets');
 
@@ -317,4 +268,6 @@ async function main() {
     fs.rmSync(tmpDir, { recursive: true, force: true });
 }
 
-main().catch(err => { console.error('upload failed:', err.message); process.exit(1); });
+if (require.main === module) {
+    main().catch(err => { console.error('upload failed:', err.message); process.exit(1); });
+}

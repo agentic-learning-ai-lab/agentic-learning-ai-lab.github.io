@@ -97,6 +97,8 @@ async function loadPaperContent() {
         loadingEl.style.display = 'none';
         paperContentLoaded = true;
 
+        sizeFiguresLikePaper(contentEl);
+
         // Generate table of contents
         generateTableOfContents();
 
@@ -114,6 +116,119 @@ async function loadPaperContent() {
         console.error('Failed to load paper content:', error);
         loadingEl.innerHTML = '<p class="tw-text-red-600">Failed to load paper content. Please try the PDF link above.</p>';
     }
+}
+
+// LaTeXML writes each figure's printed size into width/height at a fixed
+// scale where \textwidth is 660px. Give each figure the same fraction of
+// the text column it has in the PDF. Subfigure panels are sized by their
+// flex cell instead: LaTeXML drops the subfigure widths, so panels in a
+// row get widths proportional to their aspect ratios (equal heights),
+// which is how most papers lay them out.
+const LATEXML_TEXTWIDTH_PX = 660;
+// Minipages and boxes inside figures carry fixed widths in pt against
+// LaTeXML's \textwidth (6in = 433.6pt). Turn each into a share of its
+// enclosing box so the layout scales with the column and a box never
+// overflows its parent.
+const LATEXML_TEXTWIDTH_PT = 433.6;
+
+function ptWidth(el) {
+    const m = /(?:^|;)\s*width:\s*([\d.]+)pt/.exec(el.getAttribute('style') || '');
+    return m ? Number(m[1]) : 0;
+}
+
+// The PDF's text block is about 43 body-font sizes wide (6in at 10pt);
+// the site's column is wider than that relative to its text. Cap each
+// top-level figure at the same width in body-font units so figure labels
+// keep the size they have next to the text in the PDF.
+const PAPER_TEXTWIDTH_EM = 433.6 / 10;
+
+function sizeFiguresLikePaper(root) {
+    const em = parseFloat(getComputedStyle(root).fontSize) || 16;
+    root.querySelectorAll('figure.ltx_figure').forEach(fig => {
+        // Tables placed in a figure float read as tables: leave them full width.
+        if (fig.parentElement.closest('figure') || fig.querySelector('.ltx_tabular')) return;
+        fig.style.maxWidth = `${Math.round(PAPER_TEXTWIDTH_EM * em)}px`;
+        fig.style.marginInline = 'auto';
+    });
+    // Read every pt width before rewriting any, since a child's share
+    // depends on its parent's original width.
+    // A figure's own pt width (wrapfigure) counts too.
+    const boxes = [...root.querySelectorAll('figure.ltx_figure[style*="pt"], figure.ltx_figure [style*="pt"]')]
+        .filter(el => !el.closest('.ltx_transformed_outer'))
+        .map(el => [el, ptWidth(el)])
+        .filter(([, pt]) => pt);
+    const ptOf = new Map(boxes);
+    boxes.forEach(([el, pt]) => {
+        let parentPt = LATEXML_TEXTWIDTH_PT;
+        // Nearest sized box: stop at the float (a top-level figure), not at
+        // a minipage that LaTeXML also marks up as <figure>.
+        for (let p = el.parentElement; p && p !== root && !(p.tagName === 'FIGURE' && !p.classList.contains('ltx_minipage')); p = p.parentElement) {
+            if (ptOf.has(p)) { parentPt = ptOf.get(p); break; }
+        }
+        el.style.width = `${(Math.min(1, pt / parentPt) * 100).toFixed(1)}%`;
+    });
+    root.querySelectorAll('.ltx_flex_figure').forEach(flex => {
+        // Rows are the runs of cells between ltx_flex_break elements.
+        const rows = [[]];
+        for (const child of flex.children) {
+            if (child.classList.contains('ltx_flex_break')) rows.push([]);
+            else if (child.classList.contains('ltx_flex_cell')) rows[rows.length - 1].push(child);
+        }
+        // Panel widths are fractions of \textwidth; inside a minipage
+        // they are shares of that box, which LaTeXML gives in pt.
+        let boxPt = LATEXML_TEXTWIDTH_PT;
+        for (let p = flex.parentElement; p && !(p.tagName === 'FIGURE' && !p.classList.contains('ltx_minipage')); p = p.parentElement) {
+            if (ptOf.has(p)) { boxPt = ptOf.get(p); break; }
+        }
+        const boxPx = LATEXML_TEXTWIDTH_PX * boxPt / LATEXML_TEXTWIDTH_PT;
+        rows.forEach(row => {
+            // Each cell is one image or one sized box (a minipage); its
+            // share of the row is its printed width. Rows of anything else
+            // keep the stylesheet's layout.
+            const cells = row.map(cell => {
+                const box = [...cell.children].find(el => ptOf.has(el));
+                if (box && cell.children.length === 1) {
+                    return { frac: ptOf.get(box) / boxPt, aspect: null, box };
+                }
+                const imgs = cell.querySelectorAll('img[width][height]');
+                if (imgs.length !== 1) return null;
+                const [w, h] = [Number(imgs[0].getAttribute('width')), Number(imgs[0].getAttribute('height'))];
+                return { frac: w / boxPx, aspect: w / h, box: null };
+            });
+            if (!row.length || cells.some(c => !c)) return;
+            const total = cells.reduce((a, c) => a + c.frac, 0);
+            // Widths that fit the box are the panels' real sizes
+            // (latexml-lab conversions); larger ones come from arXiv's
+            // HTML, where LaTeXML dropped the subfigure widths, so fall
+            // back to equal-height panels.
+            const fits = total <= 1.02;
+            if (!fits && cells.some(c => !c.aspect)) return;
+            row.forEach((cell, i) => {
+                const c = cells[i];
+                cell.style.maxWidth = 'none';
+                cell.style.flex = fits
+                    ? `0 1 calc(${(c.frac * 100).toFixed(1)}% - 0.5rem)`
+                    : `${c.aspect} 1 0`;
+                if (c.box) c.box.style.width = '100%';
+            });
+        });
+    });
+    // The share of \textwidth an element's box has: a pt width is absolute;
+    // a % width (arXiv's HTML) is a share of the box around it.
+    const boxFrac = el => {
+        for (let p = el.parentElement; p && p !== root; p = p.parentElement) {
+            if (ptOf.has(p)) return ptOf.get(p) / LATEXML_TEXTWIDTH_PT;
+            const pct = /(?:^|;)\s*width:\s*([\d.]+)%/.exec(p.getAttribute('style') || '');
+            if (pct) return Number(pct[1]) / 100 * boxFrac(p);
+            if (p.tagName === 'FIGURE' && !p.classList.contains('ltx_minipage')) break;
+        }
+        return 1;
+    };
+    root.querySelectorAll('figure img[width]').forEach(img => {
+        if (img.closest('.ltx_flex_cell')) return;
+        const frac = Math.min(1, Number(img.getAttribute('width')) / LATEXML_TEXTWIDTH_PX / boxFrac(img));
+        if (frac > 0) img.style.width = `${(frac * 100).toFixed(1)}%`;
+    });
 }
 
 function enhanceCitations() {
@@ -290,8 +405,10 @@ function enhanceCitations() {
         });
 
         // Replace the citation content with author-year format (only for numeric citations)
-        // Only proceed if we have data for ALL links (to avoid breaking partially)
-        if (refData.length > 0 && refData.length === links.length) {
+        // Only proceed if every link has an author and year: a numbered bibliography
+        // (e.g. a journal style whose tags are [1], [2]) keeps its numbers.
+        if (refData.length > 0 && refData.length === links.length &&
+            refData.every(item => item.data.authors && item.data.year)) {
             // Clear the cite element and rebuild it
             cite.textContent = '';
             cite.appendChild(document.createTextNode('('));

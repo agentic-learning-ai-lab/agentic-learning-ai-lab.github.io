@@ -10,9 +10,12 @@ Source for [agenticlearning.ai](https://agenticlearning.ai).
 ## Prerequisites
 
 - Node.js 24 (see `.nvmrc`)
-- [qpdf](https://qpdf.sourceforge.io/) for PDF compression + deterministic finalization (optional locally; `brew install qpdf` on macOS)
+- The GitHub CLI, logged in (`gh auth login`): uploads and paper builds run as GitHub Actions
+- Python 3, for adding a full paper (`paper:add` sets up its comment stripper on first use)
 
-Image processing uses [sharp](https://sharp.pixelplumbing.com/) (cross-platform, installed via npm). Binary assets (paper PDFs, hero images, figures) live on Cloudflare R2 — not in git.
+No LaTeX, Docker or R2 credentials are needed. Paper PDFs and full-paper
+HTML are built in CI by [latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab).
+Binary assets (paper PDFs, hero images, figures) live on Cloudflare R2, not in git.
 
 ## Setup
 
@@ -20,8 +23,7 @@ Image processing uses [sharp](https://sharp.pixelplumbing.com/) (cross-platform,
 git clone git@github.com:agentic-learning-ai-lab/agentic-learning-ai-lab.github.io.git
 cd agentic-learning-ai-lab.github.io
 npm install
-npm run setup:python   # one-time: creates .venv/ with arxiv_latex_cleaner
-npm run pull:r2        # hydrate binary assets from R2 (no creds needed)
+npm run pull:r2        # optional, for full local builds: hydrate binaries from R2 (~700 MB)
 ```
 
 ## For contributors
@@ -56,34 +58,29 @@ npm run build
 This runs the following steps in order:
 
 1. **build:tailwind** — compile and minify TailwindCSS
-2. **generate_thumbnails** — create 256x256 paper/people thumbnails via `sips`
-3. **generate_search_index** — build searchable JSON index
-4. **build:arxiv** — download arXiv HTML papers and images (skips existing)
+2. **generate_thumbnails** — create 256x256 paper/people thumbnails (sharp)
+3. **build:webp** — WebP copies of every PNG/JPG
+4. **generate_search_index** — build searchable JSON index
 5. **build:compress** — resize oversized images to max 1400px width
-6. **build:pages** — render HTML pages from Handlebars templates
+6. **sync:r2** — upload new binaries to R2 and update `assets-manifest.json` (needs R2 credentials)
+7. **build:pages** — render HTML pages from Handlebars templates
 
-### Build PDFs from LaTeX source
-
-```bash
-npm run build:arxiv:pdf        # compile PDFs (reproducible) + compress via qpdf
-```
-
-### Force rebuild
-
-```bash
-npm run build:arxiv:force      # re-download all arXiv HTML and images
-npm run build:compress:force   # re-compress all images
-```
+Paper PDFs and full-paper HTML are built in CI from each paper's LaTeX
+source (`npm run paper:add`; see CONTRIBUTING.md), not by `npm run build`.
 
 ## Adding a new paper
 
-1. Add the paper entry to `data/papers.yaml` with `arxiv`, `permalink`, and optionally `enable_full_paper: true`
-2. Drop a paper image at `assets/images/papers/<slug>.png` (locally; gitignored)
-3. Run `npm run build` — this generates thumbnails, syncs new assets to R2, and renders pages
-4. Optionally run `npm run build:arxiv:pdf` to compile a local PDF
-5. Commit on a feature branch, open a PR to `main`, and merge to deploy
+Add the entry to `data/papers.yaml`, then on a branch:
 
-Binary assets are not committed to git — they live on R2 (mirror via `npm run sync:r2`, recorded in `assets-manifest.json`). Only the manifest entry is committed.
+```bash
+npm run paper:add -- <slug>                 # on arXiv, or a card only
+npm run paper:add -- <slug> <source.zip>    # full paper from any other LaTeX source
+```
+
+It uploads the hero image and, with `enable_full_paper: true`, has CI
+compile the PDF and build the full-paper page from the source.
+[`CONTRIBUTING.md`](./CONTRIBUTING.md#adding-a-new-paper) has the details,
+including lab technical reports (report numbers and DOIs).
 
 ## Deployment
 
@@ -99,7 +96,10 @@ npm run preview        # runs the full local build + serves out/ on :8000
 
 ```
 build/                     # Build scripts
-  build_arxiv_papers.js    #   Download arXiv HTML, compile PDFs, compress
+  paper_add.js             #   One command to add a paper (image, PDF, HTML)
+  paper_build.js           #   PDF + HTML from LaTeX source via latexml-lab
+  tr_reserve.js            #   Technical report: number + Zenodo DOI (PI only)
+  tr_publish.js            #   Technical report: publish the DOI (PI only)
   build_pages.js           #   Handlebars template renderer
   compress_assets.js       #   Image compression (sharp)
   generate_thumbnails.js   #   Thumbnail generation
@@ -112,7 +112,8 @@ research/                  # Per-paper directories (paper HTML + extracted conte
 assets/                    # Site-wide images, CSS, favicons (binaries gitignored)
 assets-manifest.json       # Logical-path → cdn.agenticlearning.ai URL map
 css/                       # Tailwind source and build output
-includes/                  # Handlebars partials
+templates/                 # Handlebars partials
+includes/                  # HTML fragments other lab sites include
 .github/workflows/
-  pr-checks.yml            # Per-PR slim build + bibtex lint
+  pr-checks.yml            # Per-PR slim build and checks (manifest, PDFs, Zenodo, bibliography)
 ```

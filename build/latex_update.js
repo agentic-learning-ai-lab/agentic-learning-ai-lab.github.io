@@ -5,16 +5,13 @@
  *
  *   arXiv e-print → research/<slug>/latex/ (transient) → clean → tar.gz → R2
  *
- * Then invalidates research/<slug>/paper.pdf so the next
- * `npm run build:arxiv:pdf` compiles a fresh PDF.
+ * Then removes the stale local research/<slug>/paper.pdf. Needs R2
+ * credentials; `npm run paper:add -- <slug>` does the same and more
+ * without them.
  *
  * Usage:
  *   node build/latex_update.js <slug>
- *
- * Author workflow when an arXiv version bumps:
- *   1. npm run latex:update <slug>
- *   2. npm run build:arxiv:pdf
- *   3. commit paper.pdf + assets-manifest.json
+ *   npm run paper:build -- <slug>   # then: PDF + HTML from the new source
  */
 
 const fs = require('fs-extra');
@@ -22,7 +19,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 const { ROOT } = require('./r2_lib');
-const { ensureLatexSource } = require('./build_arxiv_papers');
+const { ensureLatexSource } = require('./arxiv_source');
 const { packOne } = require('./latex_pack');
 
 const PAPERS_YAML = path.join(ROOT, 'data/papers.yaml');
@@ -62,13 +59,10 @@ async function updateOne(slug) {
   const pdfPath = path.join(ROOT, 'research', slug, 'paper.pdf');
   if (await fs.pathExists(pdfPath)) {
     await fs.remove(pdfPath);
-    console.log(`   🗑️  ${slug}: removed research/${slug}/paper.pdf (next build will recompile)`);
+    console.log(`   🗑️  ${slug}: removed the stale research/${slug}/paper.pdf`);
   }
-  // Also drop the qpdf-compressed marker so compress runs again post-recompile.
-  // Best-effort remove the legacy .gs-compressed marker too — left over from
-  // the pre-qpdf era; harmless if absent.
   await fs.remove(pdfPath + '.qpdf-compressed').catch(() => {});
-  await fs.remove(pdfPath + '.gs-compressed').catch(() => {});
+  console.log(`   Next: npm run paper:build -- ${slug}`);
 }
 
 async function main() {

@@ -20,7 +20,5 @@ jobs:
     with:
       # Upload/register workflows commit as this login; never review them.
       bot_login: 'github-actions[bot]'
-      backend: codex
-      model: gpt-5.6-terra
     secrets:
       openai_reviewer_key: ${{ secrets.OPENAI_REVIEWER_KEY }}

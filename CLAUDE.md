@@ -16,10 +16,15 @@ user-facing setup steps changed.
   `main` to production and every other branch to a preview URL.
 - Data lives in `data/*.yaml`. Templates in `*.hbs` (root) and
   `templates/*.hbs` (partials). Build scripts in `build/`.
-- Adding a paper = one entry in `data/papers.yaml` + one hero image
-  dropped at `assets/images/papers/<slug>.png` (locally; gitignored) +
-  `npm run build` (which calls `sync:r2` to mirror the image to R2 and
-  bake CDN URLs into the rendered HTML).
+- Adding a paper = one entry in `data/papers.yaml` + an optional hero
+  image at `assets/images/papers/<slug>.png` (gitignored) +
+  `npm run paper:add -- <slug> [<source.zip>]`.
+- Full-paper HTML and `paper.pdf` both come from the paper's LaTeX
+  tarball on R2, built in one
+  [latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab)
+  run: `npm run paper:add -- <slug> [<source.zip>]` does the whole thing.
+  Pre-commit check 11 and CI fail when the tarball changed but the HTML
+  or PDF was not rebuilt.
 - `npm run build` runs the full local pipeline (Sharp / PDF compile /
   sync:r2). `npm run build:cf` is the slim cloud-build path Cloudflare
   Pages uses (no binary processing — reads CDN URLs from manifest).
@@ -44,7 +49,7 @@ data/                       # YAML sources (papers, people, tags, alumni)
 research/<slug>/            # Per-paper directory
   index.html                #   built from paper.hbs — generated, gitignored
   paper.pdf                 #   compiled PDF — local + R2, gitignored
-  paper-content.json        #   arXiv HTML extraction (cached, committed)
+  paper-content.json        #   full-paper HTML (latexml-lab, or arXiv's), committed
   assets/                   #   figures for the HTML view — local + R2, gitignored
   # latex/ is transient (gitignored). Real source is a tar.gz on R2.
 
@@ -64,7 +69,10 @@ assets/
 build/                      # All build scripts (Node, no bundler)
   build_pages.js            #   Top-level driver — runs templater.js per template
   templater.js              #   Handlebars renderer; iterates papers/people/tags
-  build_arxiv_papers.js     #   arXiv HTML download + LaTeX→PDF compile (R2 source)
+  paper_add.js              #   One command per paper: image, source, PDF + HTML
+  paper_build.js            #   PDF + HTML from the R2 tarball via latexml-lab
+  arxiv_source.js           #   Download + clean an arXiv e-print
+  tr_reserve.js, tr_publish.js  # Technical reports on Zenodo (PI only)
   r2_lib.js                 #   Shared S3 client + manifest helpers for R2 scripts
   sync_to_r2.js             #   Bulk site asset sync (images, paper.pdf)
   pull_from_r2.js           #   Disaster recovery — hydrate from R2 to local
@@ -181,14 +189,8 @@ on disk (run `npm run pull:r2` on a fresh clone).
 2. `generate_thumbnails.js` — 256×256 crops of paper/people images.
 3. `build:webp` — Sharp-driven WebP companions for every PNG/JPG.
 4. `generate_search_index.js` — emit `assets/search-index.json`.
-5. `build:arxiv:pdf` — for each paper: download arXiv HTML if
-   `enable_full_paper: true`, ensure `research/<slug>/latex/` exists,
-   compile `paper.pdf` (reproducibly — `SOURCE_DATE_EPOCH` is pinned to
-   the R2 tarball's Last-Modified so re-compiles produce byte-identical
-   PDFs), then qpdf-compress + finalize with `--deterministic-id`.
-   See [LaTeX source and PDFs](#latex-source-and-pdfs).
-6. `build:compress` — resize arXiv-downloaded images to ≤1400px wide.
-7. **`sync:r2`** — upload any new files (PNGs, WebPs, PDFs, CSVs,
+5. `build:compress` — resize arXiv-downloaded images to ≤1400px wide.
+6. **`sync:r2`** — upload any new files (PNGs, WebPs, PDFs, CSVs,
    per-project CSS, videos, etc.) to R2 and update `assets-manifest.json`.
    Must precede the next two steps so they see the fresh manifest.
    Manifest entries for files NOT on local disk are PRESERVED (a missing
@@ -196,12 +198,12 @@ on disk (run `npm run pull:r2` on a fresh clone).
    summary reports them as orphans. To deliberately drop orphans:
    `node build/sync_to_r2.js --prune` (after `npm run pull:r2` to make
    sure you're not pruning something you forgot to hydrate).
-8. `build:rewrite-paper-content` — rewrite `./assets/X` in each
+7. `build:rewrite-paper-content` — rewrite `./assets/X` in each
    `paper-content.json` to absolute CDN URLs via the manifest.
-9. `build:pages` — render every `*.hbs` via Handlebars. The `cdnUrl`
+8. `build:pages` — render every `*.hbs` via Handlebars. The `cdnUrl`
    helper reads `assets-manifest.json` and bakes
    `https://cdn.agenticlearning.ai/...` URLs into the HTML.
-10. `build:assemble` — copy the slim set of serving artifacts into
+9. `build:assemble` — copy the slim set of serving artifacts into
     `out/` (HTML, JS, CSS, favicons, logos, `search-index.json`,
     `_redirects`; no binary subtrees).
 
@@ -261,129 +263,40 @@ is `assets-manifest.json` (~1245 entries, committed to git).
 
 ## LaTeX source and PDFs
 
-LaTeX source lives as one `tar.gz` per paper on Cloudflare R2. Nothing
-under `research/<slug>/latex/` is ever committed — that path is a
-transient extract used only during local editing or during a fresh
-compile. The compiled `paper.pdf` lives **only** on local disk and R2
-(gitignored, mirror via `npm run sync:r2`). See
-`notes/latex-tarball-storage.md` for the LaTeX side and
-`notes/lfs-migration.md` for the binary hosting model.
-
-**Layout:**
+Each full paper has one cleaned LaTeX `tar.gz` on R2. Its HTML
+(`paper-content.json`, in git) and its `paper.pdf` (R2 only) are both
+built from that tarball in one
+[latexml-lab](https://github.com/agentic-learning-ai-lab/latexml-lab)
+GitHub Action run, dispatched by `npm run paper:build -- <slug>`
+(`paper:add` calls it). Nothing compiles LaTeX locally.
 
 ```
-git:
-  research/<slug>/paper-content.json (arXiv HTML extract, text)
-  assets-manifest.json               (logical → CDN URL for both
-                                      /research/<slug>/paper.pdf
-                                      and /research/<slug>/latex.tar.gz)
-
-R2 (cdn.agenticlearning.ai):
-  <hash>/<slug>.pdf                  (compiled artifact)
-  <hash>/<slug>.tar.gz               (cleaned LaTeX source)
-
-local (gitignored):
-  research/<slug>/paper.pdf          (compiled artifact, on disk)
-  research/<slug>/paper.pdf.qpdf-compressed  (qpdf finalize marker)
-
-local (gitignored):
-  research/<slug>/latex/             (transient extract, present only during editing)
-  .cache/latex-tarballs/             (download cache for tarballs)
-  .cache/latex-build/<slug>/         (compile workdir)
+git:    research/<slug>/paper-content.json  (records latex_tarball + pdf_sha256)
+        assets-manifest.json                (/research/<slug>/paper.pdf, /latex.tar.gz)
+R2:     <hash>/<slug>-<year>.pdf            (compiled in CI)
+        <hash>/<slug>.tar.gz                (cleaned source)
+local:  research/<slug>/paper.pdf, latex.tar.gz, latex/   (gitignored, transient)
+        .cache/                             (safe to rm -rf)
 ```
 
-The entire `.cache/` tree is safe to `rm -rf` anytime — it's all
-regenerable from R2. Wipe it if a download looks corrupt or if disk
-pressure is real (~100 MB at current paper count).
-
-**Pipeline behavior** (see `build/build_arxiv_papers.js`):
-
-PDF compile uses a two-layer skip:
-
-1. **Outer skip — compiled PDF.** If `research/<slug>/paper.pdf` exists,
-   the build does nothing for that paper unless `--force` is passed. CI
-   hits this in 99% of runs.
-2. **Inner resolve — paper.pdf missing.** `resolveLatexSourceForCompile()`
-   picks source in this order:
-   - If `research/<slug>/latex/` exists locally with a `.tex` containing
-     `\documentclass` → use in place (author is mid-edit).
-   - Else if `assets-manifest.json` has `/research/<slug>/latex.tar.gz` →
-     download tarball from R2 (cached in `.cache/latex-tarballs/`),
-     extract to `.cache/latex-build/<slug>/`, compile there.
-   - Else → print a hint telling the author to run
-     `npm run latex:update <slug>` (arXiv bootstrap) or
-     `npm run latex:pack <slug>` (position paper). The build never
-     auto-fetches from arXiv or auto-writes to R2.
-
-**Author scripts:**
-
-```
-npm run latex:fetch  <slug>   # R2 → research/<slug>/latex/ (for editing)
-npm run latex:pack   <slug>   # local tree → clean → tar → R2 → manifest → delete local
-npm run latex:update <slug>   # arXiv → clean → tar → R2 → manifest → invalidate paper.pdf
-npm run latex:clean  <slug>   # run arxiv_latex_cleaner only (rarely needed directly)
-npm run build:arxiv:pdf       # compile any missing paper.pdf (cache-first)
-```
-
-`latex:pack --all` packs every `research/<slug>/latex/` tree it finds —
-useful when a batch of papers are seeded locally and need bulk upload.
-
-**To regenerate a PDF after editing source:**
-
-```bash
-npm run latex:fetch <slug>    # if you don't already have the tree
-# ...edit...
-npm run latex:pack <slug>     # publishes new tarball to R2
-rm research/<slug>/paper.pdf  # invalidate compiled cache
-npm run build:arxiv:pdf       # recompile from new R2 tarball
-npm run sync:r2               # uploads the new paper.pdf to R2 + manifest
-git add assets-manifest.json && git commit -m "..."
-                              # paper.pdf itself is gitignored — only the
-                              # manifest entry gets committed
-```
-
-**When an arXiv version bumps**, skip the manual fetch/edit:
-
-```bash
-npm run latex:update <slug>   # refetches from arXiv, cleans, publishes, invalidates paper.pdf
-npm run build:arxiv:pdf
-```
-
-**Local LaTeX install.** The compile prefers `latexmk` and falls back to a
-direct compile + `bibtex` cycle using the detected engine. `latexmk`
-ships with the full TeX Live distribution and `mactex` but **not** with
-`basictex` on macOS — if you get fallback warnings,
-`tlmgr install latexmk`. CI installs `latexmk` via
-`texlive-latex-extra`, plus `texlive-xetex` and `texlive-luatex` for
-papers that need a different engine.
-
-**Engine detection.** The build picks `pdflatex` / `xelatex` / `lualatex`
-per paper by scanning the main `.tex`:
-
-- A magic comment `%!TEX program = xelatex` (or `lualatex`, or
-  `pdflatex`) at the top of the file is an explicit override. This is
-  the TeXShop / Overleaf / VSCode convention.
-- Otherwise, if the source uses `fontspec`, `xeCJK`, `polyglossia`, or
-  `mathspec`, the build picks `xelatex` (these packages don't compile
-  under pdflatex).
-- Otherwise, `pdflatex`.
-
-Only the main `.tex` is inspected — `.sty` files in the same
-directory are not scanned. If a paper's main `.tex` does
-`\usepackage{my-custom-style}` and `my-custom-style.sty` is what pulls
-in fontspec, detection will fall back to `pdflatex` and the compile
-will fail. Two ways to handle this:
-
-- Put the engine name in the style file name. The detector treats any
-  `\usepackage{...xelatex...}` or `...lualatex...` package as a
-  signal for that engine (which is how
-  `\usepackage{agenticlearning-xelatex}` is picked up).
-- Add the `%!TEX program = xelatex` magic comment at the top of
-  `main.tex`. This is the canonical escape hatch and overrides
-  package-based detection.
-
-Locally, you'll need the relevant engine installed (`tlmgr install xetex` /
-`tlmgr install luatex`).
+- **Compile:** `pdf.sh` in latexml-lab runs `latexmk` on a pinned TeX
+  Live (`texlive/texlive:TL2025-historic` by digest) with no network, no
+  `latexmkrc` and TeX's restricted shell escape, then qpdf. The same
+  tarball gives the same bytes. Engine: the lab template
+  (`agenticlearning-xelatex` → XeLaTeX, `-lualatex` → LuaLaTeX,
+  `-pdflatex` refused), then arXiv's `00README.json`, a
+  `%!TEX program = …` comment, fontspec-style packages, else pdfLaTeX.
+  A failed compile fails the run and prints the log tail.
+- **Provenance:** check 11 fails when the manifest's tarball is not the
+  one `paper-content.json` was built from, or the manifest PDF's hash is
+  not the recorded `pdf_sha256`. Exceptions: `pdf_override:` in
+  papers.yaml, and a published Zenodo report, whose PDF is frozen
+  (`build/pdf_lock.js`) and checked against Zenodo by
+  `check_zenodo_pdfs.js`.
+- **Author scripts:** `latex:fetch <slug>` (R2 → `research/<slug>/latex/`
+  for editing), `latex:pack <slug> <zip|dir>` and `latex:update <slug>`
+  (arXiv) publish a new tarball with R2 creds; follow either with
+  `paper:build`. `paper:add` does all of it without R2 creds.
 
 ### Author comments in LaTeX source — stripped before upload
 
@@ -478,6 +391,7 @@ Active pre-commit checks (run as a single Node process from
 | 08 | required-fields | papers.yaml / people.yaml entries missing required fields. | `--no-verify` |
 | 09 | bibliography | `enable_full_paper` papers whose paper-content.json has an empty bibliography, over-long bibitem tags, or missing-citation spans. | `--no-verify` |
 | 10 | tag-slugs | A paper `tags:` slug not in `data/tags.yaml` (`build/lint_tags.js`). | `--no-verify` |
+| 11 | paper-build | An `enable_full_paper` paper with a LaTeX tarball on R2 whose paper-content.json is arXiv's, or was converted from a different tarball (`build/check_paper_build.js`). | `--no-verify` |
 
 Adding a new pre-commit check: drop a file in
 `scripts/checks/<NN>_<name>.js` that exports `{ name, run }`.
@@ -516,6 +430,7 @@ PRs to `main` run `.github/workflows/pr-checks.yml`:
    if any 404 — catches sync:r2 misses + stale manifest entries)
 5. `node build/check_webp_companions.js` (also pre-commit check 02)
 6. `node build/check_bibliography.js` (also pre-commit check 09)
+7. `node build/check_paper_build.js` (also pre-commit check 11)
 
 All run in the one `build-and-lint` job, the required check in
 `main`'s ruleset (which also requires one approving review).
@@ -527,7 +442,7 @@ All run in the one `build-and-lint` job, the required check in
 - **Don't bypass hooks** (`--no-verify`, `--no-gpg-sign`, etc.) unless
   the user explicitly asks.
 - **Don't delete `download_arxiv_source.js`** — it's a useful standalone
-  utility; its core is folded into `build_arxiv_papers.js`, but the CLI
+  utility; its core also lives in `arxiv_source.js`, but the CLI
   still works.
 - **Don't add a per-project page at `/research/<slug>/`** — that path is
   the data-driven detail page. Marketing-style project pages will live
@@ -546,53 +461,97 @@ All run in the one `build-and-lint` job, the required check in
 
 ## When the user asks you to add a new paper
 
-There are two parallel paths depending on whether the contributor
-has R2 credentials in their local `.env`:
-
-**With R2 creds** (you / admin):
-- Run `npm run build` — the full pipeline auto-syncs new binaries via
-  `sync:r2` and writes the manifest entry. Commit text + manifest.
-
-**Without R2 creds** (students):
-- `npm run upload` after dropping local binaries. It dispatches a GH
-  Action that mints pre-signed PUT URLs, the local CLI curls files up
-  to R2, then dispatches a register Action that commits the manifest
-  back to the contributor's branch.
-
-Either way, the YAML/MD steps are the same:
+One command does everything after the YAML entry, with or without R2
+credentials (CONTRIBUTING.md, "Adding a new paper"):
 
 1. Add the entry to `data/papers.yaml`. Use an existing entry as a
    template. Required (enforced by pre-commit check 08): `title`,
    `authors`, `permalink`, `date`, `journal`, `tags` (slugs from
    `data/tags.yaml`), `abstract`, `short_abstract`. Optional: `arxiv`, `pdf`, `webpage`,
-   `enable_full_paper`, `project_page`, `is_recent`, `image`.
-2. Drop the hero image at `assets/images/papers/<snake_case>.png`
-   (gitignored; lives on local disk + R2).
-3. Get the LaTeX source onto R2:
-   - On arXiv: `npm run latex:update <slug>` fetches from
-     `https://arxiv.org/e-print/<id>`, cleans, tars, uploads to R2,
-     writes a manifest entry, and invalidates any stale paper.pdf.
-   - Not on arXiv: drop the source at `research/<slug>/latex/` (the
-     directory is gitignored), then run `npm run latex:pack <slug>`.
-     Same effect — clean, tar, upload, manifest, then auto-delete the
-     local tree.
-4. `npm run build:arxiv:pdf` compiles `paper.pdf` by downloading the
-   tarball from R2 (cached in `.cache/`).
-5. `npm run build` runs the full local pipeline end-to-end, which
-   includes `sync:r2` (uploads the new hero image, paper.pdf, and
-   any per-project assets to R2 + updates `assets-manifest.json`).
-   Templates render with the new manifest entries baked in as
-   `https://cdn.agenticlearning.ai/...` URLs. If `sync:r2` is
-   skipped or fails, `build:pages` prints a
-   `⚠️ cdnUrl lookup fell back to local` warning naming the missed
-   paths — those'll 404 on CF Pages since the slim `out/` doesn't
-   include binary subtrees. See `notes/lfs-migration.md`.
-6. Check `out/<slug>/index.html` (or `out/research/<slug>/index.html`
-   for the embedded paper view) opens correctly via `npm run preview`.
-7. Walk the audit checklist above. Then commit ONLY the text
-   changes: `data/papers.yaml`, any new `data/projects/<slug>.md`,
-   and the updated `assets-manifest.json`. The new binaries are
-   gitignored — they live on local disk + R2 only.
+   `enable_full_paper`, `project_page`, `is_recent`, `image`, and for a lab
+   technical report `report_number` + `doi` (see
+   [Lab technical reports](#lab-technical-reports)).
+2. Optionally drop the hero image at the `image:` path, normally
+   `assets/images/papers/<slug>.png` (gitignored; local disk + R2).
+3. On a feature branch, run `npm run paper:add -- <slug>`, adding
+   `<source.zip|dir>` for a full paper that is not on arXiv. It needs
+   `gh auth login` (and Python 3 for a full paper). It:
+   - makes the hero image's thumbnail and WebP copies and uploads them
+     (`npm run upload`: pre-signed URLs from a GitHub Action, manifest
+     commit back to the branch);
+   - with `enable_full_paper: true`, cleans and uploads the source (from
+     the zip, or the `arxiv:` e-print), then `paper:build` has latexml-lab
+     compile `paper.pdf` and convert the HTML from that one tarball, and
+     uploads the PDF and figures. Every PDF is compiled in CI; there is
+     no PDF argument;
+   - stages `data/papers.yaml` (+ `research/<slug>/paper-content.json`).
+
+   The site uses the paper's lab-template version, also after
+   acceptance; a venue style is only for the venue's camera-ready. When
+   the arXiv source is in a venue style, ask for the lab-template zip
+   instead of building from arXiv.
+
+   The full paper is built on the first run and again only with a new
+   zip or `arxiv` (a new arXiv version), so a rerun just to add the hero
+   image later is cheap. Check 11 fails while the HTML or PDF is stale. The pieces are also scripts: `latex:pack`, `latex:update`,
+   `paper:build`, `upload`.
+
+   **PDF override (rare, PI approval only).** A paper that cannot compile
+   on the pinned TeX Live gets `pdf_override: '<reason>'` in papers.yaml;
+   put its PDF at `research/<slug>/paper.pdf` and `npm run upload`.
+   `paper:build` then leaves the PDF alone and check 11 skips it.
+4. Commit and push; check the PR's Cloudflare preview. `npm run build`
+   and `npm run preview` give the same page locally.
+5. Walk the audit checklist above. Commit only text: `data/papers.yaml`,
+   any `data/projects/<slug>.md`, `research/<slug>/paper-content.json`,
+   and the manifest commits `upload` made.
+
+## Lab technical reports
+
+A paper with no arXiv ID and no venue (including one held in arXiv
+moderation) can get a lab report number
+(`AGL-TR-<year>-<nn>`, numbered in order within a year) and a Zenodo DOI,
+so it can be cited and Google Scholar indexes it. A paper already on arXiv
+or at a venue does not get one: a second DOI splits its citations. The PI
+issues numbers and publishes the Zenodo record; the token is the PI's own,
+never a repo secret.
+
+Two PI-only scripts do the Zenodo side. They read `ZENODO_TOKEN` from
+`.env` (gitignored); the DOIs are minted under the token owner's account.
+
+1. The author opens a **Technical report request** issue
+   (`.github/ISSUE_TEMPLATE/technical-report.yml`).
+2. `npm run tr:reserve -- <issue>` takes the next number (from
+   papers.yaml and the account's Zenodo uploads, drafts included, so two
+   reservations cannot collide), creates a Zenodo draft with a reserved
+   DOI, and comments on the issue with the page-1 footnote and the
+   `journal` / `report_number` / `doi` lines.
+3. The author pastes them, runs `paper:add` with the source and opens the
+   PR. CI compiles the PDF.
+4. `gh pr checkout <pr> && npm run tr:publish -- <slug>` copies title,
+   authors, abstract and date from papers.yaml to the draft, uploads the
+   CI-built PDF from the manifest, shows the record and publishes only
+   when the PI types `publish` (a DOI is permanent). It then adds the
+   record to the lab community (the deposit API ignores
+   `metadata.communities`, so it requests inclusion and accepts it) and
+   re-runs the PR checks.
+5. Merge once `check_zenodo_pdfs.js` passes: the site PDF and Zenodo's
+   file are the same bytes.
+6. If the paper later appears on arXiv, add the arXiv ID to the Zenodo
+   record as a related identifier (`isIdenticalTo`) and `arxiv:` to
+   papers.yaml. Keep the report number and DOI.
+
+A published report's PDF is frozen (`build/pdf_lock.js`): `paper:build`
+keeps it, check 11 skips it, and the Zenodo check guards it. To correct
+it, publish a new version: `npm run tr:revise -- <slug>` drafts the new
+Zenodo version and writes its reserved DOI to `doi:` (the report number
+stays), which unfreezes the PDF; then update the footnote, `paper:add`
+with the new source, and `tr:publish` as above. Version 1 stays on Zenodo,
+and the record's concept DOI resolves to the latest version.
+
+The paper page renders `citation_technical_report_number`,
+`citation_technical_report_institution` and `citation_doi` from these
+fields.
 
 ## When the user asks you to update something
 

@@ -1,22 +1,7 @@
 /**
  * LaTeX-specific helpers shared by latex_pack, latex_fetch, latex_update,
- * clean_latex, and build_arxiv_papers' compile path.
- *
- * Lives here (not in build_arxiv_papers or latex_pack) so the dep graph
- * stays a DAG:
- *
- *   r2_lib  ←  latex_lib
- *      ↑          ↑
- *      ├── latex_pack ───┐
- *      ├── latex_fetch ──┤
- *      ├── latex_update ─┤
- *      └── build_arxiv_papers ─┘  (also requires latex_fetch for the
- *                                  R2 download branch in compile)
- *
- * Before this split, build_arxiv_papers and latex_pack each required the
- * other (cleanLatexSource lived in the former, manifestKey in the latter),
- * which only worked because of a load-bearing lazy require. See the PR #4
- * code review for why that pattern is fragile.
+ * clean_latex and arxiv_source. Kept apart from latex_pack so no two
+ * scripts require each other.
  */
 
 const fs = require('fs-extra');
@@ -70,6 +55,20 @@ async function findArxivLatexCleaner() {
  * @param {string} latexDir - tree to clean in place
  * @returns {Promise<{stripped: number}>}
  */
+/** Paths (relative to root) of the files under root ending in ext. */
+async function listFiles(root, ext) {
+  const out = [];
+  const walk = async (dir) => {
+    for (const e of await fs.readdir(dir, { withFileTypes: true })) {
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) await walk(full);
+      else if (e.isFile() && e.name.endsWith(ext)) out.push(path.relative(root, full));
+    }
+  };
+  await walk(root);
+  return out;
+}
+
 async function cleanLatexSource(latexDir) {
   const cleaner = await findArxivLatexCleaner();
 
@@ -89,6 +88,44 @@ async function cleanLatexSource(latexDir) {
 
   if (!await fs.pathExists(cleanedDir)) {
     throw new Error(`arxiv_latex_cleaner did not produce ${cleanedDir}`);
+  }
+
+  // The cleaner drops every file no .tex references, which keeps unused
+  // draft figures out of the public tarball. Restore what the compile
+  // still needs: a .bbl (a source that ships no .bib), fonts and
+  // templates, which carry no author text, and any file a kept class or
+  // style file names (fairmeta.cls loads its font and logo from assets/).
+  // A .cls/.sty in use is loaded from a .tex, so the cleaner keeps it; a
+  // dropped one is unused and stays dropped.
+  const keepExt = /\.(bbl|bst|clo|cfg|def|fd|tfm|vf|enc|map|pfb|afm|ttf|otf)$/i;
+  const textExt = /\.(bst|clo|cfg|def|fd)$/i;
+  const all = await listFiles(latexDir, '');
+  // Only class and style files the cleaner kept, with their comments
+  // stripped, can name a file to restore.
+  const keptTemplates = (await listFiles(cleanedDir, '')).filter(rel => /\.(cls|sty)$/i.test(rel));
+  const named = new Set();
+  for (const t of keptTemplates) {
+    const text = (await fs.readFile(path.join(cleanedDir, t), 'latin1'))
+      .split('\n').map(l => l.replace(/(^|[^\\])%.*/, '$1')).join('\n');
+    for (const rel of all) {
+      const stem = rel.replace(/\.[^./]+$/, '').split(path.sep).join('/');
+      if (stem.length >= 4 && text.includes(stem)) named.add(rel);
+    }
+  }
+  for (const rel of all) {
+    const dest = path.join(cleanedDir, rel);
+    if (await fs.pathExists(dest)) continue;
+    // A figure epstopdf already converted is kept only beside its kept .eps.
+    const eps = rel.match(/^(.*)-eps-converted-to\.pdf$/i);
+    const keep = keepExt.test(rel) || named.has(rel) ||
+      (eps && await fs.pathExists(path.join(cleanedDir, eps[1] + '.eps')));
+    if (!keep) continue;
+    await fs.copy(path.join(latexDir, rel), dest);
+    // Restored text files lose their comment lines too (the tarball is public).
+    if (textExt.test(rel)) {
+      const text = await fs.readFile(dest, 'latin1');
+      await fs.writeFile(dest, text.split('\n').filter(l => !/^\s*%/.test(l)).join('\n'), 'latin1');
+    }
   }
 
   await fs.remove(latexDir);
