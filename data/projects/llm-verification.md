@@ -22,7 +22,7 @@ bibtex: |
 
 ## Overview of Our Study {data-toc=Overview}
 
-We describe our experimental setup, the metrics we use to measure verification ability, and the verification settings we study.
+Solver–verifier pairs are a common building block of multi-agent LLM systems, in which one model checks another's work. We describe our experimental setup, the metrics we use to measure verification ability, and the verification settings we study.
 
 ### Models
 
@@ -114,6 +114,8 @@ Across 21 post-trained models, we average verifier accuracy and gain over solver
 ![](results_cross_dataset_task_scatterplots-1.png){width=900}
 
 ## A Checklist for Designing Effective Solver–Verifier Systems {data-toc="Design Checklist"}
+
+The checklist applies to LLM solver–verifier systems, including multi-agent systems in which one model checks another's work.
 
 > - **Use verifier gain, not accuracy, to evaluate a solver–verifier pair.** Verification accuracy can be misleading, while verifier gain strongly predicts actual rejection sampling gains.
 > - **Check whether the task is easier to verify than to solve.** Our experiments find higher gains on logical and mathematical reasoning tasks than on knowledge-recall tasks.
