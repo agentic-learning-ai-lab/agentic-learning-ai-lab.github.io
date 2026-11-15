@@ -25,6 +25,26 @@
   date: 2026-11-12T00:00:00.000Z
   journal: CoRR
   is_recent: true
+- title: 'Latent Merger: Latent-Space Composition of Hypernetwork-Generated LoRAs'
+  authors:
+    - Yanlai Yang
+    - Minki Kang
+    - Divyam Madaan
+    - Sung Ju Hwang
+    - Mengye Ren
+  short_abstract: 'Merge document knowledge in hypernetwork latent space, then decode a single fixed-rank LoRA adapter.'
+  abstract: 'Recent work proposes hypernetworks that convert a document into a low-rank parameter update (LoRA) in a single forward pass, enabling fast injection of new knowledge into a frozen LLM. However, storing separate LoRA adapters for each document can be unsustainable in streaming settings. In this paper, we study the problem of composing hypernetwork-generated LoRAs using two representative systems, Doc-to-LoRA and SHINE. We show that hypernetwork-generated LoRAs have a geometry sharply different from directly fine-tuned LoRAs. They exhibit greater spectral concentration and stronger cross-document alignment than next-token prediction and QA fine-tuned adapters, which are diffuse and nearly orthogonal across documents. Guided by this observation, we propose latent-space LoRA merging. We compose the intermediate hypernetwork latents and then decode the merged latent through the frozen LoRA-generation head. We show that latent-space merging techniques consistently improve over weight-space and factor-space baselines while preserving a single fixed-rank adapter. These results support latent-space composition as a promising mechanism for combining hypernetwork-generated LoRAs under a fixed output-rank budget.'
+  pdf: 'https://openreview.net/pdf?id=udwqYC27uV'
+  image: /assets/images/papers/latent_merger.png
+  permalink: latent-merger
+  date: 2026-11-07T00:00:00.000Z
+  journal: 'NeurIPS 2026'
+  tags:
+    - test-time-learning
+    - meta-learning
+  is_recent: true
+  enable_full_paper: true
+  project_page: true
 - title: 'The Surprising Effectiveness of Deleting Weights in LLM Post-Training'
   image: /assets/images/papers/deleting_weights.png
   authors:

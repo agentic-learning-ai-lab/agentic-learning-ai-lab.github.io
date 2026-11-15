@@ -35,7 +35,7 @@ const _cdnMisses = new Set();
 // returns the CDN URL; miss falls back to the logical path and is
 // tracked in _cdnMisses so the build summary still reports it.
 function resolveCdn(logicalPath) {
-    if (!logicalPath) return '';
+    if (typeof logicalPath !== 'string' || !logicalPath.trim()) return '';
     const manifest = loadAssetsManifest();
     if (manifest[logicalPath]) return manifest[logicalPath];
     _cdnMisses.add(logicalPath);
@@ -374,7 +374,7 @@ function registerHelpers(handlebars, documents) {
     handlebars.registerHelper('searchIndexVersion', () => documents.searchIndexVersion);
 
     handlebars.registerHelper('cdnUrl', function (logicalPath) {
-        if (!logicalPath) return '';
+        if (typeof logicalPath !== 'string' || !logicalPath.trim()) return '';
         const manifest = loadAssetsManifest();
         if (manifest[logicalPath]) return manifest[logicalPath];
         _cdnMisses.add(logicalPath);
@@ -407,7 +407,7 @@ function registerHelpers(handlebars, documents) {
         return logicalPath.replace(/\.(png|jpg|jpeg)$/i, '.webp');
     }
     handlebars.registerHelper('pictureCdn', function (logicalPath, options) {
-        if (!logicalPath) return '';
+        if (typeof logicalPath !== 'string' || !logicalPath.trim()) return '';
         const manifest = loadAssetsManifest();
         const hash = (options && options.hash) || {};
 
