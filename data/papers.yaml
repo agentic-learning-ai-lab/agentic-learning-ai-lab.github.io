@@ -43,6 +43,7 @@
     - multimodal-learning
   date: 2026-11-12T00:00:00.000Z
   journal: CoRR
+  is_recent: true
 - title: 'The Surprising Effectiveness of Deleting Weights in LLM Post-Training'
   image: /assets/images/papers/deleting_weights.png
   authors:
