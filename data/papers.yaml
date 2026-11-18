@@ -1,3 +1,22 @@
+- title: 'The Content–Geometry Tradeoff in World Models: When JEPA Learns Latent Maps'
+  image: /assets/images/papers/content_geometry_tradeoff.png
+  authors:
+    - Mengye Ren
+    - Ying Wang
+    - Chris Hoang
+    - Yilun Kuang
+    - Yann LeCun
+  short_abstract: Sliced variance regularization learns smooth latent maps for planning, and slow channels with a gated residual predictor keep the task-relevant content.
+  abstract: 'A latent world model for planning needs two properties: latent distances that track progress toward a goal (geometry), and task-relevant factors that remain decodable from the latent representation (content). Learning such a model also requires preventing representation collapse, typically through a stop-gradient (SG) target or a regularizer trained without SG. We find that both SG and common regularizers often yield poor latent geometry. We introduce sliced variance regularization (SVReg), which imposes a variance floor on latent projections along random directions. SVReg learns a smooth map of the agent''s state: latent trajectories are smooth, latent distances track progress in navigation and reaching, and the leading principal components trace the agent''s position in egocentric navigation. These geometric benefits, however, can come with a tradeoff in content. In manipulation tasks, SVReg can discard contact-driven factors, such as the pose of a pushed block, that SG variants tend to preserve. To address this tradeoff, we add a slowness term to the regularizer and use a gated residual predictor. This simple recipe plans best in the hard settings of five visual control tasks and learns latent street maps from realistic city walks.'
+  permalink: content-geometry-tradeoff
+  project_page: true
+  tags:
+    - world-models
+    - self-supervised-learning
+    - embodied-ai
+  date: 2026-11-18T00:00:00.000Z
+  journal: arXiv preprint
+  is_recent: true
 - title: 'Unbundling Multimodal Vision Encoding'
   image: /assets/images/papers/unbundling.png
   authors:
@@ -24,25 +43,6 @@
     - multimodal-learning
   date: 2026-11-12T00:00:00.000Z
   journal: CoRR
-- title: 'The Content–Geometry Tradeoff in World Models: When JEPA Learns Latent Maps'
-  image: /assets/images/papers/content_geometry_tradeoff.png
-  authors:
-    - Mengye Ren
-    - Ying Wang
-    - Chris Hoang
-    - Yilun Kuang
-    - Yann LeCun
-  short_abstract: Sliced variance regularization learns smooth latent maps for planning, and slow channels with a gated residual predictor keep the task-relevant content.
-  abstract: 'A latent world model for planning needs two properties: latent distances that track progress toward a goal (geometry), and task-relevant factors that remain decodable from the latent representation (content). Learning such a model also requires preventing representation collapse, typically through a stop-gradient (SG) target or a regularizer trained without SG. We find that both SG and common regularizers often yield poor latent geometry. We introduce sliced variance regularization (SVReg), which imposes a variance floor on latent projections along random directions. SVReg learns a smooth map of the agent''s state: latent trajectories are smooth, latent distances track progress in navigation and reaching, and the leading principal components trace the agent''s position in egocentric navigation. These geometric benefits, however, can come with a tradeoff in content. In manipulation tasks, SVReg can discard contact-driven factors, such as the pose of a pushed block, that SG variants tend to preserve. To address this tradeoff, we add a slowness term to the regularizer and use a gated residual predictor. This simple recipe plans best in the hard settings of five visual control tasks and learns latent street maps from realistic city walks.'
-  permalink: content-geometry-tradeoff
-  project_page: true
-  tags:
-    - world-models
-    - self-supervised-learning
-    - embodied-ai
-  date: 2026-11-10T00:00:00.000Z
-  journal: arXiv preprint
-  is_recent: true
 - title: 'The Surprising Effectiveness of Deleting Weights in LLM Post-Training'
   image: /assets/images/papers/deleting_weights.png
   authors:
