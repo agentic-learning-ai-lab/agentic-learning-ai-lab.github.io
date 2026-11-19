@@ -193,6 +193,12 @@
   font-weight: 700;
 }
 
+/* LaTeXML nests text after a bold run (e.g. a \textbf caption title) inside the
+   bold span and marks it ltx_font_medium; without this rule it inherits 700. */
+.arxiv-paper-content .ltx_font_medium {
+  font-weight: 400;
+}
+
 .arxiv-paper-content .ltx_font_sansserif.ltx_font_bold {
   font-family: "Space Mono", "SF Mono", "Monaco", Consolas, "Courier New", ui-monospace, monospace;
   font-weight: 700;
