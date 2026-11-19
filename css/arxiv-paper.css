@@ -333,6 +333,21 @@
   display: block !important;
 }
 
+/* Inside a table cell, a sized box that holds text (e.g. a fixed-width
+   "± s.d." after the mean) stays on the number's line. Wide tables scroll
+   sideways on narrow screens instead of wrapping. */
+.arxiv-paper-content .ltx_td .ltx_inline-block:not(:has(.ltx_tabular)),
+.arxiv-paper-content .ltx_th .ltx_inline-block:not(:has(.ltx_tabular)) {
+  display: inline-block !important;
+  white-space: nowrap;
+}
+.arxiv-paper-content .ltx_td:has(> .ltx_inline-block:not(:has(.ltx_tabular))) {
+  white-space: nowrap;
+}
+.arxiv-paper-content figure.ltx_table {
+  overflow-x: auto;
+}
+
 /* Inside figures, LaTeXML's rules: rotated boxes (e.g. a sideways panel
    label) and minipages laid out in a row. */
 .arxiv-paper-content figure.ltx_figure .ltx_inline-block { display: inline-block; vertical-align: middle; }
