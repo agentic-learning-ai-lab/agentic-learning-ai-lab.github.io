@@ -3,9 +3,9 @@ mathjax: true
 equal_label: Equal contribution
 affiliations:
   - { name: 'Mengye Ren',        aff: 'New York University' }
-  - { name: 'Ying Wang',         aff: ['New York University', 'AMI Labs'], equal: true }
+  - { name: 'Ying Wang',         aff: 'New York University', equal: true }
   - { name: 'Chris Hoang',        aff: 'New York University', equal: true }
-  - { name: 'Yilun Kuang',       aff: ['New York University', 'AMI Labs'] }
+  - { name: 'Yilun Kuang',       aff: 'New York University' }
   - { name: 'Yann LeCun',        aff: ['New York University', 'AMI Labs'], url: 'http://yann.lecun.com/' }
 bibtex: |
   @misc{ren2026content,
@@ -22,7 +22,7 @@ links: {}
 
 A latent world model for planning needs two properties. Latent distances should track progress toward a goal (*geometry*), and task-relevant factors should stay decodable from the latent (*content*). Training without collapse usually relies on a stop-gradient (SG) target or on a variance regularizer trained without SG. We find that both choices often give poor geometry.
 
-Sliced variance regularization (SVReg) puts a variance floor on the latent along random directions. It learns a smooth map of the agent's state, but in manipulation it can drop contact-driven factors such as a pushed block. Adding slow channels and a gated residual predictor keeps that content. The resulting recipe, Slow SVReg, plans best in the hard settings of five visual control tasks and learns street maps from city walks.
+Sliced variance regularization (SVReg) puts a variance floor on the latent along random directions. It learns a smooth map of the agent's state, but it can drop slowly changing, hard-to-predict factors such as the pose of a manipulated object. Slow SVReg adds a slowness term and a gated residual predictor, which favor these factors. It keeps them, plans best in the hard settings of five visual control tasks, and learns latent maps from first-person mazes and city walks.
 
 ## Method
 
