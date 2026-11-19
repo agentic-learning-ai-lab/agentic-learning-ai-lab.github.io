@@ -1735,3 +1735,130 @@ section {
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) .project-icon { content: var(--dark-icon); }
 }
+
+/* ==================================================================
+   Paper-style results tables for project pages (data/projects/*.md).
+   Markup: <figure class="paper-fig"><figcaption class="paper-cap">…</figcaption>
+   <div class="paper-scroll"><table class="paper-table">…</table></div></figure>.
+   Cell classes: th.c centred group header, th.cm group header with a \cmidrule,
+   th.n normal weight, .s small header text, .sd small ±s.d. after a mean;
+   row classes: tr.group italic group label (+ .rule for a rule above it),
+   tr.ours highlighted row (the lab LaTeX template's \rowblue, Tailwind blue-100).
+   Same look as the Deleting Weights tables (assets/projects/deleting-weights/style.css).
+   ================================================================== */
+.paper-fig {
+    margin: 1.5rem 0 calc(2.5rem + 3px);
+}
+.paper-cap {
+    display: block;
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-style: italic;
+    color: var(--fg-muted);
+    text-align: left;
+    text-wrap: pretty;
+}
+.paper-scroll {
+    overflow-x: auto;
+}
+/* The top and bottom rules belong to the table, so cell effects can never break them. */
+.paper-table {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-top: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    font-size: 0.9em;
+    font-variant-numeric: lining-nums tabular-nums;
+}
+.paper-table th,
+.paper-table td {
+    padding: 0.22rem 0.55rem;
+    line-height: 1.35;
+    text-align: right;
+    white-space: nowrap;
+}
+.paper-table th:first-child,
+.paper-table td:first-child {
+    text-align: left;
+}
+.paper-table th {
+    font-weight: 700;
+}
+.paper-table th.c {
+    text-align: center;
+}
+.paper-table th.n {
+    font-weight: 400;
+}
+.paper-table .s {
+    font-size: 0.87em;
+}
+.paper-table .sd {
+    font-size: 0.75em;
+}
+/* \midrule */
+.paper-table thead tr:last-child > * {
+    border-bottom: 1px solid currentColor;
+}
+/* \cmidrule(lr) under a group header */
+.paper-table th.cm {
+    position: relative;
+}
+.paper-table th.cm::after {
+    content: '';
+    position: absolute;
+    left: 0.3rem;
+    right: 0.3rem;
+    bottom: 0;
+    border-bottom: 1px solid currentColor;
+}
+.paper-table tr.group > td {
+    font-style: italic;
+    padding-top: 0.45rem;
+}
+.paper-table tr.group.rule > td {
+    border-top: 1px solid currentColor;
+}
+/* Highlighted row, extended 1 px so fractional cell edges leave no seam. */
+.paper-table tr.ours > * {
+    --paper-tint: #dbeafe;
+    background: var(--paper-tint);
+    box-shadow: 1px 0 0 var(--paper-tint);
+}
+.paper-table tr.ours > :last-child {
+    box-shadow: none;
+}
+:root[data-theme="dark"] .paper-table tr.ours > * {
+    --paper-tint: #27344d;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .paper-table tr.ours > * {
+        --paper-tint: #27344d;
+    }
+}
+@media (max-width: 900px) {
+    .paper-table {
+        font-size: 0.8em;
+    }
+    .paper-table th,
+    .paper-table td {
+        padding-left: 0.35rem;
+        padding-right: 0.35rem;
+    }
+}
+/* Phones: the table scrolls in its box, with the first column pinned. */
+@media (max-width: 760px) {
+    .paper-table th:first-child,
+    .paper-table td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        background: var(--bg);
+    }
+    .paper-table tr.ours > td:first-child {
+        background: var(--paper-tint);
+    }
+}
