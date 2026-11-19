@@ -10,12 +10,15 @@
   abstract: 'A latent world model for planning needs two properties: latent distances that smoothly track progress toward a goal (geometry), and task-relevant factors that remain decodable from the latent representation (content). Common approaches prevent representation collapse with a stop-gradient (SG) target or a distributional regularizer, but we find that both often yield poor latent geometry. In this paper, we introduce sliced variance regularization (SVReg), which imposes a variance floor on latent projections along random directions. SVReg learns a smooth map of the agent''s state. Its latent trajectories are smooth, and its latent distances track progress in navigation and reaching. These geometric benefits, however, can come with a tradeoff in content. SVReg can discard slowly changing, hard-to-predict factors, such as the pose of a manipulated object, that SG variants tend to preserve. To address this tradeoff, we propose Slow SVReg, which favors slowly changing factors with a slowness term and a gated residual predictor. It keeps these factors and improves planning. This simple recipe has the highest planning success in the hard settings of five visual control tasks, and it learns latent maps from first-person mazes and city walks.'
   permalink: content-geometry-tradeoff
   project_page: true
+  report_number: AGL-TR-2026-04
+  doi: 10.5281/zenodo.24356797
+  enable_full_paper: true
   tags:
     - world-models
     - self-supervised-learning
     - embodied-ai
   date: 2026-11-18T00:00:00.000Z
-  journal: arXiv preprint
+  journal: 'Technical report'
   is_recent: true
 - title: 'Unbundling Multimodal Vision Encoding'
   image: /assets/images/papers/unbundling.png
