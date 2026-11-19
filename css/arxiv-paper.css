@@ -265,21 +265,27 @@
 
 .arxiv-paper-content .ltx_flex_cell img { width: 100%; }
 
-/* Panel labels over a figure (latexml-lab panel.js): the paragraph shrinks
-   to the image, and each label sits at left/bottom percentages of it. The
-   label is dark on the figure's white canvas in both themes. */
-.arxiv-paper-content figure.ltx_figure .ltx_p:has(> .ltx_panel_label) {
+/* Panel labels over a figure (latexml-lab panel.js): each image and its
+   labels sit in one ltx_panel_box, and each label at left/bottom
+   percentages of it. Labels are dark on a white chip, readable where they
+   overhang the image's white canvas in dark mode. */
+.arxiv-paper-content figure.ltx_figure .ltx_panel_box {
+  display: block;
   position: relative;
   width: fit-content;
   max-width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
+.arxiv-paper-content .ltx_panel_box > .ltx_p { display: block; }
 .arxiv-paper-content .ltx_panel_label {
   position: absolute;
   line-height: 1;
   font-style: normal;
   color: #111;
+  background: #fff;
+  padding: 0 2px;
+  border-radius: 2px;
 }
 
 .arxiv-paper-content figcaption,
@@ -333,15 +339,15 @@
   display: block !important;
 }
 
-/* Inside a table cell, a sized box that holds text (e.g. a fixed-width
+/* Inside a table cell, a fixed-width box of inline text (e.g. a
    "± s.d." after the mean) stays on the number's line. Wide tables scroll
    sideways on narrow screens instead of wrapping. */
-.arxiv-paper-content .ltx_td .ltx_inline-block:not(:has(.ltx_tabular)),
-.arxiv-paper-content .ltx_th .ltx_inline-block:not(:has(.ltx_tabular)) {
+.arxiv-paper-content .ltx_td .ltx_inline-block[style*="width"]:not(:has(.ltx_tabular, .ltx_p, .ltx_para)),
+.arxiv-paper-content .ltx_th .ltx_inline-block[style*="width"]:not(:has(.ltx_tabular, .ltx_p, .ltx_para)) {
   display: inline-block !important;
   white-space: nowrap;
 }
-.arxiv-paper-content .ltx_td:has(> .ltx_inline-block:not(:has(.ltx_tabular))) {
+.arxiv-paper-content .ltx_td:has(> .ltx_inline-block[style*="width"]:not(:has(.ltx_tabular, .ltx_p, .ltx_para))) {
   white-space: nowrap;
 }
 .arxiv-paper-content figure.ltx_table {
