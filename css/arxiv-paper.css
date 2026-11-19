@@ -266,10 +266,12 @@
 .arxiv-paper-content .ltx_flex_cell img { width: 100%; }
 
 /* Panel labels over a figure (latexml-lab panel.js): each image and its
-   labels sit in one ltx_panel_box, and each label at left/bottom
+   labels sit in one ltx_panel_box (or, when LaTeXML drops that box inside a
+   minipage, one paragraph), and each label at left/bottom
    percentages of it. Labels are dark on a white chip, readable where they
    overhang the image's white canvas in dark mode. */
-.arxiv-paper-content figure.ltx_figure .ltx_panel_box {
+.arxiv-paper-content figure.ltx_figure .ltx_panel_box,
+.arxiv-paper-content figure.ltx_figure .ltx_p:has(> .ltx_panel_label) {
   display: block;
   position: relative;
   width: fit-content;
