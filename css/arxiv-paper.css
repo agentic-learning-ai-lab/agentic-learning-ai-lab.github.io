@@ -912,6 +912,8 @@ section p.tw-text-gray-600 {
 .paper-main-content {
   max-width: 1024px;
   min-width: 0;
+  /* Room between the last appendix and the site footer. */
+  padding-bottom: 6rem;
 }
 
 /* Table of contents list */
