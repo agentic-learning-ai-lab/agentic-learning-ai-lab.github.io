@@ -851,6 +851,9 @@ section {
     line-height: 1.2;
     max-width: 80px;
     word-wrap: break-word;
+    /* Corner tab: the outer corner follows the rounded thumbnail, the
+       inner corner gets a small radius. */
+    border-radius: var(--radius-sm) 0 6px 0;
 }
 
 .search-badge-paper {
