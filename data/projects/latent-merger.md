@@ -9,7 +9,7 @@ links:
   pdf: https://cdn.agenticlearning.ai/c87844af59479499/latent-merger-2026.pdf
   code: https://github.com/agentic-learning-ai-lab/latent-merger
 bibtex: |
-  @inproceedings{yang2026empirical,
+  @inproceedings{yang2026latent,
     title = {Latent Merger: Latent-Space Composition of Hypernetwork-Generated LoRAs},
     author = {Yang, Yanlai and Kang, Minki and Madaan, Divyam and Hwang, Sung Ju and Ren, Mengye},
     booktitle = {Advances in Neural Information Processing Systems},
