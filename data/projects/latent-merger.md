@@ -6,7 +6,7 @@ affiliations:
   - { name: 'Sung Ju Hwang', aff: ['KAIST', 'DeepAuto.ai'] }
   - { name: 'Mengye Ren', aff: 'New York University' }
 links:
-  pdf: https://cdn.agenticlearning.ai/c87844af59479499/latent-merger-2026.pdf
+  pdf: https://cdn.agenticlearning.ai/8cb2220ba7c76161/latent-merger-2026.pdf
   code: https://github.com/agentic-learning-ai-lab/latent-merger
 bibtex: |
   @inproceedings{yang2026latent,
@@ -37,7 +37,7 @@ This shared structure, together with a common decoder, motivates testing the gen
 
 ## Method
 
-![Figure 3. Latent Merger overview. A shared frozen hypernetwork encoder produces document latents. The trainable merger combines their mean with a gated, permutation-invariant residual; a frozen LoRA-generation head decodes one rank-r adapter for the frozen language model. The inset is schematic; projection and RMS-matching details are described below.](method-overview.png){width=1100}
+![Figure 3. Latent Merger overview. A shared, frozen hypernetwork encoder maps each document to a latent. The trainable merger adds a gated, permutation-invariant residual to the latent mean. The frozen LoRA-generation head decodes the merged latent into one fixed-rank adapter for the frozen language model.](method-overview.png){width=1100}
 
 
 Latent Merger treats the document latents as an unordered set. At each latent position, a small transformer mixes information across documents without positional embeddings, then mean-pools the result. It adds a gated, RMS-matched residual to the plain latent average. The output projection starts at zero, so **training begins at latent averaging**. The composition is permutation invariant by construction.
@@ -52,7 +52,7 @@ We evaluate the approach with D2L on Gemma-2-2B-it and SHINE on Qwen3-8B.
 
 We evaluate on **SQuAD validation** and **MS MARCO**, which is out of distribution for the SQuAD-trained merger. Each method produces one adapter per tuple of N passages. The model answers every question in that tuple using the same adapter, without the passages in its prompt. This tests **per-document knowledge retention**, not reasoning that combines facts across documents.
 
-Tables 1 and 2 report **token-overlap F1 × 100 (mean ± 95% confidence interval)** for representative methods. These are not all asserted to have the same output rank. N = 10 exceeds the training tuple sizes. SVD denotes a rank-r approximation of the average weight update. Full results, including rank-concatenation and TIES baselines, appear in Tables 3–4 of the [paper](https://cdn.agenticlearning.ai/c87844af59479499/latent-merger-2026.pdf).
+Tables 1 and 2 report **token-overlap F1 × 100 (mean ± 95% confidence interval)** for representative methods. These are not all asserted to have the same output rank. N = 10 exceeds the training tuple sizes. SVD denotes a rank-r approximation of the average weight update. Full results, including rank-concatenation and TIES baselines, appear in Tables 3–4 of the [paper](https://cdn.agenticlearning.ai/8cb2220ba7c76161/latent-merger-2026.pdf).
 
 For context, using each question's own unmerged adapter scores **66.8 / 42.2** on SQuAD / MS MARCO for D2L and **56.8 / 38.1** for SHINE. Merging therefore still loses substantial information, particularly as N grows.
 
