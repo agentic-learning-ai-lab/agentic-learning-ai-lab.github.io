@@ -796,18 +796,24 @@ function constrainSidebarPosition() {
     if (!sidebar || !paperSection) return;
 
     const handleScroll = () => {
-        const sectionTop = paperSection.getBoundingClientRect().top;
+        const rect = paperSection.getBoundingClientRect();
         const headerHeight = 50; // Height of the header
 
-        // If the section top is below the desired sidebar position, clamp it
-        if (sectionTop > headerHeight) {
-            sidebar.style.top = `${sectionTop}px`;
-        } else {
-            sidebar.style.top = `${headerHeight}px`;
-        }
+        // Keep the sidebar between the top of the paper section and its
+        // end, so it never covers the footer.
+        const top = Math.max(rect.top, headerHeight);
+        const bottom = Math.min(rect.bottom, window.innerHeight) - 20;
+        sidebar.style.top = `${top}px`;
+        // A hidden section has no box; fall back to the CSS height.
+        const height = bottom - top;
+        sidebar.style.height = rect.height ? `${Math.max(0, height)}px` : '';
+        // Once the paper has scrolled past, hide the card (its padding
+        // would otherwise still sit over the footer).
+        sidebar.style.visibility = rect.height && height < 100 ? 'hidden' : '';
     };
 
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
     handleScroll(); // Initial position
 }
 
