@@ -384,21 +384,26 @@
 }
 .arxiv-paper-content figure.ltx_figure .ltx_transformed_inner > .ltx_p { margin: 0; padding: 0; }
 
+/* LaTeXML writes some tabulars (e.g. inside \resizebox) as spans;
+   lay them out as tables, like its own ltx.css does. */
+.arxiv-paper-content span.ltx_tabular { display: inline-table; border-collapse: collapse; vertical-align: middle; }
+.arxiv-paper-content span.ltx_tr { display: table-row; }
+.arxiv-paper-content span.ltx_td { display: table-cell; }
+/* A top-level span tabular is the table itself; one nested in a cell
+   (\makecell, \shortstack) stays a compact stack. */
+.arxiv-paper-content span.ltx_tabular:not(.ltx_td *) { display: table; width: 100%; }
+.arxiv-paper-content span.ltx_tabular:not(.ltx_td *) > .ltx_tr > .ltx_td { padding: 0.75rem; }
+
 /* Rules come from the LaTeX source: LaTeXML marks each cell with
    ltx_border_tt / _bb (\toprule, \bottomrule, \hline\hline),
-   _t / _b (\midrule, \cmidrule, \hline) and _l / _r (vertical rules). */
-.arxiv-paper-content table td.ltx_border_t,
-.arxiv-paper-content table th.ltx_border_t { border-top: 1px solid var(--fg); }
-.arxiv-paper-content table td.ltx_border_tt,
-.arxiv-paper-content table th.ltx_border_tt { border-top: 2px solid var(--fg); }
-.arxiv-paper-content table td.ltx_border_b,
-.arxiv-paper-content table th.ltx_border_b { border-bottom: 1px solid var(--fg); }
-.arxiv-paper-content table td.ltx_border_bb,
-.arxiv-paper-content table th.ltx_border_bb { border-bottom: 2px solid var(--fg); }
-.arxiv-paper-content table td.ltx_border_l,
-.arxiv-paper-content table th.ltx_border_l { border-left: 1px solid var(--fg); }
-.arxiv-paper-content table td.ltx_border_r,
-.arxiv-paper-content table th.ltx_border_r { border-right: 1px solid var(--fg); }
+   _t / _b (\midrule, \cmidrule, \hline) and _l / _r (vertical rules).
+   Cells are td, th or span elements, all with class ltx_td. */
+.arxiv-paper-content .ltx_td.ltx_border_t { border-top: 1px solid var(--fg); }
+.arxiv-paper-content .ltx_td.ltx_border_tt { border-top: 2px solid var(--fg); }
+.arxiv-paper-content .ltx_td.ltx_border_b { border-bottom: 1px solid var(--fg); }
+.arxiv-paper-content .ltx_td.ltx_border_bb { border-bottom: 2px solid var(--fg); }
+.arxiv-paper-content .ltx_td.ltx_border_l { border-left: 1px solid var(--fg); }
+.arxiv-paper-content .ltx_td.ltx_border_r { border-right: 1px solid var(--fg); }
 
 .arxiv-paper-content table th,
 .arxiv-paper-content table td {
