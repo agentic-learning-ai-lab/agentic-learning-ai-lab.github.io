@@ -98,6 +98,7 @@ async function loadPaperContent() {
         paperContentLoaded = true;
 
         sizeFiguresLikePaper(contentEl);
+        splitCmidrules(contentEl);
 
         // Generate table of contents
         generateTableOfContents();
@@ -141,6 +142,33 @@ function ptWidth(el) {
 // top-level figure at the same width in body-font units so figure labels
 // keep the size they have next to the text in the PDF.
 const PAPER_TEXTWIDTH_EM = 433.6 / 10;
+
+// LaTeXML turns \cmidrule(lr){2-4}\cmidrule(lr){5-7} into one run of
+// top borders on columns 2-7. Under a row of spanning headers, cut a
+// partial rule (one that skips the first column) at each header's edges.
+function splitCmidrules(root) {
+    root.querySelectorAll('.ltx_tr').forEach(row => {
+        const cells = [...row.children].filter(c => c.classList.contains('ltx_td'));
+        if (!cells.length || cells[0].classList.contains('ltx_border_t')) return;
+        const prev = row.previousElementSibling;
+        if (!prev) return;
+        const spans = [...prev.children]
+            .filter(c => Number(c.getAttribute('colspan')) > 1)
+            .map(c => c.getBoundingClientRect());
+        if (!spans.length) return;
+        const near = (a, b) => Math.abs(a - b) < 2;
+        cells.filter(c => c.classList.contains('ltx_border_t')).forEach(c => {
+            const r = c.getBoundingClientRect();
+            if (!r.width) return;
+            const l = spans.some(s => near(s.left, r.left));
+            const rt = spans.some(s => near(s.right, r.right));
+            if (!l && !rt) return;
+            c.classList.add('ltx_cmid');
+            if (l) c.classList.add('ltx_cmid_l');
+            if (rt) c.classList.add('ltx_cmid_r');
+        });
+    });
+}
 
 function sizeFiguresLikePaper(root) {
     const em = parseFloat(getComputedStyle(root).fontSize) || 16;
