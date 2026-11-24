@@ -8,10 +8,13 @@ affiliations:
   - { name: 'Yilun Kuang',       aff: 'New York University' }
   - { name: 'Yann LeCun',        aff: ['New York University', 'AMI Labs'], url: 'http://yann.lecun.com/' }
 bibtex: |
-  @misc{ren2026content,
-    title  = {The Content--Geometry Tradeoff in World Models: When {JEPA} Learns Latent Maps},
-    author = {Ren, Mengye and Wang, Ying and Hoang, Christopher and Kuang, Yilun and LeCun, Yann},
-    year   = {2026}
+  @techreport{ren2026content,
+    title       = {The Content--Geometry Tradeoff in World Models: When {JEPA} Learns Latent Maps},
+    author      = {Ren, Mengye and Wang, Ying and Hoang, Christopher and Kuang, Yilun and LeCun, Yann},
+    institution = {Agentic Learning AI Lab, New York University},
+    number      = {AGL-TR-2026-04},
+    year        = {2026},
+    doi         = {10.5281/zenodo.24356797}
   }
 links: {}
 ---
