@@ -384,13 +384,21 @@
 }
 .arxiv-paper-content figure.ltx_figure .ltx_transformed_inner > .ltx_p { margin: 0; padding: 0; }
 
-.arxiv-paper-content table thead {
-  border-bottom: 2px solid var(--fg);
-}
-
-.arxiv-paper-content table tbody tr {
-  border-bottom: 1px solid var(--border);
-}
+/* Rules come from the LaTeX source: LaTeXML marks each cell with
+   ltx_border_tt / _bb (\toprule, \bottomrule, \hline\hline),
+   _t / _b (\midrule, \cmidrule, \hline) and _l / _r (vertical rules). */
+.arxiv-paper-content table td.ltx_border_t,
+.arxiv-paper-content table th.ltx_border_t { border-top: 1px solid var(--fg); }
+.arxiv-paper-content table td.ltx_border_tt,
+.arxiv-paper-content table th.ltx_border_tt { border-top: 2px solid var(--fg); }
+.arxiv-paper-content table td.ltx_border_b,
+.arxiv-paper-content table th.ltx_border_b { border-bottom: 1px solid var(--fg); }
+.arxiv-paper-content table td.ltx_border_bb,
+.arxiv-paper-content table th.ltx_border_bb { border-bottom: 2px solid var(--fg); }
+.arxiv-paper-content table td.ltx_border_l,
+.arxiv-paper-content table th.ltx_border_l { border-left: 1px solid var(--fg); }
+.arxiv-paper-content table td.ltx_border_r,
+.arxiv-paper-content table th.ltx_border_r { border-right: 1px solid var(--fg); }
 
 .arxiv-paper-content table th,
 .arxiv-paper-content table td {
