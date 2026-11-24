@@ -18,7 +18,6 @@ bibtex: |
     author = {Yang, Yanlai and Kang, Minki and Madaan, Divyam and Hwang, Sung Ju and Ren, Mengye},
     booktitle = {Advances in Neural Information Processing Systems},
     year = {2026},
-    url = {https://openreview.net/forum?id=udwqYC27uV},
   }
 ---
 
@@ -61,13 +60,43 @@ The tables report **token-overlap F1 × 100 (mean ± 95% confidence interval)** 
 
 For context, using each question's own unmerged adapter scores **66.8 / 42.2** on SQuAD / MS MARCO for D2L and **56.8 / 38.1** for SHINE. Merging therefore still loses substantial information, particularly as N grows.
 
-<div class="lm-table-wrap" tabindex="0" role="region" aria-label="Doc-to-LoRA · Gemma-2-2B-it, SQuAD results"><table class="lm-results"><caption>Doc-to-LoRA · Gemma-2-2B-it · SQuAD</caption><thead><tr><th scope="col">Method</th><th scope="col">N = 2</th><th scope="col">N = 5</th><th scope="col">N = 10</th></tr></thead><tbody><tr><th scope="row">Factor averaging</th><td>41.2 ± 2.7</td><td>19.8 ± 2.0</td><td>14.8 ± 1.6</td></tr><tr><th scope="row">SVD</th><td>48.5 ± 2.8</td><td>22.0 ± 2.1</td><td>15.5 ± 1.7</td></tr><tr><th scope="row">DARE</th><td>18.7 ± 2.3</td><td>17.0 ± 1.9</td><td>17.1 ± 1.4</td></tr><tr><th scope="row">Latent averaging</th><td>47.6 ± 2.8</td><td>25.2 ± 2.5</td><td>18.6 ± 1.7</td></tr><tr class="lm-ours"><th scope="row">Latent Merger (ours)</th><td>50.7 ± 2.8</td><td>29.8 ± 2.5</td><td>21.0 ± 1.3</td></tr></tbody></table></div>
+<figure class="paper-fig">
+<figcaption class="paper-cap"><strong>Doc-to-LoRA, Gemma-2-2B-it.</strong> Token-overlap F1 × 100, mean ± 95% CI, for N documents merged into one adapter. Bold: best among the methods shown.</figcaption>
+<div class="paper-scroll">
+<table class="paper-table">
+<thead>
+<tr><th></th><th colspan="3" class="c cm">SQuAD</th><th colspan="3" class="c cm">MS MARCO</th></tr>
+<tr><th>Method</th><th class="s">N = 2</th><th class="s">N = 5</th><th class="s">N = 10</th><th class="s">N = 2</th><th class="s">N = 5</th><th class="s">N = 10</th></tr>
+</thead>
+<tbody>
+<tr><td>Factor averaging</td><td>41.2<span class="sd">±2.7</span></td><td>19.8<span class="sd">±2.0</span></td><td>14.8<span class="sd">±1.6</span></td><td>29.5<span class="sd">±3.5</span></td><td>22.4<span class="sd">±2.1</span></td><td>19.7<span class="sd">±1.5</span></td></tr>
+<tr><td>SVD</td><td>48.5<span class="sd">±2.8</span></td><td>22.0<span class="sd">±2.1</span></td><td>15.5<span class="sd">±1.7</span></td><td>31.0<span class="sd">±3.5</span></td><td>23.2<span class="sd">±2.1</span></td><td>20.1<span class="sd">±1.5</span></td></tr>
+<tr><td>DARE</td><td>18.7<span class="sd">±2.3</span></td><td>17.0<span class="sd">±1.9</span></td><td>17.1<span class="sd">±1.4</span></td><td>19.2<span class="sd">±2.9</span></td><td>19.2<span class="sd">±1.9</span></td><td>19.5<span class="sd">±1.7</span></td></tr>
+<tr><td>Latent averaging</td><td>47.6<span class="sd">±2.8</span></td><td>25.2<span class="sd">±2.5</span></td><td>18.6<span class="sd">±1.7</span></td><td>31.3<span class="sd">±3.5</span></td><td><strong>23.5</strong><span class="sd">±2.2</span></td><td>20.7<span class="sd">±1.5</span></td></tr>
+<tr class="ours"><td>Latent Merger (ours)</td><td><strong>50.7</strong><span class="sd">±2.8</span></td><td><strong>29.8</strong><span class="sd">±2.5</span></td><td><strong>21.0</strong><span class="sd">±1.3</span></td><td><strong>32.0</strong><span class="sd">±3.7</span></td><td><strong>23.5</strong><span class="sd">±2.0</span></td><td><strong>22.2</strong><span class="sd">±1.7</span></td></tr>
+</tbody>
+</table>
+</div>
+</figure>
 
-<div class="lm-table-wrap" tabindex="0" role="region" aria-label="Doc-to-LoRA · Gemma-2-2B-it, MS MARCO results"><table class="lm-results"><caption>Doc-to-LoRA · Gemma-2-2B-it · MS MARCO</caption><thead><tr><th scope="col">Method</th><th scope="col">N = 2</th><th scope="col">N = 5</th><th scope="col">N = 10</th></tr></thead><tbody><tr><th scope="row">Factor averaging</th><td>29.5 ± 3.5</td><td>22.4 ± 2.1</td><td>19.7 ± 1.5</td></tr><tr><th scope="row">SVD</th><td>31.0 ± 3.5</td><td>23.2 ± 2.1</td><td>20.1 ± 1.5</td></tr><tr><th scope="row">DARE</th><td>19.2 ± 2.9</td><td>19.2 ± 1.9</td><td>19.5 ± 1.7</td></tr><tr><th scope="row">Latent averaging</th><td>31.3 ± 3.5</td><td>23.5 ± 2.2</td><td>20.7 ± 1.5</td></tr><tr class="lm-ours"><th scope="row">Latent Merger (ours)</th><td>32.0 ± 3.7</td><td>23.5 ± 2.0</td><td>22.2 ± 1.7</td></tr></tbody></table></div>
-
-<div class="lm-table-wrap" tabindex="0" role="region" aria-label="SHINE · Qwen3-8B, SQuAD results"><table class="lm-results"><caption>SHINE · Qwen3-8B · SQuAD</caption><thead><tr><th scope="col">Method</th><th scope="col">N = 2</th><th scope="col">N = 5</th><th scope="col">N = 10</th></tr></thead><tbody><tr><th scope="row">Factor averaging</th><td>44.7 ± 3.1</td><td>29.5 ± 3.0</td><td>23.7 ± 2.6</td></tr><tr><th scope="row">SVD</th><td>44.6 ± 3.1</td><td>29.3 ± 3.0</td><td>23.6 ± 2.7</td></tr><tr><th scope="row">DARE</th><td>31.3 ± 4.1</td><td>27.5 ± 3.1</td><td>23.8 ± 2.8</td></tr><tr><th scope="row">Latent averaging</th><td>45.4 ± 3.0</td><td>30.6 ± 2.8</td><td>23.5 ± 2.5</td></tr><tr class="lm-ours"><th scope="row">Latent Merger (ours)</th><td>50.2 ± 4.2</td><td>39.8 ± 2.8</td><td>30.2 ± 2.5</td></tr></tbody></table></div>
-
-<div class="lm-table-wrap" tabindex="0" role="region" aria-label="SHINE · Qwen3-8B, MS MARCO results"><table class="lm-results"><caption>SHINE · Qwen3-8B · MS MARCO</caption><thead><tr><th scope="col">Method</th><th scope="col">N = 2</th><th scope="col">N = 5</th><th scope="col">N = 10</th></tr></thead><tbody><tr><th scope="row">Factor averaging</th><td>26.7 ± 3.9</td><td>22.1 ± 2.0</td><td>20.1 ± 1.6</td></tr><tr><th scope="row">SVD</th><td>26.5 ± 3.7</td><td>22.2 ± 2.0</td><td>20.1 ± 1.6</td></tr><tr><th scope="row">DARE</th><td>31.8 ± 6.7</td><td>27.0 ± 3.6</td><td>26.0 ± 1.4</td></tr><tr><th scope="row">Latent averaging</th><td>29.5 ± 3.6</td><td>22.9 ± 2.1</td><td>20.9 ± 1.5</td></tr><tr class="lm-ours"><th scope="row">Latent Merger (ours)</th><td>33.5 ± 4.0</td><td>27.2 ± 2.2</td><td>25.8 ± 1.8</td></tr></tbody></table></div>
+<figure class="paper-fig">
+<figcaption class="paper-cap"><strong>SHINE, Qwen3-8B.</strong> Token-overlap F1 × 100, mean ± 95% CI, for N documents merged into one adapter. Bold: best among the methods shown.</figcaption>
+<div class="paper-scroll">
+<table class="paper-table">
+<thead>
+<tr><th></th><th colspan="3" class="c cm">SQuAD</th><th colspan="3" class="c cm">MS MARCO</th></tr>
+<tr><th>Method</th><th class="s">N = 2</th><th class="s">N = 5</th><th class="s">N = 10</th><th class="s">N = 2</th><th class="s">N = 5</th><th class="s">N = 10</th></tr>
+</thead>
+<tbody>
+<tr><td>Factor averaging</td><td>44.7<span class="sd">±3.1</span></td><td>29.5<span class="sd">±3.0</span></td><td>23.7<span class="sd">±2.6</span></td><td>26.7<span class="sd">±3.9</span></td><td>22.1<span class="sd">±2.0</span></td><td>20.1<span class="sd">±1.6</span></td></tr>
+<tr><td>SVD</td><td>44.6<span class="sd">±3.1</span></td><td>29.3<span class="sd">±3.0</span></td><td>23.6<span class="sd">±2.7</span></td><td>26.5<span class="sd">±3.7</span></td><td>22.2<span class="sd">±2.0</span></td><td>20.1<span class="sd">±1.6</span></td></tr>
+<tr><td>DARE</td><td>31.3<span class="sd">±4.1</span></td><td>27.5<span class="sd">±3.1</span></td><td>23.8<span class="sd">±2.8</span></td><td>31.8<span class="sd">±6.7</span></td><td>27.0<span class="sd">±3.6</span></td><td><strong>26.0</strong><span class="sd">±1.4</span></td></tr>
+<tr><td>Latent averaging</td><td>45.4<span class="sd">±3.0</span></td><td>30.6<span class="sd">±2.8</span></td><td>23.5<span class="sd">±2.5</span></td><td>29.5<span class="sd">±3.6</span></td><td>22.9<span class="sd">±2.1</span></td><td>20.9<span class="sd">±1.5</span></td></tr>
+<tr class="ours"><td>Latent Merger (ours)</td><td><strong>50.2</strong><span class="sd">±4.2</span></td><td><strong>39.8</strong><span class="sd">±2.8</span></td><td><strong>30.2</strong><span class="sd">±2.5</span></td><td><strong>33.5</strong><span class="sd">±4.0</span></td><td><strong>27.2</strong><span class="sd">±2.2</span></td><td>25.8<span class="sd">±1.8</span></td></tr>
+</tbody>
+</table>
+</div>
+</figure>
 
 ### Discussion
 
@@ -79,4 +108,4 @@ For context, using each question's own unmerged adapter scores **66.8 / 42.2** o
 
 For the two generators studied here, generated LoRAs are more aligned across documents and more spectrally concentrated than directly fine-tuned adapters. **Combining their latents and decoding once offers a promising route to a single fixed-rank document memory.** A learned merger improves retention over latent averaging, but scores remain below the per-document oracle and decline as more documents are combined. The evaluations focus on QA; non-QA and conflicting-source settings remain untested.
 
-Read the full experimental setup, ablations, and limitations on [OpenReview](https://openreview.net/forum?id=udwqYC27uV).
+Read the full experimental setup, ablations, and limitations in the [full paper](/research/latent-merger/).
