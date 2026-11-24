@@ -415,6 +415,28 @@
   font-weight: 600;
 }
 
+/* Column alignment from the tabular spec (l / c / r). */
+.arxiv-paper-content .ltx_td.ltx_align_left { text-align: left; }
+.arxiv-paper-content .ltx_td.ltx_align_center { text-align: center; }
+.arxiv-paper-content .ltx_td.ltx_align_right { text-align: right; }
+
+/* \cmidrule(lr) under a spanning header: paper-view.js splits the rule
+   at the header's edges (LaTeXML marks it as one run of top borders). */
+.arxiv-paper-content .ltx_td.ltx_cmid {
+  border-top: none;
+  position: relative;
+}
+.arxiv-paper-content .ltx_td.ltx_cmid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--fg);
+}
+.arxiv-paper-content .ltx_td.ltx_cmid_l::before { left: 0.4em; }
+.arxiv-paper-content .ltx_td.ltx_cmid_r::before { right: 0.4em; }
+
 /* Math equations */
 .arxiv-paper-content .MathJax,
 .arxiv-paper-content .mjx-chtml {
