@@ -1446,6 +1446,20 @@ section {
     margin-bottom: 0;
 }
 
+/* Lists match the paragraphs: the global `p, li` rule sets li to
+   Iowan Old Style, which looks larger than the Libertinus body text. */
+.project-prose li {
+    font-family: inherit;
+}
+.project-section > ul,
+.project-section > ol {
+    margin: 0 0 1rem;
+}
+.project-section > ul:last-child,
+.project-section > ol:last-child {
+    margin-bottom: 0;
+}
+
 .adajepa-results-compact figure {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
