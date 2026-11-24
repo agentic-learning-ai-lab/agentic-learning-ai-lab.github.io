@@ -7,6 +7,7 @@ affiliations:
   - { name: 'Mengye Ren', aff: 'New York University' }
 links:
   pdf: https://cdn.agenticlearning.ai/3145228a5ed64ec4/latent-merger-2026.pdf
+  code: https://github.com/agentic-learning-ai-lab/latent-merger
 bibtex: |
   @inproceedings{yang2026empirical,
     title = {Latent Merger: Latent-Space Composition of Hypernetwork-Generated LoRAs},
