@@ -35,7 +35,7 @@ const _cdnMisses = new Set();
 // returns the CDN URL; miss falls back to the logical path and is
 // tracked in _cdnMisses so the build summary still reports it.
 function resolveCdn(logicalPath) {
-    if (!logicalPath) return '';
+    if (typeof logicalPath !== 'string' || !logicalPath.trim()) return '';
     const manifest = loadAssetsManifest();
     if (manifest[logicalPath]) return manifest[logicalPath];
     _cdnMisses.add(logicalPath);
@@ -74,6 +74,10 @@ function doTemplating(input, output) {
             // `npm run paper:build`.
             const paperContentPath = path.join(__dirname, '..', 'research', paper.permalink, 'paper-content.json');
             paper.has_full_paper = !!paper.enable_full_paper && fs.existsSync(paperContentPath);
+            if (paper.has_full_paper && paper.project_page) {
+                const project = require('./project_page_loader').loadOne(paper.permalink);
+                if (project && project.publication_notice) paper.lab_paper_frontmatter = project;
+            }
 
             // Check the manifest, not the filesystem: paper.pdf is
             // gitignored and CF Pages cloud builds don't run pull:r2,
@@ -374,7 +378,7 @@ function registerHelpers(handlebars, documents) {
     handlebars.registerHelper('searchIndexVersion', () => documents.searchIndexVersion);
 
     handlebars.registerHelper('cdnUrl', function (logicalPath) {
-        if (!logicalPath) return '';
+        if (typeof logicalPath !== 'string' || !logicalPath.trim()) return '';
         const manifest = loadAssetsManifest();
         if (manifest[logicalPath]) return manifest[logicalPath];
         _cdnMisses.add(logicalPath);
@@ -407,7 +411,7 @@ function registerHelpers(handlebars, documents) {
         return logicalPath.replace(/\.(png|jpg|jpeg)$/i, '.webp');
     }
     handlebars.registerHelper('pictureCdn', function (logicalPath, options) {
-        if (!logicalPath) return '';
+        if (typeof logicalPath !== 'string' || !logicalPath.trim()) return '';
         const manifest = loadAssetsManifest();
         const hash = (options && options.hash) || {};
 
