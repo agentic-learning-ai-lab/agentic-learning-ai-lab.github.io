@@ -851,6 +851,9 @@ section {
     line-height: 1.2;
     max-width: 80px;
     word-wrap: break-word;
+    /* Corner tab: the outer corner follows the rounded thumbnail, the
+       inner corner gets a small radius. */
+    border-radius: var(--radius-sm) 0 6px 0;
 }
 
 .search-badge-paper {
@@ -1738,3 +1741,130 @@ section {
 
 /* Latent Merger project page components. */
 .lm-flow{display:flex;align-items:stretch;gap:10px;margin:2rem 0;font-family:system-ui,sans-serif}.lm-stage{flex:1;display:flex;flex-direction:column;gap:10px;padding:20px 14px;border:1px solid #cbd5e1;border-radius:12px;background:#f8fafc;text-align:center}.lm-stage strong{font-size:17px;color:#172554}.lm-stage span:last-child{font-size:13px;line-height:1.5;color:#475569}.lm-tag{font-size:10px;letter-spacing:.14em;font-weight:700;color:#64748b}.lm-learned{background:#eef2ff;border:2px solid #6366f1}.lm-arrow{align-self:center;color:#6366f1;font-size:24px}.lm-table-wrap{overflow-x:auto;margin:1.5rem 0 2rem;border:1px solid var(--border-soft);border-radius:10px}.lm-results{color:var(--fg);background:var(--bg);width:100%;border-collapse:collapse;font-family:system-ui,sans-serif;font-size:14px;margin:0!important}.lm-results caption{padding:14px;text-align:left;font-size:15px;font-weight:700;background:var(--card-bg);color:var(--fg)}.lm-results th,.lm-results td{padding:12px 14px!important;white-space:nowrap;border-bottom:1px solid var(--border-soft);text-align:right}.lm-results th:first-child{text-align:left}.lm-results thead{background:var(--card-bg);color:var(--fg)}.lm-results tbody th{font-weight:400}.lm-results .lm-ours{background:var(--accent-soft);color:var(--fg);font-weight:700}.lm-results .lm-ours th{font-weight:700}.lm-table-wrap:focus-visible{outline:3px solid #6366f1;outline-offset:3px}@media(max-width:640px){.lm-flow{flex-direction:column;gap:8px}.lm-stage{padding:16px}.lm-arrow{transform:rotate(90deg)}.lm-results{font-size:12px}.lm-results th,.lm-results td{padding:10px!important}}
+
+/* ==================================================================
+   Paper-style results tables for project pages (data/projects/*.md).
+   Markup: <figure class="paper-fig"><figcaption class="paper-cap">…</figcaption>
+   <div class="paper-scroll"><table class="paper-table">…</table></div></figure>.
+   Cell classes: th.c centred group header, th.cm group header with a \cmidrule,
+   th.n normal weight, .s small header text, .sd small ±s.d. after a mean;
+   row classes: tr.group italic group label (+ .rule for a rule above it),
+   tr.ours highlighted row (the lab LaTeX template's \rowblue, Tailwind blue-100).
+   Same look as the Deleting Weights tables (assets/projects/deleting-weights/style.css).
+   ================================================================== */
+.paper-fig {
+    margin: 1.5rem 0 calc(2.5rem + 3px);
+}
+.paper-cap {
+    display: block;
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-style: italic;
+    color: var(--fg-muted);
+    text-align: left;
+    text-wrap: pretty;
+}
+.paper-scroll {
+    overflow-x: auto;
+}
+/* The top and bottom rules belong to the table, so cell effects can never break them. */
+.paper-table {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-top: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    font-size: 0.9em;
+    font-variant-numeric: lining-nums tabular-nums;
+}
+.paper-table th,
+.paper-table td {
+    padding: 0.22rem 0.55rem;
+    line-height: 1.35;
+    text-align: right;
+    white-space: nowrap;
+}
+.paper-table th:first-child,
+.paper-table td:first-child {
+    text-align: left;
+}
+.paper-table th {
+    font-weight: 700;
+}
+.paper-table th.c {
+    text-align: center;
+}
+.paper-table th.n {
+    font-weight: 400;
+}
+.paper-table .s {
+    font-size: 0.87em;
+}
+.paper-table .sd {
+    font-size: 0.75em;
+}
+/* \midrule */
+.paper-table thead tr:last-child > * {
+    border-bottom: 1px solid currentColor;
+}
+/* \cmidrule(lr) under a group header */
+.paper-table th.cm {
+    position: relative;
+}
+.paper-table th.cm::after {
+    content: '';
+    position: absolute;
+    left: 0.3rem;
+    right: 0.3rem;
+    bottom: 0;
+    border-bottom: 1px solid currentColor;
+}
+.paper-table tr.group > td {
+    font-style: italic;
+    padding-top: 0.45rem;
+}
+.paper-table tr.group.rule > td {
+    border-top: 1px solid currentColor;
+}
+/* Highlighted row, extended 1 px so fractional cell edges leave no seam. */
+.paper-table tr.ours > * {
+    --paper-tint: #dbeafe;
+    background: var(--paper-tint);
+    box-shadow: 1px 0 0 var(--paper-tint);
+}
+.paper-table tr.ours > :last-child {
+    box-shadow: none;
+}
+:root[data-theme="dark"] .paper-table tr.ours > * {
+    --paper-tint: #27344d;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .paper-table tr.ours > * {
+        --paper-tint: #27344d;
+    }
+}
+@media (max-width: 900px) {
+    .paper-table {
+        font-size: 0.8em;
+    }
+    .paper-table th,
+    .paper-table td {
+        padding-left: 0.35rem;
+        padding-right: 0.35rem;
+    }
+}
+/* Phones: the table scrolls in its box, with the first column pinned. */
+@media (max-width: 760px) {
+    .paper-table th:first-child,
+    .paper-table td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        background: var(--bg);
+    }
+    .paper-table tr.ours > td:first-child {
+        background: var(--paper-tint);
+    }
+}
