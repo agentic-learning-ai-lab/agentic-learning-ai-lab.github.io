@@ -1455,6 +1455,10 @@ section {
 .project-section > ol {
     margin: 0 0 1rem;
 }
+.project-section > ul:last-child,
+.project-section > ol:last-child {
+    margin-bottom: 0;
+}
 
 .adajepa-results-compact figure {
     margin-top: 1.5rem;
