@@ -74,10 +74,6 @@ function doTemplating(input, output) {
             // `npm run paper:build`.
             const paperContentPath = path.join(__dirname, '..', 'research', paper.permalink, 'paper-content.json');
             paper.has_full_paper = !!paper.enable_full_paper && fs.existsSync(paperContentPath);
-            if (paper.has_full_paper && paper.project_page) {
-                const project = require('./project_page_loader').loadOne(paper.permalink);
-                if (project && project.publication_notice) paper.lab_paper_frontmatter = project;
-            }
 
             // Check the manifest, not the filesystem: paper.pdf is
             // gitignored and CF Pages cloud builds don't run pull:r2,

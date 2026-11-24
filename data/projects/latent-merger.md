@@ -1,8 +1,4 @@
 ---
-publication_notice: 40th Conference on Neural Information Processing Systems (NeurIPS 2026).
-website:
-  url: https://agenticlearning.ai/latent-merger
-  label: agenticlearning.ai/latent-merger
 affiliations:
   - { name: 'Yanlai Yang', aff: 'New York University' }
   - { name: 'Minki Kang', aff: 'KAIST' }

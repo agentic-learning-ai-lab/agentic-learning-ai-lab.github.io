@@ -13,11 +13,6 @@ for (const tag of paper.tags) {
 const page = fs.readFileSync('out/latent-merger/index.html', 'utf8');
 const manifest = JSON.parse(fs.readFileSync('assets-manifest.json', 'utf8'));
 const reader = fs.readFileSync('out/research/latent-merger/index.html', 'utf8');
-const notice = '40th Conference on Neural Information Processing Systems (NeurIPS 2026).';
-assert.equal(reader.split(notice).length, 2);
-assert(reader.includes('<a href="https://agenticlearning.ai/latent-merger">agenticlearning.ai/latent-merger</a>'));
-assert(reader.includes('Sung Ju Hwang<sup class="tw-text-sm">2,3</sup>, and '));
-assert(reader.includes('<sup class="tw-text-xs">1</sup>New York University, <sup class="tw-text-xs">2</sup>KAIST, <sup class="tw-text-xs">3</sup>DeepAuto.ai'));
 const pdf = manifest['/research/latent-merger/paper.pdf'];
 assert(pdf && reader.includes(pdf) && page.includes(pdf), 'Project and reader must use the rebuilt paper PDF');
 for (const ext of ['png', 'webp']) {
