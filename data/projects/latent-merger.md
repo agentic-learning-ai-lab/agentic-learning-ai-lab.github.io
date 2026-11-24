@@ -1,4 +1,8 @@
 ---
+publication_notice: 40th Conference on Neural Information Processing Systems (NeurIPS 2026).
+website:
+  url: https://agenticlearning.ai/latent-merger
+  label: agenticlearning.ai/latent-merger
 affiliations:
   - { name: 'Yanlai Yang', aff: 'New York University' }
   - { name: 'Minki Kang', aff: 'KAIST' }
@@ -6,7 +10,7 @@ affiliations:
   - { name: 'Sung Ju Hwang', aff: ['KAIST', 'DeepAuto.ai'] }
   - { name: 'Mengye Ren', aff: 'New York University' }
 links:
-  pdf: https://cdn.agenticlearning.ai/3145228a5ed64ec4/latent-merger-2026.pdf
+  pdf: https://cdn.agenticlearning.ai/c87844af59479499/latent-merger-2026.pdf
   code: https://github.com/agentic-learning-ai-lab/latent-merger
 bibtex: |
   @inproceedings{yang2026empirical,
@@ -53,7 +57,7 @@ We evaluate the approach with D2L on Gemma-2-2B-it and SHINE on Qwen3-8B.
 
 We evaluate on **SQuAD validation** and **MS MARCO**, which is out of distribution for the SQuAD-trained merger. Each method produces one adapter per tuple of N passages. The model answers every question in that tuple using the same adapter, without the passages in its prompt. This tests **per-document knowledge retention**, not reasoning that combines facts across documents.
 
-The tables report **token-overlap F1 × 100 (mean ± 95% confidence interval)** for representative methods. These are not all asserted to have the same output rank. N = 10 exceeds the training tuple sizes. SVD denotes a rank-r approximation of the average weight update. Full results, including rank-concatenation and TIES baselines, appear in Tables 3–4 of the [paper](https://cdn.agenticlearning.ai/3145228a5ed64ec4/latent-merger-2026.pdf).
+The tables report **token-overlap F1 × 100 (mean ± 95% confidence interval)** for representative methods. These are not all asserted to have the same output rank. N = 10 exceeds the training tuple sizes. SVD denotes a rank-r approximation of the average weight update. Full results, including rank-concatenation and TIES baselines, appear in Tables 3–4 of the [paper](https://cdn.agenticlearning.ai/c87844af59479499/latent-merger-2026.pdf).
 
 For context, using each question's own unmerged adapter scores **66.8 / 42.2** on SQuAD / MS MARCO for D2L and **56.8 / 38.1** for SHINE. Merging therefore still loses substantial information, particularly as N grows.
 
