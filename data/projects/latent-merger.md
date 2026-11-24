@@ -31,9 +31,9 @@ Generated adapters are not the endpoints of independent fine-tuning runs: a shar
 
 Do generated adapters behave like directly fine-tuned LoRAs? We compare D2L on **Gemma-2-2B-it** and SHINE on **Qwen3-8B** with LoRAs fine-tuned on the same 500 SQuAD validation passages and corresponding backbones, using next-token prediction (NTP-FT) or QA supervised fine-tuning (QA-SFT).
 
-![Pairwise distances between unit-Frobenius-normalized adapters, embedded in 2-D using metric MDS. Directly fine-tuned adapters form broad shells; generated adapters occupy compact regions, especially for SHINE. The embedding provides a qualitative view.](geometry.png){width=800}
+![Figure 1. Pairwise distances between unit-Frobenius-normalized adapters, embedded in 2-D using metric MDS. Directly fine-tuned adapters form broad shells; generated adapters occupy compact regions, especially for SHINE. The embedding provides a qualitative view.](geometry.png){width=800}
 
-![Cumulative uncentered spectral energy against the number of leading components. Generated adapters concentrate their energy in fewer directions. SHINE's leading component alone captures 88.8%.](spectrum.png){width=800}
+![Figure 2. Cumulative uncentered spectral energy against the number of leading components. Generated adapters concentrate their energy in fewer directions. SHINE's leading component alone captures 88.8%.](spectrum.png){width=800}
 
 The leading component captures **15.5%** of D2L's spectral energy, versus 0.6% (NTP-FT) and 1.5% (QA-SFT) on its backbone. For SHINE, it captures **88.8%**, versus 0.2% and 2.6%. Cross-document alignment is also stronger: after unit-norm normalization, mean pairwise cosine similarity is +0.144 for D2L and +0.888 for SHINE, compared with at most +0.025 for the directly fine-tuned adapters.
 
@@ -41,7 +41,7 @@ This shared structure, together with a common decoder, motivates testing the gen
 
 ## Method
 
-![Latent Merger overview. A shared frozen hypernetwork encoder produces document latents. The trainable merger combines their mean with a gated, permutation-invariant residual; a frozen LoRA-generation head decodes one rank-r adapter for the frozen language model. The inset is schematic; projection and RMS-matching details are described below.](method-overview.png){width=1100}
+![Figure 3. Latent Merger overview. A shared frozen hypernetwork encoder produces document latents. The trainable merger combines their mean with a gated, permutation-invariant residual; a frozen LoRA-generation head decodes one rank-r adapter for the frozen language model. The inset is schematic; projection and RMS-matching details are described below.](method-overview.png){width=1100}
 
 
 Latent Merger treats the document latents as an unordered set. At each latent position, a small transformer mixes information across documents without positional embeddings, then mean-pools the result. It adds a gated, RMS-matched residual to the plain latent average. The output projection starts at zero, so **training begins at latent averaging**. The composition is permutation invariant by construction.
@@ -56,12 +56,12 @@ We evaluate the approach with D2L on Gemma-2-2B-it and SHINE on Qwen3-8B.
 
 We evaluate on **SQuAD validation** and **MS MARCO**, which is out of distribution for the SQuAD-trained merger. Each method produces one adapter per tuple of N passages. The model answers every question in that tuple using the same adapter, without the passages in its prompt. This tests **per-document knowledge retention**, not reasoning that combines facts across documents.
 
-The tables report **token-overlap F1 × 100 (mean ± 95% confidence interval)** for representative methods. These are not all asserted to have the same output rank. N = 10 exceeds the training tuple sizes. SVD denotes a rank-r approximation of the average weight update. Full results, including rank-concatenation and TIES baselines, appear in Tables 3–4 of the [paper](https://cdn.agenticlearning.ai/c87844af59479499/latent-merger-2026.pdf).
+Tables 1 and 2 report **token-overlap F1 × 100 (mean ± 95% confidence interval)** for representative methods. These are not all asserted to have the same output rank. N = 10 exceeds the training tuple sizes. SVD denotes a rank-r approximation of the average weight update. Full results, including rank-concatenation and TIES baselines, appear in Tables 3–4 of the [paper](https://cdn.agenticlearning.ai/c87844af59479499/latent-merger-2026.pdf).
 
 For context, using each question's own unmerged adapter scores **66.8 / 42.2** on SQuAD / MS MARCO for D2L and **56.8 / 38.1** for SHINE. Merging therefore still loses substantial information, particularly as N grows.
 
 <figure class="paper-fig">
-<figcaption class="paper-cap"><strong>Doc-to-LoRA, Gemma-2-2B-it.</strong> Token-overlap F1 × 100, mean ± 95% CI, for N documents merged into one adapter. Bold: best among the methods shown.</figcaption>
+<figcaption class="paper-cap"><strong>Table 1. Doc-to-LoRA, Gemma-2-2B-it.</strong> Token-overlap F1 × 100, mean ± 95% CI, for N documents merged into one adapter. Bold: best among the methods shown.</figcaption>
 <div class="paper-scroll">
 <table class="paper-table">
 <thead>
@@ -80,7 +80,7 @@ For context, using each question's own unmerged adapter scores **66.8 / 42.2** o
 </figure>
 
 <figure class="paper-fig">
-<figcaption class="paper-cap"><strong>SHINE, Qwen3-8B.</strong> Token-overlap F1 × 100, mean ± 95% CI, for N documents merged into one adapter. Bold: best among the methods shown.</figcaption>
+<figcaption class="paper-cap"><strong>Table 2. SHINE, Qwen3-8B.</strong> Token-overlap F1 × 100, mean ± 95% CI, for N documents merged into one adapter. Bold: best among the methods shown.</figcaption>
 <div class="paper-scroll">
 <table class="paper-table">
 <thead>
@@ -107,5 +107,3 @@ For context, using each question's own unmerged adapter scores **66.8 / 42.2** o
 ## Takeaway
 
 For the two generators studied here, generated LoRAs are more aligned across documents and more spectrally concentrated than directly fine-tuned adapters. **Combining their latents and decoding once offers a promising route to a single fixed-rank document memory.** A learned merger improves retention over latent averaging, but scores remain below the per-document oracle and decline as more documents are combined. The evaluations focus on QA; non-QA and conflicting-source settings remain untested.
-
-Read the full experimental setup, ablations, and limitations in the [full paper](/research/latent-merger/).
