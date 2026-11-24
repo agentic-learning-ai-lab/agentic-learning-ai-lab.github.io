@@ -311,7 +311,7 @@
 /* Tables */
 .arxiv-paper-content table {
   width: 100%;
-  margin: 0.0rem 0.2rem;
+  margin: 0;
   border-collapse: collapse;
   font-size: 0.9rem;
 }
