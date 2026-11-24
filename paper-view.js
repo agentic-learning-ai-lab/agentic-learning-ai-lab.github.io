@@ -805,7 +805,11 @@ function constrainSidebarPosition() {
         const bottom = Math.min(rect.bottom, window.innerHeight) - 20;
         sidebar.style.top = `${top}px`;
         // A hidden section has no box; fall back to the CSS height.
-        sidebar.style.height = rect.height ? `${Math.max(0, bottom - top)}px` : '';
+        const height = bottom - top;
+        sidebar.style.height = rect.height ? `${Math.max(0, height)}px` : '';
+        // Once the paper has scrolled past, hide the card (its padding
+        // would otherwise still sit over the footer).
+        sidebar.style.visibility = rect.height && height < 100 ? 'hidden' : '';
     };
 
     window.addEventListener('scroll', handleScroll);
