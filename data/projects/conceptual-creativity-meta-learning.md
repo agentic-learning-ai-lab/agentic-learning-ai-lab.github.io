@@ -4,6 +4,7 @@ affiliations:
   - { name: 'Mengye Ren', aff: 'New York University' }
 links:
   code: https://github.com/agentic-learning-ai-lab/conceptual-creativity-meta-learning
+  poster: /assets/projects/conceptual-creativity-meta-learning/neurips2026-poster-conceptual-creativity-meta-learning.pdf
 italic_terms:
   - Creator
   - Appraiser
